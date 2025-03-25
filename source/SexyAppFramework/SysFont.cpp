@@ -186,7 +186,7 @@ int	SysFont::StringWidth(const SexyString& theString)
 void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theString, const Color& theColor, const Rect& theClipRect)
 {
 	DDImage* aDDImage = dynamic_cast<DDImage*>(g->mDestImage);
-
+	/*
 	if (aDDImage != NULL)
 	{
 		LPDIRECTDRAWSURFACE aSurface = aDDImage->GetSurface();
@@ -311,6 +311,7 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theS
 		DeleteObject(blackBitmap);
 		DeleteDC(aDC);
 	}
+	*/
 }
 
 Font* SysFont::Duplicate()

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.18)
 project(SexyAppFramework)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../lib/SDL/include)
 
 set(SRC_MAIN
 	# Sources
@@ -99,11 +100,7 @@ set(SRC_MAIN
 	../ImageLib/zlib/zutil.c
 	../PakLib/PakInterface.cpp
 	
-	DDInterface.cpp
 	Color.cpp
-	D3DInterface.cpp
-	D3DTester.cpp
-	DDImage.cpp
 	Font.cpp
 	Graphics.cpp
 	NativeDisplay.cpp
@@ -113,7 +110,6 @@ set(SRC_MAIN
 	SysFont.cpp
 	Quantize.cpp
 	SharedImage.cpp
-	D3D8Helper.cpp
 
 	Flags.cpp
 	XMLParser.cpp
@@ -220,10 +216,10 @@ set(SRC_MAIN
 	Color.h
 	Common.h
 	CritSect.h
-	D3DInterface.h
-	D3DTester.h
-	DDImage.h
-	DDInterface.h
+	#D3DInterface.h
+	#D3DTester.h
+	#DDImage.h
+	#DDInterface.h
 	Debug.h
 	Dialog.h
 	DialogButton.h
@@ -297,6 +293,12 @@ set(SRC_MAIN
 	WidgetContainer.h
 	WidgetManager.h
 	XMLParser.h
+
+	SDLImage.cpp
+	SDLInterface.cpp
+
+	SDLImage.h
+	SDLInterface.h
 )
 
 add_compile_definitions(SexyAppFramework _LIB)
@@ -304,6 +306,7 @@ add_library(SexyAppFramework STATIC ${SRC_MAIN})
 
 set(SexyAppLibs
 	${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8/d3d8.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/../../lib/SDL/lib/x86/SDL3.lib
 	dsound
 	winmm
 	ws2_32

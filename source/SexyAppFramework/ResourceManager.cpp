@@ -3,8 +3,8 @@
 #include "ResourceManager.h"
 #include "XMLParser.h"
 #include "SoundManager.h"
-#include "DDImage.h"
-#include "D3DInterface.h"
+#include "SDLImage.h"
+#include "SDLInterface.h"
 #include "ImageFont.h"
 #include "SysFont.h"
 #include "../ImageLib/ImageLib.h"
@@ -666,7 +666,7 @@ bool ResourceManager::ReparseResourcesFile(const std::string& theFilename)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, DDImage *theImage)
+bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, SDLImage*theImage)
 {	
 	ImageLib::Image* anAlphaImage = ImageLib::GetImage(theRes->mAlphaGridImage,true);	
 	if (anAlphaImage==NULL)
@@ -715,7 +715,7 @@ bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, DDImage *theImage)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::LoadAlphaImage(ImageRes *theRes, DDImage *theImage)
+bool ResourceManager::LoadAlphaImage(ImageRes *theRes, SDLImage*theImage)
 {
 	SEXY_PERF_BEGIN("ResourceManager::GetImage");
 	ImageLib::Image* anAlphaImage = ImageLib::GetImage(theRes->mAlphaImage,true);
@@ -760,7 +760,7 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 	SharedImageRef aSharedImageRef = gSexyAppBase->GetSharedImage(theRes->mPath, theRes->mVariant, &isNew);
 	ImageLib::gAlphaComposeColor = 0xFFFFFF;
 
-	DDImage* aDDImage = (DDImage*) aSharedImageRef;
+	SDLImage* aDDImage = (SDLImage*) aSharedImageRef;
 	
 	if (aDDImage == NULL)
 		return Fail(StrFormat("Failed to load image: %s",theRes->mPath.c_str()));
@@ -792,7 +792,7 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 				
 		if (!aDDImage->mHasAlpha)
 		{
-			aDDImage->mWantDDSurface = true;
+			//aDDImage->mWantDDSurface = true;
 			aDDImage->mPurgeBits = true;			
 		}
 
@@ -801,14 +801,14 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 
 	if (theRes->mPalletize)
 	{
-		SEXY_PERF_BEGIN("ResourceManager:Palletize");
-		if (aDDImage->mSurface==NULL)
-			aDDImage->Palletize();
-		else
-			aDDImage->mWantPal = true;
-		SEXY_PERF_END("ResourceManager:Palletize");
+		//SEXY_PERF_BEGIN("ResourceManager:Palletize");
+		//if (aDDImage->mSurface==NULL)
+		//	aDDImage->Palletize();
+		//else
+			//aDDImage->mWantPal = true;
+		//SEXY_PERF_END("ResourceManager:Palletize");
 	}
-
+	/*
 	if (theRes->mA4R4G4B4)
 		aDDImage->mD3DFlags |= D3DImageFlag_UseA4R4G4B4;
 
@@ -817,7 +817,7 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 
 	if (theRes->mMinimizeSubdivisions)
 		aDDImage->mD3DFlags |= D3DImageFlag_MinimizeNumSubdivisions;
-
+*/
 	if (theRes->mAnimInfo.mAnimType != AnimType_None)
 		aDDImage->mAnimInfo = new AnimInfo(theRes->mAnimInfo);
 
@@ -847,7 +847,7 @@ SharedImageRef ResourceManager::LoadImage(const std::string &theName)
 		return NULL;
 
 	ImageRes *aRes = (ImageRes*)anItr->second;
-	if ((DDImage*) aRes->mImage != NULL)
+	if ((SDLImage*) aRes->mImage != NULL)
 		return aRes->mImage;
 
 	if (aRes->mFromProgram)
@@ -1045,7 +1045,7 @@ bool ResourceManager::LoadNextResource()
 			case ResType_Image: 
 			{
 				ImageRes *anImageRes = (ImageRes*)aRes;
-				if ((DDImage*)anImageRes->mImage!=NULL)
+				if ((SDLImage*)anImageRes->mImage!=NULL)
 					continue;
 
 				return DoLoadImage(anImageRes); 

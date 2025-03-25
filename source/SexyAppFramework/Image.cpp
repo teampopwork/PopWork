@@ -1,6 +1,9 @@
 #include "Image.h"
 #include "Graphics.h"
 
+#include <SDL3/SDL.h>
+
+
 using namespace Sexy;
 
 Image::Image()

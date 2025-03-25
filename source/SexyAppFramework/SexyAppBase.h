@@ -20,9 +20,9 @@ namespace Sexy
 {
 
 class WidgetManager;
-class DDInterface;
+class SDLInterface;
 class Image;
-class DDImage;
+class SDLImage;
 class Widget;
 class SoundManager;
 class MusicInterface;
@@ -178,7 +178,7 @@ public:
 	bool					mNoDefer;	
 	bool					mFullScreenPageFlip;	
 	bool					mTabletPC;
-	DDInterface*			mDDInterface;
+	SDLInterface*			mSDLInterface;
 	bool					mAlphaDisabled;
 	MusicInterface*			mMusicInterface;	
 	bool					mReadFromRegistry;
@@ -410,8 +410,8 @@ public:
 
 	virtual void			Start();	
 	virtual void			Init();	
-	virtual void			PreDDInterfaceInitHook();
-	virtual void			PostDDInterfaceInitHook();
+	virtual void			PreSDLInterfaceInitHook();
+	virtual void			PostSDLInterfaceInitHook();
 	virtual bool			ChangeDirHook(const char *theIntendedPath);
 	virtual void			PlaySample(int theSoundNum);
 	virtual void			PlaySample(int theSoundNum, int thePan);
@@ -436,7 +436,7 @@ public:
 	void					SetCursor(int theCursorNum);
 	int						GetCursor();
 	void					EnableCustomCursors(bool enabled);	
-	virtual DDImage*		GetImage(const std::string& theFileName, bool commitBits = true);	
+	virtual SDLImage*		GetImage(const std::string& theFileName, bool commitBits = true);	
 	virtual SharedImageRef	GetSharedImage(const std::string& theFileName, const std::string& theVariant = "", bool* isNew = NULL);
 
 	void					CleanSharedImages();
@@ -445,11 +445,11 @@ public:
 	void					PrecacheNative(MemoryImage* theImage);
 	void					SetCursorImage(int theCursorNum, Image* theImage);
 
-	DDImage*				CreateCrossfadeImage(Image* theImage1, const Rect& theRect1, Image* theImage2, const Rect& theRect2, double theFadeFactor);
+	SDLImage*				CreateCrossfadeImage(Image* theImage1, const Rect& theRect1, Image* theImage2, const Rect& theRect2, double theFadeFactor);
 	void					ColorizeImage(Image* theImage, const Color& theColor);
-	DDImage*				CreateColorizedImage(Image* theImage, const Color& theColor);
-	DDImage*				CopyImage(Image* theImage, const Rect& theRect);
-	DDImage*				CopyImage(Image* theImage);
+	SDLImage*				CreateColorizedImage(Image* theImage, const Color& theColor);
+	SDLImage*				CopyImage(Image* theImage, const Rect& theRect);
+	SDLImage*				CopyImage(Image* theImage);
 	void					MirrorImage(Image* theImage);
 	void					FlipImage(Image* theImage);
 	void					RotateImageHue(Sexy::MemoryImage *theImage, int theDelta);
@@ -563,7 +563,7 @@ public:
 	virtual void			DoMainLoop();
 	virtual bool			UpdateAppStep(bool* updated);
 	virtual bool			UpdateApp();
-	int						InitDDInterface();
+	int						InitSDLInterface();
 	void					ClearUpdateBacklog(bool relaxForASecond = false);
 	bool					IsScreenSaver();
 	virtual bool			AppCanRestore();
