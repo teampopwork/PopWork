@@ -760,9 +760,9 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 	SharedImageRef aSharedImageRef = gSexyAppBase->GetSharedImage(theRes->mPath, theRes->mVariant, &isNew);
 	ImageLib::gAlphaComposeColor = 0xFFFFFF;
 
-	SDLImage* aDDImage = (SDLImage*) aSharedImageRef;
+	SDLImage* aSDLImage = (SDLImage*) aSharedImageRef;
 	
-	if (aDDImage == NULL)
+	if (aSDLImage == NULL)
 		return Fail(StrFormat("Failed to load image: %s",theRes->mPath.c_str()));
 
 	if (isNew)
@@ -780,20 +780,20 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 		}
 	}
 	
-	aDDImage->CommitBits();
+	aSDLImage->CommitBits();
 	theRes->mImage = aSharedImageRef;
-	aDDImage->mPurgeBits = theRes->mPurgeBits;
+	aSDLImage->mPurgeBits = theRes->mPurgeBits;
 
 	if (theRes->mDDSurface)
 	{
 		SEXY_PERF_BEGIN("ResourceManager:DDSurface");
 
-		aDDImage->CommitBits();
+		aSDLImage->CommitBits();
 				
-		if (!aDDImage->mHasAlpha)
+		if (!aSDLImage->mHasAlpha)
 		{
-			//aDDImage->mWantDDSurface = true;
-			aDDImage->mPurgeBits = true;			
+			//aSDLImage->mWantDDSurface = true;
+			aSDLImage->mPurgeBits = true;			
 		}
 
 		SEXY_PERF_END("ResourceManager:DDSurface");
@@ -802,30 +802,30 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 	if (theRes->mPalletize)
 	{
 		//SEXY_PERF_BEGIN("ResourceManager:Palletize");
-		//if (aDDImage->mSurface==NULL)
-		//	aDDImage->Palletize();
+		//if (aSDLImage->mSurface==NULL)
+		//	aSDLImage->Palletize();
 		//else
-			//aDDImage->mWantPal = true;
+			//aSDLImage->mWantPal = true;
 		//SEXY_PERF_END("ResourceManager:Palletize");
 	}
 	/*
 	if (theRes->mA4R4G4B4)
-		aDDImage->mD3DFlags |= D3DImageFlag_UseA4R4G4B4;
+		aSDLImage->mD3DFlags |= D3DImageFlag_UseA4R4G4B4;
 
 	if (theRes->mA8R8G8B8)
-		aDDImage->mD3DFlags |= D3DImageFlag_UseA8R8G8B8;
+		aSDLImage->mD3DFlags |= D3DImageFlag_UseA8R8G8B8;
 
 	if (theRes->mMinimizeSubdivisions)
-		aDDImage->mD3DFlags |= D3DImageFlag_MinimizeNumSubdivisions;
+		aSDLImage->mD3DFlags |= D3DImageFlag_MinimizeNumSubdivisions;
 */
 	if (theRes->mAnimInfo.mAnimType != AnimType_None)
-		aDDImage->mAnimInfo = new AnimInfo(theRes->mAnimInfo);
+		aSDLImage->mAnimInfo = new AnimInfo(theRes->mAnimInfo);
 
-	aDDImage->mNumRows = theRes->mRows;
-	aDDImage->mNumCols = theRes->mCols;
+	aSDLImage->mNumRows = theRes->mRows;
+	aSDLImage->mNumCols = theRes->mCols;
 
-	if (aDDImage->mPurgeBits)
-		aDDImage->PurgeBits();
+	if (aSDLImage->mPurgeBits)
+		aSDLImage->PurgeBits();
 
 	ResourceLoadedHook(theRes);
 	return true;

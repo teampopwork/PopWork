@@ -13,12 +13,12 @@
 #include "SexyAppFramework/ImageFont.h"
 
 // The Image.h file just declares basic functions. All images are either of 
-// the DDImage or MemoryImage type. For this demo, we will use DDImage
+// the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
-// A DDImage is actually derived from MemoryImage, so where an Image or
-// MemoryImage is required, a DDImage will suffice as well. A DDImage
+// A SDLImage is actually derived from MemoryImage, so where an Image or
+// MemoryImage is required, a SDLImage will suffice as well. A SDLImage
 // contains optimized code for use with DirectX 7+.
-#include "SexyAppFramework/DDImage.h"
+#include "SexyAppFramework/SDLImage.h"
 
 // The Rectangle template, used to specify X, Y, Width, Height
 #include "SexyAppFramework/Rect.h"

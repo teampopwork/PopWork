@@ -1,6 +1,6 @@
 #include "V12DemoApp.h"
 #include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/DDImage.h"
+#include "SexyAppFramework/SDLImage.h"
 #include "SexyAppFramework/ResourceManager.h"
 #include "SexyAppFramework/Dialog.h"
 #include "SexyAppFramework/SWTri.h"

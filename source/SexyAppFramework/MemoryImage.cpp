@@ -53,7 +53,7 @@ MemoryImage::MemoryImage(const MemoryImage& theMemoryImage) :
 
 	if ((theMemoryImage.mBits == NULL) && (theMemoryImage.mColorTable == NULL))
 	{
-		// Must be a DDImage with only a DDSurface
+		// Must be a SDLImage with only a DDSurface
 		aNonConstMemoryImage->GetBits();
 		deleteBits = true;
 	}

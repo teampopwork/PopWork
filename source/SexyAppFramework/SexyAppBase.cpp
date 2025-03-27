@@ -217,8 +217,8 @@ SexyAppBase::SexyAppBase()
 	mCursorThreadRunning = false;
 	mNumLoadingThreadTasks = 0;
 	mCompletedLoadingThreadTasks = 0;	
-	mLastDrawTick = timeGetTime();
-	mNextDrawTick = timeGetTime();
+	mLastDrawTick = SDL_GetTicks();
+	mNextDrawTick = SDL_GetTicks();
 	mSysCursor = true;	
 	mForceFullscreen = false;
 	mForceWindowed = false;
@@ -534,7 +534,7 @@ static BOOL CALLBACK ChangeDisplayWindowEnumProc(HWND hwnd, LPARAM lParam)
 
 void SexyAppBase::ClearUpdateBacklog(bool relaxForASecond)
 {
-	mLastTimeCheck = timeGetTime();
+	mLastTimeCheck = SDL_GetTicks();
 	mUpdateFTimeAcc = 0.0;
 
 	if (relaxForASecond)
@@ -1148,8 +1148,13 @@ void SexyAppBase::SetCursorImage(int theCursorNum, Image* theImage)
 	}
 }
 
+//Saved images ended up being corrupted/incorrect. TODO:FIX
 void SexyAppBase::TakeScreenshot()
 {
+	SDL_Surface* sshot = SDL_RenderReadPixels(mSDLInterface->mRenderer, NULL);
+	SDL_SaveBMP(sshot, "TEST.bmp");
+	SDL_DestroySurface(sshot);
+
 	/*
 	if (mDDInterface==NULL || mDDInterface->mDrawSurface==NULL)
 		return;
@@ -1182,11 +1187,11 @@ void SexyAppBase::TakeScreenshot()
 	// Capture screen
 	LPDIRECTDRAWSURFACE aSurface = mDDInterface->mDrawSurface;
 	
-	// Temporarily set the mDrawSurface to NULL so DDImage::Check3D 
+	// Temporarily set the mDrawSurface to NULL so SDLImage::Check3D 
 	// returns false so we can lock the surface.
 	mDDInterface->mDrawSurface = NULL; 
 	
-	DDImage anImage(mDDInterface);
+	SDLImage anImage(mDDInterface);
 	anImage.SetSurface(aSurface);
 	anImage.GetBits();
 	anImage.DeleteDDSurface();
@@ -1240,7 +1245,7 @@ void SexyAppBase::TakeScreenshot()
 		CloseClipboard();
 	}
 	*/
-	ClearUpdateBacklog();
+	//ClearUpdateBacklog();
 }
 
 void SexyAppBase::DumpProgramInfo()
@@ -1285,7 +1290,7 @@ void SexyAppBase::DumpProgramInfo()
 
 		int aNumPixels = aMemoryImage->mWidth*aMemoryImage->mHeight;
 
-		SDLImage* aDDImage = dynamic_cast<SDLImage*>(aMemoryImage);
+		SDLImage* aSDLImage = dynamic_cast<SDLImage*>(aMemoryImage);
 
 		int aBitsMemory = 0;
 		int aSurfaceMemory = 0;
@@ -1298,7 +1303,7 @@ void SexyAppBase::DumpProgramInfo()
 		int aMemorySize = 0;
 		if (aMemoryImage->mBits != NULL)
 			aBitsMemory = aNumPixels * 4;
-		if ((aDDImage != NULL) && (aDDImage->mSurface != NULL))
+		if ((aSDLImage != NULL) && (aSDLImage->mSurface != NULL))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
 		if (aMemoryImage->mColorTable != NULL)
 			aPalletizedMemory = aNumPixels + 256*4;
@@ -1353,7 +1358,7 @@ void SexyAppBase::DumpProgramInfo()
 		
 		int aNumPixels = aMemoryImage->mWidth*aMemoryImage->mHeight;
 
-		DDImage* aDDImage = dynamic_cast<DDImage*>(aMemoryImage);
+		SDLImage* aSDLImage = dynamic_cast<SDLImage*>(aMemoryImage);
 
 		int aMemorySize = aSortedItr->first;
 
@@ -1368,7 +1373,7 @@ void SexyAppBase::DumpProgramInfo()
 		
 		if (aMemoryImage->mBits != NULL)
 			aBitsMemory = aNumPixels * 4;
-		if ((aDDImage != NULL) && (aDDImage->mSurface != NULL))
+		if ((aSDLImage != NULL) && (aSDLImage->mSurface != NULL))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
 		if (aMemoryImage->mColorTable != NULL)
 			aPalletizedMemory = aNumPixels + 256*4;
@@ -2368,7 +2373,7 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 			mWidgetManager->mImage = mDDInterface->GetScreenImage();
 			mWidgetManager->MarkAllDirty();
 
-			mLastTime = timeGetTime();
+			mLastTime = SDL_GetTicks();
 		}
 	}
 	else
@@ -2592,7 +2597,7 @@ bool SexyAppBase::DrawDirtyStuff()
 			CalculateDemoTimeLeft();
 	}
 
-	DWORD aStartTime = timeGetTime();
+	DWORD aStartTime = SDL_GetTicks();
 
 	// Update user input and screen saver info
 	static DWORD aPeriodicTick = 0;
@@ -2620,7 +2625,7 @@ bool SexyAppBase::DrawDirtyStuff()
 
 		mDrawCount++;		
 
-		DWORD aMidTime = timeGetTime();
+		DWORD aMidTime = SDL_GetTicks();
 
 		mFPSCount++;
 		mFPSTime += aMidTime - aStartTime;
@@ -2638,12 +2643,12 @@ bool SexyAppBase::DrawDirtyStuff()
 
 		if (mWaitForVSync && mIsPhysWindowed && mSoftVSyncWait)
 		{
-			DWORD aTick = timeGetTime();
+			DWORD aTick = SDL_GetTicks();
 			if (aTick-mLastDrawTick < mSDLInterface->mMillisecondsPerFrame)
 				Sleep(mSDLInterface->mMillisecondsPerFrame - (aTick-mLastDrawTick));
 		}
 
-		DWORD aPreScreenBltTime = timeGetTime();
+		DWORD aPreScreenBltTime = SDL_GetTicks();
 		mLastDrawTick = aPreScreenBltTime;
 
 		Redraw(NULL);		
@@ -2651,7 +2656,7 @@ bool SexyAppBase::DrawDirtyStuff()
 		// This is our one UpdateFTimeAcc if we are vsynched
 		UpdateFTimeAcc(); 
 
-		DWORD aEndTime = timeGetTime();
+		DWORD aEndTime = SDL_GetTicks();
 
 		mScreenBltTime = aEndTime - aPreScreenBltTime;
 
@@ -2985,7 +2990,7 @@ static int ListDemoMarkers()
     ret = DialogBoxIndirect(gHInstance, (LPDLGTEMPLATE) hgbl, gSexyAppBase->mHWnd, (DLGPROC) MarkerListDialogProc); 
     GlobalFree(hgbl); 
 
-	gSexyAppBase->mLastTime = timeGetTime();
+	gSexyAppBase->mLastTime = SDL_GetTicks();
 
     return ret; 
 }
@@ -3152,7 +3157,7 @@ static int DemoJumpToTime()
     ret = DialogBoxIndirect(gHInstance, (LPDLGTEMPLATE) hgbl, gSexyAppBase->mHWnd, (DLGPROC) JumpToTimeDialogProc); 
     GlobalFree(hgbl); 
 
-	gSexyAppBase->mLastTime = timeGetTime();
+	gSexyAppBase->mLastTime = SDL_GetTicks();
 
     return ret; 
 }
@@ -3493,7 +3498,7 @@ LRESULT CALLBACK SexyAppBase::WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 						case 'p':
 						case 'P':
 							aSexyApp->mPaused = !aSexyApp->mPaused;
-							aSexyApp->mLastTimeCheck = timeGetTime();
+							aSexyApp->mLastTimeCheck = SDL_GetTicks();
 							aSexyApp->mUpdateFTimeAcc = 0.0;
 							break;
 
@@ -4029,7 +4034,7 @@ void SexyAppBase::ShowMemoryUsage()
 	aStr += StrFormat("Palette8: %d - %s KB\r\n",aUsage.first,SexyStringToString(CommaSeperate(aUsage.second/1024)).c_str());
 	
 	MsgBox(aStr,"Video Stats",MB_OK);
-	mLastTime = timeGetTime();
+	mLastTime = SDL_GetTicks();
 	*/
 }
 
@@ -4090,7 +4095,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 			char aBuf[512];
 			sprintf(aBuf,"3D-Mode: %s",Is3DAccelerated()?"ON":"OFF");
 			MsgBox(aBuf,"Mode Switch",MB_OK);
-			mLastTime = timeGetTime();
+			mLastTime = SDL_GetTicks();
 		}
 		else
 			ShowMemoryUsage();
@@ -4231,6 +4236,7 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 			if (event.type == SDL_EVENT_KEY_UP)
 			{
 				mWidgetManager->KeyUp((KeyCode)event.key.key);
+				TakeScreenshot();
 			}
 			else
 			{
@@ -4259,149 +4265,6 @@ std::string	SexyAppBase::NotifyCrashHook()
 
 void SexyAppBase::MakeWindow()
 {
-	//OutputDebugString("MAKING WINDOW\r\n");
-	/*
-	if (mHWnd != NULL)
-	{
-		SetWindowLong(mHWnd, GWL_USERDATA, NULL);
-		HWND anOldWindow = mHWnd;
-		mHWnd = NULL;		
-		DestroyWindow(anOldWindow);	
-		mWidgetManager->mImage = NULL;
-	}
-
-
-	if ((mPlayingDemoBuffer) || (mIsWindowed && !mFullScreenWindow))
-	{
-		DWORD aWindowStyle = WS_CLIPCHILDREN | WS_POPUP | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-		if (mEnableMaximizeButton)
-			aWindowStyle |= WS_MAXIMIZEBOX;
-
-		RECT aRect;
-		aRect.left = 0;
-		aRect.top = 0;
-		aRect.right = mWidth;
-		aRect.bottom = mHeight;
-		
-		BOOL worked = AdjustWindowRect(&aRect, aWindowStyle, FALSE);
-
-		int aWidth = aRect.right - aRect.left;
-		int aHeight = aRect.bottom - aRect.top;
-
-		// Get the work area of the desktop to allow us to center
-		RECT aDesktopRect;
-		::SystemParametersInfo(SPI_GETWORKAREA, NULL, &aDesktopRect, NULL);
-
-		int aPlaceX = 64;
-		int aPlaceY = 64;
-		
-		if (mPreferredX != -1)
-		{
-			aPlaceX = mPreferredX;
-			aPlaceY = mPreferredY;
-
-			int aSpacing = 4;
-
-			if (aPlaceX < aDesktopRect.left + aSpacing)
-				aPlaceX = aDesktopRect.left + aSpacing;
-
-			if (aPlaceY < aDesktopRect.top + aSpacing)
-				aPlaceY = aDesktopRect.top + aSpacing;
-
-			if (aPlaceX + aWidth >= aDesktopRect.right - aSpacing)
-				aPlaceX = aDesktopRect.right - aWidth - aSpacing;
-			
-			if (aPlaceY + aHeight >= aDesktopRect.bottom - aSpacing)
-				aPlaceY = aDesktopRect.bottom - aHeight - aSpacing;
-		}
-
-		if (CheckFor98Mill())
-		{
-			mHWnd = CreateWindowExA(
-				0,
-				"MainWindow",
-				SexyStringToStringFast(mTitle).c_str(),
-				aWindowStyle,
-				aPlaceX,
-				aPlaceY,
-				aWidth,
-				aHeight,
-				NULL,
-				NULL,
-				gHInstance,
-				0);
-		}
-		else
-		{
-			mHWnd = CreateWindowEx(
-				0,
-				_S("MainWindow"),
-				mTitle.c_str(),
-				aWindowStyle,
-				aPlaceX,
-				aPlaceY,
-				aWidth,
-				aHeight,
-				NULL,
-				NULL,
-				gHInstance,
-				0);	
-		}
-		
-		if (mPreferredX == -1)
-		{				
-			::MoveWindow(mHWnd, 
-				aDesktopRect.left + ((aDesktopRect.right - aDesktopRect.left) - aWidth)/2, 
-				aDesktopRect.top + (int) (((aDesktopRect.bottom - aDesktopRect.top) - aHeight)*0.382), 
-				aWidth, aHeight, FALSE);
-		}
-
-		mIsPhysWindowed = true;
-	}
-	else
-	{
-		if (CheckFor98Mill())
-		{
-			mHWnd = CreateWindowExA(
-				WS_EX_TOPMOST,
-				"MainWindow",
-				SexyStringToStringFast(mTitle).c_str(),
-				WS_POPUP | WS_VISIBLE,
-				0,
-				0,
-				mWidth,
-				mHeight,
-				NULL,
-				NULL,
-				gHInstance,
-				0);
-		}
-		else
-		{
-			mHWnd = CreateWindowEx(
-				WS_EX_TOPMOST,
-				_S("MainWindow"),
-				mTitle.c_str(),
-				WS_POPUP | WS_VISIBLE,
-				0,
-				0,
-				mWidth,
-				mHeight,
-				NULL,
-				NULL,
-				gHInstance,
-				0);
-		}
-
-		mIsPhysWindowed = false;
-	}
-
-	/*char aStr[256];
-	sprintf(aStr, "HWND: %d\r\n", mHWnd);
-	OutputDebugString(aStr);
-
-	SetWindowLong(mHWnd, GWL_USERDATA, (LONG) this);	
-*/
 	if (mSDLInterface == NULL)
 	{
 		mSDLInterface = new SDLInterface(this);
@@ -4420,55 +4283,12 @@ void SexyAppBase::MakeWindow()
 			if (is3D)
 				mTest3D = true;
 
-			//mSDLInterface->mIs3D = is3D;
+			mSDLInterface->mIs3D = is3D;
 		}
 	}
 
 	int aResult = InitSDLInterface();
 
-	//if (mDDInterface->mD3DTester!=NULL && mDDInterface->mD3DTester->ResultsChanged())
-		//RegistryEraseValue(_S("Is3D"));
-	/*
-	if ((mIsWindowed) && (aResult == DDInterface::RESULT_INVALID_COLORDEPTH))
-	{
-		if (mForceWindowed)
-		{
-			Popup(GetString("PLEASE_SET_COLOR_DEPTH", _S("Please set your desktop color depth to 16 bit.")));
-			DoExit(1);
-		}
-		else
-		{
-			mForceFullscreen = true;
-			SwitchScreenMode(false);
-		}
-		return;
-	}
-	else if ((!mIsWindowed) && 
-		((aResult == DDInterface::RESULT_EXCLUSIVE_FAIL) ||
-		 (aResult == DDInterface::RESULT_DISPCHANGE_FAIL)))
-	{
-		mForceWindowed = true;
-		SwitchScreenMode(true);
-	}
-	else if (aResult == DDInterface::RESULT_3D_FAIL)
-	{
-		Set3DAcclerated(false);
-		return;
-	}
-	else if (aResult != DDInterface::RESULT_OK)
-	{
-		if (Is3DAccelerated())
-		{
-			Set3DAcclerated(false);
-			return;
-		}
-		else
-		{
-			Popup(GetString("FAILED_INIT_DIRECTDRAW", _S("Failed to initialize DirectDraw: ")) + StringToSexyString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
-			DoExit(1);
-		}
-	}
-	*/
 	bool isActive = mActive;
 	//mActive = GetActiveWindow() == mHWnd;
 
@@ -4491,7 +4311,7 @@ void SexyAppBase::MakeWindow()
 	mWidgetManager->mImage = mSDLInterface->GetScreenImage();
 	mWidgetManager->MarkAllDirty();
 
-	SetTimer(mHWnd, 100, mFrameTime, NULL);
+//	SetTimer(mHWnd, 100, mFrameTime, NULL);
 }
 
 void SexyAppBase::DeleteNativeImageData()
@@ -4595,7 +4415,7 @@ void SexyAppBase::CursorThreadProc()
 		if ((aCursorPos.x != aLastCursorPos.x) ||
 			(aCursorPos.y != aLastCursorPos.y))
 		{	
-			DWORD aTimeNow = timeGetTime();
+			DWORD aTimeNow = SDL_GetTicks();
 			if (aTimeNow - mNextDrawTick > mSDLInterface->mMillisecondsPerFrame + 5)
 			{
 				// Do the special drawing if we are rendering at less than full framerate				
@@ -4659,6 +4479,7 @@ void SexyAppBase::SwitchScreenMode(bool wantWindowed, bool is3d, bool force)
 	
 	// We need to do this check to allow IE to get focus instead of
 	//  stealing it away for ourselves
+	/*
 	if (!mIsOpeningURL)
 	{
 		::ShowWindow(mHWnd, SW_NORMAL);
@@ -4668,14 +4489,14 @@ void SexyAppBase::SwitchScreenMode(bool wantWindowed, bool is3d, bool force)
 	{
 		// Show it but don't activate it
 		::ShowWindow(mHWnd, SW_SHOWNOACTIVATE);
-	}
+	}*/
 
 	if (mSoundManager!=NULL)
 	{
 		mSoundManager->SetCooperativeWindow(mHWnd,mIsWindowed);
 	}	
 
-	mLastTime = timeGetTime();
+	mLastTime = SDL_GetTicks();
 }
 
 void SexyAppBase::SwitchScreenMode(bool wantWindowed)
@@ -4708,7 +4529,7 @@ void SexyAppBase::EnforceCursor()
 
 	if ((mSEHOccured) || (!mMouseIn))
 	{
-		::SetCursor(::LoadCursor(NULL, IDC_ARROW));	
+		mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_DEFAULT);
 		if (mSDLInterface->SetCursorImage(NULL))
 			mCustomCursorDirty = true;
 	}
@@ -4720,33 +4541,31 @@ void SexyAppBase::EnforceCursor()
 			if (mOverrideCursor != NULL)
 				::SetCursor(mOverrideCursor);
 			else if (mCursorNum == CURSOR_POINTER)
-				::SetCursor(::LoadCursor(NULL, IDC_ARROW));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_DEFAULT);
 			else if (mCursorNum == CURSOR_HAND)
-				::SetCursor(mHandCursor);
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_DEFAULT);
 			else if (mCursorNum == CURSOR_TEXT)
-				::SetCursor(::LoadCursor(NULL, IDC_IBEAM));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_TEXT);
 			else if (mCursorNum == CURSOR_DRAGGING)
-				::SetCursor(mDraggingCursor);
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_MOVE);
 			else if (mCursorNum == CURSOR_CIRCLE_SLASH)
-				::SetCursor(::LoadCursor(NULL, IDC_NO));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_NOT_ALLOWED);
 			else if (mCursorNum == CURSOR_SIZEALL)
-				::SetCursor(::LoadCursor(NULL, IDC_SIZEALL));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_NWSE_RESIZE);
 			else if (mCursorNum == CURSOR_SIZENESW)
-				::SetCursor(::LoadCursor(NULL, IDC_SIZENESW));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_NESW_RESIZE);
 			else if (mCursorNum == CURSOR_SIZENS)
-				::SetCursor(::LoadCursor(NULL, IDC_SIZENS));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_NS_RESIZE);
 			else if (mCursorNum == CURSOR_SIZENWSE)
-				::SetCursor(::LoadCursor(NULL, IDC_SIZENWSE));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_NWSE_RESIZE);
 			else if (mCursorNum == CURSOR_SIZEWE)
-				::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_EW_RESIZE);
 			else if (mCursorNum == CURSOR_WAIT)
-				::SetCursor(::LoadCursor(NULL, IDC_WAIT));
-			else if (mCursorNum == CURSOR_CUSTOM) 
-				::SetCursor(NULL); // Default to not showing anything
-			else if (mCursorNum == CURSOR_NONE)
-				::SetCursor(NULL);			
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_PROGRESS);
+			else if (mCursorNum == CURSOR_CUSTOM)
+				mSDLInterface->SetCursorImage(NULL);
 			else
-				::SetCursor(::LoadCursor(NULL, IDC_ARROW));
+				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_DEFAULT);
 
 			if (mSDLInterface->SetCursorImage(NULL))
 				mCustomCursorDirty = true;
@@ -4818,7 +4637,7 @@ void SexyAppBase::ProcessSafeDeleteList()
 
 void SexyAppBase::UpdateFTimeAcc()
 {
-	DWORD aCurTime = timeGetTime();
+	DWORD aCurTime = SDL_GetTicks();
 
 	if (mLastTimeCheck != 0)
 	{				
@@ -4942,7 +4761,7 @@ bool SexyAppBase::Process(bool allowSleep)
 	// Make sure we're not paused
 	if ((!mPaused) && (mUpdateMultiplier > 0))
 	{
-		ulong aStartTime = timeGetTime();
+		ulong aStartTime = SDL_GetTicks();
 		
 		ulong aCurTime = aStartTime;		
 		int aCumSleepTime = 0;
@@ -5087,7 +4906,7 @@ bool SexyAppBase::Process(bool allowSleep)
 			// This is to make sure that the title screen doesn't take up any more than 
 			// 1/3 of the processor time
 
-			ulong anEndTime = timeGetTime();
+			ulong anEndTime = SDL_GetTicks();
 			int anElapsedTime = (anEndTime - aStartTime) - aCumSleepTime;
 			int aLoadingYieldSleepTime = min(250, (anElapsedTime * 2) - aCumSleepTime);
 
@@ -5227,7 +5046,7 @@ int SexyAppBase::InitSDLInterface()
 {
 	PreSDLInterfaceInitHook();
 	DeleteNativeImageData();
-	int aResult = mSDLInterface->Init(mIsPhysWindowed);
+	int aResult = mSDLInterface->Init(mIsWindowed);
 	DemoSyncRefreshRate();
 	if ( SDLInterface::RESULT_OK == aResult )
 	{
@@ -5235,6 +5054,7 @@ int SexyAppBase::InitSDLInterface()
 		mScreenBounds.mY = ( mHeight - mSDLInterface->mHeight ) / 2;
 		mScreenBounds.mWidth = mSDLInterface->mWidth;
 		mScreenBounds.mHeight = mSDLInterface->mHeight;
+		mSDLInterface->UpdateViewport();
 		mWidgetManager->Resize(mScreenBounds, mSDLInterface->mPresentationRect);
 		PostSDLInterfaceInitHook();
 	}
@@ -5263,7 +5083,7 @@ void SexyAppBase::Start()
 	int aCount = 0;
 	int aSleepCount = 0;
 
-	DWORD aStartTime = timeGetTime();		
+	DWORD aStartTime = SDL_GetTicks();		
 
 	mRunning = true;
 	mLastTime = aStartTime;
@@ -5278,7 +5098,7 @@ void SexyAppBase::Start()
 	WaitForLoadingThread();
 
 	char aString[256];
-	sprintf(aString, "Seconds       = %g\r\n", (timeGetTime() - aStartTime) / 1000.0);
+	sprintf(aString, "Seconds       = %g\r\n", (SDL_GetTicks() - aStartTime) / 1000.0);
 	OutputDebugStringA(aString);
 	//sprintf(aString, "Count         = %d\r\n", aCount);
 	//OutputDebugString(aString);

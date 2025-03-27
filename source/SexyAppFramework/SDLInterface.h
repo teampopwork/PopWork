@@ -115,6 +115,8 @@ namespace Sexy
 
 		bool SetCursorImage(Image* theImage);
 
+		void SetCursor(SDL_SystemCursor theCursorType);
+
 		void MakeSimpleMessageBox(const char* theTitle, const char* theMessage, SDL_MessageBoxFlags flags);
 
 		int MakeMessageBox(const SexyString& theText, int theType, int theButtons);

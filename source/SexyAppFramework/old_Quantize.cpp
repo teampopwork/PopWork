@@ -613,23 +613,23 @@ void Sexy::Quantize8Bit(const ulong* theSrcBits, int theWidth, int theHeight, uc
 	if (cube_info == (CubeInfo *) NULL)
 		return;
 
-	ulong aThing = timeGetTime();
+	ulong aThing = SDL_GetTicks();
 	// 277ms
 	status = Classification(cube_info, (PixelPacket*) theSrcBits, theWidth, theHeight);
-	int aTiming = timeGetTime() - aThing;
+	int aTiming = SDL_GetTicks() - aThing;
 
 	if (status != false)
 	{
 		// Reduce the number of colors in the image.
-		aThing = timeGetTime();
+		aThing = SDL_GetTicks();
 		// 1437ms
 		Reduction(cube_info, number_colors);
-		aTiming = timeGetTime() - aThing;
+		aTiming = SDL_GetTicks() - aThing;
 
-		aThing = timeGetTime();
+		aThing = SDL_GetTicks();
 		// 296 ms
 		Assignment(cube_info, (PixelPacket*) theSrcBits, theWidth, theHeight, (uchar*) theDestColorIndices, (PixelPacket*) theDestColorTable);
-		aTiming = timeGetTime() - aThing;
+		aTiming = SDL_GetTicks() - aThing;
 	}
 	
 	DestroyCubeInfo(cube_info);

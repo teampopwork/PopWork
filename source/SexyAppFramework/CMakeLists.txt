@@ -216,10 +216,6 @@ set(SRC_MAIN
 	Color.h
 	Common.h
 	CritSect.h
-	#D3DInterface.h
-	#D3DTester.h
-	#DDImage.h
-	#DDInterface.h
 	Debug.h
 	Dialog.h
 	DialogButton.h

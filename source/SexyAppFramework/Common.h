@@ -20,9 +20,34 @@
 #include <algorithm>
 #include <cstdlib>
 
+
+#include <cstdint>
+#include <ctime>
+
+#ifdef _WIN32
 #include <windows.h>
-#include <shellapi.h> 
+#include <shellapi.h>
 #include <mmsystem.h>
+#else
+
+#include <wctype.h>
+#include <string.h>
+#include <stdint.h>
+#define _stricmp strcasecmp
+#define _cdecl
+typedef uint8_t BYTE;
+typedef uint16_t WORD;
+typedef uint32_t DWORD;
+typedef uint64_t QWORD;
+typedef uint32_t UINT;
+typedef int64_t __int64;
+
+typedef std::map<std::string, std::string>		DefinesMap;
+typedef std::map<std::wstring, std::wstring>	WStringWStringMap;
+typedef SexyString::value_type					SexyChar;
+#define HAS_SEXYCHAR
+
+#endif
 #include "ModVal.h"
 
 #ifdef _USE_WIDE_STRING
@@ -42,30 +67,6 @@ typedef std::wstring		SexyString;
 #define SexyStringToWStringFast(x)	(x)
 #define StringToSexyStringFast(x)	StringToWString(x)
 #define WStringToSexyStringFast(x)	(x)
-
-#ifndef SEXYFRAMEWORK_NO_REDEFINE_WIN_API
-// Redefine the functions and structs we need to be wide-string
-#undef CreateWindowEx
-#undef RegisterClass
-#undef MessageBox
-#undef ShellExecute
-#undef GetTextExtentPoint32
-#undef RegisterWindowMessage
-#undef CreateMutex
-#undef DrawTextEx
-#undef TextOut
-
-#define CreateWindowEx				CreateWindowExW
-#define RegisterClass				RegisterClassW
-#define WNDCLASS					WNDCLASSW
-#define MessageBox					MessageBoxW
-#define ShellExecute				ShellExecuteW
-#define GetTextExtentPoint32		GetTextExtentPoint32W
-#define RegisterWindowMessage		RegisterWindowMessageW
-#define CreateMutex					CreateMutexW
-#define DrawTextEx					DrawTextExW
-#define TextOut						TextOutW
-#endif
 
 #else
 

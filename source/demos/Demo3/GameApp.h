@@ -32,10 +32,10 @@ namespace Sexy
 	class Board;
 
 	// You'll learn more about images in GameApp.cpp and Demo2,
-	// so check there for more info. You'll notice we're using DDImage instead
+	// so check there for more info. You'll notice we're using SDLImage instead
 	// of Image, like we did in Demo 2. That's for convenience only, so that
 	// we don't have to type cast the image every time we want to work with it.
-	class DDImage;
+	class SDLImage;
 
 	// We'll need a font for the label on our button (see Board for more info on buttons)
 	class ImageFont;
@@ -53,9 +53,9 @@ class GameApp : public SexyAppBase
 		// GameApp.cpp for full information. We're going to
 		// make them public for easy accessing, since the point of this tutorial
 		// is to quickly get you up to speed on using the framework.
-		DDImage*	mTurbotImg;
-		DDImage*	mLightningImg;
-		DDImage*	mAlteredImg;		// Used in our example of modifying the image bits to make an altered version of an image.
+		SDLImage*	mTurbotImg;
+		SDLImage*	mLightningImg;
+		SDLImage*	mAlteredImg;		// Used in our example of modifying the image bits to make an altered version of an image.
 
 		ImageFont*	mFont;				// The font we'll use for the label on our button in Board
 

@@ -3,7 +3,7 @@
 #include "Graphics.h"
 #include "Image.h"
 #include "KeyCodes.h"
-#include "DDImage.h"
+#include "SDLImage.h"
 #include "SexyAppBase.h"
 #include "PerfTimer.h"
 #include "Debug.h"
@@ -398,7 +398,7 @@ void WidgetManager::DrawWidgetsTo(Graphics* g)
 bool WidgetManager::DrawScreen()
 {
 	SEXY_AUTO_PERF("WidgetManager::DrawScreen");
-	//DWORD start = timeGetTime();
+	//DWORD start = SDL_GetTicks();
 
 	ModalFlags aModalFlags;
 	InitModalFlags(&aModalFlags);
@@ -425,10 +425,8 @@ bool WidgetManager::DrawScreen()
 	Graphics aScrG(mImage);
 	mCurG = &aScrG;
 
-	DDImage* aDDImage = dynamic_cast<DDImage*>(mImage);
+	SDLImage* aSDLImage = dynamic_cast<SDLImage*>(mImage);
 	bool surfaceLocked = false;
-	if (aDDImage != NULL)
-		surfaceLocked = aDDImage->LockSurface();
 
 	if (aDirtyCount > 0)
 	{
@@ -463,8 +461,6 @@ bool WidgetManager::DrawScreen()
 	
 	FlushDeferredOverlayWidgets(0x7FFFFFFF);
 
-	if (aDDImage != NULL && surfaceLocked)
-		aDDImage->UnlockSurface();
 
 	mCurG = NULL;
 

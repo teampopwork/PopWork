@@ -95,11 +95,18 @@ SDLImage* SDLInterface::GetScreenImage()
 }
 
 void SDLInterface::UpdateViewport(){
+
+	int windowWidth, windowHeight;
+	SDL_GetWindowSize(mWindow, &windowWidth, &windowHeight);
+	SDL_SetRenderLogicalPresentation(mRenderer, windowWidth, windowHeight, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
 	SDL_Rect viewport;
 	viewport.x = 0;
 	viewport.y = 0;
-	viewport.w = mWidth;
-	viewport.h = mHeight;
+	viewport.w = windowWidth;
+	viewport.h = windowWidth;
+
+	mPresentationRect = Rect(0, 0, windowWidth, windowHeight);
 
 	// Set the viewport for rendering
 	SDL_SetRenderViewport(nullptr, &viewport);
@@ -147,16 +154,24 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Window Creation Failed", SDL_GetError(), nullptr);
 		return false;
 	}
+	if (!IsWindowed)
+	{
+		SDL_SetWindowFullscreen(mWindow, true);
+		SDL_SyncWindow(mWindow);
+	}
+
 	SDL_StartTextInput(mWindow);
 
-	mRenderer = SDL_CreateRenderer(mWindow, nullptr);
+	mRenderer = SDL_CreateRenderer(mWindow, mIs3D ? NULL : "software");
 	if (mRenderer == nullptr)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Renderer Creation Failed", SDL_GetError(), nullptr);
 		return false;
 	}
 
-	mScreenTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, mWidth, mHeight);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Renderer Creation Succeeded", SDL_GetRendererName(mRenderer), mWindow);
+
+	mScreenTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, mWidth, mHeight);
 	if (mScreenTexture == nullptr)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Screen Texture-Buffer Creation Failed", SDL_GetError(), nullptr);
@@ -169,6 +184,8 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
     mMillisecondsPerFrame = 1000 / mRefreshRate;
 
 	SetVideoOnlyDraw(false);
+
+	UpdateViewport();
 
 	return true;
 }
@@ -216,21 +233,29 @@ bool SDLInterface::SetCursorImage(Image* theImage)
 {
 	if (theImage == NULL)
 	{
-		SDL_ShowCursor();
+		SDL_SetCursor(nullptr);
 		return true;
 	}
-	SDL_HideCursor();
+//	SDL_HideCursor();
 	MemoryImage* aMemoryImage = (MemoryImage*)theImage;
 
-	SDL_Surface* aSurface = SDL_CreateSurfaceFrom(aMemoryImage->mWidth, aMemoryImage->mHeight, SDL_PIXELFORMAT_RGBA8888, aMemoryImage->mBits, aMemoryImage->mWidth * sizeof(ulong));
+	SDL_Surface* aSurface = SDL_CreateSurfaceFrom(aMemoryImage->mWidth, aMemoryImage->mHeight, SDL_PIXELFORMAT_ARGB8888, aMemoryImage->mBits, aMemoryImage->mWidth * sizeof(ulong));
 
 	SDL_Cursor* aCursor = SDL_CreateColorCursor(aSurface, 0, 0);
 	
 	SDL_SetCursor(aCursor);
 
 	SDL_DestroySurface(aSurface);
+	SDL_DestroyCursor(aCursor);
 
 	return true;
+}
+
+void SDLInterface::SetCursor(SDL_SystemCursor theCursorType)
+{
+	SDL_Cursor* aCursor = SDL_CreateSystemCursor(theCursorType);
+	SDL_SetCursor(aCursor);
+	SDL_DestroyCursor(aCursor);
 }
 
 void SDLInterface::MakeSimpleMessageBox(const char* theTitle, const char* theMessage, SDL_MessageBoxFlags flags)
@@ -363,6 +388,12 @@ void SDLTextureData::CreateTextures(MemoryImage* theImage)
 
 	if (createTexture)
 	{
+		if (theImage->GetBits() == NULL)
+		{
+			// Handle error
+			return;
+		}
+
 		mTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, aWidth, aHeight);
 		if (mTexture)
 		{

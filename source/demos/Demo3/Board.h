@@ -52,8 +52,8 @@ class Graphics;
 class GameApp;
 
 // We're going to make a modified copy of GameApp::mTurbotImg, so we'll
-// need to forward declare the DDImage class. See Board::CreateMirroredStretchedImg.
-class DDImage;
+// need to forward declare the SDLImage class. See Board::CreateMirroredStretchedImg.
+class SDLImage;
 
 // We're going to create a button in this demo and respond to its
 // click event.

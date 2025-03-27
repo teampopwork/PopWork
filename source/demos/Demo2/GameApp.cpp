@@ -10,12 +10,12 @@
 #include "SexyAppFramework/ImageFont.h"
 
 // The Image.h file just declares basic functions. All images are either of 
-// the DDImage or MemoryImage type. For this demo, we will use DDImage
+// the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
-// A DDImage is actually derived from MemoryImage, so where an Image or
-// MemoryImage is required, a DDImage will suffice as well. A DDImage
+// A SDLImage is actually derived from MemoryImage, so where an Image or
+// MemoryImage is required, a SDLImage will suffice as well. A SDLImage
 // contains optimized code for use with DirectX 7+.
-#include "SexyAppFramework/DDImage.h"
+#include "SexyAppFramework/SDLImage.h"
 
 // This will let us load sounds
 #include "SexyAppFramework/SoundManager.h"
@@ -130,7 +130,7 @@ void GameApp::LoadingThreadProc()
 	//	underscore instead of ending with it, it matters not, and again,
 	//	is automatically loaded in by the image loading code.
 	//	You need to clean up the memory allocated by these functions yourself.
-	mOpaqueBeamImg = (DDImage*) GetImage("images/beam_opaque");
+	mOpaqueBeamImg = (SDLImage*) GetImage("images/beam_opaque");
 
 	// If the file was not found or couldn't be loaded (i.e. due to an
 	// incompatible file format) the returned value will be NULL.
@@ -150,7 +150,7 @@ void GameApp::LoadingThreadProc()
 	}
 
 	// Now load the other two images
-	mMoonImg = (DDImage*) GetImage("images/moon");
+	mMoonImg = (SDLImage*) GetImage("images/moon");
 	if (mMoonImg == NULL)
 	{
 		Popup("There was an error loading the file: images/moon");
@@ -158,7 +158,7 @@ void GameApp::LoadingThreadProc()
 		return;
 	}
 
-	mTurbotImg = (DDImage*) GetImage("images/turbot_worry");
+	mTurbotImg = (SDLImage*) GetImage("images/turbot_worry");
 	if (mTurbotImg == NULL)
 	{
 		Popup("There was an error loading the file: images/turbot_worry");
@@ -184,9 +184,9 @@ void GameApp::LoadingThreadProc()
 	// Palletize() method on an image, you potentially can reduce the
 	// amount of RAM it consumes by 4 times. The Palletize method
 	// returns a boolean indicating if it could or couldn't be palletized.
-	((DDImage*)mOpaqueBeamImg)->Palletize();
-	((DDImage*)mMoonImg)->Palletize();
-	((DDImage*)mTurbotImg)->Palletize();
+	((SDLImage*)mOpaqueBeamImg)->Palletize();
+	((SDLImage*)mMoonImg)->Palletize();
+	((SDLImage*)mTurbotImg)->Palletize();
 
 	// Now let's load and create some fonts. A font consists of an 
 	// image and a text file. The image works on the same principles
