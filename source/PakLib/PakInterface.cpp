@@ -1,6 +1,7 @@
 #include "PakInterface.h"
-#include <windows.h>
+
 #include <direct.h>
+#include "../SexyAppFramework/Common.h"
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;
@@ -35,6 +36,7 @@ PakInterface::~PakInterface()
 
 bool PakInterface::AddPakFile(const std::string& theFileName)
 {
+	/*
 	HANDLE aFileHandle = CreateFile(theFileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 
 	if (aFileHandle == INVALID_HANDLE_VALUE)
@@ -48,7 +50,7 @@ bool PakInterface::AddPakFile(const std::string& theFileName)
 		CloseHandle(aFileHandle);
 		return false;
 	}
-
+	
 	void* aPtr = MapViewOfFile(aFileMapping, FILE_MAP_READ, 0, 0, aFileSize);
 	if (aPtr == NULL)
 	{
@@ -56,13 +58,34 @@ bool PakInterface::AddPakFile(const std::string& theFileName)
 		CloseHandle(aFileHandle);
 		return false;
 	}
+	*/
+	FILE* aFileHandle = fopen(theFileName.c_str(), "rb");
+	if (!aFileHandle) return false;
 
-	mPakCollectionList.push_back(PakCollection());
+	fseek(aFileHandle, 0, SEEK_END);
+	size_t aFileSize = ftell(aFileHandle);
+	fseek(aFileHandle, 0, SEEK_SET);
+
+	mPakCollectionList.emplace_back(aFileSize);
 	PakCollection* aPakCollection = &mPakCollectionList.back();
-
+	/*
 	aPakCollection->mFileHandle = aFileHandle;
 	aPakCollection->mMappingHandle = aFileMapping;
 	aPakCollection->mDataPtr = aPtr;
+	
+ 	*/
+ 
+ 	if (fread(aPakCollection->mDataPtr, 1, aFileSize, aFileHandle) != aFileSize) {
+         fclose(aFileHandle);
+         return false;
+     }
+     fclose(aFileHandle);
+ 
+     {
+         auto *aDataPtr = static_cast<uint8_t *>(aPakCollection->mDataPtr);
+         for (size_t i = 0; i < aFileSize; i++)
+             *aDataPtr++ ^= 0xF7;
+     }
 	
 	PakRecordMap::iterator aRecordItr = mPakRecordMap.insert(PakRecordMap::value_type(StringToUpper(theFileName), PakRecord())).first;
 	PakRecord* aPakRecord = &(aRecordItr->second);

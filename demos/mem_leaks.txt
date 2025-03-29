@@ -1,0 +1,6 @@
+Memory Leak Report for Sat Mar 29 17:17:08 2025
+
+D:\Documents\GitHub\SexyAppFramework-SDL\source\demos\Demo5\Board.cpp(82) : Leak 4 bytes
+-----------------------------------------------------------
+Total Unfreed: 4 bytes (0KB)
+

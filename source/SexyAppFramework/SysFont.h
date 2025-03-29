@@ -2,6 +2,7 @@
 #define __SYSFONT_H__
 
 #include "Font.h"
+#include <SDL3_ttf/SDL_ttf.h>
 
 namespace Sexy
 {
@@ -12,7 +13,7 @@ class SexyAppBase;
 class SysFont : public Font
 {
 public:	
-	HFONT					mHFont;
+	TTF_Font*				mTTFFont;
 	SexyAppBase*			mApp;
 	bool					mDrawShadow;
 	bool					mSimulateBold;

@@ -107,6 +107,7 @@ namespace Sexy
 		int Init(bool IsWindowed);
 
 		bool InitSDLWindow(bool IsWindowed);
+		bool InitSDLRenderer();
 
 		bool Redraw(Rect* theClipRect = NULL);
 		void SetVideoOnlyDraw(bool videoOnly);
@@ -118,8 +119,6 @@ namespace Sexy
 		void SetCursor(SDL_SystemCursor theCursorType);
 
 		void MakeSimpleMessageBox(const char* theTitle, const char* theMessage, SDL_MessageBoxFlags flags);
-
-		int MakeMessageBox(const SexyString& theText, int theType, int theButtons);
 
 	public:
 		void PushTransform(const SexyMatrix3& theTransform, bool concatenate = true);
@@ -146,6 +145,8 @@ namespace Sexy
 		void DrawTrianglesTex(const TriVertex theVertices[][3], int theNumTriangles, const Color& theColor, int theDrawMode, Image* theTexture, float tx = 0, float ty = 0, bool blend = true);
 		void DrawTrianglesTexStrip(const TriVertex theVertices[], int theNumTriangles, const Color& theColor, int theDrawMode, Image* theTexture, float tx = 0, float ty = 0, bool blend = true);
 		void FillPoly(const Point theVertices[], int theNumVertices, const Rect* theClipRect, const Color& theColor, int theDrawMode, int tx, int ty);
+
+		void BltTexture(SDL_Texture* theTexture, int theX, int theY, const SDL_FRect& theSrcRect, const SDL_FRect& theDestRect, const Color& theColor, int theDrawMode);
 
 	};
 }

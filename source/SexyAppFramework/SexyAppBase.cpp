@@ -11,7 +11,7 @@
 #include "SDLInterface.h"
 #include "SDLImage.h"
 #include "MemoryImage.h"
-#include "HTTPTransfer.h"
+//#include "HTTPTransfer.h"
 #include "Dialog.h"
 #include "..\ImageLib\ImageLib.h"
 #include "DSoundManager.h"
@@ -415,8 +415,8 @@ SexyAppBase::~SexyAppBase()
 			RegistryWriteBoolean("Is3D", mSDLInterface->mIs3D);
 	}
 
-	extern bool gD3DInterfacePreDrawError;
-	if (!showedMsgBox && gD3DInterfacePreDrawError && !IsScreenSaver())
+	extern bool gSDLInterfacePreDrawError;
+	if (!showedMsgBox && gSDLInterfacePreDrawError && !IsScreenSaver())
 	{
 		int aResult = MessageBox(NULL, 
 						GetString("HARDWARE_ACCEL_NOT_WORKING", 
@@ -1087,6 +1087,7 @@ bool SexyAppBase::OpenURL(const std::string& theURL, bool shutdownOnOpen)
 
 std::string SexyAppBase::GetProductVersion(const std::string& thePath)
 {	
+	/*
 	// Dynamically Load Version.dll
 	typedef DWORD (APIENTRY *GetFileVersionInfoSizeFunc)(LPSTR lptstrFilename, LPDWORD lpdwHandle);
 	typedef BOOL (APIENTRY *GetFileVersionInfoFunc)(LPSTR lptstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData);
@@ -1129,8 +1130,8 @@ std::string SexyAppBase::GetProductVersion(const std::string& thePath)
 
 		delete aVersionBuffer;	
 	}
-
-	return aProductVersion;
+	*/
+	return "0";
 }
 
 void SexyAppBase::WaitForLoadingThread()
@@ -2304,8 +2305,8 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 	static DWORD aRetryTick = 0;
 	if (!mSDLInterface->Redraw(theClipRect))
 	{
-		extern bool gD3DInterfacePreDrawError;
-		gD3DInterfacePreDrawError = false; // this predraw error happens naturally when ddraw is failing
+		extern bool gSDLInterfacePreDrawError;
+		gSDLInterfacePreDrawError = false; // this predraw error happens naturally when ddraw is failing
 		if (!gIsFailing)
 		{
 			//gDebugStream << GetTickCount() << " Redraw failed!" << std::endl;
@@ -4236,11 +4237,12 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 			if (event.type == SDL_EVENT_KEY_UP)
 			{
 				mWidgetManager->KeyUp((KeyCode)event.key.key);
-				TakeScreenshot();
 			}
 			else
 			{
 				mWidgetManager->KeyDown((KeyCode)event.key.key);
+
+				DebugKeyDown((int)SDL_GetKeyFromScancode(event.key.scancode, SDL_KMOD_NONE, false));
 			}
 			break;
 		case SDL_EVENT_TEXT_INPUT:

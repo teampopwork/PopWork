@@ -24,22 +24,15 @@ void SysFont::Init(SexyAppBase* theApp, const std::string& theFace, int thePoint
 {
 	mApp = theApp;
 
-	HDC aDC = ::GetDC(mApp->mHWnd);
+	mTTFFont = TTF_OpenFont("tahoma.ttf", thePointSize);
+	if (!mTTFFont) {
+		mApp->mSDLInterface->MakeSimpleMessageBox("Error", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+	}
 
-	int aHeight = -MulDiv(thePointSize, useDevCaps?GetDeviceCaps(aDC, LOGPIXELSY):96, 72);
+	TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) | (underline ? TTF_STYLE_UNDERLINE : 0));
 
-	mHFont = CreateFontA(aHeight, 0, 0, 0, bold ? FW_BOLD : FW_NORMAL, italics, underline,
-			false, theScript, OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
-			DEFAULT_PITCH | FF_DONTCARE, theFace.c_str());
-	
-	TEXTMETRIC aTextMetric;	
-	HFONT anOldFont = (HFONT) SelectObject(aDC, mHFont);
-	GetTextMetrics(aDC, &aTextMetric);
-	SelectObject(aDC, anOldFont);
-	ReleaseDC(mApp->mHWnd, aDC);
-
-	mHeight = aTextMetric.tmHeight;
-	mAscent = aTextMetric.tmAscent;
+	mAscent = TTF_GetFontAscent(mTTFFont);
+	mHeight = TTF_GetFontHeight(mTTFFont);
 
 	mDrawShadow = false;
 	mSimulateBold = false;
@@ -47,10 +40,7 @@ void SysFont::Init(SexyAppBase* theApp, const std::string& theFace, int thePoint
 
 SysFont::SysFont(const SysFont& theSysFont)
 {
-	LOGFONT aLogFont;
-
-	GetObject(theSysFont.mHFont, sizeof(LOGFONT), &aLogFont);
-	mHFont = CreateFontIndirect(&aLogFont);
+	mTTFFont = theSysFont.mTTFFont;
 	mApp = theSysFont.mApp;
 	mHeight = theSysFont.mHeight;
 	mAscent = theSysFont.mAscent;
@@ -61,11 +51,12 @@ SysFont::SysFont(const SysFont& theSysFont)
 
 SysFont::~SysFont()
 {
-	DeleteObject(mHFont);
+	TTF_CloseFont(mTTFFont);
 }
 
 ImageFont* SysFont::CreateImageFont()
 {
+	/*
 	int i;
 	MemoryImage*			anImage;
 	int anImageCharWidth, anImageXOff, anImageYOff;
@@ -153,164 +144,44 @@ ImageFont* SysFont::CreateImageFont()
 	aFont->mActiveListValid = true;
 
 	return aFont;
+	*/
+	return nullptr; //TODO: implement
 }
 
 int	SysFont::StringWidth(const SexyString& theString)
 {
-	HDC aDC = ::GetDC(mApp->mHWnd);
-	HFONT anOldFont = (HFONT)::SelectObject(aDC, mHFont);
-	int aWidth = 0;
+	int w = 0;
+	TTF_GetStringSize(mTTFFont, theString.c_str(), NULL, &w, nullptr);
 
-#ifdef _USE_WIDE_STRING
-	if (CheckFor98Mill())
-	{
-		SIZE aSize = { 0, 0 };
-		GetTextExtentPoint32W(aDC, theString.c_str(), theString.length(), &aSize);
-		aWidth = int(aSize.cx);
-	}
-	else
-#endif
-	{
-		RECT aRect = {0, 0, 0, 0};	
-		DrawTextEx(aDC, (SexyChar*)theString.c_str(), theString.length(), &aRect, DT_CALCRECT | DT_NOPREFIX, NULL);
-		aWidth = aRect.right;
-	}
-
-	::SelectObject(aDC, anOldFont);
-	::ReleaseDC(mApp->mHWnd, aDC);
-
-	return aWidth;
+	return w;
 }
 
 void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theString, const Color& theColor, const Rect& theClipRect)
 {
-	SDLImage* aSDLImage = dynamic_cast<SDLImage*>(g->mDestImage);
-	/*
-	if (aSDLImage != NULL)
-	{
-		LPDIRECTDRAWSURFACE aSurface = aSDLImage->GetSurface();
-		if (aSurface != NULL)
-		{
-			HDC aDC;
-
-			if (aSDLImage->mLockCount > 0)
-				aSDLImage->mSurface->Unlock(NULL);
-
-			if ((g->mDestImage == gSexyAppBase->mWidgetManager->mImage) && (gSexyAppBase->Is3DAccelerated()))
-				gSexyAppBase->mDDInterface->mD3DInterface->Flush();				
-			
-			if (aSurface->GetDC(&aDC) == DD_OK)
-			{				
-				HFONT anOldFont = (HFONT) SelectObject(aDC, mHFont);
-				SetBkMode(aDC, TRANSPARENT); 
-				IntersectClipRect(aDC, theClipRect.mX, theClipRect.mY, theClipRect.mX + theClipRect.mWidth, theClipRect.mY + theClipRect.mHeight);
-
-				if (mDrawShadow)
-				{
-					SetTextColor(aDC, RGB(0,0,0));
-					TextOut(aDC, theX + g->mTransX+1, theY - mAscent + 1 + g->mTransY+1, theString.c_str(), theString.length());
-					if (mSimulateBold)
-						TextOut(aDC, theX + g->mTransX+2, theY - mAscent + 1 + g->mTransY+1, theString.c_str(), theString.length());
-				}
-				SetTextColor(aDC, RGB(theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue()));
-				TextOut(aDC, theX + g->mTransX, theY - mAscent + 1 + g->mTransY, theString.c_str(), theString.length());
-				if (mSimulateBold)
-					TextOut(aDC, theX + g->mTransX + 1, theY - mAscent + 1 + g->mTransY, theString.c_str(), theString.length());
-
-				::SelectObject(aDC, anOldFont);
-				aSurface->ReleaseDC(aDC);
-				aSDLImage->DeleteAllNonSurfaceData();				
-			}			
-
-			if (aSDLImage->mLockCount > 0)
-				aSDLImage->mSurface->Lock(NULL, &aSDLImage->mLockedSurfaceDesc, DDLOCK_SURFACEMEMORYPTR | DDLOCK_WAIT, NULL);			
-		}
+	SDL_Renderer* renderer = mApp->mSDLInterface->mRenderer;
+	SDL_Color aColor = { theColor.mRed, theColor.mGreen, theColor.mBlue , theColor.mAlpha };
+	SDL_Surface* textSurface = TTF_RenderText_Blended(mTTFFont, theString.c_str(), NULL, aColor);
+	if (!textSurface) {
+		//throw std::runtime_error("Failed to render text: " + std::string(TTF_GetError()));
 	}
-	else if (g->mDestImage != &Graphics::mStaticImage) // DrawString can be called when not drawing onto an image.
-	{
-		HDC aDC = CreateCompatibleDC(NULL);
-		HFONT anOldFont = (HFONT) SelectObject(aDC, mHFont);
 
-		int aWidth = StringWidth(theString);
-		int aHeight = mHeight;
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+	SDL_FRect dstRect = { theX, theY - mAscent, textSurface->w, textSurface->h };
+	SDL_FRect srcRect = { 0, 0, dstRect.w, dstRect.h };
+	SDL_DestroySurface(textSurface);
 
-		BITMAPINFOHEADER bih;
-		memset(&bih, 0, sizeof(bih));
-
-		bih.biPlanes = 1;
-		bih.biWidth = aWidth;
-		bih.biHeight = -aHeight;
-		bih.biCompression = BI_RGB;
-		bih.biBitCount = 32;
-		bih.biSize = sizeof(BITMAPINFOHEADER);
-
-		ulong* whiteBits, * blackBits;
-		HBITMAP whiteBitmap = (HBITMAP)CreateDIBSection(aDC, (BITMAPINFO*)&bih, DIB_RGB_COLORS, (void**)&whiteBits, NULL, 0);
-		HBITMAP blackBitmap = (HBITMAP)CreateDIBSection(aDC, (BITMAPINFO*)&bih, DIB_RGB_COLORS, (void**)&blackBits, NULL, 0);
-
-		RECT rc = { 0, 0, aWidth, aHeight };
-
-#define DRAW_BITMAP(bmp, brush) \
-		{																							\
-			HBITMAP oldBmp = (HBITMAP) SelectObject(aDC, bmp);										\
-			::FillRect(aDC, &rc, brush);															\
-			SetBkMode(aDC, TRANSPARENT);															\
-																									\
-			if (mDrawShadow)																		\
-			{																						\
-				SetTextColor(aDC, RGB(0,0,0));														\
-				TextOut(aDC, 1, 1, theString.c_str(), theString.length());							\
-				if (mSimulateBold)																	\
-					TextOut(aDC, 2, 1, theString.c_str(), theString.length());						\
-			}																						\
-			SetTextColor(aDC, RGB(theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue()));		\
-			TextOut(aDC, 0, 0, theString.c_str(), theString.length());								\
-			if (mSimulateBold)																		\
-				TextOut(aDC, 1, 0, theString.c_str(), theString.length());							\
-																									\
-			SelectObject(aDC, oldBmp);																\
-		}
-
-		DRAW_BITMAP(whiteBitmap, (HBRUSH)GetStockObject(WHITE_BRUSH));
-		DRAW_BITMAP(blackBitmap, (HBRUSH)GetStockObject(BLACK_BRUSH));
-
-		SelectObject(aDC, anOldFont);
-
-		MemoryImage aTempImage;
-		aTempImage.Create(aWidth, aHeight);
-
-		int aCount = aHeight*aWidth;
-		ulong* ptr1 = whiteBits, *ptr2 = blackBits;
-		while (aCount > 0)
-		{
-			if (*ptr1 == *ptr2)
-				*ptr1 |= 0xFF000000;
-			else if ((*ptr1 & 0xFFFFFF) != 0xFFFFFF || (*ptr2 & 0xFFFFFF) != 0x000000) // if not the background of either, it's a 'blend'
-			{
-				int ba = 255 + (*ptr2 & 0xFF) - (*ptr1 & 0xFF);
-				int ga = 255 + ((*ptr2 >> 8) & 0xFF) - ((*ptr1 >> 8) & 0xFF);
-				int ra = 255 + ((*ptr2 >> 16) & 0xFF) - ((*ptr1 >> 16) & 0xFF);
-				int aBlue = 255 * (*ptr2 & 0xFF) / ba;
-				int aGreen = 255 * ((*ptr2 >> 8) & 0xFF) / ga;
-				int aRed = 255 * ((*ptr2 >> 16) & 0xFF) / ra;
-				int anAlpha = min(ra, min(ga, ba));
-				*ptr1 = (aBlue) | (aGreen << 8) | (aRed << 16) | (anAlpha << 24);
-			}
-			else *ptr1 &= 0;
-
-			ptr1++;
-			ptr2++;
-			--aCount;
-		}
-
-		memcpy(aTempImage.GetBits(), whiteBits, aWidth*aHeight*sizeof(ulong));
-		g->DrawImage(&aTempImage, theX, theY - mAscent);
-
-		DeleteObject(whiteBitmap);
-		DeleteObject(blackBitmap);
-		DeleteDC(aDC);
+	if (!textTexture) {
+		//throw std::runtime_error("Failed to create texture from surface: " + std::string(SDL_GetError()));
 	}
-	*/
+
+	if (mDrawShadow) {
+		SDL_FRect shadowRect = { theX + 1, theY - mAscent + 1, dstRect.w, dstRect.h };
+		mApp->mSDLInterface->BltTexture(textTexture, theX, theY, srcRect, shadowRect, Color(0,0,0), g->GetDrawMode());
+	}
+
+	mApp->mSDLInterface->BltTexture(textTexture, theX, theY, srcRect, dstRect, theColor, g->GetDrawMode());
+
+	SDL_DestroyTexture(textTexture);
 }
 
 Font* SysFont::Duplicate()

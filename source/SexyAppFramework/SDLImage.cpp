@@ -31,6 +31,12 @@ void SDLImage::Create(int theWidth, int theHeight)
 
 	mBits = NULL;
 
+	mWidth = theWidth;
+	mHeight = theHeight;
+
+	mHasTrans = true;
+	mHasAlpha = true;
+
 	BitsChanged();
 }
 

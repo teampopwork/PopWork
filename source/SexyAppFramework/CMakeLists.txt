@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.18)
 
 project(SexyAppFramework)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../lib/SDL/include)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8
+)
 
 set(SRC_MAIN
 	# Sources
@@ -108,6 +109,7 @@ set(SRC_MAIN
 	ImageFont.cpp
 	MemoryImage.cpp
 	SysFont.cpp
+	TTFFont.cpp
 	Quantize.cpp
 	SharedImage.cpp
 
@@ -284,6 +286,7 @@ set(SRC_MAIN
 	SoundManager.h
 	SWTri.h
 	SysFont.h
+	TTFFont.h
 	TextWidget.h
 	Widget.h
 	WidgetContainer.h
@@ -300,9 +303,27 @@ set(SRC_MAIN
 add_compile_definitions(SexyAppFramework _LIB)
 add_library(SexyAppFramework STATIC ${SRC_MAIN})
 
+include(FetchContent)
+
+FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL
+        # This will be a tag once SDL3 is released
+        GIT_TAG origin/main
+    )
+FetchContent_MakeAvailable(SDL3)
+
+FetchContent_Declare(
+        SDL3_ttf
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
+        GIT_TAG origin/main
+    )
+FetchContent_MakeAvailable(SDL3_ttf)
+
 set(SexyAppLibs
+	SDL3::SDL3
+	SDL3_ttf::SDL3_ttf
 	${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8/d3d8.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/../../lib/SDL/lib/x86/SDL3.lib
 	dsound
 	winmm
 	ws2_32

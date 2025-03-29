@@ -38,9 +38,10 @@ inline int DeltaCounters(__int64 *lpPerformanceCount)
 ///////////////////////////////////////////////////////////////////////////////
 static __int64 CalcCPUSpeed()
 {
+	/*
 	int aPriority = GetThreadPriority(GetCurrentThread());
 	SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_HIGHEST);
-	LARGE_INTEGER	goal, current, period;
+	int64_t	goal, current, period;
 	__int64 Ticks;
 
 	if( !QueryPerformanceFrequency( &period ) ) return 0;
@@ -56,7 +57,8 @@ static __int64 CalcCPUSpeed()
 
 	SetThreadPriority(GetCurrentThread(),aPriority);
 	return( Ticks * 100 );		// Hz
-
+	*/
+	return 0;
 }
 
 static __int64 gCPUSpeed = 0;

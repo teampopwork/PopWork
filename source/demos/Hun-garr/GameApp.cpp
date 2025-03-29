@@ -20,8 +20,8 @@ GameApp::GameApp()
 	mTitle = StringToSexyStringFast("SexyAppFramework: " + mProdName + " - " + mProductVersion);
 	mRegKey = "PopCap\\SexyAppFramework\\Hungarr";
 
-	mWidth = 800;
-	mHeight = 600;
+	mWidth = 640;
+	mHeight = 480;
 
 	mDebugKeysEnabled = true;
 

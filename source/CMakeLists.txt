@@ -9,6 +9,8 @@ add_subdirectory(SexyAppFramework)
 
 option(BuildDemos "Build Demos" ON)
 
+option(CONSOLE "Show console on Windows" ON)
+
 if (${BuildDemos})
 	add_subdirectory(demos)
 endif()

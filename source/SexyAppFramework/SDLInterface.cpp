@@ -5,13 +5,14 @@
 #include "CritSect.h"
 #include "Graphics.h"
 #include "MemoryImage.h"
+#include <SDL3_ttf/SDL_ttf.h>
 
 using namespace Sexy;
 
-SDL_FPoint TransformToPoint(float x, float y, const SexyMatrix3& m) {
+SDL_FPoint TransformToPoint(float x, float y, const SexyMatrix3& m, float aTransX = 0, float aTransY = 0) {
 	SDL_FPoint result;
-	result.x = m.m00 * x + m.m01 * y + m.m02;
-	result.y = m.m10 * x + m.m11 * y + m.m12;
+	result.x = m.m00 * x + m.m01 * y + m.m02 + aTransX;
+	result.y = m.m10 * x + m.m11 * y + m.m12 + aTransY;
 	return result;
 }
 
@@ -99,17 +100,7 @@ void SDLInterface::UpdateViewport(){
 	int windowWidth, windowHeight;
 	SDL_GetWindowSize(mWindow, &windowWidth, &windowHeight);
 	SDL_SetRenderLogicalPresentation(mRenderer, windowWidth, windowHeight, SDL_LOGICAL_PRESENTATION_LETTERBOX);
-
-	SDL_Rect viewport;
-	viewport.x = 0;
-	viewport.y = 0;
-	viewport.w = windowWidth;
-	viewport.h = windowWidth;
-
 	mPresentationRect = Rect(0, 0, windowWidth, windowHeight);
-
-	// Set the viewport for rendering
-	SDL_SetRenderViewport(nullptr, &viewport);
 }
 
 int SDLInterface::Init(bool IsWindowed)
@@ -140,7 +131,7 @@ int SDLInterface::Init(bool IsWindowed)
 
 bool SDLInterface::InitSDLWindow(bool IsWindowed)
 {
-	if (!SDL_Init(SDL_INIT_VIDEO))
+	if (!SDL_Init(SDL_INIT_VIDEO) || !TTF_Init())
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL Initialization Failed", SDL_GetError(), nullptr);
 		return false;
@@ -157,10 +148,15 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 	if (!IsWindowed)
 	{
 		SDL_SetWindowFullscreen(mWindow, true);
-		SDL_SyncWindow(mWindow);
 	}
 
 	SDL_StartTextInput(mWindow);
+
+	return InitSDLRenderer();
+}
+
+bool SDLInterface::InitSDLRenderer()
+{
 
 	mRenderer = SDL_CreateRenderer(mWindow, mIs3D ? NULL : "software");
 	if (mRenderer == nullptr)
@@ -169,8 +165,6 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 		return false;
 	}
 
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Renderer Creation Succeeded", SDL_GetRendererName(mRenderer), mWindow);
-
 	mScreenTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, mWidth, mHeight);
 	if (mScreenTexture == nullptr)
 	{
@@ -178,10 +172,10 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 		return false;
 	}
 
-    const SDL_DisplayMode* aMode = SDL_GetCurrentDisplayMode(SDL_GetDisplayForWindow(mWindow));
-    mRefreshRate = aMode->refresh_rate;
-    if (!mRefreshRate) mRefreshRate = 60;
-    mMillisecondsPerFrame = 1000 / mRefreshRate;
+	const SDL_DisplayMode* aMode = SDL_GetCurrentDisplayMode(SDL_GetDisplayForWindow(mWindow));
+	mRefreshRate = aMode->refresh_rate;
+	if (!mRefreshRate) mRefreshRate = 60;
+	mMillisecondsPerFrame = 1000 / mRefreshRate;
 
 	SetVideoOnlyDraw(false);
 
@@ -189,7 +183,7 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 
 	return true;
 }
-bool gD3DInterfacePreDrawError = false;
+bool gSDLInterfacePreDrawError = false;
 bool SDLInterface::Redraw(Rect* theClipRect)
 {
 	SDL_Rect clipRect;
@@ -202,7 +196,7 @@ bool SDLInterface::Redraw(Rect* theClipRect)
 	SDL_RenderClear(mRenderer); // Clear screen
 
 	SDL_SetRenderClipRect(mRenderer, &clipRect); // Set clip rect (affects only render ops)
-	SDL_RenderTexture(mRenderer, mScreenTexture, NULL, NULL); // Render texture
+	gSDLInterfacePreDrawError = !SDL_RenderTexture(mRenderer, mScreenTexture, NULL, NULL); // Render texture
 	SDL_SetRenderClipRect(mRenderer, NULL); // Reset clip rect
 
 	SDL_RenderPresent(mRenderer); // Present the frame
@@ -211,6 +205,10 @@ bool SDLInterface::Redraw(Rect* theClipRect)
 	return true;
 }
 
+/// <summary>
+/// Setup the mScreenImage
+/// </summary>
+/// <param name="videoOnly"></param>
 void SDLInterface::SetVideoOnlyDraw(bool videoOnly)
 {
 	if (mScreenImage) delete mScreenImage;
@@ -223,12 +221,22 @@ void SDLInterface::SetVideoOnlyDraw(bool videoOnly)
 	mScreenImage->SetImageMode(false, false);
 }
 
+/// <summary>
+/// Set the next cursor position
+/// </summary>
+/// <param name="theCursorX"></param>
+/// <param name="theCursorY"></param>
 void SDLInterface::SetCursorPos(int theCursorX, int theCursorY)
 {
 	mNextCursorX = theCursorX;
 	mNextCursorY = theCursorY;
 }
 
+/// <summary>
+/// Set the cursor image to a Image* or NULL to hide the cursor
+/// </summary>
+/// <param name="theImage"></param>
+/// <returns></returns>
 bool SDLInterface::SetCursorImage(Image* theImage)
 {
 	if (theImage == NULL)
@@ -236,10 +244,9 @@ bool SDLInterface::SetCursorImage(Image* theImage)
 		SDL_SetCursor(nullptr);
 		return true;
 	}
-//	SDL_HideCursor();
 	MemoryImage* aMemoryImage = (MemoryImage*)theImage;
 
-	SDL_Surface* aSurface = SDL_CreateSurfaceFrom(aMemoryImage->mWidth, aMemoryImage->mHeight, SDL_PIXELFORMAT_ARGB8888, aMemoryImage->mBits, aMemoryImage->mWidth * sizeof(ulong));
+	SDL_Surface* aSurface = SDL_CreateSurfaceFrom(aMemoryImage->mWidth, aMemoryImage->mHeight, SDL_PIXELFORMAT_ARGB8888, aMemoryImage->GetBits(), aMemoryImage->mWidth * sizeof(ulong));
 
 	SDL_Cursor* aCursor = SDL_CreateColorCursor(aSurface, 0, 0);
 	
@@ -388,16 +395,13 @@ void SDLTextureData::CreateTextures(MemoryImage* theImage)
 
 	if (createTexture)
 	{
-		if (theImage->GetBits() == NULL)
-		{
-			// Handle error
-			return;
-		}
 
 		mTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, aWidth, aHeight);
+
+		SDL_SetTextureScaleMode(mTexture, SDL_GetRendererName(mRenderer) == "software" ? SDL_SCALEMODE_NEAREST : SDL_SCALEMODE_LINEAR);
 		if (mTexture)
 		{
-			SDL_UpdateTexture(mTexture, nullptr, theImage->mBits, aWidth * sizeof(ulong));
+			SDL_UpdateTexture(mTexture, nullptr, theImage->GetBits(), aWidth * sizeof(ulong));
 		}
 	}
 
@@ -603,13 +607,13 @@ void SDLInterface::BltTransformed(Image* theImage, const Rect* theClipRect, cons
 	SDL_FColor aColor = { theColor.GetRed() , theColor.GetGreen(), theColor.GetBlue(), theColor.GetAlpha() };
 
 	SDL_Vertex vertices[4] = {
-		{ TransformToPoint(x1, y1, theTransform), aColor, {0, 0} },     // Top-left
-		{ TransformToPoint(x2, y2, theTransform), aColor, {1, 0} },     // Top-right
-		{ TransformToPoint(x3, y3, theTransform), aColor, {0, 1} },     // Bottom-left
-		{ TransformToPoint(x4, y4, theTransform), aColor, {1, 1} }      // Bottom-right
+		{ TransformToPoint(x1, y1, theTransform, theX, theY), aColor, {0, 0} },     // Top-left
+		{ TransformToPoint(x2, y2, theTransform, theX, theY), aColor, {1, 0} },     // Top-right
+		{ TransformToPoint(x3, y3, theTransform, theX, theY), aColor, {0, 1} },     // Bottom-left
+		{ TransformToPoint(x4, y4, theTransform, theX, theY), aColor, {1, 1} }      // Bottom-right
 	};
 
-	int indices[] = { 0, 1, 2, 1, 3, 2 }; // Two triangles for a quad
+	int indices[] = { 0, 1, 2, 1, 3, 2 };
 
 	SDL_SetRenderClipRect(mRenderer, &clipRect);
 	SDL_RenderGeometry(mRenderer, aTexture, vertices, 4, indices, 6);
@@ -774,4 +778,16 @@ void SDLInterface::FillPoly(const Point theVertices[], int theNumVertices, const
 	{
 		DrawLine(theVertices[i].mX, theVertices[i].mY, theVertices[i+1].mX, theVertices[i + 1].mY, theColor, theDrawMode);
 	}
+}
+
+void SDLInterface::BltTexture(SDL_Texture* theTexture, int theX, int theY, const SDL_FRect& theSrcRect, const SDL_FRect& theDestRect, const Color& theColor, int theDrawMode)
+{
+	SDL_SetRenderTarget(mRenderer, mScreenTexture);
+
+	SDL_SetTextureColorMod(theTexture, theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue());
+	SDL_SetTextureAlphaMod(theTexture, theColor.GetAlpha());
+
+	SDL_SetTextureBlendMode(theTexture, ChooseBlendMode(theDrawMode));
+	SDL_RenderTexture(mRenderer, theTexture, &theSrcRect, &theDestRect);
+	SDL_SetRenderTarget(mRenderer, nullptr);
 }

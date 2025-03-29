@@ -239,14 +239,14 @@ void HTTPTransfer::GetThreadProc()
 						chunked = true;
 					}
 
-					char* aCheckStr = "Transfer-Encoding: ";
+					char* aCheckStr = (char*)"Transfer-Encoding: ";
 					if (strncmp(aLine.c_str(), aCheckStr, strlen(aCheckStr)) == 0)
 					{
 						if (strcmp(aLine.c_str() + strlen(aCheckStr), "identity") != 0)
 							chunked = true;
 					}
 
-					aCheckStr = "Content-Length: ";
+					aCheckStr = (char*)"Content-Length: ";
 					if (strncmp(aLine.c_str(), aCheckStr, strlen(aCheckStr)) == 0)
 					{
 						aContentLengthLeft = atoi(aLine.c_str() + strlen(aCheckStr));

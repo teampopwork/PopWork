@@ -1,4 +1,4 @@
-#ifndef __PAKINTERFACE_H__
+﻿#ifndef __PAKINTERFACE_H__
 #define __PAKINTERFACE_H__
 
 #include <map>
@@ -25,9 +25,13 @@ typedef std::map<std::string, PakRecord> PakRecordMap;
 class PakCollection
 {
 public:
-	HANDLE					mFileHandle;
-	HANDLE					mMappingHandle;
-	void*					mDataPtr;
+	//HANDLE					mFileHandle;
+	//HANDLE					mMappingHandle;
+	void* mDataPtr;
+
+	explicit PakCollection(size_t size) { mDataPtr = malloc(size); }
+
+	~PakCollection() { free(mDataPtr); }
 };
 
 typedef std::list<PakCollection> PakCollectionList;
