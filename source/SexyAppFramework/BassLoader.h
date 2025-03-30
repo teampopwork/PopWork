@@ -35,8 +35,7 @@ struct BASS_INSTANCE
 
 	DWORD(WINAPI *BASS_GetVersion)();
 
-	BOOL(WINAPI *BASS_Init)(int device, DWORD freq, DWORD flags, HWND win);
-	BOOL(WINAPI *BASS_Init2)(int device, DWORD freq, DWORD flags, HWND win, GUID* clsid);
+	BOOL(WINAPI *BASS_Init)(int device, DWORD freq, DWORD flags, HWND win, GUID* clsid);
 	void(WINAPI *BASS_Free)();
 	BOOL(WINAPI *BASS_Stop)();
 	BOOL(WINAPI *BASS_Start)();
@@ -66,12 +65,10 @@ struct BASS_INSTANCE
 	BOOL (WINAPI *BASS_ChannelRemoveFX)(DWORD handle, HFX fx);
 	QWORD (WINAPI *BASS_ChannelGetLength)(DWORD handle, DWORD mode);
 	DWORD (WINAPI *BASS_ChannelGetData)(DWORD handle, void* buffer, DWORD length);
-	BOOL (WINAPI *BASS_ChannelPreBuf)(DWORD handle, DWORD length);
 	HSYNC (WINAPI *BASS_ChannelSetSync)(DWORD handle, DWORD theType, QWORD theParam, SYNCPROC* proc, DWORD user);
 	BOOL (WINAPI *BASS_ChannelRemoveSync)(DWORD handle, HSYNC sync);
 	
-	HMUSIC(WINAPI *BASS_MusicLoad)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD flags);
-	HMUSIC(WINAPI *BASS_MusicLoad2)(BOOL mem, void *file, DWORD offset, DWORD length, DWORD flags, DWORD freq);
+	HMUSIC(WINAPI * BASS_MusicLoad)(BOOL mem, const void* file, QWORD offset, DWORD length, DWORD flags, DWORD freq);
 	void(WINAPI *BASS_MusicFree)(HMUSIC handle);
 
 	HSTREAM(WINAPI *BASS_StreamCreateFile)(BOOL mem, const void* file, QWORD offset, QWORD length, DWORD flags);

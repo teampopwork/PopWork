@@ -14,7 +14,7 @@ static void CheckBassFunction(unsigned int theFunc, const char *theName)
 {
 	if (theFunc==0)
 	{
-		std::string finalMessage = "function not found in BASS library";
+		std::string finalMessage = " function not found in BASS library";
 		finalMessage = theName + finalMessage;
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "BASS Error", finalMessage.c_str() , nullptr);
 		exit(EXIT_FAILURE);
@@ -39,16 +39,7 @@ BASS_INSTANCE::BASS_INSTANCE(const char *dllName)
 	GETPROC(BASS_Free);
 	GETPROC(BASS_Stop);
 	GETPROC(BASS_Start);
-	
-	*((unsigned int*) &BASS_SetGlobalVolumes) = (unsigned int) GetProcAddress(mModule, "BASS_SetGlobalVolumes");
-	*((unsigned int*) &BASS_SetVolume) = (unsigned int) GetProcAddress(mModule, "BASS_SetVolume");
-
-	if ((BASS_SetVolume == NULL) && (BASS_SetGlobalVolumes == NULL))
-	{
-		//MessageBoxA(NULL,"Neither BASS_SetGlobalVolumes or BASS_SetVolume found in bass.dll","Error",MB_OK | MB_ICONERROR);
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "BASS Error", "Neither BASS_SetGlobalVolumes or BASS_SetVolume found in bass.dll", nullptr);
-		exit(0);
-	}	
+	GETPROC(BASS_SetVolume);
 
 	*((unsigned int*) &BASS_SetConfig) = (unsigned int) GetProcAddress(mModule, "BASS_SetConfig");
 	*((unsigned int*) &BASS_GetConfig) = (unsigned int) GetProcAddress(mModule, "BASS_GetConfig");
@@ -103,29 +94,12 @@ BASS_INSTANCE::BASS_INSTANCE(const char *dllName)
 	GETPROC(BASS_SampleStop);
 
 	GETPROC(BASS_ErrorGetCode);
+	//added these here cause we updated to 2.4
+	GETPROC(BASS_PluginLoad);
+	GETPROC(BASS_ChannelGetLength);
 
 	mVersion2 = BASS_SetConfig != NULL;
-	if (mVersion2)
-	{
-		// Version 2 has different BASS_Init params
-		*((unsigned int*) &BASS_Init2) = (unsigned int) BASS_Init;
-		BASS_Init = NULL;
 
-		*((unsigned int*) &BASS_MusicLoad2) = (unsigned int) BASS_MusicLoad;
-		BASS_MusicLoad = NULL;
-
-		// The following are only supported in 2.2 and higher
-		*((unsigned int*) &BASS_PluginLoad) = (unsigned int) GetProcAddress(mModule, "BASS_PluginLoad");
-		*((unsigned int*) &BASS_ChannelGetLength) = (unsigned int) GetProcAddress(mModule, "BASS_ChannelGetLength");
-
-		// 2.1 and higher only
-		*((unsigned int*) &BASS_ChannelPreBuf) = (unsigned int) GetProcAddress(mModule, "BASS_ChannelPreBuf");
-	}
-	else
-	{
-		BASS_PluginLoad = NULL;
-		BASS_ChannelPreBuf = NULL;
-	}
 
 #undef GETPROC
 }

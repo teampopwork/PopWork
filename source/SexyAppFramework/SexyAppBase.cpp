@@ -467,7 +467,6 @@ SexyAppBase::~SexyAppBase()
 	if (gBass != NULL)
 	{
 		gBass->BASS_Stop();
-		gBass->BASS_Free();
 	}
 	FreeBassDLL();
 	
