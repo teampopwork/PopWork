@@ -150,7 +150,9 @@ set(SRC_MAIN
 	SexyAppBase.cpp
 
 	DSoundManager.cpp
+	BassSoundManager.cpp
 	DSoundInstance.cpp
+	BassSoundInstance.cpp
 	BassLoader.cpp
 	BassMusicInterface.cpp
 	FModLoader.cpp
@@ -224,7 +226,9 @@ set(SRC_MAIN
 	DialogListener.h
 	DirectXErrorString.h
 	DSoundInstance.h
+	BassSoundInstance.h
 	DSoundManager.h
+	BassSoundManager.h
 	EditListener.h
 	EditWidget.h
 	Flags.h
@@ -300,8 +304,15 @@ set(SRC_MAIN
 	SDLInterface.h
 )
 
+set(SDL_MIXER_X_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../lib/SDL-Mixer-X")
+
+file(GLOB SDL_MIXER_X_SOURCES
+    "${SDL_MIXER_X_DIR}/src/*.c"
+    "${SDL_MIXER_X_DIR}/src/*.h"
+)
+
 add_compile_definitions(SexyAppFramework _LIB)
-add_library(SexyAppFramework STATIC ${SRC_MAIN})
+add_library(SexyAppFramework STATIC ${SRC_MAIN} ${SDL_MIXER_X_SOURCES})
 
 include(FetchContent)
 
@@ -320,12 +331,21 @@ FetchContent_Declare(
     )
 FetchContent_MakeAvailable(SDL3_ttf)
 
+FetchContent_Declare(
+        SDL3_mixer
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer
+        GIT_TAG origin/main
+    )
+FetchContent_MakeAvailable(SDL3_mixer)
+
+
 set(SexyAppLibs
 	SDL3::SDL3
 	SDL3_ttf::SDL3_ttf
+	SDL3_mixer::SDL3_mixer
 	${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8/d3d8.lib
 	dsound
 	winmm
 	ws2_32
 )
-target_link_libraries(SexyAppFramework ${SexyAppLibs})
+target_link_libraries(SexyAppFramework ${SexyAppLibs} )

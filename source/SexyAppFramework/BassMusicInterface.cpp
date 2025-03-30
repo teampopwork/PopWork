@@ -18,69 +18,27 @@ BassMusicInfo::BassMusicInfo()
 	mHStream = NULL;
 }
 
-BassMusicInterface::BassMusicInterface(HWND theHWnd)
+BassMusicInterface::BassMusicInterface()
 {
 	LoadBassDLL();
 
-	MIXERCONTROLDETAILS mcd;
-	MIXERCONTROLDETAILS_UNSIGNED mxcd_u;
-	MIXERLINECONTROLS mxlc;
-	MIXERCONTROL mlct;
-	MIXERLINE mixerLine;
-	HMIXEROBJ phmx;
-	MIXERCAPS pmxcaps;	
-
-	mixerOpen((HMIXER*) &phmx, 0, 0, 0, MIXER_OBJECTF_MIXER);
-	mixerGetDevCaps(0, &pmxcaps, sizeof(pmxcaps));
-
-	mxlc.cbStruct = sizeof(mxlc);	
-	mxlc.cbmxctrl = sizeof(mlct);
-	mxlc.pamxctrl = &mlct;
-	mxlc.dwControlType = MIXERCONTROL_CONTROLTYPE_VOLUME;
-	mixerLine.cbStruct = sizeof(mixerLine);
-	mixerLine.dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT;
-	mixerGetLineInfo(phmx, &mixerLine, MIXER_GETLINEINFOF_COMPONENTTYPE);
-	mxlc.dwLineID = mixerLine.dwLineID;
-	mixerGetLineControls(phmx, &mxlc, MIXER_GETLINECONTROLSF_ONEBYTYPE);	
-
-	mcd.cbStruct = sizeof(mcd);
-	mcd.dwControlID = mlct.dwControlID;
-	mcd.cChannels = 1;
-	mcd.cMultipleItems = 0;
-	mcd.cbDetails = sizeof(mxcd_u);
-	mcd.paDetails = &mxcd_u;
-	
-	mixerGetControlDetails(phmx, &mcd, 0L);
-
-	//return mxcd_u.dwValue;	
-
-	BOOL success;
+	bool success = false;
 
 	if (gBass->mVersion2)
 	{
-		success = gBass->BASS_Init2(1, 44100, 0, theHWnd, NULL);
+		success = gBass->BASS_Init2(1, 44100, 0, 0, NULL);
 		gBass->BASS_SetConfig(BASS_CONFIG_BUFFER, 2000);
 	}
 	else
-		success = gBass->BASS_Init(-1, 44100, 0, theHWnd);
-
-	mixerSetControlDetails(phmx, &mcd, 0L);
-
-	gBass->BASS_Start();
-
-	mixerClose((HMIXER) phmx);
+		success = gBass->BASS_Init(-1, 44100, 0, 0);
 
 	mMaxMusicVolume = 40;
-
 	mMusicLoadFlags = gBass->mVersion2 ? BASS_MUSIC_LOOP | BASS2_MUSIC_RAMP : BASS_MUSIC_LOOP;
 }
 
 BassMusicInterface::~BassMusicInterface()
 {
-	gBass->BASS_Stop();
-	gBass->BASS_Free();
 
-	FreeBassDLL();
 }
 
 bool BassMusicInterface::LoadMusic(int theSongId, const std::string& theFileName)
@@ -136,8 +94,8 @@ void BassMusicInterface::PlayMusic(int theSongId, int theOffset, bool noLoop)
 		BassMusicInfo* aMusicInfo = &anItr->second;
 		aMusicInfo->mVolume = aMusicInfo->mVolumeCap;
 		aMusicInfo->mVolumeAdd = 0.0;
-		aMusicInfo->mStopOnFade = noLoop;
-		gBass->BASS_ChannelSetAttributes(aMusicInfo->GetHandle(), -1, (int) (aMusicInfo->mVolume*100), -101);			   
+		aMusicInfo->mStopOnFade = noLoop;   
+		gBass->BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_MUSIC_VOL_GLOBAL, (int) (aMusicInfo->mVolume*100));			   
 
 		gBass->BASS_ChannelStop(aMusicInfo->GetHandle());
 		if (aMusicInfo->mHMusic)
@@ -152,7 +110,7 @@ void BassMusicInterface::PlayMusic(int theSongId, int theOffset, bool noLoop)
 			BOOL flush = theOffset == -1 ? FALSE : TRUE;
 			gBass->BASS_StreamPlay(aMusicInfo->mHStream, flush, noLoop ? 0 : BASS_MUSIC_LOOP);
 			if (theOffset > 0)
-				gBass->BASS_ChannelSetPosition(aMusicInfo->mHStream, theOffset);
+				gBass->BASS_ChannelSetPosition(aMusicInfo->mHStream, theOffset, BASS_POS_BYTE);
 		}
 	}
 }
@@ -263,7 +221,7 @@ void BassMusicInterface::FadeIn(int theSongId, int theOffset, double theSpeed, b
 		aMusicInfo->mStopOnFade = noLoop;
 
 		gBass->BASS_ChannelStop(aMusicInfo->GetHandle());
-		gBass->BASS_ChannelSetAttributes(aMusicInfo->GetHandle(), -1, (int) (aMusicInfo->mVolume*100), -101);
+		gBass->BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_MUSIC_VOL_GLOBAL, (int)(aMusicInfo->mVolume * 100));
 		if (aMusicInfo->mHMusic)
 		{
 			if (theOffset == -1)
@@ -281,7 +239,7 @@ void BassMusicInterface::FadeIn(int theSongId, int theOffset, double theSpeed, b
 			BOOL flush = theOffset == -1 ? FALSE : TRUE;
 			gBass->BASS_StreamPlay(aMusicInfo->mHStream, flush, noLoop ? 0 : BASS_MUSIC_LOOP);
 			if (theOffset > 0)
-				gBass->BASS_ChannelSetPosition(aMusicInfo->mHStream, theOffset);
+				gBass->BASS_ChannelSetPosition(aMusicInfo->mHStream, theOffset, BASS_POS_BYTE);
 		}
 
 	}
@@ -338,7 +296,7 @@ void BassMusicInterface::SetSongVolume(int theSongId, double theVolume)
 		BassMusicInfo* aMusicInfo = &anItr->second;
 
 		aMusicInfo->mVolume = theVolume;
-		gBass->BASS_ChannelSetAttributes(aMusicInfo->GetHandle(), -1, (int) (aMusicInfo->mVolume*100), -101);
+		gBass->BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_MUSIC_VOL_GLOBAL, (int)(aMusicInfo->mVolume * 100));
 	}
 }
 
@@ -351,7 +309,7 @@ void BassMusicInterface::SetSongMaxVolume(int theSongId, double theMaxVolume)
 
 		aMusicInfo->mVolumeCap = theMaxVolume;
 		aMusicInfo->mVolume = min(aMusicInfo->mVolume, theMaxVolume);
-		gBass->BASS_ChannelSetAttributes(aMusicInfo->GetHandle(), -1, (int) (aMusicInfo->mVolume*100), -101);
+		gBass->BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_MUSIC_VOL_GLOBAL, (int)(aMusicInfo->mVolume * 100));
 	}
 }
 
@@ -402,7 +360,7 @@ void BassMusicInterface::Update()
 					gBass->BASS_ChannelStop(aMusicInfo->GetHandle());
 			}
 
-			gBass->BASS_ChannelSetAttributes(aMusicInfo->GetHandle(), -1, (int) (aMusicInfo->mVolume*100), -101);
+			gBass->BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_MUSIC_VOL_GLOBAL, (int)(aMusicInfo->mVolume * 100));
 		}
 
 		++anItr;
@@ -418,7 +376,7 @@ int BassMusicInterface::GetMusicOrder(int theSongId)
 	if (anItr != mMusicMap.end())
 	{		
 		BassMusicInfo* aMusicInfo = &anItr->second;
-		int aPosition = gBass->BASS_MusicGetOrderPosition(aMusicInfo->GetHandle());
+		int aPosition = gBass->BASS_ChannelGetLength(aMusicInfo->GetHandle(), BASS_POS_BYTE);
 		return aPosition;
 	}
 	return -1;

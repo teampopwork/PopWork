@@ -16,7 +16,7 @@ V14DemoApp::V14DemoApp()
 	mTitle = StringToSexyStringFast("SexyAppFramework: " + mProdName + " - " + mProductVersion);
 	mRegKey = "PopCap\\SexyAppFramework\\V12Demo";
 
-	mNoSoundNeeded = true;
+	//mNoSoundNeeded = true;
 	mBoard = NULL;
 
 	// Important: You now need to make this call to enable 

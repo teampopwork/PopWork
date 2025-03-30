@@ -10,6 +10,8 @@
 #include "SexyAppFramework\Flags.h"
 #include "SexyAppFramework\SexyMatrix.h"
 #include "SexyAppFramework\trivertex.h"
+#include "SexyAppFramework\SoundManager.h"
+#include "SexyAppFramework\SoundInstance.h"
 
 using namespace Sexy;
 
@@ -359,6 +361,8 @@ void Board::ButtonDepress(int id)
 		FlagsMod flags;
 		flags.mRemoveFlags |= WIDGETFLAGS_ALLOW_MOUSE;
 		mApp->mWidgetManager->AddBaseModal(mDemoWidget, flags);
+		if (mApp->mSoundManager->GetSoundInstance(1))
+			mApp->mSoundManager->GetSoundInstance(1)->Stop();
 	}
 	else if (id == mDialogButton->mId)
 	{
@@ -377,6 +381,9 @@ void Board::ButtonDepress(int id)
 		// Windows 95 or 98, in which printing with it appears to produce blank results. Let's set the font
 		// for the button on the dialog box to be FONT_DEFAULT. 
 		d->SetButtonFont(FONT_DEFAULT);
+
+		mApp->mSoundManager->LoadSound(1, "sounds/shorting");
+		mApp->mSoundManager->GetSoundInstance(1)->Play(true, false);
 	}
 	else if (id == mCurtainButton->mId)
 	{

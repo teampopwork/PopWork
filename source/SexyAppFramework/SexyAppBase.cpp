@@ -15,7 +15,9 @@
 #include "Dialog.h"
 #include "..\ImageLib\ImageLib.h"
 #include "DSoundManager.h"
+#include "BassSoundManager.h"
 #include "DSoundInstance.h"
+#include "BassSoundInstance.h"
 #include "Rect.h"
 #include "FModMusicInterface.h"
 #include "PropertiesParser.h"
@@ -31,6 +33,7 @@
 #include "SysFont.h"
 #include "ResourceManager.h"
 #include "BassMusicInterface.h"
+#include "BassLoader.h"
 #include "AutoCrit.h"
 #include "Debug.h"
 #include "../PakLib/PakInterface.h"
@@ -47,10 +50,6 @@ const int DEMO_VERSION = 2;
 SexyAppBase* Sexy::gSexyAppBase = NULL;
 
 SEHCatcher Sexy::gSEHCatcher;
-
-HMODULE gDDrawDLL = NULL;
-HMODULE gDSoundDLL = NULL;
-HMODULE gVersionDLL = NULL;
 
 //typedef struct { UINT cbSize; DWORD dwTime; } LASTINPUTINFO;
 typedef BOOL (WINAPI*GetLastInputInfoFunc)(LASTINPUTINFO *plii);
@@ -137,9 +136,6 @@ SexyAppBase::SexyAppBase()
 {
 	gSexyAppBase = this;
 
-	gVersionDLL = LoadLibraryA("version.dll");
-	gDDrawDLL = LoadLibraryA("ddraw.dll");
-	gDSoundDLL = LoadLibraryA("dsound.dll");
 	gGetLastInputInfoFunc = (GetLastInputInfoFunc) GetProcAddress(GetModuleHandleA("user32.dll"),"GetLastInputInfo");
 
 	ImageLib::InitJPEG2000();
@@ -468,19 +464,12 @@ SexyAppBase::~SexyAppBase()
 	delete mMusicInterface;
 	delete mSoundManager;			
 
-	if (mHWnd != NULL)
+	if (gBass != NULL)
 	{
-		HWND aWindow = mHWnd;
-		mHWnd = NULL;
-		
-		SetWindowLong(aWindow, GWL_USERDATA, NULL);
-
-		/*char aStr[256];
-		sprintf(aStr, "HWND: %d\r\n", aWindow);
-		OutputDebugString(aStr);*/
-				
-		DestroyWindow(aWindow);
-	}	
+		gBass->BASS_Stop();
+		gBass->BASS_Free();
+	}
+	FreeBassDLL();
 	
 	WaitForLoadingThread();	
 
@@ -493,10 +482,6 @@ SexyAppBase::~SexyAppBase()
 
 	if (mMutex != NULL)
 		::CloseHandle(mMutex);	
-
-	FreeLibrary(gDDrawDLL);
-	FreeLibrary(gDSoundDLL);
-	FreeLibrary(gVersionDLL);
 }
 
 static BOOL CALLBACK ChangeDisplayWindowEnumProc(HWND hwnd, LPARAM lParam)
@@ -2206,9 +2191,6 @@ void SexyAppBase::RestoreScreenResolution()
 {
 	if (mFullScreenWindow)
 	{
-		EnumWindows(ChangeDisplayWindowEnumProc,0); // get any windows that appeared while we were running
-		ChangeDisplaySettings(NULL,0);
-		EnumWindows(ChangeDisplayWindowEnumProc,1); // restore window pos
 		mFullScreenWindow = false;
 	}
 }
@@ -2251,7 +2233,7 @@ bool SexyAppBase::DoUpdateFrames()
 		if ((mLoadingThreadCompleted) && (!mLoaded) && (mDemoLoadingComplete))
 		{			
 			mLoaded = true;
-			::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+			//::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_NORMAL);
 			mYieldMainThread = false;
 			LoadingThreadCompleted();
 		}
@@ -2269,7 +2251,7 @@ bool SexyAppBase::DoUpdateFrames()
 	{
 		if ((mLoadingThreadCompleted) && (!mLoaded))
 		{
-			::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+			//::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_NORMAL);
 			mLoaded = true;
 			mYieldMainThread = false;
 			LoadingThreadCompleted();
@@ -5497,7 +5479,7 @@ MusicInterface* SexyAppBase::CreateMusicInterface(HWND theWindow)
 	else if (mWantFMod)
 		return new FModMusicInterface(mInvisHWnd);
 	else 
-		return new BassMusicInterface(mInvisHWnd);
+		return new BassMusicInterface();
 }
 
 void SexyAppBase::InitPropertiesHook()
@@ -5515,43 +5497,9 @@ void SexyAppBase::Init()
 	if (mShutdown)
 		return;
 
-	if (gDDrawDLL==NULL || gDSoundDLL==NULL)
-	{
-		MessageBox(NULL, 
-						GetString("APP_REQUIRES_DIRECTX", _S("This application requires DirectX to run.  You can get DirectX at http://www.microsoft.com/directx")).c_str(),
-						GetString("YOU_NEED_DIRECTX", _S("You need DirectX")).c_str(), 
-						MB_OK | MB_ICONERROR);
-		DoExit(0);
-	}	
-
 	InitPropertiesHook();
 	ReadFromRegistry();	
 
-	if (CheckForVista())
-	{
-		HMODULE aMod;
-		SHGetFolderPathFunc aFunc = (SHGetFolderPathFunc)GetSHGetFolderPath("shell32.dll", &aMod);
-		if (aFunc == NULL || aMod == NULL)
-			SHGetFolderPathFunc aFunc = (SHGetFolderPathFunc)GetSHGetFolderPath("shfolder.dll", &aMod);
-
-		if (aMod != NULL)
-		{
-			char aPath[MAX_PATH];
-			aFunc(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, aPath);
-
-			std::string aDataPath = RemoveTrailingSlash(aPath) + "\\" + mFullCompanyName + "\\" + mProdName;
-			SetAppDataFolder(aDataPath + "\\");
-			//MkDir(aDataPath);
-			//AllowAllAccess(aDataPath);
-			if (mDemoFileName.length() < 2 || (mDemoFileName[1] != ':' && mDemoFileName[2] != '\\'))
-			{
-				mDemoFileName = GetAppDataFolder() + mDemoFileName;
-			}
-
-			FreeLibrary(aMod);
-		}
-	}
-	
 	if (!mCmdLineParsed)
 		DoParseCmdLine();
 
@@ -5594,102 +5542,6 @@ void SexyAppBase::Init()
 	 
 	srand(GetTickCount());
 
-	if (CheckFor98Mill())
-	{
-		mIsWideWindow = false;
-
-		WNDCLASSA wc;
-		wc.style = CS_DBLCLKS;
-		wc.cbClsExtra = 0;
-		wc.cbWndExtra = 0;
-		wc.hbrBackground = NULL;
-		wc.hCursor = NULL;
-		wc.hIcon = ::LoadIconA(gHInstance, "IDI_MAIN_ICON");
-		wc.hInstance = gHInstance;
-		wc.lpfnWndProc = WindowProc;
-		wc.lpszClassName = "MainWindow";
-		wc.lpszMenuName = NULL;	
-		bool success = RegisterClassA(&wc) != 0;
-		DBG_ASSERTE(success);
-		
-		wc.style = 0;
-		wc.cbClsExtra = 0;
-		wc.cbWndExtra = 0;
-		wc.hbrBackground = NULL;
-		wc.hCursor = NULL;
-		wc.hIcon = NULL;
-		wc.hInstance = gHInstance;
-		wc.lpfnWndProc = WindowProc;
-		wc.lpszClassName = "InvisWindow";
-		wc.lpszMenuName = NULL;	
-		success = RegisterClassA(&wc) != 0;
-		DBG_ASSERTE(success);
-
-		mInvisHWnd = CreateWindowExA(
-				0,
-				"InvisWindow",
-				SexyStringToStringFast(mTitle).c_str(),
-				0,
-				0,
-				0,
-				0,
-				0,
-				NULL,
-				NULL,
-				gHInstance,
-				0);	
-		SetWindowLong(mInvisHWnd, GWL_USERDATA, (LONG) this);
-	}
-	else
-	{
-		mIsWideWindow = sizeof(SexyChar) == sizeof(wchar_t);
-
-		WNDCLASS wc;
-		wc.style = CS_DBLCLKS;
-		wc.cbClsExtra = 0;
-		wc.cbWndExtra = 0;
-		wc.hbrBackground = NULL;
-		wc.hCursor = NULL;
-		wc.hIcon = ::LoadIconA(gHInstance, "IDI_MAIN_ICON");
-		wc.hInstance = gHInstance;
-		wc.lpfnWndProc = WindowProc;
-		wc.lpszClassName = _S("MainWindow");
-		wc.lpszMenuName = NULL;	
-		bool success = RegisterClass(&wc) != 0;
-		DBG_ASSERTE(success);
-		
-		wc.style = 0;
-		wc.cbClsExtra = 0;
-		wc.cbWndExtra = 0;
-		wc.hbrBackground = NULL;
-		wc.hCursor = NULL;
-		wc.hIcon = NULL;
-		wc.hInstance = gHInstance;
-		wc.lpfnWndProc = WindowProc;
-		wc.lpszClassName = _S("InvisWindow");
-		wc.lpszMenuName = NULL;	
-		success = RegisterClass(&wc) != 0;
-		DBG_ASSERTE(success);
-
-		mInvisHWnd = CreateWindowEx(
-				0,
-				_S("InvisWindow"),
-				mTitle.c_str(),
-				0,
-				0,
-				0,
-				0,
-				0,
-				NULL,
-				NULL,
-				gHInstance,
-				0);	
-		SetWindowLong(mInvisHWnd, GWL_USERDATA, (LONG) this);
-	}
-		
-	mHandCursor = CreateCursor(gHInstance, 11, 4, 32, 32, gFingerCursorData, gFingerCursorData+sizeof(gFingerCursorData)/2); 
-	mDraggingCursor = CreateCursor(gHInstance, 15, 10, 32, 32, gDraggingCursorData, gDraggingCursorData+sizeof(gDraggingCursorData)/2); 
-		
 	// Let app do something before showing window, or switching to fullscreen mode
 	// NOTE: Moved call to PreDisplayHook above mIsWindowed and GetSystemsMetrics
 	// checks because the checks below use values that could change in PreDisplayHook.
@@ -5710,33 +5562,6 @@ void SexyAppBase::Init()
 		}
 	}
 
-	if (mFullScreenWindow) // change resoultion using ChangeDisplaySettings
-	{
-		EnumWindows(ChangeDisplayWindowEnumProc,0); // record window pos
-		DEVMODE dm;
-		EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm );
-
-		// Switch resolutions
-		if (dm.dmPelsWidth!=mWidth || dm.dmPelsHeight!=mHeight || (dm.dmBitsPerPel!=16 && dm.dmBitsPerPel!=32))
-		{
-			dm.dmPelsWidth = mWidth;
-			dm.dmPelsHeight = mHeight;
-			dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
-
-			if (dm.dmBitsPerPel!=16 && dm.dmBitsPerPel!=32) // handle 24-bit/256 color case
-			{
-				dm.dmBitsPerPel = 16;
-				dm.dmFields |= DM_BITSPERPEL;
-			}
-
-			if (ChangeDisplaySettings(&dm,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL)
-			{
-				mFullScreenWindow = false;
-				mIsWindowed = false;
-			}
-		}
-	}
-
 	MakeWindow();
 		
 	if (mPlayingDemoBuffer)
@@ -5754,7 +5579,7 @@ void SexyAppBase::Init()
 	}
 
 	if (mSoundManager == NULL)		
-		mSoundManager = new DSoundManager(mNoSoundNeeded?NULL:mHWnd, mWantFMod);
+		mSoundManager = new BassSoundManager();
 
 	SetSfxVolume(mSfxVolume);
 	
@@ -6480,12 +6305,13 @@ void SexyAppBase::Set3DAcclerated(bool is3D, bool reinit)
 	{
 		int aResult = InitSDLInterface();
 
-		if (is3D && aResult != SDLInterface::RESULT_OK)
+		if (is3D && aResult == SDLInterface::RESULT_3D_FAIL)
 		{
 			Set3DAcclerated(false, reinit);
 			return;
 		}
-		else if (aResult != SDLInterface::RESULT_OK)
+
+		if (aResult != SDLInterface::RESULT_OK)
 		{
 		//	Popup(GetString("FAILED_INIT_DIRECTDRAW", _S("Failed to initialize DirectDraw: ")) + StringToSexyString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
 			DoExit(1);

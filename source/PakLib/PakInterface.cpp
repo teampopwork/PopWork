@@ -225,7 +225,6 @@ PFILE* PakInterface::FOpen(const char* theFileName, const char* anAccess)
 			return aPFP;
 		}
 	}
-
 	FILE* aFP = fopen(theFileName, anAccess);
 	if (aFP == NULL)
 		return NULL;

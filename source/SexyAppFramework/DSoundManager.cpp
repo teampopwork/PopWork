@@ -42,6 +42,7 @@ DSoundManager::DSoundManager(HWND theHWnd, bool haveFMod)
 
 	if (theHWnd != NULL)
 	{
+		/*
 		extern HMODULE gDSoundDLL;
 		typedef HRESULT (WINAPI *DirectSoundCreateFunc)(LPCGUID lpcGuid, LPDIRECTSOUND * ppDS, LPUNKNOWN  pUnkOuter);
 		DirectSoundCreateFunc aDirectSoundCreateFunc = (DirectSoundCreateFunc)GetProcAddress(gDSoundDLL,"DirectSoundCreate");
@@ -99,6 +100,7 @@ DSoundManager::DSoundManager(HWND theHWnd, bool haveFMod)
 				aResult = mDirectSound->SetCooperativeLevel(theHWnd,DSSCL_NORMAL);
 			}
 		}
+		*/
 	}	
 }
 
