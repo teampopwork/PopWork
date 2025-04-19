@@ -1,5 +1,7 @@
 #include "FModLoader.h"
 #include <stdlib.h>
+#include <SDL3/SDL.h>
+#include <string>
 
 using namespace Sexy;
 
@@ -12,10 +14,10 @@ static void CheckFModFunction(unsigned int theFunc, const char *theName)
 {
 	if (theFunc==0)
 	{
-		char aBuf[1024];
-		sprintf(aBuf,"%s function not found in fmod.dll",theName);
-		MessageBoxA(NULL,aBuf,"Error",MB_OK | MB_ICONERROR);
-		exit(0);
+		std::string finalMessage = " function not found in fmod.dll";
+		finalMessage = theName + finalMessage;
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FMOD Error", finalMessage.c_str(), nullptr);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -23,8 +25,12 @@ static void CheckFModFunction(unsigned int theFunc, const char *theName)
 ///////////////////////////////////////////////////////////////////////////////
 FMOD_INSTANCE::FMOD_INSTANCE(const char *dllName)
 {
-    mModule = LoadLibrary(dllName);
-    if (!mModule)
+#if defined(_WIN32)
+	mModule = LoadLibrary(dllName);
+#else
+	mModule = dlopen(dllName, RTLD_LAZY);
+#endif
+	if (!mModule)
 		return;
 
     #define GETPROC(_x, _y)                                                                       \
@@ -251,7 +257,13 @@ FMOD_INSTANCE::FMOD_INSTANCE(const char *dllName)
 FMOD_INSTANCE::~FMOD_INSTANCE()
 {
 	if (mModule)
+	{
+#if defined(_WIN32)
 		FreeLibrary(mModule);
+#else
+		dlclose(mModule);
+#endif
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -265,7 +277,7 @@ void Sexy::LoadFModDLL()
 	gFMod = new FMOD_INSTANCE("fmod.dll");
 	if (gFMod->mModule==NULL)
 	{
-		MessageBoxA(NULL,"Can't find fmod.dll." ,"Error",MB_OK | MB_ICONERROR);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FMOD Error", "Can't find fmod.dll.", nullptr);
 		exit(0);
 	}
 }
