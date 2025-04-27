@@ -8,21 +8,10 @@ BASS Audio Library
 The BASS Audio Library is the default library used by the Framework 
 to decompress sounds and to play music.  Licenses to the BASS Audio 
 Library can be purchased at http://www.un4seen.com/bass.html#license.
-You can avoid using the BASS Audio Library by setting 
-SexyAppBase::mWantFMod before application initialization to use the 
-FMOD Music Library or by setting SexyAppBase::mNoSoundNeeded if you 
-do not need to load compressed audio or play tracked music.
-				
-FMOD Audio Library
-The FMOD library is a popular alternative to the BASS Audio Library.
-Licenses to FMOD can be purchased at http://www.fmod.org/. Although 
-the BASS Audio Library is the default sound library in the Framework, 
-you can use FMOD instead by setting SexyAppBase::mWantFMod before 
-application initialization.
 
 MP3 Compressed Audio
 The Framework supports both MP3 and OGG decompression through either 
-BASS or FMOD.  The OGG format can be used for free, but if you must 
+BASS or OpenAL.  The OGG format can be used for free, but if you must 
 use MP3 in your product, you will have to contact Thompson Multimedia 
 and arrange to pay for an MP3 license.  Game developers can get a 
 'game license' to use MP3 for $2500.  See 

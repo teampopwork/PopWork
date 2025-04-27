@@ -5,7 +5,7 @@
 #include "CritSect.h"
 #include "Graphics.h"
 #include "MemoryImage.h"
-#include <SDL3_ttf/SDL_ttf.h>
+//#include <SDL3_ttf/SDL_ttf.h>
 
 using namespace Sexy;
 
@@ -131,7 +131,7 @@ int SDLInterface::Init(bool IsWindowed)
 
 bool SDLInterface::InitSDLWindow(bool IsWindowed)
 {
-	if (!SDL_Init(SDL_INIT_VIDEO) || !TTF_Init())
+	if (!SDL_Init(SDL_INIT_VIDEO)/* || !TTF_Init()*/)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL Initialization Failed", SDL_GetError(), nullptr);
 		return false;

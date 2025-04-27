@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.18)
 
 project(SexyAppFramework)
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8
-)
-
 set(SRC_MAIN
 	# Sources
 	../ImageLib/ImageLib.cpp
@@ -122,7 +118,6 @@ set(SRC_MAIN
 	MTRand.cpp
 	KeyCodes.cpp
 	HTTPTransfer.cpp
-	DirectXErrorString.cpp
 	Debug.cpp
 	CritSect.cpp
 	Common.cpp
@@ -147,17 +142,14 @@ set(SRC_MAIN
 	ogg/synthesis.c
 	ogg/vorbisfile.c
 	ogg/window.c
+
+	AUReader.h
 	SexyAppBase.cpp
 
-	DSoundManager.cpp
-	BassSoundManager.cpp
-	DSoundInstance.cpp
-	BassSoundInstance.cpp
+	OpenALSoundManager.cpp
+	OpenALSoundInstance.cpp
 	BassLoader.cpp
 	BassMusicInterface.cpp
-	FModLoader.cpp
-	FModMusicInterface.cpp
-	FModSoundInstance.cpp
 	MusicInterface.cpp
 	
 	SWTri.cpp
@@ -224,19 +216,12 @@ set(SRC_MAIN
 	Dialog.h
 	DialogButton.h
 	DialogListener.h
-	DirectXErrorString.h
-	DSoundInstance.h
-	BassSoundInstance.h
-	DSoundManager.h
-	BassSoundManager.h
+	OpenALSoundInstance.h
+	OpenALSoundManager.h
 	EditListener.h
 	EditWidget.h
 	Flags.h
 	FlashWidget.h
-	FModLoader.h
-	FModMusicInterface.h
-	FModSoundInstance.h
-	FModSoundManager.h
 	Font.h
 	Graphics.h
 	HTTPTransfer.h
@@ -304,15 +289,9 @@ set(SRC_MAIN
 	SDLInterface.h
 )
 
-set(SDL_MIXER_X_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../lib/SDL-Mixer-X")
-
-file(GLOB SDL_MIXER_X_SOURCES
-    "${SDL_MIXER_X_DIR}/src/*.c"
-    "${SDL_MIXER_X_DIR}/src/*.h"
-)
 
 add_compile_definitions(SexyAppFramework _LIB)
-add_library(SexyAppFramework STATIC ${SRC_MAIN} ${SDL_MIXER_X_SOURCES})
+add_library(SexyAppFramework STATIC ${SRC_MAIN})
 
 include(FetchContent)
 
@@ -325,26 +304,25 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SDL3)
 
 FetchContent_Declare(
-        SDL3_ttf
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
-        GIT_TAG origin/main
-    )
-FetchContent_MakeAvailable(SDL3_ttf)
+    openAL
+    GIT_REPOSITORY https://github.com/kcat/openal-soft
+    GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(openAL)
 
 FetchContent_Declare(
-        SDL3_mixer
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer
-        GIT_TAG origin/main
-    )
-FetchContent_MakeAvailable(SDL3_mixer)
+    miniAudio
+    GIT_REPOSITORY https://github.com/mackron/miniaudio
+    GIT_TAG        master
+)
 
+FetchContent_MakeAvailable(miniAudio)
 
 set(SexyAppLibs
 	SDL3::SDL3
-	SDL3_ttf::SDL3_ttf
-	SDL3_mixer::SDL3_mixer
-	${CMAKE_CURRENT_SOURCE_DIR}/../../lib/directx8/d3d8.lib
-	dsound
+	OpenAL::OpenAL
+	miniaudio
 	winmm
 	ws2_32
 )

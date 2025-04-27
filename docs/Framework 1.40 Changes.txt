@@ -16,3 +16,6 @@ Graphics
 ================================
 * Replaced the DirectX/DirectDraw rendering system with SDL3.
 
+Audio
+================================
+* Replaced DSound with OpenAL.

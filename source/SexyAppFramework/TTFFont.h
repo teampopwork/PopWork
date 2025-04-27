@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Font.h"
-#include <SDL3_ttf/SDL_ttf.h>
+//#include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3/SDL.h>
 
 namespace Sexy
@@ -36,10 +36,10 @@ namespace Sexy
 		std::string mText;
 		bool mDrawShadow;
 		bool mSimulateBold;
-		TTF_Font* mFont;
+		//TTF_Font* mFont;
 		Color mColor;
 		SDL_Texture* mTexture;
-		TTF_Text mTTFText;
+		//TTF_Text mTTFText;
 		int mWidth;
 		int mHeight;
 

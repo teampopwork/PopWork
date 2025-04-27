@@ -143,7 +143,6 @@ public:
 	double					mDemoMusicVolume;
 	double					mDemoSfxVolume;
 	bool					mNoSoundNeeded;
-	bool					mWantFMod;
 	bool					mCmdLineParsed;
 	bool					mSkipSignatureChecks;
 	bool					mStandardWordWrap;
@@ -158,7 +157,7 @@ public:
 	WidgetManager*			mWidgetManager;
 	DialogMap				mDialogMap;
 	DialogList				mDialogList;
-	DWORD					mPrimaryThreadId;
+	uint64_t 				mPrimaryThreadId;
 	bool					mSEHOccured;
 	bool					mShutdown;
 	bool					mExitToTop;

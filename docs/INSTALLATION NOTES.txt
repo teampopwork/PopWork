@@ -1,9 +1,6 @@
 The most common reason why the demos and source fail to build are due to the lack 
 of required software to build them. Ensure that you have the following before building:
 
-* The microsoft DirectX SDK (not just the runtime). 
-	http://www.microsoft.com/directx
-
 * The Windows Platform SDK (VS2005 Express does NOT include this by default but Pro does).
 	http://www.microsoft.com/downloads/details.aspx?FamilyId=484269E2-3B89-47E3-8EB7-1F2BE6D7123A&displaylang=en
 	Do not be alarmed by the title "Windows Server 2003 SP1 Platform SDK Web Install".

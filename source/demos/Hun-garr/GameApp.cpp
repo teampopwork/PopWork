@@ -124,7 +124,7 @@ void GameApp::Init()
 
 	// This example just uses 1 standard OGG file instead of a tracker file.
 	// Since we aren't cross fading at all, we'll only load it once.
-	//mMusicInterface->LoadMusic(0, "music/hungarr.ogg");
+	mMusicInterface->LoadMusic(0, "music/hungarr.ogg");
 	mMusicInterface->FadeIn(0, 0, 0.002, false);
 
 	mNumLoadingThreadTasks = mResourceManager->GetNumResources("Game") + 

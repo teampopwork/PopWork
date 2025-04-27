@@ -14,12 +14,9 @@
 //#include "HTTPTransfer.h"
 #include "Dialog.h"
 #include "..\ImageLib\ImageLib.h"
-#include "DSoundManager.h"
-#include "BassSoundManager.h"
-#include "DSoundInstance.h"
-#include "BassSoundInstance.h"
+#include "OpenALSoundManager.h"
+#include "OpenALSoundInstance.h"
 #include "Rect.h"
-#include "FModMusicInterface.h"
 #include "PropertiesParser.h"
 #include "PerfTimer.h"
 #include "MTRand.h"
@@ -41,6 +38,7 @@
 #include <shlobj.h>
 
 #include "memmgr.h"
+#include <thread>
 
 using namespace Sexy;
 
@@ -257,7 +255,6 @@ SexyAppBase::SexyAppBase()
 	mDebugKeysEnabled = false;
 	mOldWndProc = 0;
 	mNoSoundNeeded = false;
-	mWantFMod = false;
 
 	mSyncRefreshRate = 100;
 	mVSyncUpdates = false;
@@ -481,39 +478,6 @@ SexyAppBase::~SexyAppBase()
 
 	if (mMutex != NULL)
 		::CloseHandle(mMutex);	
-}
-
-static BOOL CALLBACK ChangeDisplayWindowEnumProc(HWND hwnd, LPARAM lParam)
-{
-	typedef std::map<HWND,RECT> WindowMap;
-	static WindowMap aMap;
-
-	if (lParam==0 && aMap.find(hwnd)==aMap.end()) // record
-	{
-		RECT aRect;
-		if (!IsIconic(hwnd) && IsWindowVisible(hwnd))
-		{
-			if (GetWindowRect(hwnd,&aRect))
-			{
-//				char aBuf[4096];
-//				GetWindowText(hwnd,aBuf,4000);
-//				DWORD aProcessId = 0;
-//				GetWindowThreadProcessId(hwnd,&aProcessId);
-//				SEXY_TRACE(StrFormat("%s %d - %d %d %d %d",aBuf,aProcessId,aRect.left,aRect.top,aRect.right,aRect.bottom).c_str());
-				aMap[hwnd] = aRect;
-			}
-		}
-	}
-	else 
-	{
-		WindowMap::iterator anItr = aMap.find(hwnd);
-		if (anItr != aMap.end())
-		{
-			RECT &r = anItr->second;
-			MoveWindow(hwnd,r.left,r.top,abs(r.right-r.left),abs(r.bottom-r.top),TRUE);
-		}
-	}
-	return TRUE;
 }
 
 void SexyAppBase::ClearUpdateBacklog(bool relaxForASecond)
@@ -778,96 +742,19 @@ void SexyAppBase::DemoAddMarker(const std::string& theString)
 	}
 }
 
+#if 0
 void SexyAppBase::DemoRegisterHandle(HANDLE theHandle)
 {
-	if ((mRecordingDemoBuffer) || (mPlayingDemoBuffer))
-	{
-		// Insert the handle into a map with an auto-incrementing number so
-		//  we can match up the auto-incrementing numbers with the handle
-		//  later on, as handles may not be the same between executions
-		std::pair<HandleToIntMap::iterator, bool> aPair = mHandleToIntMap.insert(HandleToIntMap::value_type(theHandle, mCurHandleNum));
-		DBG_ASSERT(aPair.second);
-		mCurHandleNum++;
-	}
 }
 
 void SexyAppBase::DemoWaitForHandle(HANDLE theHandle)
 {
-	WaitForSingleObject(theHandle, INFINITE);
-	
-	if ((mRecordingDemoBuffer) || (mPlayingDemoBuffer))
-	{
-		// Remove the handle from our waiting map
-		HandleToIntMap::iterator anItr = mHandleToIntMap.find(theHandle);					
-		DBG_ASSERT(anItr != mHandleToIntMap.end());
-		mHandleToIntMap.erase(anItr);
-	}
 }
 
 bool SexyAppBase::DemoCheckHandle(HANDLE theHandle)
 {
-	if (mPlayingDemoBuffer)
-	{	
-		// We only need to try to get the result if we think we are waiting for one	
-		if (gSexyAppBase->PrepareDemoCommand(false))
-		{
-			if ((!gSexyAppBase->mDemoIsShortCmd) && (gSexyAppBase->mDemoCmdNum == DEMO_HANDLE_COMPLETE))
-			{
-				// Find auto-incrementing handle num from handle
-				HandleToIntMap::iterator anItr = mHandleToIntMap.find(theHandle);					
-				DBG_ASSERT(anItr != mHandleToIntMap.end());
-
-				int anOldBufferPos = gSexyAppBase->mDemoBuffer.mReadBitPos;
-
-				// Since we don't require a demo result entry to be here, we must verify
-				//  that this is referring to us
-				int aDemoHandleNum = gSexyAppBase->mDemoBuffer.ReadLong();
-				
-				if (aDemoHandleNum == anItr->second)
-				{
-					// Alright, this was the handle we were waiting for!
-					gSexyAppBase->mDemoNeedsCommand = true;
-
-					// Actually wait for our local buddy to complete
-					WaitForSingleObject(theHandle, INFINITE);
-					mHandleToIntMap.erase(anItr);
-
-					return true;
-				}
-				else
-				{
-					// Not us, go back
-					gSexyAppBase->mDemoBuffer.mReadBitPos = anOldBufferPos;
-				}
-			}
-		}
-
-		return false;	
-	}
-	else 
-	{
-		if (WaitForSingleObject(theHandle, 0) == WAIT_OBJECT_0)
-		{
-			if (mRecordingDemoBuffer)
-			{
-				// Find auto-incrementing handle num from handle
-				HandleToIntMap::iterator anItr = mHandleToIntMap.find(theHandle);					
-				DBG_ASSERT(anItr != mHandleToIntMap.end());
-
-				gSexyAppBase->WriteDemoTimingBlock();
-				gSexyAppBase->mDemoBuffer.WriteNumBits(0, 1);
-				gSexyAppBase->mDemoBuffer.WriteNumBits(DEMO_HANDLE_COMPLETE, 5);
-				gSexyAppBase->mDemoBuffer.WriteLong(anItr->second);
-
-				mHandleToIntMap.erase(anItr);
-			}
-
-			return true;
-		}
-
-		return false;
-	}
 }
+#endif
 
 void SexyAppBase::DemoAssertIntEqual(int theInt)
 {
@@ -1053,9 +940,9 @@ bool SexyAppBase::OpenURL(const std::string& theURL, bool shutdownOnOpen)
 		mShutdownOnURLOpen = shutdownOnOpen;
 		mIsOpeningURL = true;
 		mOpeningURL = theURL;
-		mOpeningURLTime = GetTickCount();		
+		mOpeningURLTime = SDL_GetTicks();		
 
-		if ((int) ShellExecuteA(NULL, "open", theURL.c_str(), NULL, NULL, SW_SHOWNORMAL) > 32)
+		if (SDL_OpenURL(theURL.c_str()))
 		{
 			return true;
 		}
@@ -1121,7 +1008,8 @@ std::string SexyAppBase::GetProductVersion(const std::string& thePath)
 void SexyAppBase::WaitForLoadingThread()
 {
 	while ((mLoadingThreadStarted) && (!mLoadingThreadCompleted))
-		Sleep(20);
+		SDL_Delay(20);
+	
 }
 
 void SexyAppBase::SetCursorImage(int theCursorNum, Image* theImage)
@@ -2095,20 +1983,19 @@ bool SexyAppBase::EraseFile(const std::string& theFileName)
 	if (mPlayingDemoBuffer)
 		return true;
 
-	return DeleteFileA(theFileName.c_str()) != 0;
+	return remove(theFileName.c_str()) != 0;
 }
 
 void SexyAppBase::SEHOccured()
 {
 	SetMusicVolume(0);
-	::ShowWindow(mHWnd, SW_HIDE);
 	mSEHOccured = true;
 	EnforceCursor();
 }
 
 std::string SexyAppBase::GetGameSEHInfo()
 {
-	int aSecLoaded = (GetTickCount() - mTimeLoaded) / 1000;
+	int aSecLoaded = (SDL_GetTicks() - mTimeLoaded) / 1000;
 
 	char aTimeStr[16];
 	sprintf(aTimeStr, "%02d:%02d:%02d", (aSecLoaded/60/60), (aSecLoaded/60)%60, aSecLoaded%60);
@@ -2161,24 +2048,14 @@ void SexyAppBase::Shutdown()
 		// Blah
 		while (mCursorThreadRunning)
 		{
-			Sleep(10);
+			SDL_Delay(10);
 		}
 		
 		if (mMusicInterface != NULL)
 			mMusicInterface->StopAllMusic();		
-		/*
-		if ((!mIsPhysWindowed) && (mSDLInterface != NULL) && (mSDLInterface->mDD != NULL))
-		{
-			mDDInterface->mDD->RestoreDisplayMode();
-		}
-
-		if (mHWnd != NULL) 
-		{
-			ShowWindow(mHWnd, SW_HIDE);			
-		}
 
 		RestoreScreenResolution();
-*/
+
 		if (mReadFromRegistry)
 			WriteToRegistry();
 
@@ -4358,14 +4235,14 @@ void SexyAppBase::StartLoadingThread()
 	if (!mLoadingThreadStarted)
 	{
 		mYieldMainThread = true; 
-		::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);		
+		//::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);		
 		mLoadingThreadStarted = true;
-		_beginthread(LoadingThreadProcStub, 0, this);
+		std::thread loadingThread(LoadingThreadProcStub, this);
+		loadingThread.detach();
 	}
 }
 void SexyAppBase::CursorThreadProc()
 {
-	::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 
 	POINT aLastCursorPos = {0, 0};
 	int aLastDrawCount = 0;
@@ -4413,7 +4290,7 @@ void SexyAppBase::CursorThreadProc()
 			}			
 		}		
 
-		Sleep(10);
+		SDL_Delay(10);
 	}
 	
 	mCursorThreadRunning = false;
@@ -4421,7 +4298,6 @@ void SexyAppBase::CursorThreadProc()
 
 void SexyAppBase::CursorThreadProcStub(void *theArg)
 {
-	CoInitialize(NULL);
 	SexyAppBase* aSexyApp = (SexyAppBase*) theArg;
 	aSexyApp->CursorThreadProc();
 }
@@ -4431,8 +4307,8 @@ void SexyAppBase::StartCursorThread()
 	if (!mCursorThreadRunning)
 	{
 		mCursorThreadRunning = true;
-		::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
-		_beginthread(CursorThreadProcStub, 0, this);
+		std::thread aCursorThread(&SexyAppBase::CursorThreadProcStub, this);
+		aCursorThread.detach();  // Detach to run independently
 	}
 }
 
@@ -4459,20 +4335,6 @@ void SexyAppBase::SwitchScreenMode(bool wantWindowed, bool is3d, bool force)
 	mIsWindowed = wantWindowed;	
 
 	MakeWindow();
-	
-	// We need to do this check to allow IE to get focus instead of
-	//  stealing it away for ourselves
-	/*
-	if (!mIsOpeningURL)
-	{
-		::ShowWindow(mHWnd, SW_NORMAL);
-		::SetForegroundWindow(mHWnd);
-	}
-	else
-	{
-		// Show it but don't activate it
-		::ShowWindow(mHWnd, SW_SHOWNOACTIVATE);
-	}*/
 
 	if (mSoundManager!=NULL)
 	{
@@ -5475,8 +5337,6 @@ MusicInterface* SexyAppBase::CreateMusicInterface(HWND theWindow)
 {
 	if (mNoSoundNeeded)
 		return new MusicInterface;
-	else if (mWantFMod)
-		return new FModMusicInterface(mInvisHWnd);
 	else 
 		return new BassMusicInterface();
 }
@@ -5578,7 +5438,7 @@ void SexyAppBase::Init()
 	}
 
 	if (mSoundManager == NULL)		
-		mSoundManager = new BassSoundManager();
+		mSoundManager = new OpenALSoundManager();
 
 	SetSfxVolume(mSfxVolume);
 	
@@ -6206,7 +6066,7 @@ void SexyAppBase::SetMusicVolume(double theVolume)
 	mMusicVolume = theVolume;
 
 	if (mMusicInterface != NULL)
-		mMusicInterface->SetVolume((mMuteCount > 0) ? 0.0 : mMusicVolume);
+		mMusicInterface->SetVolume((mMuteCount > 0) ? 0.0 : mMusicVolume * 10);
 }
 
 double SexyAppBase::GetSfxVolume()

@@ -356,6 +356,7 @@ void Board::ButtonDepress(int theId)
 			//Let's make it play on the left speaker only. We set a panning value
 			//in decibels, which for DirectX range from -10000 to +10000, where
 			//-10000 is fully left and +10000 is fully right:
+			//OpenAL doesn't do this, but we automatically convert the value, so  you can keep using the DirectX values until later.
 			sample->SetPan(-10000);
 			
 			// Now we have the sample play. This is again slightly different than
