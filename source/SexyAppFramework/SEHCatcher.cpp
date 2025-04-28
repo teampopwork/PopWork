@@ -1,3 +1,5 @@
+#if WIN32
+
 #include "SEHCatcher.h"
 #include "SexyAppBase.h"
 #include <fstream>
@@ -1290,3 +1292,5 @@ std::string SEHCatcher::GetSysInfo()
 	return aDebugDump;
 }	
 
+
+#endif

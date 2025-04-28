@@ -1,5 +1,4 @@
-#ifndef __DIALOG_H__
-#define __DIALOG_H__
+#pragma once
 
 #include "Widget.h"
 #include "ButtonListener.h"
@@ -119,5 +118,3 @@ public:
 };
 
 }
-
-#endif //__DIALOG_H__

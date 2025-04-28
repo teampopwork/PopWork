@@ -13,7 +13,7 @@ namespace Sexy
 	protected:
 		OpenALSoundManager*		mSoundManagerP;
 		ALuint 					mSourceSoundBuffer;
-		ALuint					mSoundBuffer;
+		ALuint					mSoundSource;
 		bool					mAutoRelease;
 		bool					mHasPlayed;
 		bool					mReleased;
@@ -24,7 +24,7 @@ namespace Sexy
 		int						mPan;
 		double					mVolume;
 
-		DWORD					mDefaultFrequency;
+		double					mDefaultFrequency;
 
 
 	protected:

@@ -1,7 +1,5 @@
-#ifndef __SOUNDINSTANCE_H__
-#define __SOUNDINSTANCE_H__
+#pragma once
 
-#include <windows.h>
 #include "Common.h"
 
 namespace Sexy
@@ -30,5 +28,3 @@ public:
 };
 
 }
-
-#endif //__SOUNDINSTANCE_H__

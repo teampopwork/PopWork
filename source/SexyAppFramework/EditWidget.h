@@ -1,5 +1,4 @@
-#ifndef __EDITWIDGET_H__
-#define __EDITWIDGET_H__
+#pragma once
 
 #include "Widget.h"
 
@@ -98,5 +97,3 @@ public:
 };
 
 }
-
-#endif //__EDITWIDGET_H__

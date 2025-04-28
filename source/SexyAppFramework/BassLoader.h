@@ -1,5 +1,4 @@
-#ifndef __BASSLOADER_H__
-#define __BASSLOADER_H__
+#pragma once
 
 #define WIN32_LEAN_AND_MEAN
 #if defined(_WIN32)
@@ -102,5 +101,3 @@ void LoadBassDLL(); // exits on failure
 void FreeBassDLL();
 
 } // namespace Sexy
-
-#endif

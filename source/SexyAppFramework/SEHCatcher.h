@@ -1,5 +1,5 @@
-#ifndef __SEHCATHER_H__
-#define __SEHCATHER_H__
+#if WIN32
+#pragma once
 
 #include "Common.h"
 #include "HTTPTransfer.h"

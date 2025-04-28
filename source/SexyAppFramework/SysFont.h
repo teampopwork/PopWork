@@ -1,5 +1,4 @@
-#ifndef __SYSFONT_H__
-#define __SYSFONT_H__
+#pragma once
 
 #include "Font.h"
 //#include <SDL3_ttf/SDL_ttf.h>
@@ -35,5 +34,3 @@ public:
 };
 
 }
-
-#endif //__SYSFONT_H__

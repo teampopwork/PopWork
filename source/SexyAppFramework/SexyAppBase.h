@@ -1,5 +1,4 @@
-#ifndef __SEXYAPPBASE_H__
-#define __SEXYAPPBASE_H__
+#pragma once
 
 #include "Common.h"
 #include "Rect.h"
@@ -572,5 +571,3 @@ public:
 extern SexyAppBase* gSexyAppBase;
 
 };
-
-#endif //__SEXYAPPBASE_H__

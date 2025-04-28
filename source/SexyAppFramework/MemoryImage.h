@@ -1,5 +1,4 @@
-#ifndef __MEMORYIMAGE_H__
-#define __MEMORYIMAGE_H__
+#pragma once
 
 #include "Image.h"
 
@@ -109,5 +108,3 @@ public:
 };
 
 }
-
-#endif //__MEMORYIMAGE_H__

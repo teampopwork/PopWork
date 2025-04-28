@@ -1,5 +1,4 @@
-#ifndef __SLIDERLISTENER_H__
-#define __SLIDERLISTENER_H__
+#pragma once
 
 namespace Sexy
 {
@@ -11,5 +10,3 @@ public:
 };
 
 }
-
-#endif //__SLIDERLISTENER_H__

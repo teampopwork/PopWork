@@ -1,5 +1,4 @@
-#ifndef __XMLPARSER_H__
-#define __XMLPARSER_H__
+#pragma once
 
 #include "Common.h"
 
@@ -102,5 +101,3 @@ public:
 };
 
 };
-
-#endif //__XMLPARSER_H__

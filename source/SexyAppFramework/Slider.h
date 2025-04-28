@@ -1,6 +1,4 @@
-#ifndef __SLIDER_H__
-#define __SLIDER_H__
-
+#pragma once
 #include "Widget.h"
 
 namespace Sexy
@@ -39,5 +37,3 @@ public:
 };
 
 }
-
-#endif //__SLIDER_H__

@@ -1,5 +1,4 @@
-#ifndef __IMAGEFONT_H__
-#define __IMAGEFONT_H__
+#pragma once
 
 #include "Font.h"
 #include "DescParser.h"
@@ -167,5 +166,3 @@ public:
 };
 
 }
-
-#endif //__IMAGEFONT_H__

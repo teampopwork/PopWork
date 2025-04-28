@@ -1,5 +1,4 @@
-#ifndef __EDITLISTENER_H__
-#define __EDITLISTENER_H__
+#pragma once
 
 #include "Common.h"
 #include "KeyCodes.h"
@@ -18,5 +17,3 @@ public:
 };
 
 }
-
-#endif //__EDITLISTENER_H__

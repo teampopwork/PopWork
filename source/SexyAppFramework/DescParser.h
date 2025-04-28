@@ -1,5 +1,4 @@
-#ifndef __DESCPARSER_H__
-#define __DESCPARSER_H__
+#pragma once
 
 #include "Common.h"
 
@@ -97,5 +96,3 @@ public:
 };
 
 }
-
-#endif //__DESCPARSER_H__

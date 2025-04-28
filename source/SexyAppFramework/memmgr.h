@@ -1,5 +1,4 @@
-#ifndef __SEXYMEMMGR_H__
-#define __SEXYMEMMGR_H__
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////
 //						HOW TO USE THIS FILE
@@ -92,5 +91,3 @@ inline void __cdecl operator delete[](void* pMem, const char *file, int line)
 
 #endif // SEXY_MEMTRACE
 
-
-#endif

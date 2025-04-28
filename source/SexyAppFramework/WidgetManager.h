@@ -1,5 +1,5 @@
-#ifndef __WIDGETMANAGER_H__
-#define __WIDGETMANAGER_H__
+#pragma once
+
 
 #include "Common.h"
 #include "KeyCodes.h"
@@ -130,5 +130,3 @@ public:
 };
 
 }
-
-#endif // __WIDGETMANAGER_H__

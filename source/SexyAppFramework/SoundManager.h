@@ -1,7 +1,5 @@
-#ifndef __SOUNDMANAGER_H__
-#define __SOUNDMANAGER_H__
+#pragma once
 
-#include <windows.h>
 #include "Common.h"
 
 namespace Sexy
@@ -46,5 +44,3 @@ public:
 
 
 }
-
-#endif //__SOUNDMANAGER_H__

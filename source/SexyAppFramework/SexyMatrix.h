@@ -1,5 +1,4 @@
-#ifndef __SEXYMATRIX_H__
-#define __SEXYMATRIX_H__
+#pragma once
 
 #include "SexyVector.h"
 
@@ -87,5 +86,3 @@ public:
 
 
 } // namespace Sexy
-
-#endif

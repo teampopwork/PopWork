@@ -1,5 +1,4 @@
-#ifndef __FONT_H__
-#define __FONT_H__
+#pragma once
 
 #include "Common.h"
 #include "Rect.h"
@@ -39,5 +38,3 @@ public:
 };
 
 }
-
-#endif //__FONT_H__

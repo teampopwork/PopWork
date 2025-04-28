@@ -1,5 +1,4 @@
-#ifndef __IMAGE_H__
-#define __IMAGE_H__
+#pragma once
 
 #include "Common.h"
 #include "Color.h"
@@ -100,5 +99,3 @@ public:
 };
 
 }
-
-#endif //__IMAGE_H__

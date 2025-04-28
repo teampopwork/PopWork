@@ -1,5 +1,4 @@
-#ifndef __SHARED_IMAGE_H__
-#define __SHARED_IMAGE_H__
+#pragma once
 
 #include "Common.h"
 
@@ -46,5 +45,3 @@ public:
 };
 
 }
-
-#endif //__SHARED_IMAGE_H__

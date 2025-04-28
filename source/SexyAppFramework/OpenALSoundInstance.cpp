@@ -1,7 +1,5 @@
 #include "OpenALSoundInstance.h"
 #include "OpenALSoundManager.h"
-#include "BassLoader.h"
-#include <iostream>
 
 using namespace Sexy;
 
@@ -13,7 +11,7 @@ OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, AL
 	mAutoRelease = false;
 	mHasPlayed = false;
 	mSourceSoundBuffer = theSourceSound;
-	mSoundBuffer = NULL;
+	mSoundSource = NULL;
 
 	mBaseVolume = 1.0;
 	mBasePan = 0;
@@ -23,13 +21,11 @@ OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, AL
 
 	mDefaultFrequency = 44100;
 
-	BASS_CHANNELINFO  aInfo{};
-
-	//start duplicating the sound buffer
+	//Generate the OpenAL source.
 	if (mSourceSoundBuffer != NULL)
 	{
-		alGenSources(1, &mSoundBuffer);
-		alSourcei(mSoundBuffer, AL_BUFFER, mSourceSoundBuffer);
+		alGenSources(1, &mSoundSource);
+		alSourcei(mSoundSource, AL_BUFFER, mSourceSoundBuffer);
 	}
 
 	RehupVolume();
@@ -37,23 +33,26 @@ OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, AL
 
 OpenALSoundInstance::~OpenALSoundInstance()
 {
-	alDeleteSources(1, &mSoundBuffer);
+	alDeleteSources(1, &mSoundSource);
 }
 
 void OpenALSoundInstance::RehupVolume()
 {
-	if (mSoundBuffer != NULL)
+	if (mSoundSource != NULL)
 	{
-		alSourcef(mSoundBuffer, AL_GAIN, mVolume * mBaseVolume * mSoundManagerP->mMasterVolume);
+		alSourcef(mSoundSource, AL_GAIN, mVolume * mBaseVolume * mSoundManagerP->mMasterVolume);
 	}
 }
 
 void OpenALSoundInstance::RehupPan()
 {
-	if (mSoundBuffer != NULL)
+	if (mSoundSource != NULL)
 	{
-		float normalizedPan = mBasePan * mPan / 10000.0f;
-		alSource3f(mSoundBuffer, AL_POSITION, normalizedPan, 0.0f, 0.0f);
+		float converted_panning = (mBasePan + mPan) / 10000.0f;
+		if (converted_panning < -1.0f) converted_panning = -1.0f;
+		if (converted_panning > 1.0f) converted_panning = 1.0f;
+		
+		alSource3f(mSoundSource, AL_POSITION, converted_panning, 0.0f, 0.0f);
 	}
 }
 
@@ -95,21 +94,20 @@ bool OpenALSoundInstance::Play(bool looping, bool autoRelease)
 	mHasPlayed = true;
 	mAutoRelease = autoRelease;
 
-	if (mSoundBuffer == NULL)
+	if (mSoundSource == NULL)
 	{
 		return false;
 	}
-	if (looping)
-		alSourcei(mSoundBuffer, AL_LOOPING, true);
-	alSourcePlay(mSoundBuffer);
+	alSourcei(mSoundSource, AL_LOOPING, looping);
+	alSourcePlay(mSoundSource);
 	return true;
 }
 
 void OpenALSoundInstance::Stop()
 {
-	if (mSoundBuffer != NULL)
+	if (mSoundSource != NULL)
 	{
-		alSourceStop(mSoundBuffer);
+		alSourceStop(mSoundSource);
 		mAutoRelease = false;
 	}
 
@@ -117,16 +115,11 @@ void OpenALSoundInstance::Stop()
 
 void OpenALSoundInstance::AdjustPitch(double theNumSteps)
 {
-	if (mSoundBuffer != NULL)
+	if (mSoundSource != NULL)
 	{
+		// 1.059463..... is the twelfth root of 2, which is the how many semitones per steps.
 		double aFrequencyMult = pow(1.0594630943592952645618252949463, theNumSteps);
-		double aNewFrequency = mDefaultFrequency * aFrequencyMult;
-		if (aNewFrequency < 100)
-			aNewFrequency = 100;
-		if (aNewFrequency > 100000)
-			aNewFrequency = 100000;
-
-		alSourcef(mSoundBuffer, AL_PITCH, aFrequencyMult);
+		alSourcef(mSoundSource, AL_PITCH, aFrequencyMult);
 	}
 }
 
@@ -135,11 +128,11 @@ bool OpenALSoundInstance::IsPlaying()
 	if (!mHasPlayed)
 		return false;
 
-	if (mSoundBuffer == NULL)
+	if (mSoundSource == NULL)
 		return false;
 
 	ALint aStatus;
-	alGetSourcei(mSoundBuffer, AL_SOURCE_STATE, &aStatus);
+	alGetSourcei(mSoundSource, AL_SOURCE_STATE, &aStatus);
 	if (aStatus == AL_PLAYING)
 		return true;
 	else

@@ -1,5 +1,4 @@
-#ifndef __FLAGS_H__
-#define __FLAGS_H__
+#pragma once
 
 namespace Sexy
 {
@@ -72,5 +71,3 @@ public:
 };
 
 }
-
-#endif //__FLAGS_H__

@@ -1,5 +1,4 @@
-#ifndef __DIALOGLISTENER_H__
-#define __DIALOGLISTENER_H__
+#pragma once
 
 namespace Sexy
 {
@@ -12,5 +11,3 @@ public:
 };
 
 }
-
-#endif // __DIALOGLISTENER_H__

@@ -1,5 +1,4 @@
-#ifndef __SEXY_RESOURCEMANAGER_H__
-#define __SEXY_RESOURCEMANAGER_H__
+#pragma once
 
 #include "Common.h"
 #include "Image.h"
@@ -228,7 +227,3 @@ struct ResourceManagerException : public std::exception
 };
 
 }
-
-#endif //__PROPERTIESPARSER_H__
-
-

@@ -1,5 +1,4 @@
-#ifndef __DEBUG_INCLUDED__
-#define __DEBUG_INCLUDED__
+#pragma once
 
 #include "Common.h"
 #include <cassert>
@@ -27,5 +26,3 @@ extern void OutputDebug(const SexyChar* fmt ...);
 #define DBG_ASSERT(exp)		{ gInAssert = true; assert(exp); gInAssert = false; }
 
 #endif // NDEBUG
-
-#endif //__DEBUG_INCLUDED__

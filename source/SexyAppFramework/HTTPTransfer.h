@@ -1,5 +1,4 @@
-#ifndef __HTTPTRANSFER_H__
-#define __HTTPTRANSFER_H__
+#pragma once
 
 #include "Common.h"
 
@@ -80,5 +79,3 @@ public:
 };
 
 };
-
-#endif //__HTTPTRANSFER_H__

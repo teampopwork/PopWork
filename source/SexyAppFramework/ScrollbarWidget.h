@@ -2,8 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifndef __SCROLLBARWIDGET_H__
-#define __SCROLLBARWIDGET_H__
+#pragma once
 
 #include "Widget.h"
 #include "ButtonListener.h"
@@ -86,5 +85,3 @@ public:
 };
 
 }
-
-#endif // __SCROLLBARWIDGET_H__

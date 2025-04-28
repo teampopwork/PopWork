@@ -1,5 +1,4 @@
-#ifndef __CHECKBOX_H__
-#define __CHECKBOX_H__
+#pragma once
 
 #include "Widget.h"
 
@@ -42,5 +41,3 @@ public:
 };
 
 }
-
-#endif //__CHECKBOX_H__

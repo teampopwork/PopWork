@@ -1,5 +1,4 @@
-#ifndef _H_CritSect
-#define _H_CritSect
+#pragma once
 
 #include "Common.h"
 
@@ -21,4 +20,3 @@ public:
 
 }
 
-#endif // _H_CritSect

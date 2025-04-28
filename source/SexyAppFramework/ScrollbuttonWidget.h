@@ -1,5 +1,4 @@
-#ifndef __SCROLLBUTTONWIDGET_H__
-#define __SCROLLBUTTONWIDGET_H__
+#pragma once
 
 #include "..\SexyAppFramework\ButtonWidget.h"
 
@@ -25,5 +24,3 @@ public:
 };
 
 }
-
-#endif //__SCROLLBUTTONWIDGET_H__

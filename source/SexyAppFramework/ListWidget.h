@@ -1,5 +1,4 @@
-#ifndef __LISTWIDGET_H__
-#define __LISTWIDGET_H__
+#pragma once
 
 #include "ScrollListener.h"
 #include "Widget.h"
@@ -92,5 +91,3 @@ public:
 };
 
 }
-
-#endif // __LISTWIDGET_H__

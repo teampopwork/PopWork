@@ -1,5 +1,5 @@
-#ifndef __WIDGET_H__
-#define __WIDGET_H__
+#pragma once
+
 
 #include "Common.h"
 #include "Color.h"
@@ -142,5 +142,3 @@ enum LayoutFlags
 
 
 }
-
-#endif //__WIDGET_H__

@@ -1,5 +1,4 @@
-#ifndef __HYPERLINKWIDGET_H__
-#define __HYPERLINKWIDGET_H__
+#pragma once
 
 #include "ButtonWidget.h"
 
@@ -23,5 +22,3 @@ public:
 };
 
 }
-
-#endif //__HYPERLINKWIDGET_H__

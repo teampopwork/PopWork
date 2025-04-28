@@ -1,5 +1,4 @@
-#ifndef __MUSICINTERFACE_H__
-#define __MUSICINTERFACE_H__
+#pragma once
 
 #include "Common.h"
 
@@ -39,5 +38,3 @@ public:
 };
 
 }
-
-#endif //__MUSICINTERFACE_H__

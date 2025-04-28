@@ -1,6 +1,5 @@
 #ifndef __SEXYAPPFRAMEWORK_NO_PROPERTIES_PARSER__
-#ifndef __PROPERTIESPARSER_H__
-#define __PROPERTIESPARSER_H__
+#pragma once
 
 #include "SexyAppBase.h"
 
@@ -35,7 +34,5 @@ public:
 };
 
 }
-
-#endif //__PROPERTIESPARSER_H__
 
 #endif // __SEXYAPPFRAMEWORK_NO_PROPERTIES_PARSER__

@@ -1,5 +1,5 @@
-#ifndef __NATIVEDISPLAY_H__
-#define __NATIVEDISPLAY_H__
+#pragma once
+
 #include "Common.h"
 
 namespace Sexy
@@ -27,6 +27,3 @@ public:
 };
 
 };
-
-
-#endif

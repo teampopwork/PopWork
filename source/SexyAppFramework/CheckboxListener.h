@@ -1,5 +1,4 @@
-#ifndef __CHECKBOX_LISTENER__
-#define __CHECKBOX_LISTENER__
+#pragma once
 
 namespace Sexy
 {
@@ -11,5 +10,3 @@ public:
 };
 
 }
-
-#endif //__CHECKBOX_LISTENER__

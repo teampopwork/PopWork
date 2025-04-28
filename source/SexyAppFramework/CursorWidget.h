@@ -1,5 +1,4 @@
-#ifndef __CURSORWIDGET_H__
-#define __CURSORWIDGET_H__
+#pragma once
 
 #include "Widget.h"
 #include "Point.h"
@@ -24,5 +23,3 @@ public:
 };
 
 }
-
-#endif //__CURSORWIDGET_H__

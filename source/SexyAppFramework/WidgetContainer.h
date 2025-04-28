@@ -1,5 +1,5 @@
-#ifndef __WIDGETCONTAINER_H__
-#define __WIDGETCONTAINER_H__
+#pragma once
+
 
 #include "Common.h"
 #include "Rect.h"
@@ -83,5 +83,3 @@ public:
 };
 
 };
-
-#endif //__WIDGETCONTAINER_H__

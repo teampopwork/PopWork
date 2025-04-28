@@ -1,6 +1,4 @@
-#ifndef __COLOR_H__
-#define __COLOR_H__
-
+#pragma once
 #include "Common.h"
 
 namespace Sexy
@@ -46,5 +44,3 @@ bool operator==(const Color& theColor1, const Color& theColor2);
 bool operator!=(const Color& theColor1, const Color& theColor2);
 
 }
-
-#endif //__COLOR_H__

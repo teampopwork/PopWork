@@ -1,6 +1,4 @@
-#ifndef __BASSMUSICINTERFACE_H__
-#define __BASSMUSICINTERFACE_H__
-
+#pragma once
 #include "MusicInterface.h"
 #include "bass.h"
 
@@ -64,5 +62,3 @@ public:
 };
 
 }
-
-#endif //__BASSMUSICINTERFACE_H__

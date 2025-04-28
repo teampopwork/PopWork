@@ -1,5 +1,4 @@
-#ifndef __GRAPHICS_H__
-#define __GRAPHICS_H__
+#pragma once
 
 #include "Common.h"
 #include "Rect.h"
@@ -196,5 +195,3 @@ public:
 };
 
 }
-
-#endif //__GRAPHICS_H__

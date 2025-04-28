@@ -1,5 +1,4 @@
-#ifndef __TEXTWIDGET_H__
-#define __TEXTWIDGET_H__
+#pragma once
 
 #include "Widget.h"
 #include "ScrollListener.h"
@@ -58,5 +57,3 @@ public:
 };
 
 }
-
-#endif //__TEXTWIDGET_H__

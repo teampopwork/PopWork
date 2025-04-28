@@ -1,5 +1,4 @@
-#ifndef __TRectANGLE_H__
-#define __TRectANGLE_H__
+#pragma once
 
 #include "Common.h"
 #include "Point.h"
@@ -114,5 +113,3 @@ typedef TRect<double> FRect;
 
 
 }
-
-#endif //__TRectANGLE_H__

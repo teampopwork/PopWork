@@ -1,5 +1,4 @@
-#ifndef __RATIO_H__
-#define __RATIO_H__
+#pragma once
 
 namespace Sexy
 {
@@ -54,5 +53,3 @@ namespace Sexy
 	}
 
 }
-
-#endif

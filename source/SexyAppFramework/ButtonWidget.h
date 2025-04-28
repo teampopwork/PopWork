@@ -1,5 +1,4 @@
-#ifndef __BUTTONWIDGET_H__
-#define __BUTTONWIDGET_H__
+#pragma once
 
 #include "Widget.h"
 
@@ -74,5 +73,3 @@ public:
 };
 
 }
-
-#endif //__BUTTONWIDGET_H__

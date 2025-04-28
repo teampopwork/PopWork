@@ -1,5 +1,4 @@
-#ifndef __FLASHWIDGET_H__
-#define __FLASHWIDGET_H__
+#pragma once
 
 #include "Common.h"
 #include "Widget.h"
@@ -119,5 +118,3 @@ public:
 };
 
 }
-
-#endif //__FLASHWIDGET_H__

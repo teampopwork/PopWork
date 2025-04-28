@@ -1,5 +1,4 @@
-#ifndef __SEXYVECTOR_H__
-#define __SEXYVECTOR_H__
+#pragma once
 
 #include <math.h>
 
@@ -73,5 +72,3 @@ public:
 };
 
 };
-
-#endif

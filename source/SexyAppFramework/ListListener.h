@@ -1,5 +1,4 @@
-#ifndef __LISTLISTENER_H__
-#define __LISTLISTENER_H__
+#pragma once
 
 namespace Sexy 
 {
@@ -14,4 +13,3 @@ public:
 
 }
 
-#endif //__LISTLISTENER_H__

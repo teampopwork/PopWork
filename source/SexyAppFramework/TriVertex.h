@@ -1,5 +1,4 @@
-#ifndef __TRIVERTEX_H__
-#define __TRIVERTEX_H__
+#pragma once
 
 namespace Sexy
 {
@@ -20,6 +19,3 @@ public:
 };
 
 } // namespace Sexy
-
-
-#endif

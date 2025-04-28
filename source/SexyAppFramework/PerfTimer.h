@@ -1,5 +1,4 @@
-#ifndef __SEXY_PERFTIMER_H__
-#define __SEXY_PERFTIMER_H__
+#pragma once
 
 #include "Common.h"
 
@@ -80,8 +79,6 @@ public:
 };
 
 } // namespace Sexy
-
-#endif
 
 #pragma warning(push)
 #pragma warning(disable:4005)

@@ -1,5 +1,4 @@
-#ifndef __MODVAL_H__
-#define __MODVAL_H__
+#pragma once
 
 #include <string>
 
@@ -68,5 +67,3 @@ bool			ReparseModValues();
 void			AddModValEnum(const std::string &theEnumName, int theVal);
 
 }
-
-#endif //__MODVAL_H__

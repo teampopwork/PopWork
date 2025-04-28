@@ -1,5 +1,4 @@
-#ifndef __SCROLLLISTENER_H__
-#define __SCROLLLISTENER_H__
+#pragma once
 
 namespace Sexy 
 {
@@ -11,5 +10,3 @@ public:
 };
 
 }
-
-#endif // __SCROLLLISTENER_H__

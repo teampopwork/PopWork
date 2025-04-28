@@ -1,5 +1,4 @@
-#ifndef __KEYCODES_INCLUDED__
-#define __KEYCODES_INCLUDED__
+#pragma once
 
 #include "Common.h"
 
@@ -105,5 +104,3 @@ KeyCode	GetKeyCodeFromName(const std::string& theKeyName);
 const std::string GetKeyNameFromCode(const KeyCode& theKeyCode);
 
 }
-
-#endif //__KEYCODES_INCLUDED__

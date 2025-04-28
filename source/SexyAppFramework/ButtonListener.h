@@ -1,5 +1,4 @@
-#ifndef __BUTTONLISTENER_H__
-#define __BUTTONLISTENER_H__
+#pragma once
 
 namespace Sexy
 {
@@ -17,5 +16,3 @@ public:
 };
 
 }
-
-#endif //__BUTTONLISTENER_H__

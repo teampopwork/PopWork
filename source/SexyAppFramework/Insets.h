@@ -1,5 +1,4 @@
-#ifndef __INSETS_H__
-#define __INSETS_H__
+#pragma once
 
 namespace Sexy
 {
@@ -19,5 +18,3 @@ public:
 };
 
 }
-
-#endif //__INSETS_H__

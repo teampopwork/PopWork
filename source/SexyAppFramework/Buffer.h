@@ -1,5 +1,4 @@
-#ifndef __BUFFER_H__
-#define __BUFFER_H__
+#pragma once
 
 #include <string>
 #include "Common.h"
@@ -62,5 +61,3 @@ public:
 };
 
 }
-
-#endif //__BUFFER_H__
