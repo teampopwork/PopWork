@@ -6,4 +6,3 @@ This repository contains PopCap's SexyAppFramework which is the engine that all 
 
 - [x] Replace DirectX/DirectSound for SDL3/OpenAL
 - [ ] Replace all windows code in favor for platform independent code.
-- [ ] Complete/Rework SysFont.
