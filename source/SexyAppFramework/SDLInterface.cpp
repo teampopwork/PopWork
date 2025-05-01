@@ -239,23 +239,25 @@ void SDLInterface::SetCursorPos(int theCursorX, int theCursorY)
 /// <returns></returns>
 bool SDLInterface::SetCursorImage(Image* theImage)
 {
-	if (theImage == NULL)
+	AutoCrit anAutoCrit(mCritSect);
+
+	if (mCursorImage != theImage)
 	{
-		SDL_SetCursor(nullptr);
+		mCursorImage = theImage;
+		if (theImage == NULL)
+			return true;
+		SDL_Surface* aSurface = SDL_CreateSurfaceFrom(theImage->mWidth, theImage->mHeight, SDL_PIXELFORMAT_ARGB8888, ((MemoryImage*)mCursorImage)->GetBits(), theImage->mWidth * sizeof(ulong));
+
+		SDL_Cursor* aCursor = SDL_CreateColorCursor(aSurface, mCursorImage->mWidth / 2, mCursorImage->mHeight / 2);
+
+		SDL_SetCursor(aCursor);
+
+		SDL_DestroySurface(aSurface);
+
 		return true;
 	}
-	MemoryImage* aMemoryImage = (MemoryImage*)theImage;
 
-	SDL_Surface* aSurface = SDL_CreateSurfaceFrom(aMemoryImage->mWidth, aMemoryImage->mHeight, SDL_PIXELFORMAT_ARGB8888, aMemoryImage->GetBits(), aMemoryImage->mWidth * sizeof(ulong));
-
-	SDL_Cursor* aCursor = SDL_CreateColorCursor(aSurface, 0, 0);
-	
-	SDL_SetCursor(aCursor);
-
-	SDL_DestroySurface(aSurface);
-	SDL_DestroyCursor(aCursor);
-
-	return true;
+	return false;
 }
 
 void SDLInterface::SetCursor(SDL_SystemCursor theCursorType)

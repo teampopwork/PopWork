@@ -75,6 +75,7 @@ namespace Sexy
 		int mRefreshRate;
 		int mMillisecondsPerFrame;
 
+		Image* mCursorImage;
 		SDLImage* mScreenImage;
 
 		int mNextCursorX;

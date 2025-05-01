@@ -16,7 +16,6 @@ LPTOP_LEVEL_EXCEPTION_FILTER SEHCatcher::mPreviousFilter;
 SexyAppBase*				SEHCatcher::mApp = NULL;
 HFONT						SEHCatcher::mDialogFont = NULL;
 HFONT						SEHCatcher::mBoldFont = NULL;
-bool						SEHCatcher::mHasDemoFile = false;
 bool						SEHCatcher::mDebugError = false;
 std::string					SEHCatcher::mErrorTitle;
 std::string					SEHCatcher::mErrorText;
@@ -437,36 +436,9 @@ void SEHCatcher::DoHandleDebugEvent(LPEXCEPTION_POINTERS lpEP)
 #ifdef ZYLOM
 	ZylomGS_StandAlone_SendBugReport((char*) aDebugDump.c_str());
 #else
-	if (mApp != NULL)
-	{
-		if (mApp->mRecordingDemoBuffer)
-		{
-			// Make sure we have enough update block things in there to
-			//  get to the final crashing update
-			mApp->WriteDemoTimingBlock();
-			mApp->mDemoBuffer.WriteNumBits(0, 1);
-			mApp->mDemoBuffer.WriteNumBits(DEMO_IDLE, 5);
-			mApp->WriteDemoBuffer();		
-			mUploadFileName = mApp->mDemoFileName;
-		}	
-
-		mHasDemoFile = mApp->mRecordingDemoBuffer;
-		std::string anUploadFile = mApp->NotifyCrashHook();
-		if (!anUploadFile.empty())
-		{
-			mUploadFileName = anUploadFile;
-			mHasDemoFile = true;
-		}
-
-		mApp->mRecordingDemoBuffer = false;
-		mApp->mPlayingDemoBuffer = false;
-	}
-
 	if (mShowUI)
 		ShowErrorDialog(anErrorTitle, aDebugDump);
 #endif
-
-	//::MessageBox(NULL, aDebugDump.c_str(), "ERROR", MB_ICONERROR);	
 
 	UnloadImageHelp();	
 }
@@ -920,22 +892,6 @@ void SEHCatcher::SubmitReportThread(void *theArg)
 		"Content-Disposition: form-data; name=\"errortext\"\r\n" +		
 		"\r\n" +
 		mErrorText + "\r\n";
-
-	if (mHasDemoFile)
-	{
-		Buffer aBuffer;
-		mApp->ReadBufferFromFile(mUploadFileName, &aBuffer, true);
-
-		aContent += 
-			"--" + aSeperator + "\r\n"
-			"Content-Disposition: form-data; name=\"demofile\"; filename=\"popcap.dmo\"\r\n" +
-			"Content-Type: application/octet-stream\r\n" +
-			"\r\n";		
-
-		aContent.insert(aContent.end(), (char*) aBuffer.GetDataPtr(), (char*) aBuffer.GetDataPtr() + aBuffer.GetDataLen());			
-				
-		aContent += "\r\n";
-	}
 
 	aContent +=
 		"--" + aSeperator + "--\r\n";

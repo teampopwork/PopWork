@@ -39,7 +39,6 @@ public:
 	static HWND				mNoButtonWindow;
 	static HWND				mDebugButtonWindow;
 	static HWND				mEditWindow;
-	static bool				mHasDemoFile;
 	static bool				mDebugError;
 	static std::string		mErrorTitle;
 	static std::string		mErrorText;

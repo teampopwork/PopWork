@@ -12,7 +12,6 @@ HTTPTransfer::HTTPTransfer()
 	mTransferId = gCurTransferId++;
 	mResult = RESULT_NOT_STARTED;
 	mContentLength = 0;
-	mDemoLastKnownResult = mResult;
 	mThreadRunning = false;	
 }
 
@@ -383,10 +382,6 @@ void HTTPTransfer::StartTransfer()
 {	
 	mTransferPending = true;
 
-	// Don't really start the transfer while in demo playing mode
-	if ((gSexyAppBase != NULL) && (gSexyAppBase->mPlayingDemoBuffer))
-		return;
-
 	mThreadRunning = true;
 	_beginthread(GetThreadProcStub, 0, this);
 }
@@ -475,7 +470,6 @@ void HTTPTransfer::Reset()
 	}	
 
 	mResult = RESULT_NOT_STARTED;
-	mDemoLastKnownResult = RESULT_NOT_STARTED;
 	mTransferId = gCurTransferId++;	
 	mContent.erase();
 	mExiting = false;
@@ -489,64 +483,6 @@ static int aLastThreadId = 0;
 
 void HTTPTransfer::UpdateStatus()
 {	
-	// This will save the result data in demo recording mode and load it in (if available)
-	//  in demo playback mode
-
-	if (gSexyAppBase != NULL)
-	{
-		if (gSexyAppBase->mPlayingDemoBuffer)
-		{
-			// We only need to try to get the result if we think we are waiting for one			
-			if (gSexyAppBase->PrepareDemoCommand(false))
-			{
-				if ((!gSexyAppBase->mDemoIsShortCmd) && (gSexyAppBase->mDemoCmdNum == DEMO_HTTP_RESULT))
-				{
-					int anOldBufferPos = gSexyAppBase->mDemoBuffer.mReadBitPos;
-
-					// Since we don't require a demo result entry to be here, we must verify
-					//  that this is referring to us
-					int aTransferId = gSexyAppBase->mDemoBuffer.ReadLong();
-					
-					if (aTransferId == mTransferId)
-					{
-						// We finally got our result!
-						mResult = gSexyAppBase->mDemoBuffer.ReadByte();
-						mContent = gSexyAppBase->mDemoBuffer.ReadString();
-						mDemoLastKnownResult = mResult;
-						gSexyAppBase->mDemoNeedsCommand = true;
-
-						//TODO:
-						//OutputDebugString(StrFormat("Found State Change on %s (Id %d) to %d at %d\r\n", mURL.c_str(), mTransferId, mResult, gSexyAppBase->mUpdateCount).c_str());
-					}
-					else
-					{
-						// Not us, go back
-						gSexyAppBase->mDemoBuffer.mReadBitPos = anOldBufferPos;
-					}
-				}
-			}
-		}
-		else if ((gSexyAppBase->mRecordingDemoBuffer) && (mResult != mDemoLastKnownResult))
-		{
-			//TODO:
-			//OutputDebugString(StrFormat("Recording State Change on %s (Id %d) to %d at %d\r\n", mURL.c_str(), mTransferId, mResult, gSexyAppBase->mUpdateCount).c_str());			
-
-			// Write out the new result
-			gSexyAppBase->WriteDemoTimingBlock();
-			gSexyAppBase->mDemoBuffer.WriteNumBits(0, 1);
-			gSexyAppBase->mDemoBuffer.WriteNumBits(DEMO_HTTP_RESULT, 5);
-			gSexyAppBase->mDemoBuffer.WriteLong(mTransferId);
-			gSexyAppBase->mDemoBuffer.WriteByte(mResult);
-
-			// Avoid any threading issues by not allowing access to mContent while in progress
-			if (mResult == RESULT_NOT_COMPLETED)
-				gSexyAppBase->mDemoBuffer.WriteString("");
-			else
-				gSexyAppBase->mDemoBuffer.WriteString(mContent);
-
-			mDemoLastKnownResult = mResult;
-		}
-	}
 }
 
 void HTTPTransfer::WaitFor()

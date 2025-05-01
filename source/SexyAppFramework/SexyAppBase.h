@@ -9,6 +9,7 @@
 #include "CritSect.h"
 #include "SharedImage.h"
 #include "Ratio.h"
+#include <SDL3/SDL.h>
 
 namespace ImageLib
 {
@@ -73,35 +74,6 @@ enum
 	NUM_CURSORS
 };
 
-enum
-{
-	DEMO_MOUSE_POSITION,	
-	DEMO_ACTIVATE_APP,
-	DEMO_SIZE,
-	DEMO_KEY_DOWN,
-	DEMO_KEY_UP,
-	DEMO_KEY_CHAR,
-	DEMO_CLOSE,
-	DEMO_MOUSE_ENTER,
-	DEMO_MOUSE_EXIT,
-	DEMO_LOADING_COMPLETE,
-	DEMO_REGISTRY_GETSUBKEYS,
-	DEMO_REGISTRY_READ,
-	DEMO_REGISTRY_WRITE,
-	DEMO_REGISTRY_ERASE,	
-	DEMO_FILE_EXISTS,
-	DEMO_FILE_READ,
-	DEMO_FILE_WRITE,
-	DEMO_HTTP_RESULT,
-	DEMO_SYNC,
-	DEMO_ASSERT_STRING_EQUAL,
-	DEMO_ASSERT_INT_EQUAL,
-	DEMO_MOUSE_WHEEL,
-	DEMO_HANDLE_COMPLETE,
-	DEMO_VIDEO_DATA,
-	DEMO_IDLE = 31
-};
-
 enum {
 	FPS_ShowFPS,
 	FPS_ShowCoords,
@@ -139,8 +111,6 @@ public:
 	int						mFullscreenBits;
 	double					mMusicVolume;
 	double					mSfxVolume;
-	double					mDemoMusicVolume;
-	double					mDemoSfxVolume;
 	bool					mNoSoundNeeded;
 	bool					mCmdLineParsed;
 	bool					mSkipSignatureChecks;
@@ -183,7 +153,7 @@ public:
 	std::string				mRegisterLink;
 	std::string				mProductVersion;	
 	Image*					mCursorImages[NUM_CURSORS];
-	HCURSOR					mOverrideCursor;
+	SDL_Cursor* 			mOverrideCursor;
 	bool					mIsOpeningURL;
 	bool					mShutdownOnURLOpen;
 	std::string				mOpeningURL;
@@ -194,7 +164,6 @@ public:
 	double					mUnmutedSfxVolume;	
 	int						mMuteCount;
 	int						mAutoMuteCount;
-	bool					mDemoMute;
 	bool					mMuteOnLostFocus;
 	MemoryImageSet			mMemoryImageSet;
 	SharedImageMap			mSharedImageMap;
@@ -228,8 +197,8 @@ public:
 
 	int						mCursorNum;
 	SoundManager*			mSoundManager;
-	HCURSOR					mHandCursor;
-	HCURSOR					mDraggingCursor;
+	SDL_Cursor*				mHandCursor;
+	SDL_Cursor*				mDraggingCursor;
 	WidgetSafeDeleteList	mSafeDeleteList;
 	bool					mMouseIn;	
 	bool					mRunning;
@@ -262,30 +231,6 @@ public:
 
 	int						mNumLoadingThreadTasks;
 	int						mCompletedLoadingThreadTasks;
-
-	// For recording/playback of program control
-	bool					mRecordingDemoBuffer;
-	bool					mPlayingDemoBuffer;
-	bool					mManualShutdown;
-	std::string			mDemoPrefix;
-	std::string			mDemoFileName;
-	Buffer					mDemoBuffer;
-	int						mDemoLength;
-	int						mLastDemoMouseX;
-	int						mLastDemoMouseY;
-	int						mLastDemoUpdateCnt;
-	bool					mDemoNeedsCommand;
-	bool					mDemoIsShortCmd;
-	int						mDemoCmdNum;
-	int						mDemoCmdOrder;
-	int						mDemoCmdBitPos;
-	bool					mDemoLoadingComplete;
-	HandleToIntMap			mHandleToIntMap; // For waiting on handles
-	int						mCurHandleNum;
-
-	typedef std::pair<std::string, int> DemoMarker;
-	typedef std::list<DemoMarker> DemoMarkerList;
-	DemoMarkerList			mDemoMarkerList;
 
 	bool					mDebugKeysEnabled;
 	bool					mEnableMaximizeButton;
@@ -361,9 +306,6 @@ protected:
 	bool					RegistryRead(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength);
 	bool					RegistryReadKey(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength, HKEY theMainKey = HKEY_CURRENT_USER);
 	bool					RegistryWrite(const std::string& theValueName, ulong theType, const uchar* theValue, ulong theLength);
-
-	// Demo recording helpers	
-	void					ProcessDemo();
 
 public:
 	SexyAppBase();
@@ -486,7 +428,6 @@ public:
 	bool					Is3DAccelerated();
 	bool					Is3DAccelerationSupported();
 	bool					Is3DAccelerationRecommended();
-	void					DemoSyncRefreshRate();
 	void					Set3DAcclerated(bool is3D, bool reinit = true);
 	virtual void			Done3dTesting();
 	virtual std::string		NotifyCrashHook(); // return file name that you want to upload
@@ -519,23 +460,6 @@ public:
 	void					SetInteger(const std::string& theId, int theValue);
 	void					SetDouble(const std::string& theId, double theValue);
 	void					SetString(const std::string& theId, const std::wstring& theValue);
-	
-	// Demo access methods
-	bool					PrepareDemoCommand(bool required);
-	void					WriteDemoTimingBlock();
-	void					WriteDemoBuffer();
-	bool					ReadDemoBuffer(std::string &theError);//UNICODE
-	void					DemoSyncBuffer(Buffer* theBuffer);
-	void					DemoSyncString(std::string* theString);
-	void					DemoSyncInt(int* theInt);
-	void					DemoSyncBool(bool* theBool);
-	void					DemoAssertStringEqual(const std::string& theString);
-	void					DemoAssertIntEqual(int theInt);
-	void					DemoAddMarker(const std::string& theString);
-	void					DemoRegisterHandle(HANDLE theHandle);
-	void					DemoWaitForHandle(HANDLE theHandle);
-	bool					DemoCheckHandle(HANDLE theHandle);
-	
 
 	// Registry access methods
 	bool					RegistryGetSubKeys(const std::string& theKeyName, StringVector* theSubKeys);
@@ -552,7 +476,7 @@ public:
 
 	// File access methods
 	bool					WriteBufferToFile(const std::string& theFileName, const Buffer* theBuffer);
-	bool					ReadBufferFromFile(const std::string& theFileName, Buffer* theBuffer, bool dontWriteToDemo = false);//UNICODE
+	bool					ReadBufferFromFile(const std::string& theFileName, Buffer* theBuffer);//UNICODE
 	bool					WriteBytesToFile(const std::string& theFileName, const void *theData, unsigned long theDataLen);
 	bool					FileExists(const std::string& theFileName);
 	bool					EraseFile(const std::string& theFileName);

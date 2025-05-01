@@ -1054,14 +1054,14 @@ void FlashWidget::CheckCursor()
 	if (aCursor == ::LoadCursor(NULL, IDC_ARROW))
 	{
 		mCurCursor = CURSOR_POINTER;
-		gSexyAppBase->mOverrideCursor = NULL;
-		gSexyAppBase->SetCursor(mCurCursor);
+		//gSexyAppBase->mOverrideCursor = NULL;
+		//gSexyAppBase->SetCursor(mCurCursor);
 	}
 	else if (aCursor != NULL)
 	{
-		gSexyAppBase->mOverrideCursor = aCursor;
+		//gSexyAppBase->mOverrideCursor = aCursor;
 		mCurCursor = CURSOR_HAND;
-		gSexyAppBase->SetCursor(mCurCursor);
+		//gSexyAppBase->SetCursor(mCurCursor);
 	}
 }
 

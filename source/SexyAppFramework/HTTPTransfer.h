@@ -42,8 +42,6 @@ public:
 	bool					mAborted;
 	int						mResult;
 
-	int						mDemoLastKnownResult;
-
 protected:
 	void					PrepareTransfer(const std::string& theURL);
 	void					StartTransfer();
