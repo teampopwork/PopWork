@@ -145,10 +145,8 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Window Creation Failed", SDL_GetError(), nullptr);
 		return false;
 	}
-	if (!IsWindowed)
-	{
-		SDL_SetWindowFullscreen(mWindow, true);
-	}
+
+	SDL_SetWindowFullscreen(mWindow, !IsWindowed);
 
 	SDL_StartTextInput(mWindow);
 

@@ -2279,10 +2279,17 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 
 					int x = event.button.x;
 					int y = event.button.y;
+
+					int renderWidth, renderHeight;
+					SDL_GetCurrentRenderOutputSize(mSDLInterface->mRenderer, &renderWidth, &renderHeight);
+
+					int scaledX = static_cast<int>(event.button.x * ((float)mWidth / renderWidth));
+					int scaledY = static_cast<int>(event.button.y * ((float)mHeight / renderHeight));
+
 					if (down)
-						mWidgetManager->MouseDown(x, y, btnCode);
+						mWidgetManager->MouseDown(scaledX, scaledY, btnCode);
 					else
-						mWidgetManager->MouseUp(x, y, btnCode);
+						mWidgetManager->MouseUp(scaledX, scaledY, btnCode);
 				}
 				break;
 			case SDL_EVENT_MOUSE_WHEEL:
