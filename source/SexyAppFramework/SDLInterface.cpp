@@ -272,6 +272,15 @@ void SDLInterface::MakeSimpleMessageBox(const char* theTitle, const char* theMes
 	SDL_ShowSimpleMessageBox(flags, theTitle, theMessage, mWindow);
 }
 
+int SDLInterface::MakeResultMessageBox(SDL_MessageBoxData data)
+{
+
+	int buttonid;
+	SDL_ShowMessageBox(&data, &buttonid);
+
+	return buttonid;
+}
+
 void SDLInterface::PushTransform(const SexyMatrix3& theTransform, bool concatenate)
 {
 	if (mTransformStack.empty() || !concatenate)

@@ -46,9 +46,6 @@ SexyAppBase* Sexy::gSexyAppBase = NULL;
 
 SEHCatcher Sexy::gSEHCatcher;
 
-//typedef struct { UINT cbSize; DWORD dwTime; } LASTINPUTINFO;
-typedef BOOL (WINAPI*GetLastInputInfoFunc)(LASTINPUTINFO *plii);
-GetLastInputInfoFunc gGetLastInputInfoFunc = NULL;
 static bool gScreenSaverActive = false;
 
 #ifndef SPI_GETSCREENSAVERRUNNING
@@ -130,8 +127,6 @@ void* GetSHGetFolderPath(const char* theDLL, HMODULE* theMod)
 SexyAppBase::SexyAppBase()
 {
 	gSexyAppBase = this;
-
-	gGetLastInputInfoFunc = (GetLastInputInfoFunc) GetProcAddress(GetModuleHandleA("user32.dll"),"GetLastInputInfo");
 
 	ImageLib::InitJPEG2000();
 
@@ -389,16 +384,31 @@ SexyAppBase::~SexyAppBase()
 	extern bool gSDLInterfacePreDrawError;
 	if (!showedMsgBox && gSDLInterfacePreDrawError && !IsScreenSaver())
 	{
-		int aResult = MessageBox(NULL, 
-						GetString("HARDWARE_ACCEL_NOT_WORKING", 
-									_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
-									_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
-									_S("Would you like to keep Hardware Acceleration switched on?")).c_str(),
-						(StringToSexyString(mCompanyName) + _S(" ") +
-						 GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation"))).c_str(),
-						MB_YESNO | MB_ICONQUESTION);
+		const SDL_MessageBoxButtonData buttons[] = {
+		{ 0, 0, "No" },
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes" },
+		};
 
-		if (aResult==IDNO)
+		std::string aMessage =
+			GetString("HARDWARE_ACCEL_NOT_WORKING",
+				_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
+				_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
+				_S("Would you like to keep Hardware Acceleration switched on?"));
+		std::string aTitle = (StringToSexyString(mCompanyName) + _S(" ") + GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
+
+		SDL_MessageBoxData messageBoxData = {
+			SDL_MESSAGEBOX_INFORMATION,
+			NULL,
+			aTitle.c_str(),
+			aMessage.c_str(),
+			SDL_arraysize(buttons),
+			buttons,
+			NULL
+		};
+
+
+		int aResult = mSDLInterface->MakeResultMessageBox(messageBoxData);
+		if (aResult==0)
 			RegistryWriteBoolean("Is3D", false);
 	}
 
@@ -1933,7 +1943,7 @@ void SexyAppBase::Popup(const std::string& theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		::MessageBoxA(mHWnd, theString.c_str(), SexyStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+		mSDLInterface->MakeSimpleMessageBox(SexyStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), theString.c_str(), SDL_MESSAGEBOX_ERROR);
 	EndPopup();
 }
 
@@ -1947,7 +1957,8 @@ void SexyAppBase::Popup(const std::wstring& theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		::MessageBoxW(mHWnd, theString.c_str(), SexyStringToWString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+		//::MessageBoxW(mHWnd, theString.c_str(), SexyStringToWString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+		//mSDLInterface->MakeSimpleMessageBox(SexyStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), theString.c_str(), SDL_MESSAGEBOX_ERROR); readding after wstring is working properly
 	EndPopup();
 }
 

@@ -120,6 +120,7 @@ namespace Sexy
 		void SetCursor(SDL_SystemCursor theCursorType);
 
 		void MakeSimpleMessageBox(const char* theTitle, const char* theMessage, SDL_MessageBoxFlags flags);
+		int MakeResultMessageBox(SDL_MessageBoxData data);
 
 	public:
 		void PushTransform(const SexyMatrix3& theTransform, bool concatenate = true);
