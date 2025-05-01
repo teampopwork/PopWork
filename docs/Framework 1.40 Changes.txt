@@ -4,9 +4,6 @@ General
 =======
 * Added the V14 demo, showcases: new blend modes (usage of SDL3), TTF text.
 
-Font/ImageFont
-===============
-* Added the TTFFont class. It uses .ttf files to draw text, bringing an alternative to ImageFont, recommended usage for text that is scaled, rotated, etc frequently.
 
 SexyAppBase
 ===========

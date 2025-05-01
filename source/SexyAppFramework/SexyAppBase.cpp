@@ -1655,7 +1655,7 @@ static void CalculateFPS()
 {
 	gFrameCount++;
 
-	static SysFont aFont(gSexyAppBase,"Tahoma",8);
+	static SysFont aFont(gSexyAppBase,"tahoma.ttf",16);
 	if (gFPSImage==NULL)
 	{
 		gFPSImage = new SDLImage(gSexyAppBase->mSDLInterface);
@@ -1684,9 +1684,9 @@ static void CalculateFPS()
 		Graphics aDrawG(gFPSImage);
 		aDrawG.SetFont(&aFont);
 		SexyString aFPS = StrFormat(_S("FPS: %d"), gFPSDisplay);
-		aDrawG.SetColor(0x000000);
+		aDrawG.SetColor(Color(0, 0, 0));
 		aDrawG.FillRect(0,0,gFPSImage->GetWidth(),gFPSImage->GetHeight());
-		aDrawG.SetColor(0xFFFFFF);
+		aDrawG.SetColor(Color(255,255,255));
 		aDrawG.DrawString(aFPS,2,aFont.GetAscent());
 		//gFPSImage->mKeepBits = false;
 		//gFPSImage->GenerateDDSurface();
@@ -2119,7 +2119,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 		}
 #endif
 	}
-	else if (theKey == VK_F3)
+	else if (theKey == SDLK_F3)
 	{
 		if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
@@ -2140,7 +2140,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 			gForceDisplay = true;
 		}
 	}
-	else if (theKey == VK_F8)
+	else if (theKey == SDLK_F8)
 	{
 		if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
@@ -2156,7 +2156,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
-	else if (theKey == VK_F10)
+	else if (theKey == SDLK_F10)
 	{
 #ifndef RELEASEFINAL
 		if (mWidgetManager->mKeyDown[KEYCODE_CONTROL])
@@ -2177,7 +2177,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
-	else if (theKey == VK_F11)
+	else if (theKey == SDLK_F11)
 	{
 		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 			DumpProgramInfo();
@@ -2186,7 +2186,7 @@ bool SexyAppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
-	else if (theKey == VK_F2)
+	else if (theKey == SDLK_F2)
 	{
 		bool isPerfOn = !SexyPerf::IsPerfOn();
 		if (isPerfOn)

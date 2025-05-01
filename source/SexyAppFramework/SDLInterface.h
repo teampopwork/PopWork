@@ -148,7 +148,7 @@ namespace Sexy
 		void DrawTrianglesTexStrip(const TriVertex theVertices[], int theNumTriangles, const Color& theColor, int theDrawMode, Image* theTexture, float tx = 0, float ty = 0, bool blend = true);
 		void FillPoly(const Point theVertices[], int theNumVertices, const Rect* theClipRect, const Color& theColor, int theDrawMode, int tx, int ty);
 
-		void BltTexture(SDL_Texture* theTexture, int theX, int theY, const SDL_FRect& theSrcRect, const SDL_FRect& theDestRect, const Color& theColor, int theDrawMode);
+		void BltTexture(SDL_Texture* theTexture, const SDL_FRect& theSrcRect, const SDL_FRect& theDestRect, const Color& theColor, int theDrawMode);
 
 	};
 }

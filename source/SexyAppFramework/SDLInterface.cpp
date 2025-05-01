@@ -5,7 +5,7 @@
 #include "CritSect.h"
 #include "Graphics.h"
 #include "MemoryImage.h"
-//#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 using namespace Sexy;
 
@@ -131,7 +131,7 @@ int SDLInterface::Init(bool IsWindowed)
 
 bool SDLInterface::InitSDLWindow(bool IsWindowed)
 {
-	if (!SDL_Init(SDL_INIT_VIDEO)/* || !TTF_Init()*/)
+	if (!SDL_Init(SDL_INIT_VIDEO) || !TTF_Init())
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL Initialization Failed", SDL_GetError(), nullptr);
 		return false;
@@ -789,7 +789,7 @@ void SDLInterface::FillPoly(const Point theVertices[], int theNumVertices, const
 	}
 }
 
-void SDLInterface::BltTexture(SDL_Texture* theTexture, int theX, int theY, const SDL_FRect& theSrcRect, const SDL_FRect& theDestRect, const Color& theColor, int theDrawMode)
+void SDLInterface::BltTexture(SDL_Texture* theTexture,const SDL_FRect& theSrcRect, const SDL_FRect& theDestRect, const Color& theColor, int theDrawMode)
 {
 	SDL_SetRenderTarget(mRenderer, mScreenTexture);
 

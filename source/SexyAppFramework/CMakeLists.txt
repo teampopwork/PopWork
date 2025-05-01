@@ -105,7 +105,6 @@ set(SRC_MAIN
 	ImageFont.cpp
 	MemoryImage.cpp
 	SysFont.cpp
-	TTFFont.cpp
 	Quantize.cpp
 	SharedImage.cpp
 
@@ -275,7 +274,6 @@ set(SRC_MAIN
 	SoundManager.h
 	SWTri.h
 	SysFont.h
-	TTFFont.h
 	TextWidget.h
 	Widget.h
 	WidgetContainer.h
@@ -304,6 +302,14 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SDL3)
 
 FetchContent_Declare(
+        SDL_TTF
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
+        # This will be a tag once SDL3 is released
+        GIT_TAG origin/main
+    )
+FetchContent_MakeAvailable(SDL_TTF)
+
+FetchContent_Declare(
     openAL
     GIT_REPOSITORY https://github.com/kcat/openal-soft
     GIT_TAG        master
@@ -321,6 +327,7 @@ FetchContent_MakeAvailable(miniAudio)
 
 set(SexyAppLibs
 	SDL3::SDL3
+	SDL3_ttf::SDL3_ttf
 	OpenAL::OpenAL
 	miniaudio
 	winmm

@@ -24,15 +24,15 @@ void SysFont::Init(SexyAppBase* theApp, const std::string& theFace, int thePoint
 {
 	mApp = theApp;
 
-	//mTTFFont = TTF_OpenFont("tahoma.ttf", thePointSize);
-	//if (!mTTFFont) {
-	//	mApp->mSDLInterface->MakeSimpleMessageBox("Error", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
-	//}
+	mTTFFont = TTF_OpenFont(theFace.c_str(), thePointSize);
+	if (!mTTFFont) {
+		mApp->mSDLInterface->MakeSimpleMessageBox("Error", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+	}
 
-	//TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) | (underline ? TTF_STYLE_UNDERLINE : 0));
+	TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) | (underline ? TTF_STYLE_UNDERLINE : 0));
 
-	//mAscent = TTF_GetFontAscent(mTTFFont);
-	//mHeight = TTF_GetFontHeight(mTTFFont);
+	mAscent = TTF_GetFontAscent(mTTFFont);
+	mHeight = TTF_GetFontHeight(mTTFFont);
 
 	mDrawShadow = false;
 	mSimulateBold = false;
@@ -40,7 +40,7 @@ void SysFont::Init(SexyAppBase* theApp, const std::string& theFace, int thePoint
 
 SysFont::SysFont(const SysFont& theSysFont)
 {
-	//mTTFFont = theSysFont.mTTFFont;
+	mTTFFont = theSysFont.mTTFFont;
 	mApp = theSysFont.mApp;
 	mHeight = theSysFont.mHeight;
 	mAscent = theSysFont.mAscent;
@@ -51,7 +51,7 @@ SysFont::SysFont(const SysFont& theSysFont)
 
 SysFont::~SysFont()
 {
-	//TTF_CloseFont(mTTFFont);
+	TTF_CloseFont(mTTFFont);
 }
 
 ImageFont* SysFont::CreateImageFont()
@@ -151,7 +151,7 @@ ImageFont* SysFont::CreateImageFont()
 int	SysFont::StringWidth(const SexyString& theString)
 {
 	int w = 0;
-	//TTF_GetStringSize(mTTFFont, theString.c_str(), NULL, &w, nullptr);
+	TTF_GetStringSize(mTTFFont, theString.c_str(), NULL, &w, nullptr);
 
 	return w;
 }
@@ -160,28 +160,29 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theS
 {
 	SDL_Renderer* renderer = mApp->mSDLInterface->mRenderer;
 	SDL_Color aColor = { theColor.mRed, theColor.mGreen, theColor.mBlue , theColor.mAlpha };
-	//SDL_Surface* textSurface = TTF_RenderText_Blended(mTTFFont, theString.c_str(), NULL, aColor);
-	//if (!textSurface) {
-		//throw std::runtime_error("Failed to render text: " + std::string(TTF_GetError()));
-	//}
-
-	//SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-//	SDL_FRect dstRect = { theX, theY - mAscent, textSurface->w, textSurface->h };
-//	SDL_FRect srcRect = { 0, 0, dstRect.w, dstRect.h };
-//	SDL_DestroySurface(textSurface);
-
-//	if (!textTexture) {
-		//throw std::runtime_error("Failed to create texture from surface: " + std::string(SDL_GetError()));
-	//}
-
-	if (mDrawShadow) {
-	//	SDL_FRect shadowRect = { theX + 1, theY - mAscent + 1, dstRect.w, dstRect.h };
-	//	mApp->mSDLInterface->BltTexture(textTexture, theX, theY, srcRect, shadowRect, Color(0,0,0), g->GetDrawMode());
+	SDL_Surface* textSurface = TTF_RenderText_Blended(mTTFFont, theString.c_str(), NULL, aColor);
+	if (!textSurface) {
+		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to render text: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+		return;
 	}
 
-//	mApp->mSDLInterface->BltTexture(textTexture, theX, theY, srcRect, dstRect, theColor, g->GetDrawMode());
+	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+	SDL_FRect dstRect = { theX, theY - mAscent, textSurface->w, textSurface->h };
+	SDL_FRect srcRect = { 0, 0, dstRect.w, dstRect.h };
+	SDL_DestroySurface(textSurface);
 
-	//SDL_DestroyTexture(textTexture);
+	if (!textTexture) {
+		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to create texture from surface: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+	}
+
+	if (mDrawShadow) {
+		SDL_FRect shadowRect = { theX + 1, theY - mAscent + 1, dstRect.w, dstRect.h };
+		mApp->mSDLInterface->BltTexture(textTexture, srcRect, shadowRect, Color(0,0,0), g->GetDrawMode());
+	}
+
+	mApp->mSDLInterface->BltTexture(textTexture, srcRect, dstRect, theColor, g->GetDrawMode());
+
+	SDL_DestroyTexture(textTexture);
 }
 
 Font* SysFont::Duplicate()
