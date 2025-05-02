@@ -3,7 +3,6 @@
 //#define SEXY_MEMTRACE
 
 #include "SexyAppBase.h"
-#include "SEHCatcher.h"
 #include "WidgetManager.h"
 #include "Widget.h"
 #include "Debug.h"
@@ -43,8 +42,6 @@
 using namespace Sexy;
 
 SexyAppBase* Sexy::gSexyAppBase = NULL;
-
-SEHCatcher Sexy::gSEHCatcher;
 
 static bool gScreenSaverActive = false;
 
@@ -163,10 +160,8 @@ SexyAppBase::SexyAppBase()
 	mPreferredY = -1;
 	mIsScreenSaver = false;
 	mAllowMonitorPowersave = true;
-	mHWnd = NULL;
 	mSDLInterface = NULL;	
 	mMusicInterface = NULL;
-	mInvisHWnd = NULL;
 	mFrameTime = 10;
 	mNonDrawCount = 0;
 	mDrawCount = 0;
@@ -300,8 +295,6 @@ SexyAppBase::SexyAppBase()
 	else
 		mTabletPC = false;	
 
-	gSEHCatcher.mApp = this;	
-	
 	//std::wifstream stringsFile(_wfopen(L".\\properties\\fstrings", L"rb"));
 	//
 	//if(!stringsFile)
@@ -425,15 +418,7 @@ SexyAppBase::~SexyAppBase()
 	}
 	mDialogMap.clear();
 	mDialogList.clear();
-	
-	if (mInvisHWnd != NULL)
-	{
-		HWND aWindow = mInvisHWnd;
-		mInvisHWnd = NULL;
-		SetWindowLong(aWindow, GWL_USERDATA, NULL);
-		DestroyWindow(aWindow);
-	}	
-	
+
 	delete mWidgetManager;	
 	delete mResourceManager;
 	delete gFPSImage;
@@ -1905,6 +1890,8 @@ void SexyAppBase::EndPopup()
 	}
 }
 
+
+//TODO: make it so it does a SDL message box
 int SexyAppBase::MsgBox(const std::string& theText, const std::string& theTitle, int theFlags)
 {
 //	if (mDDInterface && mDDInterface->mDD)
@@ -1916,12 +1903,13 @@ int SexyAppBase::MsgBox(const std::string& theText, const std::string& theTitle,
 	}
 
 	BeginPopup();
-	int aResult = MessageBoxA(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
+//	int aResult = MessageBoxA(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
 	EndPopup();
 
-	return aResult;
+	return 0;//aResult;
 }
 
+//TODO: make it so it does a SDL message box
 int SexyAppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, int theFlags)
 {
 //	if (mDDInterface && mDDInterface->mDD)
@@ -1933,10 +1921,10 @@ int SexyAppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitl
 	}
 
 	BeginPopup();
-	int aResult = MessageBoxW(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
+	//int aResult = MessageBoxW(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
 	EndPopup();
 
-	return aResult;
+	return 0;// aResult;
 }
 
 void SexyAppBase::Popup(const std::string& theString)
@@ -1978,17 +1966,7 @@ void SexyAppBase::SafeDeleteWidget(Widget* theWidget)
 
 void SexyAppBase::HandleNotifyGameMessage(int theType, int theParam)
 {
-	if (theType==0) // bring to front message
-	{
-		WINDOWPLACEMENT aWindowPlacement;
-		aWindowPlacement.length = sizeof(WINDOWPLACEMENT);
-		GetWindowPlacement(mHWnd, &aWindowPlacement);		
 
-		if (aWindowPlacement.showCmd == SW_SHOWMINIMIZED)
-			ShowWindow(mHWnd, SW_RESTORE);
-
-		::SetForegroundWindow(mHWnd);
-	}
 }
 
 void SexyAppBase::RehupFocus()
@@ -2465,48 +2443,6 @@ void SexyAppBase::StartLoadingThread()
 void SexyAppBase::CursorThreadProc()
 {
 
-	POINT aLastCursorPos = {0, 0};
-	int aLastDrawCount = 0;
-
-	while (!mShutdown)
-	{
-//		if (mProcessInTimer)
-//			PostMessage(mHWnd,WM_TIMER,101,0);
-
-		POINT aCursorPos;
-
-		::GetCursorPos(&aCursorPos);
-		::ScreenToClient(mHWnd, &aCursorPos);
-
-		if (aLastDrawCount != mDrawCount)
-		{
-			// We did a draw so we may have committed a pending mNextCursorX/Y 
-			aLastCursorPos.x = mSDLInterface->mCursorX;
-			aLastCursorPos.y = mSDLInterface->mCursorY;
-		}
-
-		if ((aCursorPos.x != aLastCursorPos.x) ||
-			(aCursorPos.y != aLastCursorPos.y))
-		{	
-			DWORD aTimeNow = SDL_GetTicks();
-			if (aTimeNow - mNextDrawTick > mSDLInterface->mMillisecondsPerFrame + 5)
-			{
-				// Do the special drawing if we are rendering at less than full framerate				
-				mSDLInterface->SetCursorPos(aCursorPos.x, aCursorPos.y);
-				aLastCursorPos = aCursorPos;
-			}
-			else
-			{
-				// Set them up to get assigned in the next screen redraw
-				mSDLInterface->mNextCursorX = aCursorPos.x;
-				mSDLInterface->mNextCursorY = aCursorPos.y;
-			}			
-		}		
-
-		SDL_Delay(10);
-	}
-	
-	mCursorThreadRunning = false;
 }
 
 void SexyAppBase::CursorThreadProcStub(void *theArg)
@@ -2551,7 +2487,7 @@ void SexyAppBase::SwitchScreenMode(bool wantWindowed, bool is3d, bool force)
 
 	if (mSoundManager!=NULL)
 	{
-		mSoundManager->SetCooperativeWindow(mHWnd,mIsWindowed);
+		mSoundManager->SetCooperativeWindow(mIsWindowed);
 	}	
 
 	mLastTime = SDL_GetTicks();
@@ -3030,10 +2966,7 @@ void SexyAppBase::Start()
 	if (mAutoStartLoadingThread)
 		StartLoadingThread();
 
-	::ShowWindow(mHWnd, SW_SHOW);	
-	::SetFocus(mHWnd);
-
-	timeBeginPeriod(1);
+	SDL_RaiseWindow(mSDLInterface->mWindow);
 
 	int aCount = 0;
 	int aSleepCount = 0;
@@ -3072,8 +3005,6 @@ void SexyAppBase::Start()
 		sprintf(aString, "Avg FPS       = %d\r\n", (mDrawCount*1000)/(mDrawTime+mScreenBltTime));
 		OutputDebugStringA(aString);
 	}
-
-	timeEndPeriod(1);	
 
 	PreTerminate();
 
@@ -3444,7 +3375,7 @@ bool SexyAppBase::ChangeDirHook(const char *theIntendedPath)
 	return false;
 }
 
-MusicInterface* SexyAppBase::CreateMusicInterface(HWND theWindow)
+MusicInterface* SexyAppBase::CreateMusicInterface()
 {
 	if (mNoSoundNeeded)
 		return new MusicInterface;
@@ -3526,7 +3457,7 @@ void SexyAppBase::Init()
 
 	SetSfxVolume(mSfxVolume);
 	
-	mMusicInterface = CreateMusicInterface(mInvisHWnd);	
+	mMusicInterface = CreateMusicInterface();	
 
 	SetMusicVolume(mMusicVolume);	
 

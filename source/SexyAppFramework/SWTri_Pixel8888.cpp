@@ -81,7 +81,5 @@
 			
 			*pix = ((finalAlpha-1)<<24) | tr | tg | tb;
 		}
-		else
-			_asm nop;
 	}
 	#endif

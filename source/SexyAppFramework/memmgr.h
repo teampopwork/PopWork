@@ -30,7 +30,7 @@ void SexyMemRemoveTrack(void *addr);
 
 //Replacement for the standard "new" operator, records size of allocation and 
 //the file/line number it was on
-inline void* __cdecl operator new(unsigned int size, const char* file, int line)
+inline void* __cdecl operator new(size_t size, const char* file, int line)
 {
 	void* ptr = (void*)malloc(size);
 	SexyMemAddTrack(ptr, size, file, line);
@@ -38,7 +38,7 @@ inline void* __cdecl operator new(unsigned int size, const char* file, int line)
 }
 
 //Same as above, but for arrays
-inline void* __cdecl operator new[](unsigned int size, const char* file, int line)
+inline void* __cdecl operator new[](size_t size, const char* file, int line)
 {
 	void* ptr = (void*)malloc(size);
 	SexyMemAddTrack(ptr, size, file, line);
@@ -47,13 +47,13 @@ inline void* __cdecl operator new[](unsigned int size, const char* file, int lin
 
 
 // These single argument new operators allow vc6 apps to compile without errors
-inline void* __cdecl operator new(unsigned int size)
+inline void* __cdecl operator new(size_t size)
 {
 	void* ptr = (void*)malloc(size);
 	return(ptr);
 }
 
-inline void* __cdecl operator new[](unsigned int size)
+inline void* __cdecl operator new[](size_t size)
 {
 	void* ptr = (void*)malloc(size);
 	return(ptr);

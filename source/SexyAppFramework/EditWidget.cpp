@@ -182,15 +182,7 @@ void EditWidget::UpdateCaretPos()
 void EditWidget::GotFocus()
 {
 	Widget::GotFocus();
-	if (mWidgetManager && mWidgetManager->mApp->mTabletPC)
-	{
-		SexyAppBase *anApp = mWidgetManager->mApp;
 
-		CreateCaret(anApp->mHWnd,NULL,0,0);
-		UpdateCaretPos();
-		ShowCaret(anApp->mHWnd);
-	}
-	
 	mShowingCursor = true;
 	mBlinkAcc = 0;
 	MarkDirty();	
@@ -199,12 +191,6 @@ void EditWidget::GotFocus()
 void EditWidget::LostFocus()
 {
 	Widget::LostFocus();
-
-	if (mWidgetManager && mWidgetManager->mApp->mTabletPC)
-	{
-		HideCaret(mWidgetManager->mApp->mHWnd);
-		DestroyCaret();
-	}
 
 	mShowingCursor = false;	
 	MarkDirty();

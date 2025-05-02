@@ -437,7 +437,7 @@ void OpenALSoundManager::Flush()
 {
 }
 
-void OpenALSoundManager::SetCooperativeWindow(HWND theHWnd, bool isWindowed)
+void OpenALSoundManager::SetCooperativeWindow(bool isWindowed)
 {
 }
 #undef SOUND_FLAGS

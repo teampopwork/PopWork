@@ -138,8 +138,6 @@ public:
 	bool					mInitialized;	
 	bool					mProcessInTimer;
 	DWORD					mTimeLoaded;
-	HWND					mHWnd;
-	HWND					mInvisHWnd;
 	bool					mIsScreenSaver;
 	bool					mAllowMonitorPowersave;
 	WindowsMessageList		mDeferredMessages;
@@ -312,7 +310,7 @@ public:
 	virtual ~SexyAppBase();
 
 	// Common overrides:
-	virtual MusicInterface*	CreateMusicInterface(HWND theHWnd);
+	virtual MusicInterface*	CreateMusicInterface();
 	virtual void			InitHook();
 	virtual void			ShutdownHook();	
 	virtual void			PreTerminate();

@@ -56,7 +56,7 @@ namespace Sexy
 
 		virtual void			Flush();
 
-		virtual void			SetCooperativeWindow(HWND theHWnd, bool isWindowed);
+		virtual void			SetCooperativeWindow(bool isWindowed);
 		virtual void			StopAllSounds();
 		virtual int				GetFreeSoundId();
 		virtual int				GetNumSounds();

@@ -2,6 +2,12 @@
 
 #include "Common.h"
 
+#ifdef WIN32
+#include <time.h>
+#else
+#include <sys/time.h>
+#endif
+
 namespace Sexy
 {
 
@@ -10,7 +16,7 @@ namespace Sexy
 class PerfTimer 
 {
 protected:
-	LARGE_INTEGER mStart;
+	__int64 mStart;
 	double mDuration;
 	bool mRunning;
 

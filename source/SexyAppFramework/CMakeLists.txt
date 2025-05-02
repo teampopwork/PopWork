@@ -111,7 +111,6 @@ set(SRC_MAIN
 	Flags.cpp
 	XMLParser.cpp
 	SexyMatrix.cpp
-	SEHCatcher.cpp
 	PropertiesParser.cpp
 	PerfTimer.cpp
 	MTRand.cpp
@@ -263,7 +262,6 @@ set(SRC_MAIN
 	ScrollbarWidget.h
 	ScrollbuttonWidget.h
 	ScrollListener.h
-	SEHCatcher.h
 	SexyAppBase.h
 	SexyMatrix.h
 	SexyVector.h

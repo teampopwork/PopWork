@@ -1,65 +1,8 @@
 #include "PerfTimer.h"
 #include <map>
+#include <SDL3/SDL.h>
 
 using namespace Sexy;
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-inline int QueryCounters(__int64 *lpPerformanceCount)
-{
-	/* returns TSC only */
-	_asm
-	{
-		mov ebx, dword ptr [lpPerformanceCount]
-		rdtsc
-			mov dword ptr [ebx], eax
-			mov dword ptr [ebx+4], edx
-	}
-	return 1;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-inline int DeltaCounters(__int64 *lpPerformanceCount)
-{
-	_asm
-	{
-		mov ebx, dword ptr [lpPerformanceCount]
-		rdtsc
-			sub eax, dword ptr [ebx]
-			sbb edx, dword ptr [ebx+4]
-			mov dword ptr [ebx],   eax
-				mov dword ptr [ebx+4], edx
-	}
-	return 1;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-static __int64 CalcCPUSpeed()
-{
-	/*
-	int aPriority = GetThreadPriority(GetCurrentThread());
-	SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_HIGHEST);
-	int64_t	goal, current, period;
-	__int64 Ticks;
-
-	if( !QueryPerformanceFrequency( &period ) ) return 0;
-
-	QueryPerformanceCounter(&goal);
-	goal.QuadPart+=period.QuadPart/100;
-	QueryCounters( &Ticks );
-	do
-	{
-		QueryPerformanceCounter(&current);
-	} while(current.QuadPart<goal.QuadPart);
-	DeltaCounters( &Ticks );
-
-	SetThreadPriority(GetCurrentThread(),aPriority);
-	return( Ticks * 100 );		// Hz
-	*/
-	return 0;
-}
 
 static __int64 gCPUSpeed = 0;
 
@@ -68,7 +11,7 @@ static __int64 gCPUSpeed = 0;
 PerfTimer::PerfTimer()
 {
 	mDuration = 0;
-	mStart.QuadPart = 0;
+	mStart = 0;
 	mRunning = false;
 }
 
@@ -76,10 +19,9 @@ PerfTimer::PerfTimer()
 ///////////////////////////////////////////////////////////////////////////////
 void PerfTimer::CalcDuration()
 {
-	LARGE_INTEGER anEnd, aFreq;
-	QueryPerformanceCounter(&anEnd);
-	QueryPerformanceFrequency(&aFreq);
-	mDuration = ((anEnd.QuadPart-mStart.QuadPart)*1000)/(double)aFreq.QuadPart;
+	int64_t anEnd = SDL_GetPerformanceCounter();
+	int64_t aFreq = SDL_GetPerformanceFrequency();
+	mDuration = ((anEnd - mStart) * 1000) / (double)aFreq;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,7 +29,7 @@ void PerfTimer::CalcDuration()
 void PerfTimer::Start()
 {
 	mRunning = true;
-	QueryPerformanceCounter(&mStart);
+	mStart = SDL_GetPerformanceCounter();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,10 +57,11 @@ double PerfTimer::GetDuration()
 ///////////////////////////////////////////////////////////////////////////////
 __int64 PerfTimer::GetCPUSpeed()
 {
+	
 	if(gCPUSpeed<=0)
 	{
-		gCPUSpeed = CalcCPUSpeed();
-		if (gCPUSpeed<=0)
+		//gCPUSpeed = CalcCPUSpeed();
+	//	if (gCPUSpeed<=0)
 			gCPUSpeed = 1;
 	}
 
@@ -169,7 +112,7 @@ struct PerfRecord
 	bool mStart;
 
 	PerfRecord() { }
-	PerfRecord(const char *theName, bool start) : mName(theName), mStart(start) { QueryCounters(&mTime); }
+	PerfRecord(const char* theName, bool start) : mName(theName), mStart(start), mTime(SDL_GetPerformanceFrequency()) {};
 };
 typedef std::vector<PerfRecord> PerfRecordVector;
 PerfRecordVector gPerfRecordVector;
@@ -209,14 +152,13 @@ static inline void InsertPerfRecord(PerfRecord &theRecord)
 static inline void CollatePerfRecords()
 {
 	__int64 aTime1,aTime2;
-	QueryCounters(&aTime1);
+	aTime1 = SDL_GetPerformanceCounter();
 
 	for(int i=0; i<gPerfRecordTop; i++)
 		InsertPerfRecord(gPerfRecordVector[i]);
 
 	gPerfRecordTop = 0;
-	QueryCounters(&aTime2);
-
+	aTime2 = SDL_GetPerformanceCounter();
 	gCollateTime += aTime2-aTime1;
 }
 
@@ -251,21 +193,20 @@ void SexyPerf::BeginPerf(bool measurePerfOverhead)
 	if(!measurePerfOverhead)
 		gPerfOn = true;
 	
-	QueryCounters(&gStartTime);
+	gStartTime = SDL_GetPerformanceCounter();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 void SexyPerf::EndPerf()
 {
-	__int64 anEndTime;
-	QueryCounters(&anEndTime);
+	__int64 anEndTime = SDL_GetPerformanceCounter();
 
 	CollatePerfRecords();
 
 	gPerfOn = false;
 
-	__int64 aFreq = PerfTimer::GetCPUSpeed();
+	__int64 aFreq = SDL_GetPerformanceFrequency();
 
 	gDuration = ((double)(anEndTime - gStartTime - gCollateTime))*1000/aFreq;
 
