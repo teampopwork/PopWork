@@ -285,6 +285,9 @@ set(SRC_MAIN
 
 	SDLImage.h
 	SDLInterface.h
+
+	#Embedded Fonts
+	LiberationSansRegular.h
 )
 
 

@@ -1647,6 +1647,9 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 }
 
 ///////////////////////////// FPS Stuff
+
+#include "LiberationSansRegular.h"
+
 static PerfTimer gFPSTimer;
 static int gFrameCount;
 static int gFPSDisplay;
@@ -1655,7 +1658,7 @@ static void CalculateFPS()
 {
 	gFrameCount++;
 
-	static SysFont aFont(gSexyAppBase,"tahoma.ttf",16);
+	static SysFont aFont(gSexyAppBase, LiberationSans_Regular, LiberationSans_Regular_Size,16);
 	if (gFPSImage==NULL)
 	{
 		gFPSImage = new SDLImage(gSexyAppBase->mSDLInterface);

@@ -20,6 +20,29 @@ SysFont::SysFont(SexyAppBase* theApp, const std::string& theFace, int thePointSi
 	Init(theApp,theFace,thePointSize,theScript,bold,italics,underline,true);
 }
 
+SysFont::SysFont(SexyAppBase* theApp, const unsigned char aData[], size_t aDataSize, int thePointSize, int theScript, bool bold, bool italics, bool underline)
+{
+	mApp = theApp;
+	SDL_IOStream* io = SDL_IOFromConstMem((void*)aData, aDataSize);
+	if (!io) {
+		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to create SDL_IOStream", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+		return;
+	}
+
+	mTTFFont = TTF_OpenFontIO(io, false, thePointSize);
+	if (!mTTFFont) {
+		mApp->mSDLInterface->MakeSimpleMessageBox("Error", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+	}
+
+	TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) | (underline ? TTF_STYLE_UNDERLINE : 0));
+
+	mAscent = TTF_GetFontAscent(mTTFFont);
+	mHeight = TTF_GetFontHeight(mTTFFont);
+
+	mDrawShadow = false;
+	mSimulateBold = false;
+}
+
 void SysFont::Init(SexyAppBase* theApp, const std::string& theFace, int thePointSize, int theScript, bool bold, bool italics, bool underline, bool useDevCaps)
 {
 	mApp = theApp;
