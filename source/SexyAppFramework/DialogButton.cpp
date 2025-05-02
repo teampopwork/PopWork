@@ -1,6 +1,7 @@
 #include "DialogButton.h"
 #include "SysFont.h"
 #include "WidgetManager.h"
+#include "LiberationSansRegular.h"
 
 using namespace Sexy;
 
@@ -36,7 +37,7 @@ void DialogButton::Draw(Graphics* g)
 	}
 
 	if ((mFont == NULL) && (mLabel.length() > 0))
-		mFont = new SysFont(mWidgetManager->mApp, "Arial Unicode MS", 12, true);
+		mFont = new SysFont(mWidgetManager->mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 12, true);
 
 	bool doTranslate = IsButtonDown();
 

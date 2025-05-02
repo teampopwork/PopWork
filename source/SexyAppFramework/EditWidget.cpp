@@ -3,6 +3,7 @@
 #include "WidgetManager.h"
 #include "SexyAppBase.h"
 #include "EditListener.h"
+#include "LiberationSansRegular.h"
 
 using namespace Sexy;
 
@@ -115,7 +116,7 @@ void EditWidget::SetFont(Font* theFont, Font* theWidthCheckFont)
 void EditWidget::Draw(Graphics* g) // Already translated
 {	
 	if (mFont == NULL)
-		mFont = new SysFont(mWidgetManager->mApp, "Arial Unicode MS", 10, false);
+		mFont = new SysFont(mWidgetManager->mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 10, false);
 
 	SexyString &aString = GetDisplayString();
 

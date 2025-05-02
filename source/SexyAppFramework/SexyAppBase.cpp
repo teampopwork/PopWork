@@ -1658,7 +1658,7 @@ static void CalculateFPS()
 {
 	gFrameCount++;
 
-	static SysFont aFont(gSexyAppBase, LiberationSans_Regular, LiberationSans_Regular_Size,16);
+	static SysFont aFont(gSexyAppBase, LiberationSans_Regular, LiberationSans_Regular_Size, 8);
 	if (gFPSImage==NULL)
 	{
 		gFPSImage = new SDLImage(gSexyAppBase->mSDLInterface);

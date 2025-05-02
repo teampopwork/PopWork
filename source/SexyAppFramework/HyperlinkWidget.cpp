@@ -3,6 +3,7 @@
 #include "ImageFont.h"
 #include "SysFont.h"
 #include "WidgetManager.h"
+#include "LiberationSansRegular.h"
 
 using namespace Sexy;
 
@@ -19,7 +20,7 @@ HyperlinkWidget::HyperlinkWidget(int theId, ButtonListener* theButtonListener) :
 void HyperlinkWidget::Draw(Graphics* g)
 {
 	if (mFont == NULL)
-		mFont = new SysFont(mWidgetManager->mApp, "Arial Unicode MS", 10); //baz changed
+		mFont = new SysFont(mWidgetManager->mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 10); //baz changed
 
 	int aFontX = (mWidth - mFont->StringWidth(mLabel))/2;
 	int aFontY = (mHeight + mFont->GetAscent())/2 - 1;

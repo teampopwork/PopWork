@@ -2,9 +2,11 @@
 #include "DemoWidget.h"
 #include "../Res.h"
 #include "V14DemoApp.h"
+#include "SexyAppFramework\SysFont.h"
 #include "SexyAppFramework\Font.h"
 #include "SexyAppFramework\Graphics.h"
 #include "SexyAppFramework\ButtonWidget.h"
+#include "SexyAppFramework\LiberationSansRegular.h"
 #include "SexyAppFramework\WidgetManager.h"
 #include "SexyAppFramework\Dialog.h"
 #include "SexyAppFramework\Flags.h"
@@ -43,6 +45,8 @@ Board::Board(V14DemoApp* theApp)
 
 	mWidgetFlagsMod.mAddFlags |= WIDGETFLAGS_MARK_DIRTY;
 
+	SysFont* aFont = new SysFont(mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 12, 0, false, false, false);
+
 	// Previously, it was annoying trying to place widgets on some sort of parent widget, 
 	// since there was no notion of parent/child relationship. What you had to do was
 	// override the AddedToManager and RemovedFromManager functions, create and add your
@@ -58,8 +62,8 @@ Board::Board(V14DemoApp* theApp)
 	// for you.
 	mDemoButton = new ButtonWidget(0, this);
 	mDemoButton->mLabel = _S("Demo Widget");
-	mDemoButton->SetFont(FONT_DEFAULT);
-	mDemoButton->Resize(10, 10, 10 + FONT_DEFAULT->StringWidth(mDemoButton->mLabel), 50);
+	mDemoButton->SetFont(aFont);
+	mDemoButton->Resize(10, 10, 10 + aFont->StringWidth(mDemoButton->mLabel), 50);
 
 	// VERY IMPORTANT: Notice that we're calling THIS CLASS' (or really, it's parent, WidgetContainer's)
 	// AddWidget method instead of the WidgetManager's method. In order to designate a widget as a child
@@ -361,8 +365,6 @@ void Board::ButtonDepress(int id)
 		FlagsMod flags;
 		flags.mRemoveFlags |= WIDGETFLAGS_ALLOW_MOUSE;
 		mApp->mWidgetManager->AddBaseModal(mDemoWidget, flags);
-		if (mApp->mSoundManager->GetSoundInstance(1))
-			mApp->mSoundManager->GetSoundInstance(1)->Stop();
 	}
 	else if (id == mDialogButton->mId)
 	{
@@ -382,8 +384,6 @@ void Board::ButtonDepress(int id)
 		// for the button on the dialog box to be FONT_DEFAULT. 
 		d->SetButtonFont(FONT_DEFAULT);
 
-		mApp->mSoundManager->LoadSound(1, "sounds/shorting");
-		mApp->mSoundManager->GetSoundInstance(1)->Play(true, false);
 	}
 	else if (id == mCurtainButton->mId)
 	{

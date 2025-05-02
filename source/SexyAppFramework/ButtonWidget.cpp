@@ -3,6 +3,7 @@
 #include "SysFont.h"
 #include "WidgetManager.h"
 #include "ButtonListener.h"
+#include "LiberationSansRegular.h"
 
 using namespace Sexy;
 
@@ -71,7 +72,7 @@ void ButtonWidget::Draw(Graphics* g)
 		return;
 
 	if ((mFont == NULL) && (mLabel.length() > 0))
-		mFont = new SysFont(mWidgetManager->mApp, "Arial Unicode MS", 10);
+		mFont = new SysFont(mWidgetManager->mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 10);
 
 	bool isDown = mIsDown && mIsOver && !mDisabled;
 	isDown ^= mInverted;

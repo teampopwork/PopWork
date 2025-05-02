@@ -5,6 +5,7 @@
 #include "WidgetManager.h"
 #include "SysFont.h"
 #include "ImageFont.h"
+#include "LiberationSansRegular.h"
 
 using namespace Sexy;
 
@@ -151,9 +152,9 @@ void Dialog::SetLinesFont(Font* theFont)
 void Dialog::EnsureFonts()
 {
 	if (mHeaderFont == NULL)
-		mHeaderFont = new SysFont(gSexyAppBase, "Arial Unicode MS", 14);
+		mHeaderFont = new SysFont(gSexyAppBase, LiberationSans_Regular, LiberationSans_Regular_Size, 14);
 	if (mLinesFont == NULL)
-		mLinesFont = new SysFont(gSexyAppBase, "Arial Unicode MS", 12);
+		mLinesFont = new SysFont(gSexyAppBase, LiberationSans_Regular, LiberationSans_Regular_Size, 12);
 }
 
 int	Dialog::GetPreferredHeight(int theWidth)
