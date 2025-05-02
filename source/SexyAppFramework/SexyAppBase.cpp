@@ -350,14 +350,17 @@ SexyAppBase::~SexyAppBase()
 						{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "No" }
 					};
 
-					SDL_MessageBoxData aMessageboxData = {};
-					aMessageboxData.flags = SDL_MESSAGEBOX_INFORMATION;
-					aMessageboxData.title = (mCompanyName + _S(" ") +
-						GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation"))).c_str();
-					aMessageboxData.message = GetString("HARDWARE_ACCEL_SWITCHED_ON",
+					std::string aTitle = SexyStringToStringFast(StringToSexyStringFast(mCompanyName) + _S(" ") + GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
+
+					std::string aMessage = SexyStringToStringFast(GetString("HARDWARE_ACCEL_SWITCHED_ON",
 						_S("Hardware Acceleration was switched on during this session.\n")
 						_S("If this resulted in slower performance, it should be switched off.\n")
-						_S("Would you like to keep Hardware Acceleration switched on?")).c_str();
+						_S("Would you like to keep Hardware Acceleration switched on?")));
+
+					SDL_MessageBoxData aMessageboxData = {};
+					aMessageboxData.flags = SDL_MESSAGEBOX_INFORMATION;
+					aMessageboxData.title = aTitle.c_str();
+					aMessageboxData.message = aMessage.c_str();
 					aMessageboxData.numbuttons = SDL_arraysize(buttons);
 					aMessageboxData.buttons = buttons;
 					aMessageboxData.window = mSDLInterface->mWindow;
@@ -389,12 +392,12 @@ SexyAppBase::~SexyAppBase()
 		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes" },
 		};
 
-		std::string aMessage =
-			GetString("HARDWARE_ACCEL_NOT_WORKING",
-				_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
-				_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
-				_S("Would you like to keep Hardware Acceleration switched on?"));
-		std::string aTitle = (StringToSexyString(mCompanyName) + _S(" ") + GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
+		std::string aMessage = SexyStringToStringFast(GetString("HARDWARE_ACCEL_NOT_WORKING",
+			_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
+			_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
+			_S("Would you like to keep Hardware Acceleration switched on?")));
+
+		std::string aTitle = SexyStringToStringFast(StringToSexyStringFast(mCompanyName) + _S(" ") + GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
 		SDL_MessageBoxData messageBoxData = {
 			SDL_MESSAGEBOX_INFORMATION,
@@ -3484,10 +3487,10 @@ void SexyAppBase::Init()
 	gPakInterface->AddPakFile("main.pak");
 
 	// Create a message we can use to talk to ourselves inter-process
-	mNotifyGameMessage = RegisterWindowMessage((_S("Notify") + StringToSexyString(mProdName)).c_str());
+	mNotifyGameMessage = RegisterWindowMessage(SexyStringToStringFast(_S("Notify") + StringToSexyString(mProdName)).c_str());
 
 	// Create a globally unique mutex
-	mMutex = CreateMutex(NULL, TRUE, (StringToSexyString(mProdName) + _S("Mutex")).c_str());
+	mMutex = CreateMutex(NULL, TRUE, SexyStringToStringFast(StringToSexyString(mProdName) + _S("Mutex")).c_str());
 	if (::GetLastError() == ERROR_ALREADY_EXISTS)
 		HandleGameAlreadyRunning();
 

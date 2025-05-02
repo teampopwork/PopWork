@@ -6,6 +6,7 @@
 #include "MemoryImage.h"
 #include "SDLInterface.h"
 #include "WidgetManager.h"
+#include "Common.h"
 #include <stdlib.h>
 
 using namespace Sexy;
@@ -174,7 +175,7 @@ ImageFont* SysFont::CreateImageFont()
 int	SysFont::StringWidth(const SexyString& theString)
 {
 	int w = 0;
-	TTF_GetStringSize(mTTFFont, theString.c_str(), NULL, &w, nullptr);
+	TTF_GetStringSize(mTTFFont, SexyStringToStringFast(theString).c_str(), NULL, &w, nullptr);
 
 	return w;
 }
@@ -183,7 +184,7 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const SexyString& theS
 {
 	SDL_Renderer* renderer = mApp->mSDLInterface->mRenderer;
 	SDL_Color aColor = { theColor.mRed, theColor.mGreen, theColor.mBlue , theColor.mAlpha };
-	SDL_Surface* textSurface = TTF_RenderText_Blended(mTTFFont, theString.c_str(), NULL, aColor);
+	SDL_Surface* textSurface = TTF_RenderText_Blended(mTTFFont, SexyStringToStringFast(theString).c_str(), NULL, aColor);
 	if (!textSurface) {
 		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to render text: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
 		return;
