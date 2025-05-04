@@ -3,6 +3,8 @@ Changelog for Framework version 1.3:
 General
 =======
 * Added the V14 demo, showcases: new blend modes (usage of SDL3), TTF text.
+* Added x64 support.
+* Fixed WideString.
 
 
 SexyAppBase
@@ -16,3 +18,8 @@ Graphics
 Audio
 ================================
 * Replaced DSound with OpenAL.
+
+BASS related:
+=============
+* Upgraded BASS to 2.4
+* Gave access to all functions in the library.

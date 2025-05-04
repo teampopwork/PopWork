@@ -32,7 +32,7 @@ private:
 	DemoWidget*		mDemoWidget;		
 	ButtonWidget*	mDemoButton;		// Creates our DemoWidget
 	ButtonWidget*	mDialogButton;		// Creates a little dialog box
-	ButtonWidget*	mCurtainButton;		// Initiates the curtain closing/opening transition
+	ButtonWidget*	mMsgButton;
 	Rect			mRect;				// A rectangle that gets larger/smaller over time
 	
 	bool			mExpanding;			// Is the above (mRect) rectangle shrinking or growing?

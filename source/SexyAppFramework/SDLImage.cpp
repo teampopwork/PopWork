@@ -10,7 +10,7 @@ using namespace Sexy;
 
 SDLImage::SDLImage() : MemoryImage(gSexyAppBase)
 {
-	//mInterface = gSexyAppBase->mSDLInterface; TODO: Fix this
+	mInterface = gSexyAppBase->mSDLInterface;
 	mInterface->AddSDLImage(this);
 }
 

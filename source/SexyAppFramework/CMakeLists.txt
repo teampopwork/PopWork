@@ -117,7 +117,6 @@ set(SRC_MAIN
 	KeyCodes.cpp
 	HTTPTransfer.cpp
 	Debug.cpp
-	CritSect.cpp
 	Common.cpp
 	Buffer.cpp
 	ResourceManager.cpp
@@ -146,7 +145,6 @@ set(SRC_MAIN
 
 	OpenALSoundManager.cpp
 	OpenALSoundInstance.cpp
-	BassLoader.cpp
 	BassMusicInterface.cpp
 	MusicInterface.cpp
 	
@@ -200,7 +198,6 @@ set(SRC_MAIN
 	../ImageLib/zlib/zutil.h
 	../PakLib/PakInterface.h
 	AutoCrit.h
-	BassLoader.h
 	BassMusicInterface.h
 	Buffer.h
 	ButtonListener.h
@@ -333,5 +330,7 @@ set(SexyAppLibs
 	miniaudio
 	winmm
 	ws2_32
+	${BASS_LIB_PATH}/bass.lib
 )
+
 target_link_libraries(SexyAppFramework ${SexyAppLibs} )

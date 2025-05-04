@@ -29,7 +29,7 @@
 #include "SysFont.h"
 #include "ResourceManager.h"
 #include "BassMusicInterface.h"
-#include "BassLoader.h"
+#include "bass.h"
 #include "AutoCrit.h"
 #include "Debug.h"
 #include "../PakLib/PakInterface.h"
@@ -437,11 +437,7 @@ SexyAppBase::~SexyAppBase()
 	delete mMusicInterface;
 	delete mSoundManager;			
 
-	if (gBass != NULL)
-	{
-		gBass->BASS_Stop();
-	}
-	FreeBassDLL();
+	BASS_Stop();
 	
 	WaitForLoadingThread();	
 
@@ -450,8 +446,6 @@ SexyAppBase::~SexyAppBase()
 
 	gSexyAppBase = NULL;
 
-	if (mMutex != NULL)
-		::CloseHandle(mMutex);	
 }
 
 void SexyAppBase::ClearUpdateBacklog(bool relaxForASecond)
@@ -716,9 +710,26 @@ void SexyAppBase::SetCursorImage(int theCursorNum, Image* theImage)
 //Saved images ended up being corrupted/incorrect. TODO:FIX
 void SexyAppBase::TakeScreenshot()
 {
-	SDL_Surface* sshot = SDL_RenderReadPixels(mSDLInterface->mRenderer, NULL);
-	SDL_SaveBMP(sshot, "TEST.bmp");
-	SDL_DestroySurface(sshot);
+	SDL_RenderPresent(mSDLInterface->mRenderer);
+	if (SDL_GetRendererName(mSDLInterface->mRenderer) == "software") //Cheaper alternative for software renderer
+	{
+		SDL_Surface* sshot = SDL_GetWindowSurface(mSDLInterface->mWindow);
+		SDL_SaveBMP(sshot, "TEST.bmp");
+	}
+	else
+	{
+		SDL_Surface* sshot = SDL_RenderReadPixels(mSDLInterface->mRenderer, NULL);
+		if (sshot)
+		{
+			SDL_SaveBMP(sshot, "TEST.png");
+			SDL_DestroySurface(sshot);
+		}
+		else
+		{
+			SDL_Log("Failed to read pixels: %s", SDL_GetError());
+		}
+	}
+
 
 	/*
 	if (mDDInterface==NULL || mDDInterface->mDrawSurface==NULL)
@@ -1521,7 +1532,6 @@ bool SexyAppBase::DoUpdateFrames()
 
 	if ((mLoadingThreadCompleted) && (!mLoaded))
 	{
-		//::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_NORMAL);
 		mLoaded = true;
 		mYieldMainThread = false;
 		LoadingThreadCompleted();
@@ -1786,7 +1796,7 @@ bool SexyAppBase::DrawDirtyStuff()
 		{
 			DWORD aTick = SDL_GetTicks();
 			if (aTick-mLastDrawTick < mSDLInterface->mMillisecondsPerFrame)
-				Sleep(mSDLInterface->mMillisecondsPerFrame - (aTick-mLastDrawTick));
+				SDL_Delay(mSDLInterface->mMillisecondsPerFrame - (aTick-mLastDrawTick));
 		}
 
 		DWORD aPreScreenBltTime = SDL_GetTicks();
@@ -1891,40 +1901,169 @@ void SexyAppBase::EndPopup()
 }
 
 
-//TODO: make it so it does a SDL message box
 int SexyAppBase::MsgBox(const std::string& theText, const std::string& theTitle, int theFlags)
 {
-//	if (mDDInterface && mDDInterface->mDD)
-//		mDDInterface->mDD->FlipToGDISurface();
 	if (IsScreenSaver())
 	{
 		LogScreenSaverError(theText);
 		return IDOK;
 	}
 
+	SDL_MessageBoxData messageBoxData = {
+		SDL_MESSAGEBOX_INFORMATION,
+		NULL,
+		theTitle.c_str(),
+		theText.c_str(),
+		NULL,
+		NULL,
+		NULL
+	};
+
+	if (theFlags & MsgBoxFlags::MsgBox_OK)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
+		};
+
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_OKCANCEL)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
+			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_ABORTRETRYIGNORE)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Abort" },
+			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Retry" },
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Ignore" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_YESNOCANCEL)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
+		{ 0, 1, "No" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_YESNO)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "No" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_RETRYCANCEL)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Retry" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+
 	BeginPopup();
-//	int aResult = MessageBoxA(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
+	int aResult = mSDLInterface->MakeResultMessageBox(messageBoxData);
 	EndPopup();
 
-	return 0;//aResult;
+	return aResult;
 }
 
-//TODO: make it so it does a SDL message box
 int SexyAppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, int theFlags)
 {
-//	if (mDDInterface && mDDInterface->mDD)
-//		mDDInterface->mDD->FlipToGDISurface();
 	if (IsScreenSaver())
 	{
 		LogScreenSaverError(WStringToString(theText));
 		return IDOK;
 	}
 
+
+	SDL_MessageBoxData messageBoxData = {
+		SDL_MESSAGEBOX_INFORMATION,
+		NULL,
+		WStringToString(theTitle).c_str(),
+		WStringToString(theText).c_str(),
+		NULL,
+		NULL,
+		NULL
+	};
+
+	if (theFlags & MsgBoxFlags::MsgBox_OK)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
+		};
+
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_OKCANCEL)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
+			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_ABORTRETRYIGNORE)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Abort" },
+			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Retry" },
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Ignore" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_YESNOCANCEL)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
+		{ 0, 1, "No" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_YESNO)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "No" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+	else if (theFlags & MsgBoxFlags::MsgBox_RETRYCANCEL)
+	{
+		SDL_MessageBoxButtonData buttons[] = {
+		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Retry" },
+		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+		};
+		messageBoxData.numbuttons = SDL_arraysize(buttons);
+		messageBoxData.buttons = buttons;
+	}
+
 	BeginPopup();
-	//int aResult = MessageBoxW(mHWnd, theText.c_str(), theTitle.c_str(), theFlags);
+	int aResult = mSDLInterface->MakeResultMessageBox(messageBoxData);
 	EndPopup();
 
-	return 0;// aResult;
+	return aResult;
 }
 
 void SexyAppBase::Popup(const std::string& theString)
@@ -2434,7 +2573,6 @@ void SexyAppBase::StartLoadingThread()
 	if (!mLoadingThreadStarted)
 	{
 		mYieldMainThread = true; 
-		//::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);		
 		mLoadingThreadStarted = true;
 		std::thread loadingThread(LoadingThreadProcStub, this);
 		loadingThread.detach();
@@ -2442,7 +2580,7 @@ void SexyAppBase::StartLoadingThread()
 }
 void SexyAppBase::CursorThreadProc()
 {
-
+	mCursorThreadRunning = false;
 }
 
 void SexyAppBase::CursorThreadProcStub(void *theArg)
@@ -2794,7 +2932,7 @@ bool SexyAppBase::Process(bool allowSleep)
 
 					// Wait till next processing cycle
 					++mSleepCount;
-					Sleep(aTimeToNextFrame);
+					SDL_Delay(aTimeToNextFrame);
 
 					aCumSleepTime += aTimeToNextFrame;					
 				}
@@ -2815,7 +2953,7 @@ bool SexyAppBase::Process(bool allowSleep)
 				if (!allowSleep)
 					return false;
 
-				Sleep(aLoadingYieldSleepTime);
+				SDL_Delay(aLoadingYieldSleepTime);
 			}
 		}
 	}
@@ -2897,7 +3035,7 @@ bool SexyAppBase::UpdateAppStep(bool* updated)
 		{
 			if (mStepMode==2)
 			{
-				Sleep(mFrameTime);
+				SDL_Delay(mFrameTime);
 				mUpdateAppState = UPDATESTATE_PROCESS_DONE; // skip actual update until next step
 			}
 			else
@@ -2971,7 +3109,7 @@ void SexyAppBase::Start()
 	int aCount = 0;
 	int aSleepCount = 0;
 
-	DWORD aStartTime = SDL_GetTicks();		
+	Uint64 aStartTime = SDL_GetTicks();		
 
 	mRunning = true;
 	mLastTime = aStartTime;
@@ -3418,10 +3556,10 @@ void SexyAppBase::Init()
 	gPakInterface->AddPakFile("main.pak");
 
 	// Create a message we can use to talk to ourselves inter-process
-	mNotifyGameMessage = RegisterWindowMessage(SexyStringToStringFast(_S("Notify") + StringToSexyString(mProdName)).c_str());
+	mNotifyGameMessage = RegisterWindowMessage(SexyStringToStringFast(_S("Notify") + StringToSexyStringFast(mProdName)).c_str());
 
 	// Create a globally unique mutex
-	mMutex = CreateMutex(NULL, TRUE, SexyStringToStringFast(StringToSexyString(mProdName) + _S("Mutex")).c_str());
+	mMutex = new std::mutex();
 	if (::GetLastError() == ERROR_ALREADY_EXISTS)
 		HandleGameAlreadyRunning();
 
@@ -4066,7 +4204,7 @@ void SexyAppBase::AddMemoryImage(MemoryImage* theMemoryImage)
 
 void SexyAppBase::RemoveMemoryImage(MemoryImage* theMemoryImage)
 {
-	AutoCrit anAutoCrit(mSDLInterface->mCritSect);
+	//AutoCrit anAutoCrit(mSDLInterface->mCritSect);
 	MemoryImageSet::iterator anItr = mMemoryImageSet.find(theMemoryImage);
 	if (anItr != mMemoryImageSet.end())
 		mMemoryImageSet.erase(anItr);

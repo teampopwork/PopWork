@@ -9,6 +9,7 @@
 #include "CritSect.h"
 #include "SharedImage.h"
 #include "Ratio.h"
+#include <mutex>
 #include <SDL3/SDL.h>
 
 namespace ImageLib
@@ -88,6 +89,16 @@ enum
 	UPDATESTATE_PROCESS_DONE
 };
 
+enum MsgBoxFlags
+{
+	MsgBox_OK = 0,
+	MsgBox_OKCANCEL = 1,
+	MsgBox_ABORTRETRYIGNORE = 2,
+	MsgBox_YESNOCANCEL = 3,
+	MsgBox_YESNO = 4,
+	MsgBox_RETRYCANCEL = 5,
+};
+
 typedef std::map<HANDLE, int> HandleToIntMap;
 
 class SexyAppBase : public ButtonListener, public DialogListener
@@ -117,7 +128,7 @@ public:
 	bool					mStandardWordWrap;
 	bool					mbAllowExtendedChars;
 
-	HANDLE					mMutex;
+	std::mutex*				mMutex;
 	bool					mOnlyAllowOneCopyToRun;
 	UINT					mNotifyGameMessage;
 	CritSect				mCritSect;	

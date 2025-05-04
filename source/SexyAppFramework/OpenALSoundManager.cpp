@@ -1,6 +1,5 @@
 ﻿#include "OpenALSoundManager.h"
 #include "OpenALSoundInstance.h"
-#include "BassLoader.h"
 #include "../PakLib/PakInterface.h"
 #include "Common.h"
 #include "AUReader.h"
