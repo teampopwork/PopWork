@@ -25,12 +25,8 @@
 
 using namespace Sexy;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{	
-
-
-	gHInstance = hInstance;
-
+int main(int argc, char* argv[])
+{
 	GameApp* anApp = new GameApp();
 	anApp->Init();
 	anApp->Start();

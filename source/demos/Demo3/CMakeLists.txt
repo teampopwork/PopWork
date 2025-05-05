@@ -15,7 +15,7 @@ set(SRC_MAIN
 	Board.h
 )
 
-add_executable(Demo3 WIN32 ${SRC_MAIN})
+add_executable(Demo3 ${SRC_MAIN})
 add_dependencies(Demo3 SexyAppFramework)
 target_link_libraries(Demo3 SexyAppFramework)
 

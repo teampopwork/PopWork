@@ -18,7 +18,7 @@ set(SRC_MAIN
 	../Res.cpp
 )
 
-add_executable(XMLDemo WIN32 ${SRC_MAIN})
+add_executable(XMLDemo ${SRC_MAIN})
 add_dependencies(XMLDemo SexyAppFramework)
 target_link_libraries(XMLDemo SexyAppFramework)
 

@@ -52,10 +52,8 @@
 
 using namespace Sexy;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int main(int argc, char* argv[])
 {
-	gHInstance = hInstance;
-
 	V12DemoApp* anApp = new V12DemoApp();
 	anApp->Init();
 	anApp->Start();

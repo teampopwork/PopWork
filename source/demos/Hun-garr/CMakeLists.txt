@@ -26,7 +26,7 @@ set(SRC_MAIN
 	../Res.cpp
 )
 
-add_executable(Hun-garr WIN32 ${SRC_MAIN})
+add_executable(Hun-garr ${SRC_MAIN})
 add_dependencies(Hun-garr SexyAppFramework)
 target_link_libraries(Hun-garr SexyAppFramework)
 

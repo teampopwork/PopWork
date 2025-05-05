@@ -111,7 +111,6 @@ namespace Sexy
 const ulong SEXY_RAND_MAX = 0x7FFFFFFF;
 
 extern bool			gDebug;
-extern HINSTANCE	gHInstance;
 
 int					Rand();
 int					Rand(int range);

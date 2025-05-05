@@ -22,7 +22,7 @@ set(SRC_MAIN
 	../Res.cpp
 )
 
-add_executable(Demo5 WIN32 ${SRC_MAIN})
+add_executable(Demo5 ${SRC_MAIN})
 add_dependencies(Demo5 SexyAppFramework)
 target_link_libraries(Demo5 SexyAppFramework)
 

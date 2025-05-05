@@ -21,10 +21,8 @@
 
 using namespace Sexy;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int main(int argc, char* argv[])
 {
-	gHInstance = hInstance;
-
 	XMLDemoApp* anApp = new XMLDemoApp();
 	anApp->Init();
 	anApp->Start();

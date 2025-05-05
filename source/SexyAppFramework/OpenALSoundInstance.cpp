@@ -33,7 +33,9 @@ OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, AL
 
 OpenALSoundInstance::~OpenALSoundInstance()
 {
-	alDeleteSources(1, &mSoundSource);
+	alSourceStop(mSoundSource); //Stop the source first
+	alSourcei(mSoundSource, AL_BUFFER, 0); //Detach buffer
+	alDeleteSources(1, &mSoundSource); ///Delete the source
 }
 
 void OpenALSoundInstance::RehupVolume()
@@ -108,6 +110,7 @@ void OpenALSoundInstance::Stop()
 	if (mSoundSource != NULL)
 	{
 		alSourceStop(mSoundSource);
+		alSourcei(mSoundSource, AL_SEC_OFFSET, 0);
 		mAutoRelease = false;
 	}
 

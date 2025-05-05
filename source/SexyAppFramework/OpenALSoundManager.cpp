@@ -13,10 +13,11 @@
 #include <miniaudio.h>
 #include <SDL3/SDL.h>
 
+#define AL_CHECK_ERROR() { \
+if(alGetError() != AL_NO_ERROR) __debugbreak(); \
+}
+
 using namespace Sexy;
-
-
-#define SOUND_FLAGS (DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME |  DSBCAPS_STATIC | DSBCAPS_LOCSOFTWARE | DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLFREQUENCY)
 
 ALCdevice* mALDevice = nullptr;
 ALCcontext* mALContext = nullptr;
@@ -56,10 +57,11 @@ OpenALSoundManager::OpenALSoundManager()
 
 OpenALSoundManager::~OpenALSoundManager()
 {
+	ReleaseChannels();
+	ReleaseSounds();
 	alcMakeContextCurrent(nullptr);
 	if (mALContext) alcDestroyContext(mALContext);
 	if (mALDevice) alcCloseDevice(mALDevice);
-	ReleaseSounds();
 }
 
 bool OpenALSoundManager::Initialized()
@@ -316,6 +318,9 @@ void OpenALSoundManager::ReleaseSound(unsigned int theSfxID)
 {
 	if (mSourceSounds[theSfxID] != NULL)
 	{
+		ForceReleaseSources(mSourceSounds[theSfxID]);
+		alDeleteBuffers(1, &mSourceSounds[theSfxID]);
+		AL_CHECK_ERROR();
 		mSourceSounds[theSfxID] = NULL;
 		mSourceFileNames[theSfxID] = "";
 	}
@@ -353,6 +358,18 @@ int OpenALSoundManager::GetNumSounds()
 	}
 
 	return aCount;
+}
+
+void OpenALSoundManager::ForceReleaseSources(ALuint theBuffer)
+{
+	for (int i = 0; i < MAX_CHANNELS; i++)
+	{
+		if (mPlayingSounds[i] != NULL && mPlayingSounds[i]->mSourceSoundBuffer == theBuffer)
+		{
+			delete mPlayingSounds[i];
+			mPlayingSounds[i] = NULL;
+		}
+	}
 }
 
 void OpenALSoundManager::SetVolume(double theVolume)
@@ -439,4 +456,3 @@ void OpenALSoundManager::Flush()
 void OpenALSoundManager::SetCooperativeWindow(bool isWindowed)
 {
 }
-#undef SOUND_FLAGS

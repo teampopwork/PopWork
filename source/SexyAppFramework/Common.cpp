@@ -10,7 +10,6 @@
 
 #include "PerfTimer.h"
 
-HINSTANCE Sexy::gHInstance;
 bool Sexy::gDebug = false;
 static Sexy::MTRand gMTRand;
 namespace Sexy

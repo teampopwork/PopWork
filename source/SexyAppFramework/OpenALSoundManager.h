@@ -60,6 +60,7 @@ namespace Sexy
 		virtual void			StopAllSounds();
 		virtual int				GetFreeSoundId();
 		virtual int				GetNumSounds();
+		virtual void			ForceReleaseSources(ALuint theBuffer);
 	};
 
 }

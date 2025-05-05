@@ -3545,10 +3545,6 @@ void SexyAppBase::Init()
 	if (IsScreenSaver())	
 		mOnlyAllowOneCopyToRun = false;	
 
-
-	if(gHInstance==NULL)
-		gHInstance = (HINSTANCE)GetModuleHandle(NULL);
-
 	// Change directory
 	if (!ChangeDirHook(mChangeDirTo.c_str()))
 		chdir(mChangeDirTo.c_str());

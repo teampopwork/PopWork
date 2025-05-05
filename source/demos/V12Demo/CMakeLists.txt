@@ -20,7 +20,7 @@ set(SRC_MAIN
 	../Res.cpp
 )
 
-add_executable(V12Demo WIN32 ${SRC_MAIN})
+add_executable(V12Demo ${SRC_MAIN})
 add_dependencies(V12Demo SexyAppFramework)
 target_link_libraries(V12Demo SexyAppFramework)
 
