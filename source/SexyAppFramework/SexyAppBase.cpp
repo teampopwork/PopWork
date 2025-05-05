@@ -125,8 +125,6 @@ SexyAppBase::SexyAppBase()
 {
 	gSexyAppBase = this;
 
-	ImageLib::InitJPEG2000();
-
 	mMutex = NULL;
 	mNotifyGameMessage = 0;
 
@@ -1484,8 +1482,6 @@ void SexyAppBase::Shutdown()
 
 		if (mReadFromRegistry)
 			WriteToRegistry();
-
-		ImageLib::CloseJPEG2000();
 	}
 }
 

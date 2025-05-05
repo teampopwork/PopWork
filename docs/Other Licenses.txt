@@ -25,16 +25,3 @@ from Macromedia at
 http://www.macromedia.com/support/shockwave/info/licensing/main_2.html.
 Make sure you actually read the license, particularly the 
 "Consideration" section.
-
-J2K-Codec Library
-The framework supports loading j2k images through the j2k-codec library.
-This library is NOT free and you must purchase your own copy if you want
-to use it in registered (non-demo) mode. You may obtain a copy from 
-Alex Saveliev at http://j2k-codec.com. We do not distribute our key,
-so the library will run in demo mode with the following restrictions,
-as taken from the readme.txt file:
-  * beeps at the end of each decoding 
-  * open the ordering page once in about 30 decoded images 
-  * on the rare occasions do several other little nags
-
-The price of the j2k codec is between $49 and $399, depending on use.
