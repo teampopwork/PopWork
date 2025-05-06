@@ -131,12 +131,6 @@ int SDLInterface::Init(bool IsWindowed)
 
 bool SDLInterface::InitSDLWindow(bool IsWindowed)
 {
-	if (!SDL_Init(SDL_INIT_VIDEO) || !TTF_Init())
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL Initialization Failed", SDL_GetError(), nullptr);
-		return false;
-	}
-
 	int aWindowFlags = IsWindowed ? 0 : SDL_WINDOW_FULLSCREEN;
 
 	mWindow = SDL_CreateWindow(SexyStringToStringFast(mApp->mTitle).c_str(), mWidth, mHeight, aWindowFlags);

@@ -123,6 +123,12 @@ void* GetSHGetFolderPath(const char* theDLL, HMODULE* theMod)
 
 SexyAppBase::SexyAppBase()
 {
+	if (!SDL_Init(SDL_INIT_VIDEO) || !TTF_Init())
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL Initialization Failed", SDL_GetError(), nullptr);
+		return;
+	}
+
 	gSexyAppBase = this;
 
 	mMutex = NULL;
@@ -135,14 +141,14 @@ SexyAppBase::SexyAppBase()
 #endif
 
 	// Extract product version
-	char aPath[_MAX_PATH];
-	GetModuleFileNameA(NULL, aPath, 256);
-	mProductVersion = GetProductVersion(aPath);	
-	mChangeDirTo = GetFileDir(aPath);
+	//char aPath[_MAX_PATH];
+	//GetModuleFileNameA(NULL, aPath, 256);
+	//mProductVersion = GetProductVersion(aPath);	
+	//mChangeDirTo = GetFileDir(aPath);
 
 	mNoDefer = false;	
 	mFullScreenPageFlip = true; // should we page flip in fullscreen?
-	mTimeLoaded = GetTickCount();
+	mTimeLoaded = SDL_GetTicks();
 	mSEHOccured = false;
 	mProdName = "Product";
 	mTitle = _S("SexyApp");
