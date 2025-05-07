@@ -46,6 +46,7 @@ Image* Sexy::IMAGE_DIALOG_BUTTON;
 Image* Sexy::IMAGE_ROBOTROBOT;
 Image* Sexy::IMAGE_SLIDER_THUMB;
 Image* Sexy::IMAGE_SLIDER_TRACK;
+Image* Sexy::IMAGE_TESTPIXEL;
 int Sexy::SOUND_MUTATOR;
 int Sexy::SOUND_TIMER;
 
@@ -68,6 +69,7 @@ bool Sexy::ExtractGameResources(ResourceManager *theManager)
 		IMAGE_ROBOTROBOT = aMgr.GetImageThrow("IMAGE_ROBOTROBOT");
 		IMAGE_SLIDER_THUMB = aMgr.GetImageThrow("IMAGE_SLIDER_THUMB");
 		IMAGE_SLIDER_TRACK = aMgr.GetImageThrow("IMAGE_SLIDER_TRACK");
+		IMAGE_TESTPIXEL = aMgr.GetImageThrow("IMAGE_TESTPIXEL");
 		SOUND_MUTATOR = aMgr.GetSoundThrow("SOUND_MUTATOR");
 		SOUND_TIMER = aMgr.GetSoundThrow("SOUND_TIMER");
 	}
@@ -259,6 +261,7 @@ static void* gResources[] =
 	&SOUND_GAME_OVER_RESTART,
 	&SOUND_GAME_OVER_TEXT,
 	&SOUND_REGION_FILLED,
+	IMAGE_TESTPIXEL,
 	NULL
 };
 
@@ -343,6 +346,7 @@ const char* Sexy::GetStringIdById(int theId)
 		case IMAGE_DIALOG_BOX_ID: return "IMAGE_DIALOG_BOX";
 		case IMAGE_DIALOG_BUTTON_ID: return "IMAGE_DIALOG_BUTTON";
 		case IMAGE_SLIDER_TRACK_ID: return "IMAGE_SLIDER_TRACK";
+		case IMAGE_TESTPIXEL_ID: return "IMAGE_TESTPIXEL";
 		case IMAGE_SLIDER_THUMB_ID: return "IMAGE_SLIDER_THUMB";
 		case IMAGE_HUNGARR_SMALL_ID: return "IMAGE_HUNGARR_SMALL";
 		case IMAGE_HUNGARR_BEAM_UP_ID: return "IMAGE_HUNGARR_BEAM_UP";

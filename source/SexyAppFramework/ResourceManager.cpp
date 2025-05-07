@@ -298,7 +298,7 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 		((mApp->Is3DAccelerated()) && (theElement.mAttributes.find(_S("nobits3d")) != theElement.mAttributes.end())) ||
 		((!mApp->Is3DAccelerated()) && (theElement.mAttributes.find(_S("nobits2d")) != theElement.mAttributes.end()));
 	aRes->mA8R8G8B8 = theElement.mAttributes.find(_S("a8r8g8b8")) != theElement.mAttributes.end();
-	aRes->mMinimizeSubdivisions = theElement.mAttributes.find(_S("minsubdivide")) != theElement.mAttributes.end();
+	aRes->mNearestFilter = theElement.mAttributes.find(_S("nearestfilter")) != theElement.mAttributes.end();
 	aRes->mAutoFindAlpha = theElement.mAttributes.find(_S("noalpha")) == theElement.mAttributes.end();	
 
 	XMLParamMap::iterator anItr;
@@ -809,16 +809,10 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 			//aSDLImage->mWantPal = true;
 		//SEXY_PERF_END("ResourceManager:Palletize");
 	}
-	/*
-	if (theRes->mA4R4G4B4)
-		aSDLImage->mD3DFlags |= D3DImageFlag_UseA4R4G4B4;
 
-	if (theRes->mA8R8G8B8)
-		aSDLImage->mD3DFlags |= D3DImageFlag_UseA8R8G8B8;
+	if (theRes->mNearestFilter)
+		aSDLImage->mImageFlags |= SDLImageFlag_NearestFiltering;
 
-	if (theRes->mMinimizeSubdivisions)
-		aSDLImage->mD3DFlags |= D3DImageFlag_MinimizeNumSubdivisions;
-*/
 	if (theRes->mAnimInfo.mAnimType != AnimType_None)
 		aSDLImage->mAnimInfo = new AnimInfo(theRes->mAnimInfo);
 

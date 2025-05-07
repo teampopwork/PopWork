@@ -43,7 +43,7 @@ MemoryImage::MemoryImage(const MemoryImage& theMemoryImage) :
 	mIsVolatile(theMemoryImage.mIsVolatile),
 	mPurgeBits(theMemoryImage.mPurgeBits),
 	mWantPal(theMemoryImage.mWantPal),
-	mD3DFlags(theMemoryImage.mD3DFlags),
+	mImageFlags(theMemoryImage.mImageFlags),
 	mBitsChangedCount(theMemoryImage.mBitsChangedCount),
 	mD3DData(NULL)
 {
@@ -153,7 +153,7 @@ void MemoryImage::Init()
 	mIsVolatile = false;
 
 	mD3DData = NULL;
-	mD3DFlags = 0;
+	mImageFlags = 0;
 	mBitsChangedCount = 0;
 
 	mPurgeBits = false;
@@ -197,7 +197,7 @@ void MemoryImage::NormalDrawLine(double theStartX, double theStartY, double theE
 	ulong aGRoundAdd = aGMask >> 1;
 	ulong aBRoundAdd = aBMask >> 1;
 	
-	DWORD *aSurface = GetBits();
+	ulong *aSurface = GetBits();
 
 	if (true)//(mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
 	{
@@ -492,7 +492,7 @@ void MemoryImage::AdditiveDrawLine(double theStartX, double theStartY, double th
 	ulong aBRoundAdd = aBMask >> 1;
 
 	uchar* aMaxTable = mApp->mAdd8BitMaxTable;
-	DWORD *aSurface = GetBits();
+	ulong*aSurface = GetBits();
 	
 	if (true)//(mLockedSurfaceDesc.ddpfPixelFormat.dwRGBBitCount == 32)
 	{
@@ -1789,7 +1789,7 @@ void MemoryImage::BltMatrix(Image* theImage, float x, float y, const SexyMatrix3
 {
 	theImage->mDrawn = true;
 
-	DWORD *aSurface = GetBits();
+	ulong*aSurface = GetBits();
 	int aPitch = mWidth*4;
 	int aFormat = 0x8888;
 	if (mForcedMode && !mHasAlpha && !mHasTrans)
@@ -1868,7 +1868,7 @@ void MemoryImage::BltTrianglesTex(Image *theTexture, const TriVertex theVertices
 {
 	theTexture->mDrawn = true;
 
-	DWORD *aSurface = GetBits();
+	ulong*aSurface = GetBits();
 
 	int aPitch = mWidth*4;
 	int aFormat = 0x8888;

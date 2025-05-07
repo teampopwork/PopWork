@@ -137,7 +137,7 @@ public:
 	WidgetManager*			mWidgetManager;
 	DialogMap				mDialogMap;
 	DialogList				mDialogList;
-	uint64_t 				mPrimaryThreadId;
+	SDL_ThreadID  			mPrimaryThreadId;
 	bool					mSEHOccured;
 	bool					mShutdown;
 	bool					mExitToTop;
@@ -148,7 +148,7 @@ public:
 	bool					mForceWindowed;	
 	bool					mInitialized;	
 	bool					mProcessInTimer;
-	DWORD					mTimeLoaded;
+	uint32_t				mTimeLoaded;
 	bool					mIsScreenSaver;
 	bool					mAllowMonitorPowersave;
 	WindowsMessageList		mDeferredMessages;
@@ -186,9 +186,9 @@ public:
 	bool					mHasPendingDraw;
 	double					mPendingUpdatesAcc;
 	double					mUpdateFTimeAcc;
-	DWORD					mLastTimeCheck;
-	DWORD					mLastTime;
-	DWORD					mLastUserInputTick;
+	uint64_t 				mLastTimeCheck;
+	uint64_t 				mLastTime;
+	uint64_t 				mLastUserInputTick;
 
 	int						mSleepCount;
 	int						mDrawCount;
@@ -200,8 +200,8 @@ public:
 	int						mFastForwardToUpdateNum;
 	bool					mFastForwardToMarker;
 	bool					mFastForwardStep;
-	DWORD					mLastDrawTick;
-	DWORD					mNextDrawTick;
+	uint64_t 				mLastDrawTick;
+	uint64_t 				mNextDrawTick;
 	int						mStepMode;  // 0 = off, 1 = step, 2 = waiting for step
 
 	int						mCursorNum;
@@ -217,7 +217,7 @@ public:
 	bool					mIsDisabled;
 	bool					mHasFocus;
 	int						mDrawTime;
-	ulong					mFPSStartTick;
+	uint64_t				mFPSStartTick;
 	int						mFPSFlipCount;
 	int						mFPSDirtyCount;
 	int						mFPSTime;
@@ -295,11 +295,11 @@ protected:
 	
 	// Loading thread methods	
 	virtual void			LoadingThreadCompleted();
-	static void				LoadingThreadProcStub(void *theArg);	
+	static int				LoadingThreadProcStub(void *theArg);	
 
 	// Cursor thread methods
 	void					CursorThreadProc();
-	static void				CursorThreadProcStub(void *theArg);
+	static int				CursorThreadProcStub(void *theArg);
 	void					StartCursorThread();
 	
 	void					WaitForLoadingThread();				

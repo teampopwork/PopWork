@@ -24,6 +24,7 @@ namespace Sexy
 	extern Image* IMAGE_ROBOTROBOT;
 	extern Image* IMAGE_SLIDER_THUMB;
 	extern Image* IMAGE_SLIDER_TRACK;
+	extern Image* IMAGE_TESTPIXEL;
 	extern int SOUND_MUTATOR;
 	extern int SOUND_TIMER;
 
@@ -128,6 +129,7 @@ namespace Sexy
 		SOUND_GAME_OVER_RESTART_ID,
 		SOUND_GAME_OVER_TEXT_ID,
 		SOUND_REGION_FILLED_ID,
+		IMAGE_TESTPIXEL_ID,
 		RESOURCE_ID_MAX
 	};
 

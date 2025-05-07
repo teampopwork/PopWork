@@ -598,7 +598,7 @@ bool Graphics::DrawLineClipHelper(double* theStartX, double* theStartY, double* 
 
 	if (aEndY >= mClipRect.mY + mClipRect.mHeight)
 	{
-		if (aStartY >= mClipRect.mY + mClipRect.mHeight)
+		if (ceil(aStartY) >= mClipRect.mY + mClipRect.mHeight)
 			return false;
 
 		double aSlope = (aEndX - aStartX) / (aEndY - aStartY);
@@ -1114,7 +1114,7 @@ int Graphics::WriteString(const SexyString& theString, int theX, int theY, int t
 				break;
 			else // change color instruction
 			{
-				DWORD aColor = 0;
+				uint32_t aColor = 0;
 				if (theString[i+1]==_S('o'))
 				{
 					if (sexystrncmp(theString.c_str()+i+1, _S("oldclr"), 6) == 0)

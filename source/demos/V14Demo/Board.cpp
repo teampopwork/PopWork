@@ -143,6 +143,13 @@ void Board::Draw(Graphics* g)
 	g->SetColor(Color(255, 0, 0));
 	g->FillRect(mRect);
 
+	{
+		GraphicsAutoState auto_state(g);
+		g->SetScale(2.0f, 2.0f, 300.0f, 100.0f);
+		g->DrawImage(IMAGE_TESTPIXEL, 300, 100);
+	}
+
+
 	if (!mLostFocus)
 	{
 		GraphicsAutoState auto_state(g);

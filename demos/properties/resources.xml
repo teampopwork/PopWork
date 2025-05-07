@@ -90,7 +90,9 @@
 		
 		<!-- in case you're wondering about some of these filenames, they are taken
 			from various PopCap games. They haven't been changed. -->
-		
+
+					
+		<Image id="TESTPIXEL"						path="showcase_pixel" nearestfilter=""/>
 		<Image id="ROBOTROBOT"						path="robotrobot"/>
 		<Image id="CHECKBOX"						path="checkbox"/>
 		<Image id="BG0"								path="layer0"/>

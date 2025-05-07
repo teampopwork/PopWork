@@ -204,10 +204,11 @@ bool SDLInterface::Redraw(Rect* theClipRect)
 void SDLInterface::SetVideoOnlyDraw(bool videoOnly)
 {
 	if (mScreenImage) delete mScreenImage;
-	mScreenImage = new SDLImage(this);
-	//mScreenImage->SetSurface(useSecondary ? mSecondarySurface : mDrawSurface);		
-	//mScreenImage->mNoLock = mVideoOnlyDraw;
-	//mScreenImage->mVideoMemory = mVideoOnlyDraw;
+	mScreenImage = new SDLImage(this);	
+	CreateImageTexture(mScreenImage);
+	SDLTextureData* aData = (SDLTextureData*)mScreenImage->mD3DData;
+	aData->mTexture = mScreenTexture;
+	RecoverBits(mScreenImage);
 	mScreenImage->mWidth = mWidth;
 	mScreenImage->mHeight = mHeight;
 	mScreenImage->SetImageMode(false, false);
@@ -401,7 +402,7 @@ void SDLTextureData::CreateTextures(MemoryImage* theImage)
 
 		mTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, aWidth, aHeight);
 
-		SDL_SetTextureScaleMode(mTexture, SDL_GetRendererName(mRenderer) == "software" ? SDL_SCALEMODE_NEAREST : SDL_SCALEMODE_LINEAR);
+		SDL_SetTextureScaleMode(mTexture, (SDL_GetRendererName(mRenderer) == "software" || theImage->mImageFlags & SDLImageFlag_NearestFiltering) ? SDL_SCALEMODE_NEAREST : SDL_SCALEMODE_LINEAR);
 		if (mTexture)
 		{
 			SDL_UpdateTexture(mTexture, nullptr, theImage->GetBits(), aWidth * sizeof(ulong));

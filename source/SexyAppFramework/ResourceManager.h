@@ -69,7 +69,7 @@ protected:
 		bool mA8R8G8B8;
 		bool mDDSurface;
 		bool mPurgeBits;
-		bool mMinimizeSubdivisions;
+		bool mNearestFilter;
 		int mRows;
 		int mCols;	
 		DWORD mAlphaColor;

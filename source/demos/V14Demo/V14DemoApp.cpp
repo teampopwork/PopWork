@@ -55,14 +55,14 @@ void V14DemoApp::InitHook()
 	// We're just going to wind up using the default font from this resource group.
 	// Since there's very little to load, we'll dispense with the whole
 	// title screen loading stuff.
-	if (!mResourceManager->LoadResources("Init"))
+	if (!mResourceManager->LoadResources("Init") || !mResourceManager->LoadResources("Game"))
 	{
 		mLoadingFailed = true;
 		ShowResourceError(true);
 		return;
 	}
 
-	if (!ExtractInitResources(mResourceManager))
+	if (!ExtractInitResources(mResourceManager) || !ExtractGameResources(mResourceManager))
 	{
 		mLoadingFailed = true;
 		ShowResourceError(true);

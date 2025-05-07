@@ -22,6 +22,14 @@ namespace Sexy
 	typedef std::set<MemoryImage*> ImageSet;
 	typedef std::list<SexyMatrix3> TransformStack;
 
+	enum SDLImageFlags
+	{
+		SDLImageFlag_NearestFiltering = 0x0001,		// Uses nearest filtering for the texture
+// 0x0002
+// 0x0004
+// 0x0008
+	};
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////

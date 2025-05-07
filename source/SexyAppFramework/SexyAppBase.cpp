@@ -37,7 +37,6 @@
 #include <shlobj.h>
 
 #include "memmgr.h"
-#include <thread>
 
 using namespace Sexy;
 
@@ -231,7 +230,7 @@ SexyAppBase::SexyAppBase()
 	mAutoMuteCount = 0;
 	mMuteOnLostFocus = true;
 	mFPSTime = 0;
-	mFPSStartTick = GetTickCount();
+	mFPSStartTick = SDL_GetTicks();
 	mFPSFlipCount = 0;
 	mFPSCount = 0;
 	mFPSDirtyCount = 0;
@@ -289,7 +288,7 @@ SexyAppBase::SexyAppBase()
 	mWidgetManager = new WidgetManager(this);
 	mResourceManager = new ResourceManager(this);
 
-	mPrimaryThreadId = 0;
+	mPrimaryThreadId = (SDL_ThreadID)0;
 
 	if (GetSystemMetrics(86)) // check for tablet pc
 	{
@@ -711,10 +710,42 @@ void SexyAppBase::SetCursorImage(int theCursorNum, Image* theImage)
 	}
 }
 
+
+void WriteScreenShotThread(void* theArg)
+{
+	//////////////////////////////////////////////////////////////////////////
+	// Validate the passed parameter
+	SDLImage* theImage = (SDLImage*)theArg;
+	if (theImage == NULL) return;
+
+	//////////////////////////////////////////////////////////////////////////
+	// Get free image name
+	std::string anImageDir = GetAppDataFolder() + "_screenshots";
+	MkDir(anImageDir);
+	anImageDir += "/";
+
+	int aMaxId = 0;
+	std::string anImagePrefix = "image";
+	//add the automatic id later.
+	std::string anImageName = anImageDir + anImagePrefix + StrFormat("%d.png", aMaxId + 1);
+
+	//////////////////////////////////////////////////////////////////////////
+	// Write image
+	ImageLib::Image aSaveImage;
+	aSaveImage.mBits = theImage->mBits;
+	aSaveImage.mWidth = theImage->mWidth;
+	aSaveImage.mHeight = theImage->mHeight;
+	ImageLib::WritePNGImage(anImageName, &aSaveImage);
+	aSaveImage.mBits = NULL;
+
+	//////////////////////////////////////////////////////////////////////////
+	// delete the image in this thread
+	delete theImage;
+}
+
 //Saved images ended up being corrupted/incorrect. TODO:FIX
 void SexyAppBase::TakeScreenshot()
 {
-	SDL_RenderPresent(mSDLInterface->mRenderer);
 	if (SDL_GetRendererName(mSDLInterface->mRenderer) == "software") //Cheaper alternative for software renderer
 	{
 		SDL_Surface* sshot = SDL_GetWindowSurface(mSDLInterface->mWindow);
@@ -733,7 +764,6 @@ void SexyAppBase::TakeScreenshot()
 			SDL_Log("Failed to read pixels: %s", SDL_GetError());
 		}
 	}
-
 
 	/*
 	if (mDDInterface==NULL || mDDInterface->mDrawSurface==NULL)
@@ -1465,7 +1495,7 @@ void SexyAppBase::ShutdownHook()
 
 void SexyAppBase::Shutdown()
 {
-	if ((mPrimaryThreadId != 0) && (GetCurrentThreadId() != mPrimaryThreadId))
+	if ((mPrimaryThreadId != 0) && (SDL_GetCurrentThreadID() != mPrimaryThreadId))
 	{
 		mLoadingFailed = true;
 	}
@@ -1565,7 +1595,7 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 		gSDLInterfacePreDrawError = false; // this predraw error happens naturally when ddraw is failing
 		if (!gIsFailing)
 		{
-			//gDebugStream << GetTickCount() << " Redraw failed!" << std::endl;
+			//gDebugStream << SDL_GetTicks() << " Redraw failed!" << std::endl;
 			gIsFailing = true;
 		}
 
@@ -1574,7 +1604,7 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 		aWindowPlacement.length = sizeof(aWindowPlacement);
 		::GetWindowPlacement(mHWnd, &aWindowPlacement);
 		
-		DWORD aTick = GetTickCount();
+		DWORD aTick = SDL_GetTicks();
 		if ((mActive || (aTick-aRetryTick>1000 && mIsPhysWindowed)) && (aWindowPlacement.showCmd != SW_SHOWMINIMIZED) && (!mMinimized))
 		{
 			aRetryTick = aTick;
@@ -1599,11 +1629,11 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 
 			int aResult = InitDDInterface();
 
-			//gDebugStream << GetTickCount() << " ReInit..." << std::endl;
+			//gDebugStream << SDL_GetTicks() << " ReInit..." << std::endl;
 			
 			if ((mIsWindowed) && (aResult == DDInterface::RESULT_INVALID_COLORDEPTH))
 			{
-				//gDebugStream << GetTickCount() << "ReInit Invalid Colordepth" << std::endl;
+				//gDebugStream << SDL_GetTicks() << "ReInit Invalid Colordepth" << std::endl;
 				if (!mActive) // don't switch to full screen if not active app
 					return;
 
@@ -1618,7 +1648,7 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 			}
 			else if (aResult != DDInterface::RESULT_OK)
 			{
-				//gDebugStream << GetTickCount() << " ReInit Failed" << std::endl;
+				//gDebugStream << SDL_GetTicks() << " ReInit Failed" << std::endl;
 				//Fail("Failed to initialize DirectDraw");
 				//Sleep(1000);				
 				
@@ -1637,7 +1667,7 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 	{
 		if (gIsFailing)
 		{
-			//gDebugStream << GetTickCount() << " Redraw succeeded" << std::endl;
+			//gDebugStream << SDL_GetTicks() << " Redraw succeeded" << std::endl;
 			gIsFailing = false;
 			aRetryTick = 0;
 		}
@@ -1816,7 +1846,7 @@ bool SexyAppBase::DrawDirtyStuff()
 #ifdef _DEBUG
 		/*if (mFPSTime >= 5000) // Show FPS about every 5 seconds
 		{
-			ulong aTickNow = GetTickCount();
+			ulong aTickNow = SDL_GetTicks();
 
 			OutputDebugString(StrFormat(_S("Theoretical FPS: %d\r\n"), (int) (mFPSCount * 1000 / mFPSTime)).c_str());
 			OutputDebugString(StrFormat(_S("Actual      FPS: %d\r\n"), (mFPSFlipCount * 1000) / max((aTickNow - mFPSStartTick), 1)).c_str());
@@ -1870,7 +1900,7 @@ void SexyAppBase::LogScreenSaverError(const std::string &theError)
 	FILE *aFile = fopen("ScrError.txt",aFlag);
 	if (aFile != NULL)
 	{
-		fprintf(aFile,"%s %s %u\n",theError.c_str(),_strtime(aBuf),GetTickCount());
+		fprintf(aFile,"%s %s %u\n",theError.c_str(),_strtime(aBuf),SDL_GetTicks());
 		fclose(aFile);
 	}
 }
@@ -2557,17 +2587,19 @@ void SexyAppBase::LoadingThreadCompleted()
 {
 }
 
-void SexyAppBase::LoadingThreadProcStub(void *theArg)
+int SexyAppBase::LoadingThreadProcStub(void *theArg)
 {
 	SexyAppBase* aSexyApp = (SexyAppBase*) theArg;
 	
 	aSexyApp->LoadingThreadProc();		
 
 	char aStr[256];
-	sprintf(aStr, "Resource Loading Time: %d\r\n", (GetTickCount() - aSexyApp->mTimeLoaded));
+	sprintf(aStr, "Resource Loading Time: %d\r\n", (SDL_GetTicks() - aSexyApp->mTimeLoaded));
 	OutputDebugStringA(aStr);
 
 	aSexyApp->mLoadingThreadCompleted = true;
+
+	return 0;
 }
 
 void SexyAppBase::StartLoadingThread()
@@ -2576,8 +2608,8 @@ void SexyAppBase::StartLoadingThread()
 	{
 		mYieldMainThread = true; 
 		mLoadingThreadStarted = true;
-		std::thread loadingThread(LoadingThreadProcStub, this);
-		loadingThread.detach();
+		SDL_Thread* aThread = SDL_CreateThread(LoadingThreadProcStub, "LoadingThread", (void*)this);
+		SDL_DetachThread(aThread);
 	}
 }
 void SexyAppBase::CursorThreadProc()
@@ -2585,10 +2617,11 @@ void SexyAppBase::CursorThreadProc()
 	mCursorThreadRunning = false;
 }
 
-void SexyAppBase::CursorThreadProcStub(void *theArg)
+int SexyAppBase::CursorThreadProcStub(void *theArg)
 {
 	SexyAppBase* aSexyApp = (SexyAppBase*) theArg;
 	aSexyApp->CursorThreadProc();
+	return 0;
 }
 
 void SexyAppBase::StartCursorThread()
@@ -2596,8 +2629,8 @@ void SexyAppBase::StartCursorThread()
 	if (!mCursorThreadRunning)
 	{
 		mCursorThreadRunning = true;
-		std::thread aCursorThread(&SexyAppBase::CursorThreadProcStub, this);
-		aCursorThread.detach();  // Detach to run independently
+		SDL_Thread* aThread = SDL_CreateThread(CursorThreadProcStub, "CursorThread", (void*)this);
+		SDL_DetachThread(aThread);
 	}
 }
 
@@ -2773,7 +2806,7 @@ void SexyAppBase::UpdateFTimeAcc()
 
 bool SexyAppBase::Process(bool allowSleep)
 {
-	/*DWORD aTimeNow = GetTickCount();
+	/*DWORD aTimeNow = SDL_GetTicks();
 	if (aTimeNow - aLastCheck >= 10000)
 	{
 		OutputDebugString(StrFormat(_S("FUpdates: %d\n"), aNumCalls).c_str());
@@ -3533,7 +3566,7 @@ void SexyAppBase::InitHook()
 
 void SexyAppBase::Init()
 {
-	mPrimaryThreadId = GetCurrentThreadId();	
+	mPrimaryThreadId = SDL_GetCurrentThreadID();	
 	
 	if (mShutdown)
 		return;
@@ -3561,10 +3594,10 @@ void SexyAppBase::Init()
 	if (::GetLastError() == ERROR_ALREADY_EXISTS)
 		HandleGameAlreadyRunning();
 
-	mRandSeed = GetTickCount();
+	mRandSeed = SDL_GetTicks();
 	SRand(mRandSeed);	
 	 
-	srand(GetTickCount());
+	srand(SDL_GetTicks());
 
 	// Let app do something before showing window, or switching to fullscreen mode
 	// NOTE: Moved call to PreDisplayHook above mIsWindowed and GetSystemsMetrics

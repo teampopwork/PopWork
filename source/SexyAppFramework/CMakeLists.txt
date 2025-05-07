@@ -107,8 +107,10 @@ set(SRC_MAIN
 	SysFont.cpp
 	Quantize.cpp
 	SharedImage.cpp
+	Profile.cpp
 
 	Flags.cpp
+	XMLWriter.cpp
 	XMLParser.cpp
 	SexyMatrix.cpp
 	PropertiesParser.cpp
@@ -274,6 +276,8 @@ set(SRC_MAIN
 	WidgetContainer.h
 	WidgetManager.h
 	XMLParser.h
+	XMLWriter.h
+	Profile.h
 
 	SDLImage.cpp
 	SDLInterface.cpp
