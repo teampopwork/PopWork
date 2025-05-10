@@ -351,6 +351,17 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(miniAudio)
 
+#Setup ImageLib dependencies
+
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build as DLL" FORCE)
+set(BUILD_EXECUTABLES OFF CACHE BOOL "Build executables" FORCE)
+set(BUILD_STATIC_LIBS OFF CACHE BOOL "Build static libraries" FORCE)
+set(BUILD_TESTS "Build test executables" OFF CACHE BOOL "BUILD_SHARED_LIBS OR BUILD_STATIC_LIBS;BUILD_EXECUTABLES" FORCE)
+set(JPEG_BINARY_DIR "${CMAKE_BINARY_DIR}/lib/jpeg")
+set(PNG_BINARY_DIR "${CMAKE_BINARY_DIR}/lib/png")
+add_subdirectory(../lib/jpeg ${JPEG_BINARY_DIR})
+add_subdirectory(../lib/png ${PNG_BINARY_DIR})
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build as DLL" FORCE)
 
 set(SexyAppLibs
 	SDL3::SDL3
@@ -359,9 +370,9 @@ set(SexyAppLibs
 	miniaudio
 	winmm
 	ws2_32
-	png
-	jpeg
-	zlib
+	ZLIB::ZLIB
+    jpeg_static
+    png_static
 	${BASS_LIB_PATH}/bass.lib
 )
 

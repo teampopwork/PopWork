@@ -1,0 +1,9 @@
+[submodule "lib/zlib"]
+	path = lib/zlib
+	url = https://github.com/madler/zlib.git
+[submodule "lib/png"]
+	path = lib/png
+	url = https://github.com/pnggroup/libpng.git
+[submodule "lib/jpeg"]
+	path = lib/jpeg
+	url = https://github.com/csparker247/jpeg-cmake
