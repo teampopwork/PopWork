@@ -6,28 +6,28 @@
 #include "../Res.h"
 
 // You should remember these files from the previous demos
-#include "SexyAppFramework/Graphics.h"
-#include "SexyAppFramework/Color.h"
-#include "SexyAppFramework/Rect.h"
-#include "SexyAppFramework/ButtonWidget.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/ImageFont.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
+#include "SexyAppFramework/Graphics/Color.h"
+#include "SexyAppFramework/Math/Rect.h"
+#include "SexyAppFramework/Widget/ButtonWidget.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Graphics/ImageFont.h"
 
 // The following are needed for some new widgets we're going to learn about:
-#include "SexyAppFramework/EditWidget.h"
-#include "SexyAppFramework/Checkbox.h"
-#include "SexyAppFramework/ListWidget.h"
-#include "SexyAppFramework/ScrollbarWidget.h"
-#include "SexyAppFramework/ScrollListener.h"
+#include "SexyAppFramework/Widget/EditWidget.h"
+#include "SexyAppFramework/Widget/Checkbox.h"
+#include "SexyAppFramework/Widget/ListWidget.h"
+#include "SexyAppFramework/Widget/ScrollbarWidget.h"
+#include "SexyAppFramework/Widget/ScrollListener.h"
 
 // As part of our pitch shifted sound example, we'll need to 
 // access the sound manager in our GameApp class as well as
 // individual sound instances:
-#include "SexyAppFramework/SoundManager.h"
-#include "SexyAppFramework/SoundInstance.h"
+#include "SexyAppFramework/Audio/SoundManager.h"
+#include "SexyAppFramework/Audio/SoundInstance.h"
 
 // Used for file I/O:
-#include "SexyAppFramework/Buffer.h"
+#include "SexyAppFramework/Misc/Buffer.h"
 
 // The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace Sexy" to avoid

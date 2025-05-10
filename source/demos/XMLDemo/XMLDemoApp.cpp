@@ -1,7 +1,7 @@
 #include "XMLDemoApp.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/ResourceManager.h"
-#include "SexyAppFramework/XMLParser.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Resources/ResourceManager.h"
+#include "SexyAppFramework/ReadWrite/XMLParser.h"
 #include "Board.h"
 #include "../Res.h"
 

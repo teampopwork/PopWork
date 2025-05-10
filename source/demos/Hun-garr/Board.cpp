@@ -7,16 +7,16 @@
 #include "GameOverEffect.h"
 #include "OptionsDialog.h"
 
-#include "SexyAppFramework/Graphics.h"
-#include "SexyAppFramework/Color.h"
-#include "SexyAppFramework/Rect.h"
-#include "SexyAppFramework/ButtonWidget.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/ImageFont.h"
-#include "SexyAppFramework/SoundManager.h"
-#include "SexyAppFramework/SoundInstance.h"
-#include "SexyAppFramework/Buffer.h"
-#include "SexyAppFramework/MusicInterface.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
+#include "SexyAppFramework/Graphics/Color.h"
+#include "SexyAppFramework/Math/Rect.h"
+#include "SexyAppFramework/Widget/ButtonWidget.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Graphics/ImageFont.h"
+#include "SexyAppFramework/Audio/SoundManager.h"
+#include "SexyAppFramework/Audio/SoundInstance.h"
+#include "SexyAppFramework/Misc/Buffer.h"
+#include "SexyAppFramework/Audio/MusicInterface.h"
 
 
 #define _USE_MATH_DEFINES

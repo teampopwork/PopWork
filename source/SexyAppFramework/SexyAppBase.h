@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Common.h"
-#include "Rect.h"
-#include "Color.h"
-#include "ButtonListener.h"
-#include "DialogListener.h"
-#include "Buffer.h"
-#include "CritSect.h"
-#include "SharedImage.h"
-#include "Ratio.h"
+#include "Math/Rect.h"
+#include "Graphics/Color.h"
+#include "Widget/ButtonListener.h"
+#include "Widget/DialogListener.h"
+#include "Misc/Buffer.h"
+#include "Misc/CritSect.h"
+#include "Graphics/SharedImage.h"
+#include "Math/Ratio.h"
 #include <mutex>
 #include <SDL3/SDL.h>
 

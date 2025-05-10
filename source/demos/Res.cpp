@@ -1,5 +1,5 @@
 #include "Res.h"
-#include "SexyAppFramework/ResourceManager.h"
+#include "SexyAppFramework/Resources/ResourceManager.h"
 
 using namespace Sexy;
 

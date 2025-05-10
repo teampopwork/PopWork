@@ -2,11 +2,11 @@
 #include "../Res.h"
 #include "Board.h"
 #include "SexyAppFramework/SexyAppBase.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/Font.h"
-#include "SexyAppFramework/DialogButton.h"
-#include "SexyAppFramework/Checkbox.h"
-#include "SexyAppFramework/Slider.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Graphics/Font.h"
+#include "SexyAppFramework/Widget/DialogButton.h"
+#include "SexyAppFramework/Widget/Checkbox.h"
+#include "SexyAppFramework/Widget/Slider.h"
 
 using namespace Sexy;
 

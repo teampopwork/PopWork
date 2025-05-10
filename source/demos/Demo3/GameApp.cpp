@@ -1,6 +1,6 @@
 #include "GameApp.h"
 #include "Board.h"
-#include "SexyAppFramework/WidgetManager.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
 
 
 // The Image.h file just declares basic functions. All images are either of 
@@ -8,10 +8,10 @@
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "SexyAppFramework/SDLImage.h"
+#include "SexyAppFramework/Graphics/SDLImage.h"
 
 // We're going to create a font for Board's button widget's label
-#include "SexyAppFramework/ImageFont.h"
+#include "SexyAppFramework/Graphics/ImageFont.h"
 
 // The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace Sexy" to avoid

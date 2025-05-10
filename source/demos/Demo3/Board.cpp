@@ -1,29 +1,29 @@
 #include "Board.h"
 #include "GameApp.h"
-#include "SexyAppFramework/Graphics.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
 
 // See the Draw method for more information on using the Color class.
-#include "SexyAppFramework/Color.h"
+#include "SexyAppFramework/Graphics/Color.h"
 
 // The Image.h file just declares basic functions. All images are either of 
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "SexyAppFramework/SDLImage.h"
+#include "SexyAppFramework/Graphics/SDLImage.h"
 
 // The Rectangle template, used to specify X, Y, Width, Height
-#include "SexyAppFramework/Rect.h"
+#include "SexyAppFramework/Math/Rect.h"
 
 // We're going to be making a button in this demo so we need to
 // include this file.
-#include "SexyAppFramework/ButtonWidget.h"
+#include "SexyAppFramework/Widget/ButtonWidget.h"
 
 // We're going to add our own button widget, which requires knowing about the
 // WidgetManager.
-#include "SexyAppFramework/WidgetManager.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
 
-#include "SexyAppFramework/ImageFont.h"
+#include "SexyAppFramework/Graphics/ImageFont.h"
 
 // The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace Sexy" to avoid

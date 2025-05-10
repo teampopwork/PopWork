@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 // This file must be included so that we can derive our Board class from it
-#include "SexyAppFramework/Widget.h"
+#include "SexyAppFramework/Widget/Widget.h"
 
 // We place all our classes inside the "Sexy" namespace to avoid name collisions
 // with other libraries that might be added.

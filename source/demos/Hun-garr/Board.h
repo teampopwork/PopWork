@@ -27,9 +27,9 @@
 //	classes where and when to draw to.
 //////////////////////////////////////////////////////////////////////////
 
-#include "SexyAppFramework/Widget.h"
-#include "SexyAppFramework/ButtonListener.h"
-#include "SexyAppFramework/Rect.h"
+#include "SexyAppFramework/Widget/Widget.h"
+#include "SexyAppFramework/Widget/ButtonListener.h"
+#include "SexyAppFramework/Math/Rect.h"
 
 namespace Sexy
 {

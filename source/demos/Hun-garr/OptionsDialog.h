@@ -10,9 +10,9 @@
 #ifndef __OPTIONS_DIALOG_H__
 #define __OPTIONS_DIALOG_H__
 
-#include "SexyAppFramework/Dialog.h"
-#include "SexyAppFramework/SliderListener.h"
-#include "SexyAppFramework/CheckboxListener.h"
+#include "SexyAppFramework/Widget/Dialog.h"
+#include "SexyAppFramework/Widget/SliderListener.h"
+#include "SexyAppFramework/Widget/CheckboxListener.h"
 
 namespace Sexy
 {

@@ -1,13 +1,13 @@
 #include "GameApp.h"
 #include "TitleScreen.h"
 #include "Board.h"
-#include "SexyAppFramework/WidgetManager.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
 
 // We will be accessing the resource manager in this demo, so include it's header
-#include "SexyAppFramework/ResourceManager.h"
+#include "SexyAppFramework/Resources/ResourceManager.h"
 
 // Required for playing music
-#include "SexyAppFramework/BassMusicInterface.h"
+#include "SexyAppFramework/Audio/BassMusicInterface.h"
 
 // Contains all the resources from the resources.xml file in our
 // properties directory. See that file for more information.

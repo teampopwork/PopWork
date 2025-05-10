@@ -1,0 +1,30 @@
+target_sources(${PROJECT_NAME} PRIVATE
+	Color.cpp
+	Color.h
+	Font.cpp
+	Font.h
+	Graphics.cpp
+	Graphics.h
+	Image.cpp
+	Image.h
+	ImageFont.cpp
+	ImageFont.h
+	MemoryImage.cpp
+	MemoryImage.h
+	NativeDisplay.cpp
+	NativeDisplay.h
+	Quantize.cpp
+	Quantize.h
+	SDLImage.cpp
+	SDLImage.h
+	SDLInterface.cpp
+	SDLInterface.h
+	SharedImage.cpp
+	SharedImage.h
+	SysFont.cpp
+	SysFont.h
+	SWTri/SWTri.cpp
+	SWTri/SWTri.h
+
+	HeaderFont/LiberationSansRegular.h
+)

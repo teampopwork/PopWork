@@ -1,8 +1,8 @@
 #ifndef __DEMO_WIDGET_H__
 #define __DEMO_WIDGET_H__
 
-#include "SexyAppFramework/Widget.h"
-#include "SexyAppFramework/ButtonListener.h"
+#include "SexyAppFramework/Widget/Widget.h"
+#include "SexyAppFramework/Widget/ButtonListener.h"
 
 namespace Sexy
 {

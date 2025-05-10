@@ -5,9 +5,9 @@
 #include "../Res.h"
 #include "Board.h"
 #include "SexyAppFramework/SexyAppBase.h"
-#include "SexyAppFramework/Graphics.h"
-#include "SexyAppFramework/Font.h"
-#include "SexyAppFramework/Image.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
+#include "SexyAppFramework/Graphics/Font.h"
+#include "SexyAppFramework/Graphics/Image.h"
 
 using namespace Sexy;
 

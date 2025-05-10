@@ -8,15 +8,15 @@
 
 // Now that we're on our 4th demo, the reason for including the headers
 // below should be apparent. If you forgot, review demos 1-3.
-#include "SexyAppFramework/Font.h"
-#include "SexyAppFramework/Graphics.h"
-#include "SexyAppFramework/Image.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/Rect.h"
+#include "SexyAppFramework/Graphics/Font.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
+#include "SexyAppFramework/Graphics/Image.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Math/Rect.h"
 
 // A new class: the HyperlinkWidget. It acts and resembles a standard
 // WWW hyperlink.
-#include "SexyAppFramework/HyperlinkWidget.h"
+#include "SexyAppFramework/Widget/HyperlinkWidget.h"
 
 using namespace Sexy;
 

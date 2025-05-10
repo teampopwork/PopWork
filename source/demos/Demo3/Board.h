@@ -28,11 +28,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 // This file must be included so that we can derive our Board class from it
-#include "SexyAppFramework/Widget.h"
+#include "SexyAppFramework/Widget/Widget.h"
 
 // You'll learn about responding to button events in this demo. 
 // Any class that wants to respond to them must derive from ButtonListener.
-#include "SexyAppFramework/ButtonListener.h"
+#include "SexyAppFramework/Widget/ButtonListener.h"
 
 // We place all our classes inside the "Sexy" namespace to avoid name collisions
 // with other libraries that might be added.

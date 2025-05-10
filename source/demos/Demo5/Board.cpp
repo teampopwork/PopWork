@@ -6,13 +6,13 @@
 #include "../Res.h"
 
 // You should remember these files from the previous demos
-#include "SexyAppFramework/Graphics.h"
-#include "SexyAppFramework/Color.h"
-#include "SexyAppFramework/Rect.h"
-#include "SexyAppFramework/ButtonWidget.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/ImageFont.h"
-#include "SexyAppFramework/Image.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
+#include "SexyAppFramework/Graphics/Color.h"
+#include "SexyAppFramework/Math/Rect.h"
+#include "SexyAppFramework/Widget/ButtonWidget.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Graphics/ImageFont.h"
+#include "SexyAppFramework/Graphics/Image.h"
 
 // Our example dialog box
 #include "DemoDialog.h"
@@ -20,7 +20,7 @@
 // And for our performance profiling example, we first have to define SEXY_PERF_ENABLED
 // before including PerfTimer.h:
 #define SEXY_PERF_ENABLED
-#include "SexyAppFramework/PerfTimer.h"
+#include "SexyAppFramework/Debug/PerfTimer.h"
 
 // Lastly, for our example of how to catch memory leaks, we first
 // enable leak detection with a #define in EACH of the files we want
@@ -30,7 +30,7 @@
 // Memory leaks will automatically be dumped to "mem_leaks.txt" when
 // the app is closed. 
 #define SEXY_MEMTRACE
-#include "SexyAppFramework/memmgr.h"
+#include "SexyAppFramework/Debug/memmgr.h"
 
 // The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace Sexy" to avoid

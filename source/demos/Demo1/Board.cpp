@@ -1,11 +1,11 @@
 #include "Board.h"
-#include "SexyAppFramework/Graphics.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
 
 // See the Draw method for more information on using the Color class.
-#include "SexyAppFramework/Color.h"
+#include "SexyAppFramework/Graphics/Color.h"
 
 // A generic X, Y point template. See Draw() below for usage info.
-#include "SexyAppFramework/Point.h"
+#include "SexyAppFramework/Math/Point.h"
 
 // The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace Sexy" to avoid

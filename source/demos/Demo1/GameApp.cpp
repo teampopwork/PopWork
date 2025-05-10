@@ -1,6 +1,6 @@
 #include "GameApp.h"
 #include "Board.h"
-#include "SexyAppFramework/WidgetManager.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
 #include "SexyAppFramework/Common.h"
 
 // The SexyAppFramework resides in the "Sexy" namespace. As a convenience,

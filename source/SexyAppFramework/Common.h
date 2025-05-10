@@ -47,7 +47,7 @@ typedef SexyString::value_type					SexyChar;
 #define HAS_SEXYCHAR
 
 #endif
-#include "ModVal.h"
+#include "ReadWrite/ModVal.h"
 
 #ifdef _USE_WIDE_STRING
 

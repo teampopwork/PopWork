@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.18)
 
 project(SexyAppFramework)
 
+set(PROJECT_NAME SexyAppFramework)
+
 set(SRC_MAIN
 	# Sources
 	../ImageLib/ImageLib.cpp
@@ -289,43 +291,18 @@ set(SRC_MAIN
 	LiberationSansRegular.h
 )
 
+#add_compile_definitions(SexyAppFramework _LIB)
+add_library(SexyAppFramework STATIC)
 
-add_compile_definitions(SexyAppFramework _LIB)
-add_library(SexyAppFramework STATIC ${SRC_MAIN})
-
-include(FetchContent)
-
-FetchContent_Declare(
-        SDL3
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL
-        # This will be a tag once SDL3 is released
-        GIT_TAG origin/main
-    )
-FetchContent_MakeAvailable(SDL3)
-
-FetchContent_Declare(
-        SDL_TTF
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
-        # This will be a tag once SDL3 is released
-        GIT_TAG origin/main
-    )
-FetchContent_MakeAvailable(SDL_TTF)
-
-FetchContent_Declare(
-    openAL
-    GIT_REPOSITORY https://github.com/kcat/openal-soft
-    GIT_TAG        master
-)
-
-FetchContent_MakeAvailable(openAL)
-
-FetchContent_Declare(
-    miniAudio
-    GIT_REPOSITORY https://github.com/mackron/miniaudio
-    GIT_TAG        master
-)
-
-FetchContent_MakeAvailable(miniAudio)
+add_subdirectory(Graphics)
+add_subdirectory(Audio)
+add_subdirectory(Math)
+add_subdirectory(Misc)
+add_subdirectory(ReadWrite)
+add_subdirectory(Resources)
+add_subdirectory(Widget)
+add_subdirectory(ImageLib)
+add_subdirectory(PakLib)
 
 set(SexyAppLibs
 	SDL3::SDL3
@@ -334,7 +311,10 @@ set(SexyAppLibs
 	miniaudio
 	winmm
 	ws2_32
+	png
+	jpeg
+	zlib
 	${BASS_LIB_PATH}/bass.lib
 )
 
-target_link_libraries(SexyAppFramework ${SexyAppLibs} )
+target_link_libraries(SexyAppFramework ${SexyAppLibs})

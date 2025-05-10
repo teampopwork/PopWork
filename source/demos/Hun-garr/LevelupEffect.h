@@ -10,7 +10,7 @@
 #define __LEVELUP_EFFECT_H__
 
 #include "SexyAppFramework/Common.h"
-#include "SexyAppFramework/Rect.h"
+#include "SexyAppFramework/Math/Rect.h"
 
 namespace Sexy
 {

@@ -1,7 +1,7 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "SexyAppFramework/Widget.h"
+#include "SexyAppFramework/Widget/Widget.h"
 
 namespace Sexy
 {

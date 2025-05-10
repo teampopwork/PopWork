@@ -2,10 +2,10 @@
 #include "TitleScreen.h"
 #include "Board.h"
 #include "OptionsDialog.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/ResourceManager.h"
-#include "SexyAppFramework/BassMusicInterface.h"
-#include "SexyAppFramework/Dialog.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Resources/ResourceManager.h"
+#include "SexyAppFramework/Audio/BassMusicInterface.h"
+#include "SexyAppFramework/Widget/Dialog.h"
 #include "../Res.h"
 
 using namespace Sexy;

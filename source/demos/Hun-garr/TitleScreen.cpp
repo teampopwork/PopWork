@@ -1,12 +1,12 @@
 #include "TitleScreen.h"
 #include "GameApp.h"
 #include "../Res.h"
-#include "SexyAppFramework/Font.h"
-#include "SexyAppFramework/Graphics.h"
-#include "SexyAppFramework/Image.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/Rect.h"
-#include "SexyAppFramework/HyperlinkWidget.h"
+#include "SexyAppFramework/Graphics/Font.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
+#include "SexyAppFramework/Graphics/Image.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Math/Rect.h"
+#include "SexyAppFramework/Widget/HyperlinkWidget.h"
 
 using namespace Sexy;
 

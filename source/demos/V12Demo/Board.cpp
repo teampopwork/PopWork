@@ -2,14 +2,14 @@
 #include "DemoWidget.h"
 #include "../Res.h"
 #include "V12DemoApp.h"
-#include "SexyAppFramework\Font.h"
-#include "SexyAppFramework\Graphics.h"
-#include "SexyAppFramework\ButtonWidget.h"
-#include "SexyAppFramework\WidgetManager.h"
-#include "SexyAppFramework\Dialog.h"
-#include "SexyAppFramework\Flags.h"
-#include "SexyAppFramework\SexyMatrix.h"
-#include "SexyAppFramework\trivertex.h"
+#include "SexyAppFramework/Graphics/Font.h"
+#include "SexyAppFramework/Graphics/Graphics.h"
+#include "SexyAppFramework/Widget/ButtonWidget.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Widget/Dialog.h"
+#include "SexyAppFramework/Misc/Flags.h"
+#include "SexyAppFramework/Math/SexyMatrix.h"
+#include "SexyAppFramework/Math/trivertex.h"
 
 using namespace Sexy;
 

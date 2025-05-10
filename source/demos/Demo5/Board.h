@@ -27,14 +27,14 @@
 //	classes where and when to draw to.
 //////////////////////////////////////////////////////////////////////////
 
-#include "SexyAppFramework/Widget.h"
-#include "SexyAppFramework/ButtonListener.h"
+#include "SexyAppFramework/Widget/Widget.h"
+#include "SexyAppFramework/Widget/ButtonListener.h"
 
 // Because we're going to be learning about some new widgets, we
 // need to include some more listener classes so we can respond to each one.
-#include "SexyAppFramework/EditListener.h"
-#include "SexyAppFramework/CheckboxListener.h"
-#include "SexyAppFramework/ListListener.h"
+#include "SexyAppFramework/Widget/EditListener.h"
+#include "SexyAppFramework/Widget/CheckboxListener.h"
+#include "SexyAppFramework/Widget/ListListener.h"
 
 
 

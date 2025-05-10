@@ -1,7 +1,7 @@
 #include "DemoWidget.h"
 #include "../Res.h"
-#include "SexyAppFramework/WidgetManager.h"
-#include "SexyAppFramework/ButtonWidget.h"
+#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "SexyAppFramework/Widget/ButtonWidget.h"
 #include "V12DemoApp.h"
 
 using namespace Sexy;

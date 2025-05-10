@@ -3,40 +3,40 @@
 //#define SEXY_MEMTRACE
 
 #include "SexyAppBase.h"
-#include "WidgetManager.h"
-#include "Widget.h"
-#include "Debug.h"
-#include "KeyCodes.h"
-#include "SDLInterface.h"
-#include "SDLImage.h"
-#include "MemoryImage.h"
+#include "Widget/WidgetManager.h"
+#include "Widget/Widget.h"
+#include "Debug/Debug.h"
+#include "Misc/KeyCodes.h"
+#include "Graphics/SDLInterface.h"
+#include "Graphics/SDLImage.h"
+#include "Graphics/MemoryImage.h"
 //#include "HTTPTransfer.h"
-#include "Dialog.h"
-#include "..\ImageLib\ImageLib.h"
-#include "OpenALSoundManager.h"
-#include "OpenALSoundInstance.h"
-#include "Rect.h"
-#include "PropertiesParser.h"
-#include "PerfTimer.h"
-#include "MTRand.h"
-#include "ModVal.h"
+#include "Widget/Dialog.h"
+#include "ImageLib\ImageLib.h"
+#include "Audio/OpenALSoundManager.h"
+#include "Audio/OpenALSoundInstance.h"
+#include "Math/Rect.h"
+#include "Resources/PropertiesParser.h"
+#include "Debug/PerfTimer.h"
+#include "Math/MTRand.h"
+#include "ReadWrite/ModVal.h"
 #include <process.h>
 #include <direct.h>
 #include <fstream>
 #include <time.h>
 #include <math.h>
 #include <regstr.h>
-#include "SysFont.h"
-#include "ResourceManager.h"
-#include "BassMusicInterface.h"
-#include "bass.h"
-#include "AutoCrit.h"
-#include "Debug.h"
-#include "../PakLib/PakInterface.h"
+#include "Graphics/SysFont.h"
+#include "Resources/ResourceManager.h"
+#include "Audio/BassMusicInterface.h"
+#include "Audio/bass.h"
+#include "Misc/AutoCrit.h"
+#include "Debug/Debug.h"
+#include "PakLib/PakInterface.h"
 #include <string>
 #include <shlobj.h>
 
-#include "memmgr.h"
+#include "Debug/memmgr.h"
 
 using namespace Sexy;
 
