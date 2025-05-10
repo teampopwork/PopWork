@@ -304,6 +304,54 @@ add_subdirectory(Widget)
 add_subdirectory(ImageLib)
 add_subdirectory(PakLib)
 
+
+if (IS_64BIT)
+    message (STATUS "Getting the x64 BASS path")
+	set(BASS_LIB_PATH ${CMAKE_SOURCE_DIR}/lib/Bass/x64)
+else ()
+    message (STATUS "Getting the x86 BASS path")
+	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/lib/Bass/x86)
+endif()
+
+set(OPENAL_DLL_PATH "${CMAKE_BINARY_DIR}/_deps/openal-build/OpenAL32.dll")
+
+set(SDL3_DLL_PATH "${CMAKE_BINARY_DIR}/_deps/sdl3-build/SDL3.dll")
+
+include(FetchContent)
+
+FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL
+        # This will be a tag once SDL3 is released
+        GIT_TAG origin/main
+    )
+FetchContent_MakeAvailable(SDL3)
+
+FetchContent_Declare(
+        SDL_TTF
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
+        # This will be a tag once SDL3 is released
+        GIT_TAG origin/main
+    )
+FetchContent_MakeAvailable(SDL_TTF)
+
+FetchContent_Declare(
+    openAL
+    GIT_REPOSITORY https://github.com/kcat/openal-soft
+    GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(openAL)
+
+FetchContent_Declare(
+    miniAudio
+    GIT_REPOSITORY https://github.com/mackron/miniaudio
+    GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(miniAudio)
+
+
 set(SexyAppLibs
 	SDL3::SDL3
 	SDL3_ttf::SDL3_ttf
@@ -317,4 +365,4 @@ set(SexyAppLibs
 	${BASS_LIB_PATH}/bass.lib
 )
 
-target_link_libraries(SexyAppFramework ${SexyAppLibs})
+target_link_libraries(SexyAppFramework PUBLIC ${SexyAppLibs})

@@ -10,54 +10,24 @@ set(SDL_SHARED ON)
 
 #setup libaries:
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message (STATUS "Getting the x64 BASS path")
-	set(BASS_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/Bass/x64)
+    message (STATUS "Using x64")
+	set(IS_64BIT true)
 else ()
-    message (STATUS "Getting the x86 BASS path")
-	set(BASS_LIB_PATH  ${CMAKE_CURRENT_SOURCE_DIR}/lib/Bass/x86)
+    message (STATUS "Using x86")
+	set(IS_64BIT false)
 endif()
 
-set(OPENAL_DLL_PATH "${CMAKE_BINARY_DIR}/_deps/openal-build/OpenAL32.dll")
+option(WideStrings "Wide Strings" ON)
+if (${WideStrings})
+	add_compile_definitions(_USE_WIDE_STRING)
+endif()
 
+add_subdirectory(SexyAppFramework)
 
-set(SDL3_DLL_PATH "${CMAKE_BINARY_DIR}/_deps/sdl3-build/SDL3.dll")
+option(BuildDemos "Build Demos" ON)
 
-find_package (zlib REQUIRED)
-find_package (jpeg REQUIRED)
-find_package (png REQUIRED)
+option(CONSOLE "Show console on Windows" ON)
 
-include(FetchContent)
-
-FetchContent_Declare(
-        SDL3
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL
-        # This will be a tag once SDL3 is released
-        GIT_TAG origin/main
-    )
-FetchContent_MakeAvailable(SDL3)
-
-FetchContent_Declare(
-        SDL_TTF
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
-        # This will be a tag once SDL3 is released
-        GIT_TAG origin/main
-    )
-FetchContent_MakeAvailable(SDL_TTF)
-
-FetchContent_Declare(
-    openAL
-    GIT_REPOSITORY https://github.com/kcat/openal-soft
-    GIT_TAG        master
-)
-
-FetchContent_MakeAvailable(openAL)
-
-FetchContent_Declare(
-    miniAudio
-    GIT_REPOSITORY https://github.com/mackron/miniaudio
-    GIT_TAG        master
-)
-
-FetchContent_MakeAvailable(miniAudio)
-
-add_subdirectory(source)
+if (${BuildDemos})
+	add_subdirectory(demos_src)
+endif()
