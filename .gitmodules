@@ -1,9 +1,12 @@
-[submodule "lib/zlib"]
-	path = lib/zlib
+[submodule "zlib"]
+	path = source/SexyAppFramework/ImageLib/zlib
 	url = https://github.com/madler/zlib.git
-[submodule "lib/libpng"]
-	path = lib/libpng
+[submodule "ogg"]
+	path = source/SexyAppFramework/SexyAppFramework/Audio/ogg
+	url = https://github.com/xiph/vorbis.git
+[submodule "png"]
+	path = source/SexyAppFramework/ImageLib/png
 	url = https://github.com/pnggroup/libpng.git
-[submodule "jpeg-cmake"]
-	path = jpeg-cmake
+[submodule "jpeg"]
+	path = source/SexyAppFramework/ImageLib/jpeg
 	url = https://github.com/csparker247/jpeg-cmake
