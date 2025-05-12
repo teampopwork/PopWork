@@ -77,6 +77,7 @@ public:
 	//	using some sort of overlay widget as well.
 	//////////////////////////////////////////////////////////////////////////	
 	void		DrawOverlay(Graphics* g);
+	virtual void KeyChar(SexyChar theChar);
 	
 
 	void		SetFocusLost(bool f) {mLostFocus = f; mDeferPriority = 2;}

@@ -567,7 +567,7 @@ class Board :	public Widget, public ButtonListener
 		//	Purpose: Called by the WidgetManager if a key is pressed and the Board
 		//	has focus. Used to see if space was pressed, to toggle pause state.
 		//////////////////////////////////////////////////////////////////////////		
-		virtual void KeyChar(char theChar);
+		virtual void KeyChar(SexyChar theChar);
 
 		//////////////////////////////////////////////////////////////////////////
 		//	Function: Draw

@@ -12,6 +12,7 @@ public:
 	int						mWidth;
 	int						mHeight;
 	unsigned long*			mBits;
+	int						mNumChannels;
 
 public:
 	Image();
@@ -22,10 +23,8 @@ public:
 	unsigned long*			GetBits();
 };
 
-bool WriteJPEGImage(const std::string& theFileName, Image* theImage);
-bool WritePNGImage(const std::string& theFileName, Image* theImage);
-bool WriteTGAImage(const std::string& theFileName, Image* theImage);
-bool WriteBMPImage(const std::string& theFileName, Image* theImage);
+bool WriteImage(const std::string& theFileName, const std::string& theExtension, Image* theImage);
+bool WriteImageRaw(const std::string& theFileName, const std::string& theExtension, unsigned char* theData, int theWidth, int theHeight);
 extern int gAlphaComposeColor;
 extern bool gAutoLoadAlpha;
 

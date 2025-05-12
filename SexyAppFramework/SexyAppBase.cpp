@@ -711,12 +711,12 @@ void SexyAppBase::SetCursorImage(int theCursorNum, Image* theImage)
 }
 
 
-void WriteScreenShotThread(void* theArg)
+int WriteScreenShotThread(void* theArg)
 {
 	//////////////////////////////////////////////////////////////////////////
 	// Validate the passed parameter
-	SDLImage* theImage = (SDLImage*)theArg;
-	if (theImage == NULL) return;
+	SDL_Surface* theSurface = (SDL_Surface*)theArg;
+	if (theSurface == NULL) return 1;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Get free image name
@@ -732,145 +732,38 @@ void WriteScreenShotThread(void* theArg)
 	//////////////////////////////////////////////////////////////////////////
 	// Write image
 	ImageLib::Image aSaveImage;
-	aSaveImage.mBits = theImage->mBits;
-	aSaveImage.mWidth = theImage->mWidth;
-	aSaveImage.mHeight = theImage->mHeight;
-	ImageLib::WritePNGImage(anImageName, &aSaveImage);
+	aSaveImage.mBits = (ulong*)theSurface->pixels;
+	aSaveImage.mWidth = theSurface->w;
+	aSaveImage.mHeight = theSurface->h;
+	ImageLib::WriteImage(anImageName, ".png", & aSaveImage);
 	aSaveImage.mBits = NULL;
 
 	//////////////////////////////////////////////////////////////////////////
 	// delete the image in this thread
-	delete theImage;
+	SDL_DestroySurface(theSurface);
+
+	return 0;
 }
 
-//Saved images ended up being corrupted/incorrect. TODO:FIX
 void SexyAppBase::TakeScreenshot()
 {
-	if (SDL_GetRendererName(mSDLInterface->mRenderer) == "software") //Cheaper alternative for software renderer
-	{
-		SDL_Surface* sshot = SDL_GetWindowSurface(mSDLInterface->mWindow);
-		SDL_SaveBMP(sshot, "TEST.bmp");
-	}
-	else
-	{
-		SDL_Surface* sshot = SDL_RenderReadPixels(mSDLInterface->mRenderer, NULL);
-		if (sshot)
-		{
-			SDL_SaveBMP(sshot, "TEST.png");
-			SDL_DestroySurface(sshot);
-		}
-		else
-		{
-			SDL_Log("Failed to read pixels: %s", SDL_GetError());
-		}
-	}
-
-	/*
-	if (mDDInterface==NULL || mDDInterface->mDrawSurface==NULL)
-		return;
-
-	// Get free image name
-	std::string anImageDir = GetAppDataFolder() + "_screenshots";
-	MkDir(anImageDir);
-	anImageDir += "/";
-
-	WIN32_FIND_DATAA aData;
-	int aMaxId = 0;
-	std::string anImagePrefix = "image";
-	HANDLE aHandle = FindFirstFileA((anImageDir + "*.png").c_str(), &aData);
-	if (aHandle!=INVALID_HANDLE_VALUE)
-	{
-		do {
-			int aNum = 0;
-			if (sscanf(aData.cFileName,(anImagePrefix + "%d.png").c_str(), &aNum)==1)
-			{
-				if (aNum>aMaxId)
-					aMaxId = aNum;
-			}
-
-		} 
-		while(FindNextFileA(aHandle,&aData));
-		FindClose(aHandle);
-	}
-	std::string anImageName = anImageDir + anImagePrefix + StrFormat("%d.png",aMaxId+1);
-
-	// Capture screen
-	LPDIRECTDRAWSURFACE aSurface = mDDInterface->mDrawSurface;
-	
-	// Temporarily set the mDrawSurface to NULL so SDLImage::Check3D 
-	// returns false so we can lock the surface.
-	mDDInterface->mDrawSurface = NULL; 
-	
-	SDLImage anImage(mDDInterface);
-	anImage.SetSurface(aSurface);
-	anImage.GetBits();
-	anImage.DeleteDDSurface();
-	mDDInterface->mDrawSurface = aSurface; 
-
-	if (anImage.mBits==NULL)
-		return;
-		
-	// Write image
-	ImageLib::Image aSaveImage;
-	aSaveImage.mBits = anImage.mBits;
-	aSaveImage.mWidth = anImage.mWidth;
-	aSaveImage.mHeight = anImage.mHeight;
-	ImageLib::WritePNGImage(anImageName, &aSaveImage);
-	aSaveImage.mBits = NULL;
-		
-
-/*
-	keybd_event(VK_MENU,0,0,0);
-    keybd_event(VK_SNAPSHOT,0,0,0);
-    keybd_event(VK_MENU,0,KEYEVENTF_KEYUP,0);
-	if (OpenClipboard(mHWnd))
-	{
-		HBITMAP aBitmap = (HBITMAP)GetClipboardData(CF_BITMAP);
-		if (aBitmap!=NULL)
-		{
-			BITMAP anObject;
-			ZeroMemory(&anObject,sizeof(anObject));
-			GetObject(aBitmap,sizeof(anObject),&anObject);
-
-			BITMAPINFO anInfo;
-			ZeroMemory(&anInfo,sizeof(anInfo));
-			BITMAPINFOHEADER &aHeader = anInfo.bmiHeader;
-			aHeader.biBitCount = 32;
-			aHeader.biPlanes = 1;
-			aHeader.biHeight = -abs(anObject.bmHeight);
-			aHeader.biWidth = abs(anObject.bmWidth);
-			aHeader.biSize = sizeof(aHeader);
-			aHeader.biSizeImage = aHeader.biHeight*aHeader.biWidth*4;
-			ImageLib::Image aSaveImage;
-			aSaveImage.mBits = new DWORD[abs(anObject.bmWidth*anObject.bmHeight)];
-			aSaveImage.mWidth = abs(anObject.bmWidth);
-			aSaveImage.mHeight = abs(anObject.bmHeight);
-
-			HDC aDC = GetDC(NULL);
-			if (GetDIBits(aDC,aBitmap,0,aSaveImage.mHeight,aSaveImage.mBits,&anInfo,DIB_RGB_COLORS))
-				ImageLib::WritePNGImage(anImageName, &aSaveImage);
-
-			ReleaseDC(NULL,aDC);
-		}
-		CloseClipboard();
-	}
-	*/
-	//ClearUpdateBacklog();
+	//TODO: Reimplement screenshots
 }
 
 void SexyAppBase::DumpProgramInfo()
 {
-	/*
+	
 	Deltree(GetAppDataFolder() + "_dump");
 
 	for (;;)
 	{
 		if (mkdir((GetAppDataFolder() + "_dump").c_str()))
 			break;
-		Sleep(100);
+		SDL_Delay(100);
 	}
 
-	std::fstream aDumpStream((GetAppDataFolder() + "_dump\\imagelist.html").c_str(), std::ios::out);
+
+	std::fstream aDumpStream("_dump\\imagelist.html", std::ios::out);
 
 	time_t aTime;
 	time(&aTime);
@@ -913,7 +806,7 @@ void SexyAppBase::DumpProgramInfo()
 		int aMemorySize = 0;
 		if (aMemoryImage->mBits != NULL)
 			aBitsMemory = aNumPixels * 4;
-		if ((aSDLImage != NULL) && (aSDLImage->mSurface != NULL))
+		if ((aSDLImage != NULL) && (aSDLImage->mD3DData != NULL))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
 		if (aMemoryImage->mColorTable != NULL)
 			aPalletizedMemory = aNumPixels + 256*4;
@@ -929,7 +822,7 @@ void SexyAppBase::DumpProgramInfo()
 		if (aMemoryImage->mRLAdditiveData != NULL)
 			aRLAdditiveMemory = aNumPixels;
 		if (aMemoryImage->mD3DData != NULL)
-			aTextureMemory += ((TextureData*)aMemoryImage->mD3DData)->mTexMemSize;
+			aTextureMemory += ((SDLTextureData*)aMemoryImage->mD3DData)->GetMemSize();
 
 		aMemorySize = aBitsMemory + aSurfaceMemory + aPalletizedMemory + aNativeAlphaMemory + aRLAlphaMemory + aRLAdditiveMemory + aTextureMemory;
 		aTotalMemory += aMemorySize;
@@ -957,14 +850,14 @@ void SexyAppBase::DumpProgramInfo()
 		MemoryImage* aMemoryImage = aSortedItr->second;				
 
 		char anImageName[256];
-		sprintf(anImageName, "img%04d.png", anImgNum);
+		sprintf(anImageName, "img%04d", anImgNum);
 
 		char aThumbName[256];
-		sprintf(aThumbName, "thumb%04d.jpg", anImgNum);
+		sprintf(aThumbName, "thumb%04d", anImgNum);
 		
 		aDumpStream << "<TR>" << std::endl;
 
-		aDumpStream << "<TD><A HREF=" << anImageName << "><IMG SRC=" << aThumbName << " WIDTH=" << aThumbWidth << " HEIGHT=" << aThumbHeight << "></A></TD>" << std::endl;
+		aDumpStream << "<TD><A HREF=" << anImageName << ".png><IMG SRC=" << aThumbName << ".jpeg WIDTH=" << aThumbWidth << " HEIGHT=" << aThumbHeight << "></A></TD>" << std::endl;
 		
 		int aNumPixels = aMemoryImage->mWidth*aMemoryImage->mHeight;
 
@@ -983,7 +876,7 @@ void SexyAppBase::DumpProgramInfo()
 		
 		if (aMemoryImage->mBits != NULL)
 			aBitsMemory = aNumPixels * 4;
-		if ((aSDLImage != NULL) && (aSDLImage->mSurface != NULL))
+		if ((aSDLImage != NULL) && (aSDLImage->mD3DData != NULL))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
 		if (aMemoryImage->mColorTable != NULL)
 			aPalletizedMemory = aNumPixels + 256*4;
@@ -1000,15 +893,9 @@ void SexyAppBase::DumpProgramInfo()
 			aRLAdditiveMemory = aNumPixels;		
 		if (aMemoryImage->mD3DData != NULL)
 		{
-			aTextureMemory += ((TextureData*)aMemoryImage->mD3DData)->mTexMemSize;
+			aTextureMemory += ((SDLTextureData*)aMemoryImage->mD3DData)->GetMemSize();
 
-			switch (((TextureData*)aMemoryImage->mD3DData)->mPixelFormat)
-			{				
-			case PixelFormat_A8R8G8B8: aTextureFormatName = "A8R8G8B8"; break;
-			case PixelFormat_A4R4G4B4: aTextureFormatName = "A4R4G4B4"; break;
-			case PixelFormat_R5G6B5: aTextureFormatName = "R5G6B5"; break;
-			case PixelFormat_Palette8: aTextureFormatName = "Palette8"; break;
-			}			
+			aTextureFormatName = "ARGB8888"; //They are always like this
 		}
 
 		aTotalMemorySize		+= aMemorySize;
@@ -1059,7 +946,7 @@ void SexyAppBase::DumpProgramInfo()
 				*(aThumbBitsPtr++) = aBits[aSrcX + (aSrcY*aCopiedImage.mWidth)];
 			}
 
-		ImageLib::WriteJPEGImage((GetAppDataFolder() + std::string("_dump\\") + aThumbName).c_str(), &anImageLibImage);
+		ImageLib::WriteImage((GetAppDataFolder() + std::string("_dump/") + aThumbName).c_str(), ".jpeg", &anImageLibImage);
 
 		// Write high resolution image
 
@@ -1068,7 +955,7 @@ void SexyAppBase::DumpProgramInfo()
 		anFullImage.mWidth = aCopiedImage.GetWidth();
 		anFullImage.mHeight = aCopiedImage.GetHeight();
 
-		ImageLib::WritePNGImage((GetAppDataFolder() + std::string("_dump\\") + anImageName).c_str(), &anFullImage);
+		ImageLib::WriteImage((GetAppDataFolder() + std::string("_dump/") + anImageName).c_str(), ".png", &anFullImage);
 
 		anFullImage.mBits = NULL;
 
@@ -1093,7 +980,6 @@ void SexyAppBase::DumpProgramInfo()
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 
 	aDumpStream << "</TABLE></CENTER></BODY></HTML>" << std::endl;
-	*/
 }
 
 double SexyAppBase::GetLoadingThreadProgress()
@@ -1564,6 +1450,7 @@ bool SexyAppBase::DoUpdateFrames()
 
 	if ((mLoadingThreadCompleted) && (!mLoaded))
 	{
+		SDL_SetCurrentThreadPriority(SDL_THREAD_PRIORITY_NORMAL);
 		mLoaded = true;
 		mYieldMainThread = false;
 		LoadingThreadCompleted();
@@ -1678,7 +1565,7 @@ void SexyAppBase::Redraw(Rect* theClipRect)
 
 ///////////////////////////// FPS Stuff
 
-#include "LiberationSansRegular.h"
+#include "Graphics/HeaderFont/LiberationSansRegular.h"
 
 static PerfTimer gFPSTimer;
 static int gFrameCount;
@@ -2463,9 +2350,9 @@ bool SexyAppBase::ProcessDeferredMessages(bool singleMessage)
 					break;
 
 				if (isDown)
-					mWidgetManager->KeyDown((KeyCode)key);
+					mWidgetManager->KeyDown(GetKeyCodeFromSDLKeycode(key));
 				else
-					mWidgetManager->KeyUp((KeyCode)key);
+					mWidgetManager->KeyUp(GetKeyCodeFromSDLKeycode(key));
 			}
 				break;
 			case SDL_EVENT_TEXT_INPUT:
@@ -2607,6 +2494,7 @@ void SexyAppBase::StartLoadingThread()
 	if (!mLoadingThreadStarted)
 	{
 		mYieldMainThread = true; 
+		SDL_SetCurrentThreadPriority(SDL_THREAD_PRIORITY_HIGH);
 		mLoadingThreadStarted = true;
 		SDL_Thread* aThread = SDL_CreateThread(LoadingThreadProcStub, "LoadingThread", (void*)this);
 		SDL_DetachThread(aThread);
@@ -2614,6 +2502,50 @@ void SexyAppBase::StartLoadingThread()
 }
 void SexyAppBase::CursorThreadProc()
 {
+	SDL_SetCurrentThreadPriority(SDL_THREAD_PRIORITY_HIGH);
+	SDL_Point aLastCursorPos = { 0, 0 };
+	int aLastDrawCount = 0;
+
+	while (!mShutdown)
+	{
+
+		SDL_Point aCursorPos;
+
+		float x, y;
+
+		SDL_GetMouseState(&x, &y);
+
+		aCursorPos.x = (int)x;
+		aCursorPos.y = (int)y;
+
+		if (aLastDrawCount != mDrawCount)
+		{
+			// We did a draw so we may have committed a pending mNextCursorX/Y 
+			aLastCursorPos.x = mSDLInterface->mCursorX;
+			aLastCursorPos.y = mSDLInterface->mCursorY;
+		}
+
+		if ((aCursorPos.x != aLastCursorPos.x) ||
+			(aCursorPos.y != aLastCursorPos.y))
+		{
+			Uint32 aTimeNow = SDL_GetTicks();
+			if (aTimeNow - mNextDrawTick > mSDLInterface->mMillisecondsPerFrame + 5)
+			{
+				// Do the special drawing if we are rendering at less than full framerate				
+				mSDLInterface->SetCursorPos(aCursorPos.x, aCursorPos.y);
+				aLastCursorPos = aCursorPos;
+			}
+			else
+			{
+				// Set them up to get assigned in the next screen redraw
+				mSDLInterface->mNextCursorX = aCursorPos.x;
+				mSDLInterface->mNextCursorY = aCursorPos.y;
+			}
+		}
+
+		SDL_Delay(10);
+	}
+
 	mCursorThreadRunning = false;
 }
 
@@ -2629,6 +2561,7 @@ void SexyAppBase::StartCursorThread()
 	if (!mCursorThreadRunning)
 	{
 		mCursorThreadRunning = true;
+		SDL_SetCurrentThreadPriority(SDL_THREAD_PRIORITY_HIGH);
 		SDL_Thread* aThread = SDL_CreateThread(CursorThreadProcStub, "CursorThread", (void*)this);
 		SDL_DetachThread(aThread);
 	}

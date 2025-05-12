@@ -51,6 +51,8 @@ namespace Sexy
 		void CreateTextures(MemoryImage* theImage);
 		void CheckCreateTextures(MemoryImage* theImage);
 
+		int GetMemSize();
+
 	};
 
 	class SDLInterface : public NativeDisplay
@@ -75,6 +77,7 @@ namespace Sexy
 		int mHeight;
 		int mDisplayWidth;
 		int mDisplayHeight;
+		int mVideoOnlyDraw;
 
 		bool mIs3D;
 		bool mHasInitiated;

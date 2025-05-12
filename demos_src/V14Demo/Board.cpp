@@ -10,6 +10,8 @@
 #include "SexyAppFramework/Widget/WidgetManager.h"
 #include "SexyAppFramework/Widget/Dialog.h"
 #include "SexyAppFramework/Misc/Flags.h"
+#include "SexyAppFramework/ImageLib/ImageLib.h"
+#include "SexyAppFramework/Graphics/MemoryImage.h"
 #include "SexyAppFramework/Math/SexyMatrix.h"
 #include "SexyAppFramework/Math/trivertex.h"
 #include "SexyAppFramework/Audio/SoundManager.h"
@@ -185,6 +187,11 @@ void Board::DrawOverlay(Graphics* g)
 
 	g->SetColorizeImages(true);
 	g->SetColor(Color(0, 255, 255));
+}
+
+void Board::KeyChar(SexyChar theChar)
+{
+
 }
 
 void Board::ButtonDepress(int id)

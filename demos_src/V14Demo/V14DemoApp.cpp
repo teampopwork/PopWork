@@ -90,6 +90,7 @@ void V14DemoApp::InitHook()
 	mBoard = new Board(this);
 	mBoard->Resize(0, 0, mWidth, mHeight);
 	mWidgetManager->AddWidget(mBoard);
+	mWidgetManager->SetFocus(mBoard);
 }
 
 void V14DemoApp::LostFocus()

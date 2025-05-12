@@ -1,8 +1,8 @@
-#include "Common.h"
+#include "../Common.h"
 #include "Debug.h"
 
-#include "AutoCrit.h"
-#include "CritSect.h"
+#include "../Misc/AutoCrit.h"
+#include "../Misc/CritSect.h"
 
 #include <time.h>
 #include <stdarg.h>

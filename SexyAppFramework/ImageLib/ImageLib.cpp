@@ -10,11 +10,14 @@
 #include "ImageLib.h"
 #include "../PakLib/PakInterface.h"
 
-#include "../jpeg\libjpeg\jpeglib.h"
-#include "../jpeg\libjpeg\jerror.h"
-#include "../png\png.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+#define STBI_MSC_SECURE_CRT
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
 
 #include <cmath>
+#include <vector>
 
 using namespace ImageLib;
 
@@ -22,6 +25,7 @@ Image::Image()
 {
 	mWidth = 0;
 	mHeight = 0;
+	mNumChannels = 4; //Default to have R, G, B and A channels.
 	mBits = NULL;
 }
 
@@ -48,166 +52,43 @@ unsigned long* Image::GetBits()
 //////////////////////////////////////////////////////////////////////////
 // PNG Pak Support
 
-static void png_pak_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+Image* GetImageSTB(const std::string& theFileName)
 {
-	png_size_t check;
-
-	/* fread() returns 0 on error, so it is OK to store this in a png_size_t
-	* instead of an int, which is what fread() actually returns.
-	*/
-	png_voidp io_ptr = png_get_io_ptr(png_ptr);
-	check = (png_size_t)p_fread(data, 1, length, (PFILE*)io_ptr);
-
-	if (check != length)
-	{
-		png_error(png_ptr, "Read Error");
-	}
-}
-
-Image* GetPNGImage(const std::string& theFileName)
-{
-	png_structp png_ptr;
-	png_infop info_ptr;
-	unsigned int sig_read = 0;
-	png_uint_32 width, height;
-	int bit_depth, color_type, interlace_type;
 	PFILE* fp;
 
 	if ((fp = p_fopen(theFileName.c_str(), "rb")) == NULL)
 		return NULL;
 
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
-		NULL, NULL, NULL);
-	png_set_read_fn(png_ptr, (png_voidp)fp, png_pak_read_data);
-
-	if (png_ptr == NULL)
-	{
-		p_fclose(fp);
-		return NULL;
-	}
-
-	/* Allocate/initialize the memory for image information.  REQUIRED. */
-	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL)
-	{
-		p_fclose(fp);
-		png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-		return NULL;
-	}
-
-	/* Set error handling if you are using the setjmp/longjmp method (this is
-	 * the normal method of doing things with libpng).  REQUIRED unless you
-	 * set up your own error handlers in the png_create_read_struct() earlier.
-	 */
-	if (setjmp(png_jmpbuf(png_ptr)))
-	{
-		/* Free all of the memory associated with the png_ptr and info_ptr */
-		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-		p_fclose(fp);
-		/* If we get here, we had a problem reading the file */
-		return NULL;
-	}
-
-	//png_init_io(png_ptr, fp);
-
-	//png_ptr->io_ptr = (png_voidp)fp;
-
-	png_read_info(png_ptr, info_ptr);
-	png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type,
-		&interlace_type, NULL, NULL);
-
-	/* Add filler (or alpha) byte (before/after each RGB triplet) */
-	png_set_expand(png_ptr);
-	png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
-	//png_set_gray_1_2_4_to_8(png_ptr);
-	png_set_palette_to_rgb(png_ptr);
-	png_set_gray_to_rgb(png_ptr);
-	png_set_bgr(png_ptr);
-
-	//	int aNumBytes = png_get_rowbytes(png_ptr, info_ptr) * height / 4;
-	unsigned long* aBits = new unsigned long[width * height];
-	unsigned long* anAddr = aBits;
-	for (int i = 0; i < height; i++)
-	{
-		png_read_rows(png_ptr, (png_bytepp)&anAddr, NULL, 1);
-		anAddr += width;
-	}
-
-	/* read rest of file, and get additional chunks in info_ptr - REQUIRED */
-	png_read_end(png_ptr, info_ptr);
-
-	/* clean up after the read, and free any memory allocated - REQUIRED */
-	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-
-	/* close the file */
+	p_fseek(fp, 0, SEEK_END);
+	size_t fileSize = p_ftell(fp);
+	p_fseek(fp, 0, SEEK_SET);
+	std::vector<uint8_t> data(fileSize);
+	p_fread(data.data(), 1, fileSize, fp);
 	p_fclose(fp);
+
+	int width, height, num_channels;
+	unsigned char* stb_image = stbi_load_from_memory(data.data(), fileSize, &width, &height, &num_channels, NULL);
+
+	unsigned long* aBits = new unsigned long[width * height];
+	for (int i = 0; i < width * height; ++i)
+	{
+		unsigned char* pixel = &stb_image[i * num_channels];
+
+		unsigned char r = pixel[0];
+		unsigned char g = pixel[1];
+		unsigned char b = pixel[2];
+		unsigned char a = (num_channels == 4) ? pixel[3] : 0xFF;
+
+		aBits[i] = (a << 24) | (r << 16) | (g << 8) | b;
+	}
 
 	Image* anImage = new Image();
 	anImage->mWidth = width;
 	anImage->mHeight = height;
 	anImage->mBits = aBits;
+	anImage->mNumChannels = num_channels;
 
-	return anImage;
-}
-
-Image* GetTGAImage(const std::string& theFileName)
-{
-	PFILE* aTGAFile = p_fopen(theFileName.c_str(), "rb");
-	if (aTGAFile == NULL)
-		return NULL;
-
-	BYTE aHeaderIDLen;
-	p_fread(&aHeaderIDLen, sizeof(BYTE), 1, aTGAFile);
-
-	BYTE aColorMapType;
-	p_fread(&aColorMapType, sizeof(BYTE), 1, aTGAFile);
-
-	BYTE anImageType;
-	p_fread(&anImageType, sizeof(BYTE), 1, aTGAFile);
-
-	WORD aFirstEntryIdx;
-	p_fread(&aFirstEntryIdx, sizeof(WORD), 1, aTGAFile);
-
-	WORD aColorMapLen;
-	p_fread(&aColorMapLen, sizeof(WORD), 1, aTGAFile);
-
-	BYTE aColorMapEntrySize;
-	p_fread(&aColorMapEntrySize, sizeof(BYTE), 1, aTGAFile);
-
-	WORD anXOrigin;
-	p_fread(&anXOrigin, sizeof(WORD), 1, aTGAFile);
-
-	WORD aYOrigin;
-	p_fread(&aYOrigin, sizeof(WORD), 1, aTGAFile);
-
-	WORD anImageWidth;
-	p_fread(&anImageWidth, sizeof(WORD), 1, aTGAFile);
-
-	WORD anImageHeight;
-	p_fread(&anImageHeight, sizeof(WORD), 1, aTGAFile);
-
-	BYTE aBitCount = 32;
-	p_fread(&aBitCount, sizeof(BYTE), 1, aTGAFile);
-
-	BYTE anImageDescriptor = 8 | (1 << 5);
-	p_fread(&anImageDescriptor, sizeof(BYTE), 1, aTGAFile);
-
-	if ((aBitCount != 32) ||
-		(anImageDescriptor != (8 | (1 << 5))))
-	{
-		p_fclose(aTGAFile);
-		return NULL;
-	}
-
-	Image* anImage = new Image();
-
-	anImage->mWidth = anImageWidth;
-	anImage->mHeight = anImageHeight;
-	anImage->mBits = new unsigned long[anImageWidth * anImageHeight];
-
-	p_fread(anImage->mBits, 4, anImage->mWidth * anImage->mHeight, aTGAFile);
-
-	p_fclose(aTGAFile);
+	delete stb_image;
 
 	return anImage;
 }
@@ -769,442 +650,68 @@ Image* GetGIFImage(const std::string& theFileName)
 	return NULL;
 }
 
-typedef struct my_error_mgr* my_error_ptr;
-
-struct my_error_mgr
+bool ImageLib::WriteImage(const std::string& theFileName, const std::string& theExtension, Image* theImage)
 {
-	struct jpeg_error_mgr pub;	/* "public" fields */
+	uint8_t* data = new unsigned char[theImage->mWidth * theImage->mHeight * theImage->mNumChannels];
 
-	jmp_buf setjmp_buffer;	/* for return to caller */
-};
-
-METHODDEF(void)
-my_error_exit(j_common_ptr cinfo)
-{
-	/* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
-	my_error_ptr myerr = (my_error_ptr)cinfo->err;
-
-	/* Always display the message. */
-	/* We could postpone this until after returning, if we chose. */
-	(*cinfo->err->output_message) (cinfo);
-
-	/* Return control to the setjmp point */
-	longjmp(myerr->setjmp_buffer, 1);
-
-}
-
-bool ImageLib::WriteJPEGImage(const std::string& theFileName, Image* theImage)
-{
-	FILE* fp;
-
-	if ((fp = fopen(theFileName.c_str(), "wb")) == NULL)
-		return false;
-
-	struct jpeg_compress_struct cinfo;
-	struct my_error_mgr jerr;
-
-	cinfo.err = jpeg_std_error(&jerr.pub);
-	jerr.pub.error_exit = my_error_exit;
-
-	if (setjmp(jerr.setjmp_buffer))
+	int index = 0;
+	for (int j = theImage->mHeight - 1; j >= 0; --j)
 	{
-		/* If we get here, the JPEG code has signaled an error.
-		 * We need to clean up the JPEG object, close the input file, and return.
-		 */
-		jpeg_destroy_compress(&cinfo);
-		fclose(fp);
-		return false;
-	}
-
-	jpeg_create_compress(&cinfo);
-
-	cinfo.image_width = theImage->mWidth;
-	cinfo.image_height = theImage->mHeight;
-	cinfo.input_components = 3;
-	cinfo.in_color_space = JCS_RGB;
-	cinfo.optimize_coding = 1;
-	jpeg_set_defaults(&cinfo);
-	jpeg_set_quality(&cinfo, 80, TRUE);
-
-	jpeg_stdio_dest(&cinfo, fp);
-
-	jpeg_start_compress(&cinfo, true);
-
-	int row_stride = theImage->GetWidth() * 3;
-
-	unsigned char* aTempBuffer = new unsigned char[row_stride];
-
-	unsigned long* aSrcPtr = theImage->mBits;
-
-	for (int aRow = 0; aRow < theImage->mHeight; aRow++)
-	{
-		unsigned char* aDest = aTempBuffer;
-
-		for (int aCol = 0; aCol < theImage->mWidth; aCol++)
+		for (int i = 0; i < theImage->mWidth; ++i)
 		{
-			unsigned long src = *(aSrcPtr++);
-
-			*aDest++ = (src >> 16) & 0xFF;
-			*aDest++ = (src >> 8) & 0xFF;
-			*aDest++ = (src) & 0xFF;
-		}
-
-		jpeg_write_scanlines(&cinfo, &aTempBuffer, 1);
-	}
-
-	delete[] aTempBuffer;
-
-	jpeg_finish_compress(&cinfo);
-	jpeg_destroy_compress(&cinfo);
-
-	fclose(fp);
-
-	return true;
-}
-
-bool ImageLib::WritePNGImage(const std::string& theFileName, Image* theImage)
-{
-	png_structp png_ptr;
-	png_infop info_ptr;
-
-	FILE* fp;
-
-	if ((fp = fopen(theFileName.c_str(), "wb")) == NULL)
-		return false;
-
-	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
-		NULL, NULL, NULL);
-
-	if (png_ptr == NULL)
-	{
-		fclose(fp);
-		return false;
-	}
-
-	// Allocate/initialize the memory for image information.  REQUIRED.
-	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL)
-	{
-		fclose(fp);
-		png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
-		return false;
-	}
-
-	// Set error handling if you are using the setjmp/longjmp method (this is
-	// the normal method of doing things with libpng).  REQUIRED unless you
-	// set up your own error handlers in the png_create_write_struct() earlier.
-
-	if (setjmp(png_jmpbuf(png_ptr)))
-	{
-		// Free all of the memory associated with the png_ptr and info_ptr
-		png_destroy_write_struct(&png_ptr, &info_ptr);
-		fclose(fp);
-		// If we get here, we had a problem writeing the file
-		return NULL;
-	}
-
-	png_init_io(png_ptr, fp);
-
-	png_color_8 sig_bit;
-	sig_bit.red = 8;
-	sig_bit.green = 8;
-	sig_bit.blue = 8;
-	/* if the image has an alpha channel then */
-	sig_bit.alpha = 8;
-	png_set_sBIT(png_ptr, info_ptr, &sig_bit);
-	png_set_bgr(png_ptr);
-
-	png_set_IHDR(png_ptr, info_ptr, theImage->mWidth, theImage->mHeight, 8, PNG_COLOR_TYPE_RGB_ALPHA,
-		PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-
-	// Add filler (or alpha) byte (before/after each RGB triplet)
-	//png_set_expand(png_ptr);
-	//png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER);
-	//png_set_gray_1_2_4_to_8(png_ptr);
-	//png_set_palette_to_rgb(png_ptr);
-	//png_set_gray_to_rgb(png_ptr);
-
-	png_write_info(png_ptr, info_ptr);
-
-	for (int i = 0; i < theImage->mHeight; i++)
-	{
-		png_bytep aRowPtr = (png_bytep)(theImage->mBits + i * theImage->mWidth);
-		png_write_rows(png_ptr, &aRowPtr, 1);
-	}
-
-	// write rest of file, and get additional chunks in info_ptr - REQUIRED
-	png_write_end(png_ptr, info_ptr);
-
-	// clean up after the write, and free any memory allocated - REQUIRED
-	png_destroy_write_struct(&png_ptr, &info_ptr);
-
-	// close the file
-	fclose(fp);
-
-	return true;
-}
-
-bool ImageLib::WriteTGAImage(const std::string& theFileName, Image* theImage)
-{
-	FILE* aTGAFile = fopen(theFileName.c_str(), "wb");
-	if (aTGAFile == NULL)
-		return false;
-
-	BYTE aHeaderIDLen = 0;
-	fwrite(&aHeaderIDLen, sizeof(BYTE), 1, aTGAFile);
-
-	BYTE aColorMapType = 0;
-	fwrite(&aColorMapType, sizeof(BYTE), 1, aTGAFile);
-
-	BYTE anImageType = 2;
-	fwrite(&anImageType, sizeof(BYTE), 1, aTGAFile);
-
-	WORD aFirstEntryIdx = 0;
-	fwrite(&aFirstEntryIdx, sizeof(WORD), 1, aTGAFile);
-
-	WORD aColorMapLen = 0;
-	fwrite(&aColorMapLen, sizeof(WORD), 1, aTGAFile);
-
-	BYTE aColorMapEntrySize = 0;
-	fwrite(&aColorMapEntrySize, sizeof(BYTE), 1, aTGAFile);
-
-	WORD anXOrigin = 0;
-	fwrite(&anXOrigin, sizeof(WORD), 1, aTGAFile);
-
-	WORD aYOrigin = 0;
-	fwrite(&aYOrigin, sizeof(WORD), 1, aTGAFile);
-
-	WORD anImageWidth = theImage->mWidth;
-	fwrite(&anImageWidth, sizeof(WORD), 1, aTGAFile);
-
-	WORD anImageHeight = theImage->mHeight;
-	fwrite(&anImageHeight, sizeof(WORD), 1, aTGAFile);
-
-	BYTE aBitCount = 32;
-	fwrite(&aBitCount, sizeof(BYTE), 1, aTGAFile);
-
-	BYTE anImageDescriptor = 8 | (1 << 5);
-	fwrite(&anImageDescriptor, sizeof(BYTE), 1, aTGAFile);
-
-	fwrite(theImage->mBits, 4, theImage->mWidth * theImage->mHeight, aTGAFile);
-
-	fclose(aTGAFile);
-
-	return true;
-}
-
-bool ImageLib::WriteBMPImage(const std::string& theFileName, Image* theImage)
-{
-	FILE* aFile = fopen(theFileName.c_str(), "wb");
-	if (aFile == NULL)
-		return false;
-
-	BITMAPFILEHEADER aFileHeader;
-	BITMAPINFOHEADER aHeader;
-
-	memset(&aFileHeader, 0, sizeof(aFileHeader));
-	memset(&aHeader, 0, sizeof(aHeader));
-
-	int aNumBytes = theImage->mWidth * theImage->mHeight * 4;
-
-	aFileHeader.bfType = ('M' << 8) | 'B';
-	aFileHeader.bfSize = sizeof(BITMAPINFOHEADER);//sizeof(aFileHeader) + sizeof(aHeader) + aNumBytes;
-	aFileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER); //sizeof(aHeader);  
-
-	aHeader.biSize = sizeof(aHeader);
-	aHeader.biWidth = theImage->mWidth;
-	aHeader.biHeight = theImage->mHeight;
-	aHeader.biPlanes = 1;
-	aHeader.biBitCount = 32;
-	aHeader.biCompression = BI_RGB;
-
-	fwrite(&aFileHeader, sizeof(aFileHeader), 1, aFile);
-	fwrite(&aHeader, sizeof(aHeader), 1, aFile);
-	DWORD* aRow = theImage->mBits + (theImage->mHeight - 1) * theImage->mWidth;
-	int aRowSize = theImage->mWidth * 4;
-	for (int i = 0; i < theImage->mHeight; i++, aRow -= theImage->mWidth)
-		fwrite(aRow, 4, theImage->mWidth, aFile);
-
-	fclose(aFile);
-	return true;
-}
-
-////////////////////////////////////////////////////////////////////////// 
-// JPEG Pak Reader
-
-typedef struct {
-	struct jpeg_source_mgr pub;	/* public fields */
-
-	PFILE* infile;		/* source stream */
-	JOCTET* buffer;		/* start of buffer */
-	boolean start_of_file;	/* have we gotten any data yet? */
-} pak_source_mgr;
-
-typedef pak_source_mgr* pak_src_ptr;
-
-#define INPUT_BUF_SIZE 4096
-
-METHODDEF(void) init_source(j_decompress_ptr cinfo)
-{
-	pak_src_ptr src = (pak_src_ptr)cinfo->src;
-	src->start_of_file = TRUE;
-}
-
-METHODDEF(boolean) fill_input_buffer(j_decompress_ptr cinfo)
-{
-	pak_src_ptr src = (pak_src_ptr)cinfo->src;
-	size_t nbytes;
-
-	nbytes = p_fread(src->buffer, 1, INPUT_BUF_SIZE, src->infile);
-	//((size_t) fread((void *) (buf), (size_t) 1, (size_t) (sizeofbuf), (file)))
-
-	if (nbytes <= 0) {
-		if (src->start_of_file)	/* Treat empty input file as fatal error */
-			ERREXIT(cinfo, JERR_INPUT_EMPTY);
-		WARNMS(cinfo, JWRN_JPEG_EOF);
-		/* Insert a fake EOI marker */
-		src->buffer[0] = (JOCTET)0xFF;
-		src->buffer[1] = (JOCTET)JPEG_EOI;
-		nbytes = 2;
-	}
-
-	src->pub.next_input_byte = src->buffer;
-	src->pub.bytes_in_buffer = nbytes;
-	src->start_of_file = FALSE;
-
-	return TRUE;
-}
-
-METHODDEF(void) skip_input_data(j_decompress_ptr cinfo, long num_bytes)
-{
-	pak_src_ptr src = (pak_src_ptr)cinfo->src;
-
-	if (num_bytes > 0) {
-		while (num_bytes > (long)src->pub.bytes_in_buffer) {
-			num_bytes -= (long)src->pub.bytes_in_buffer;
-			(void)fill_input_buffer(cinfo);
-		}
-		src->pub.next_input_byte += (size_t)num_bytes;
-		src->pub.bytes_in_buffer -= (size_t)num_bytes;
-	}
-}
-
-METHODDEF(void) term_source(j_decompress_ptr cinfo)
-{
-	/* no work necessary here */
-}
-
-void jpeg_pak_src(j_decompress_ptr cinfo, PFILE* infile)
-{
-	pak_src_ptr src;
-
-	/* The source object and input buffer are made permanent so that a series
-	* of JPEG images can be read from the same file by calling jpeg_stdio_src
-	* only before the first one.  (If we discarded the buffer at the end of
-	* one image, we'd likely lose the start of the next one.)
-	* This makes it unsafe to use this manager and a different source
-	* manager serially with the same JPEG object.  Caveat programmer.
-	*/
-	if (cinfo->src == NULL) {	/* first time for this JPEG object? */
-		cinfo->src = (struct jpeg_source_mgr*)
-			(*cinfo->mem->alloc_small) ((j_common_ptr)cinfo, JPOOL_PERMANENT,
-				sizeof(pak_source_mgr));
-		src = (pak_src_ptr)cinfo->src;
-		src->buffer = (JOCTET*)
-			(*cinfo->mem->alloc_small) ((j_common_ptr)cinfo, JPOOL_PERMANENT,
-				INPUT_BUF_SIZE * sizeof(JOCTET));
-	}
-
-	src = (pak_src_ptr)cinfo->src;
-	src->pub.init_source = init_source;
-	src->pub.fill_input_buffer = fill_input_buffer;
-	src->pub.skip_input_data = skip_input_data;
-	src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
-	src->pub.term_source = term_source;
-	src->infile = infile;
-	src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
-	src->pub.next_input_byte = NULL; /* until buffer loaded */
-}
-
-
-Image* GetJPEGImage(const std::string& theFileName)
-{
-	PFILE* fp;
-
-	if ((fp = p_fopen(theFileName.c_str(), "rb")) == NULL)
-		return NULL;
-
-	struct jpeg_decompress_struct cinfo;
-	struct my_error_mgr jerr;
-
-	cinfo.err = jpeg_std_error(&jerr.pub);
-	jerr.pub.error_exit = my_error_exit;
-
-	if (setjmp(jerr.setjmp_buffer))
-	{
-		/* If we get here, the JPEG code has signaled an error.
-		 * We need to clean up the JPEG object, close the input file, and return.
-		 */
-		jpeg_destroy_decompress(&cinfo);
-		p_fclose(fp);
-		return 0;
-	}
-
-	jpeg_create_decompress(&cinfo);
-	jpeg_pak_src(&cinfo, fp);
-	jpeg_read_header(&cinfo, TRUE);
-	jpeg_start_decompress(&cinfo);
-	int row_stride = cinfo.output_width * cinfo.output_components;
-
-	unsigned char** buffer = (*cinfo.mem->alloc_sarray)
-		((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
-
-	unsigned long* aBits = new unsigned long[cinfo.output_width * cinfo.output_height];
-	unsigned long* q = aBits;
-
-	if (cinfo.output_components == 1)
-	{
-		while (cinfo.output_scanline < cinfo.output_height)
-		{
-			jpeg_read_scanlines(&cinfo, buffer, 1);
-
-			unsigned char* p = *buffer;
-			for (int i = 0; i < cinfo.output_width; i++)
-			{
-				int r = *p++;
-				*q++ = 0xFF000000 | (r << 16) | (r << 8) | (r);
-			}
+			float r = (float)i / (float)theImage->mWidth;
+			float g = (float)j / (float)theImage->mHeight;
+			float b = 0.2f;
+			int ir = int(255.99 * r);
+			int ig = int(255.99 * g);
+			int ib = int(255.99 * b);
+
+			data[index++] = ir;
+			data[index++] = ig;
+			data[index++] = ib;
 		}
 	}
+
+	if (stricmp(theExtension.c_str(), ".jpg") == 0)
+		stbi_write_jpg((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight, 3, data, 100);
+	else if (stricmp(theExtension.c_str(), ".jpeg") == 0)
+		stbi_write_jpg((theFileName + ".jpeg").c_str(), theImage->mWidth, theImage->mHeight, 3, data, 100);
+	else if (stricmp(theExtension.c_str(), ".png") == 0)
+		stbi_write_png((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight, theImage->mNumChannels, data, theImage->mWidth * theImage->mNumChannels);
+	else if (stricmp(theExtension.c_str(), ".bmp") == 0)
+		stbi_write_bmp((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight, theImage->mNumChannels, data);
+	else if (stricmp(theExtension.c_str(), ".tga") == 0)
+		stbi_write_tga((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight, theImage->mNumChannels, data);
 	else
 	{
-		while (cinfo.output_scanline < cinfo.output_height)
-		{
-			jpeg_read_scanlines(&cinfo, buffer, 1);
-
-			unsigned char* p = *buffer;
-			for (int i = 0; i < cinfo.output_width; i++)
-			{
-				int r = *p++;
-				int g = *p++;
-				int b = *p++;
-
-				*q++ = 0xFF000000 | (r << 16) | (g << 8) | (b);
-			}
-		}
+		delete[] data;
+		return false;
 	}
 
-	Image* anImage = new Image();
-	anImage->mWidth = cinfo.output_width;
-	anImage->mHeight = cinfo.output_height;
-	anImage->mBits = aBits;
+	delete[] data;
 
-	jpeg_finish_decompress(&cinfo);
-	jpeg_destroy_decompress(&cinfo);
+	return true;
+}
 
-	p_fclose(fp);
+bool ImageLib::WriteImageRaw(const std::string& theFileName, const std::string& theExtension, unsigned char* theData, int theWidth, int theHeight)
+{
 
-	return anImage;
+	if (stricmp(theExtension.c_str(), ".jpg") == 0)
+		stbi_write_jpg((theFileName + theExtension).c_str(), theWidth, theHeight, 4, theData, 100);
+	else if (stricmp(theExtension.c_str(), ".jpeg") == 0)
+		stbi_write_jpg((theFileName + ".jpeg").c_str(), theWidth, theHeight, 4, theData, 100);
+	else if (stricmp(theExtension.c_str(), ".png") == 0)
+		stbi_write_png((theFileName + theExtension).c_str(), theWidth, theHeight, 4, theData, theWidth * 4);
+	else if (stricmp(theExtension.c_str(), ".bmp") == 0)
+		stbi_write_bmp((theFileName + theExtension).c_str(), theWidth, theHeight, 4, theData);
+	else if (stricmp(theExtension.c_str(), ".tga") == 0)
+		stbi_write_tga((theFileName + theExtension).c_str(), theWidth, theHeight, 4, theData);
+	else
+	{
+		return false;
+	}
+
+	return true;
 }
 
 int ImageLib::gAlphaComposeColor = 0xFFFFFF;
@@ -1232,13 +739,13 @@ Image* ImageLib::GetImage(const std::string& theFilename, bool lookForAlphaImage
 	Image* anImage = NULL;
 
 	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".tga") == 0) || (anExt.length() == 0)))
-		anImage = GetTGAImage(aFilename + ".tga");
+		anImage = GetImageSTB(aFilename + ".tga");
 
 	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".jpg") == 0) || (anExt.length() == 0)))
-		anImage = GetJPEGImage(aFilename + ".jpg");
+		anImage = GetImageSTB(aFilename + ".jpg");
 
 	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".png") == 0) || (anExt.length() == 0)))
-		anImage = GetPNGImage(aFilename + ".png");
+		anImage = GetImageSTB(aFilename + ".png");
 
 	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".gif") == 0) || (anExt.length() == 0)))
 		anImage = GetGIFImage(aFilename + ".gif");

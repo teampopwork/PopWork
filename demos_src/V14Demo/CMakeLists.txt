@@ -37,16 +37,3 @@ set_target_properties(V14Demo
     RUNTIME_OUTPUT_NAME_MINSIZEREL "V14Demo_MinSizeRel"
     RUNTIME_OUTPUT_NAME_RELWITHDEBINFO "V14Demo_RelWithDebugInfo"
 )
-
-add_custom_command(TARGET V14Demo POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${BASS_LIB_PATH}/bass.dll"
-        "${CMAKE_SOURCE_DIR}/demos"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${OPENAL_DLL_PATH}"
-        "${CMAKE_SOURCE_DIR}/demos"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${SDL3_DLL_PATH}"
-        "${CMAKE_SOURCE_DIR}/demos"
-    COMMAND ${CMAKE_COMMAND} -E echo "Copied the DLLs into build folder."
-)

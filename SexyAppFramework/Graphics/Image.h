@@ -54,6 +54,7 @@ public:
 	std::string				mFilePath;
 	int						mWidth;
 	int						mHeight;
+	int						mNumChannels;
 
 	// for image strips
 	int						mNumRows; 

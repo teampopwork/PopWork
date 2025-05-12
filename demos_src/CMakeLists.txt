@@ -9,3 +9,6 @@ add_subdirectory(Hun-garr)
 add_subdirectory(V12Demo)
 add_subdirectory(V14Demo)
 add_subdirectory(XMLDemo)
+
+
+copyDlls()

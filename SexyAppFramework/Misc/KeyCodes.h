@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Common.h"
+#include <SDL3/SDL.h>
 
 namespace Sexy
 {
@@ -101,6 +102,7 @@ typedef enum KeyCode
 };
 
 KeyCode	GetKeyCodeFromName(const std::string& theKeyName);
+KeyCode	GetKeyCodeFromSDLKeycode(const SDL_Keycode key);
 const std::string GetKeyNameFromCode(const KeyCode& theKeyCode);
 
 }

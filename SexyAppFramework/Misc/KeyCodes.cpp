@@ -21,8 +21,8 @@ KeyNameEntry aKeyCodeArray[] =
 	{"TAB", KEYCODE_TAB},
 	{"CLEAR", KEYCODE_CLEAR},
 	{"RETURN", KEYCODE_RETURN},
-	{"SHIFT", KEYCODE_SHIFT},
-	{"CONTROL", KEYCODE_CONTROL},
+	{"Left Shift", KEYCODE_SHIFT},
+	{"Left Ctrl", KEYCODE_CONTROL},
 	{"MENU", KEYCODE_MENU},
 	{"PAUSE", KEYCODE_PAUSE},
 	{"CAPITAL", KEYCODE_CAPITAL},
@@ -100,6 +100,11 @@ KeyNameEntry aKeyCodeArray[] =
 	{"NUMLOCK", KEYCODE_NUMLOCK},
 	{"SCROLL", KEYCODE_SCROLL}	
 };
+
+KeyCode	Sexy::GetKeyCodeFromSDLKeycode(const SDL_Keycode key)
+{
+	return GetKeyCodeFromName(SDL_GetKeyName(key));
+}
 
 KeyCode	Sexy::GetKeyCodeFromName(const std::string& theKeyName)
 {

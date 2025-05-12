@@ -28,6 +28,7 @@ SDLInterface::SDLInterface(SexyAppBase* theApp)
     mCursorX = 0;
     mCursorY = 0;
     mIs3D = false;
+	mVideoOnlyDraw = true;
     mMillisecondsPerFrame = 0;
     mNextCursorX = 0;
     mNextCursorY = 0;
@@ -168,7 +169,7 @@ bool SDLInterface::InitSDLRenderer()
 	if (!mRefreshRate) mRefreshRate = 60;
 	mMillisecondsPerFrame = 1000 / mRefreshRate;
 
-	SetVideoOnlyDraw(false);
+	SetVideoOnlyDraw(mVideoOnlyDraw);
 
 	UpdateViewport();
 
@@ -202,12 +203,12 @@ bool SDLInterface::Redraw(Rect* theClipRect)
 /// <param name="videoOnly"></param>
 void SDLInterface::SetVideoOnlyDraw(bool videoOnly)
 {
+	AutoCrit anAutoCrit(mCritSect);
+
+	mVideoOnlyDraw = videoOnly;
+
 	if (mScreenImage) delete mScreenImage;
 	mScreenImage = new SDLImage(this);	
-	CreateImageTexture(mScreenImage);
-	SDLTextureData* aData = (SDLTextureData*)mScreenImage->mD3DData;
-	aData->mTexture = mScreenTexture;
-	RecoverBits(mScreenImage);
 	mScreenImage->mWidth = mWidth;
 	mScreenImage->mHeight = mHeight;
 	mScreenImage->SetImageMode(false, false);
@@ -422,6 +423,15 @@ void SDLTextureData::CheckCreateTextures(MemoryImage* theImage)
 		return;
 	}
 	CreateTextures(theImage);
+}
+
+int SDLTextureData::GetMemSize()
+{
+	int aSize = 0;
+
+	aSize = (SDL_BYTESPERPIXEL(SDL_PIXELFORMAT_ARGB8888) / 8) * mWidth * mHeight;
+
+	return aSize;
 }
 
 /////////////////////////////////////////////////////////////////
