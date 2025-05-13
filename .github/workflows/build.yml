@@ -1,0 +1,80 @@
+name: Build SexyAppFramework
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Windows x64
+  build_win64:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+        with:
+            submodules: 'recursive'
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+        with:
+            cmakeVersion: "3.25.0"
+
+      - name: Configure CMake project
+        run: |
+            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A x64
+
+      - name: Build project
+        run: cmake --build build --config Release
+  # Windows x32
+  build_win32:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+        with:
+            submodules: 'recursive'
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+        with:
+            cmakeVersion: "3.25.0"
+
+      - name: Configure CMake project
+        run: |
+            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A Win32
+
+      - name: Build project
+        run: cmake --build build --config Release
+  # Linux
+  build-linux:
+    name: Build (Linux)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: 'recursive'
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: "3.25.0"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Configure project
+        run: |
+          cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build project
+        run: cmake --build build --config Release
