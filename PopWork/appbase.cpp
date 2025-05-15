@@ -1559,7 +1559,7 @@ void AppBase::Redraw(Rect* theClipRect)
 
 ///////////////////////////// FPS Stuff
 
-#include "Graphics/HeaderFont/LiberationSansRegular.h"
+#include "graphics/HeaderFont/LiberationSansRegular.h"
 
 static PerfTimer gFPSTimer;
 static int gFrameCount;

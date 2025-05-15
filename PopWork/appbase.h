@@ -4,15 +4,15 @@
 #pragma once
 #endif
 
-#include "Common.h"
-#include "Math/Rect.h"
-#include "Graphics/Color.h"
-#include "Widget/ButtonListener.h"
-#include "Widget/DialogListener.h"
-#include "Misc/Buffer.h"
-#include "Misc/CritSect.h"
-#include "Graphics/SharedImage.h"
-#include "Math/Ratio.h"
+#include "common.h"
+#include "math/rect.h"
+#include "graphics/color.h"
+#include "widget/buttonlistener.h"
+#include "widget/dialoglistener.h"
+#include "misc/buffer.h"
+#include "misc/critsect.h"
+#include "graphics/sharedimage.h"
+#include "math/ratio.h"
 #include <mutex>
 #include <SDL3/SDL.h>
 
