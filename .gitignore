@@ -1,4 +1,6 @@
 # .gitignore
+*.pdb
+*.ilk
 .vs/
 .vscode/
 .idea/
