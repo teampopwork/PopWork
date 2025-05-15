@@ -66,9 +66,9 @@ jobs:
           cmakeVersion: "3.25.0"
 
       - name: Install dependencies
-         run: |
-           sudo apt-get update
-           sudo apt-get install -y \
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y \
              build-essential \
              libx11-dev \
              libxcursor-dev \
