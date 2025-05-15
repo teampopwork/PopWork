@@ -1,9 +1,9 @@
 #include "Board.h"
 #include "XMLDemoApp.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
+#include "PopWork/graphics/graphics.h"
 #include "../Res.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 Board::Board(XMLDemoApp* theApp)
 {

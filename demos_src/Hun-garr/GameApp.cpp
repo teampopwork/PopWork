@@ -2,13 +2,13 @@
 #include "TitleScreen.h"
 #include "Board.h"
 #include "OptionsDialog.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Resources/ResourceManager.h"
-#include "SexyAppFramework/Audio/BassMusicInterface.h"
-#include "SexyAppFramework/Widget/Dialog.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/resources/resourcemanager.h"
+#include "PopWork/audio/bassmusicinterface.h"
+#include "PopWork/widget/dialog.h"
 #include "../Res.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -17,8 +17,8 @@ GameApp::GameApp()
 {
 	mProdName = "Hun-garr Needs Planets!";
 	mProductVersion = "1.0";
-	mTitle = StringToSexyStringFast("SexyAppFramework: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap\\SexyAppFramework\\Hungarr";
+	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mRegKey = "PopCap\\PopWork\\Hungarr";
 
 	mWidth = 640;
 	mHeight = 480;
@@ -69,7 +69,7 @@ GameApp::~GameApp()
 void GameApp::Init()
 {
 
-	SexyAppBase::Init();
+	AppBase::Init();
 
 	LoadResourceManifest();
 	if (!mResourceManager->LoadResources("Init"))
@@ -181,7 +181,7 @@ void GameApp::LoadingThreadProc()
 void GameApp::LoadingThreadCompleted()
 {
 	// Let the base app class also know that we have completed
-	SexyAppBase::LoadingThreadCompleted();
+	AppBase::LoadingThreadCompleted();
 
 	if (mLoadingFailed)
 		return;
@@ -215,7 +215,7 @@ Dialog* GameApp::NewDialog(int theDialogId, bool isModal, const std::string& the
 	// Rather than dupliate a lengthy explanation, check out the top of DemoDialog.cpp for a complete description
 	// of what all the parameters and functions are, in Demo5.
 	Dialog* d = new Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, theDialogId, isModal,
-		StringToSexyStringFast(theDialogHeader), StringToSexyStringFast(theDialogLines), StringToSexyStringFast(theDialogFooter), theButtonMode);
+		StringToPopWorkStringFast(theDialogHeader), StringToPopWorkStringFast(theDialogLines), StringToPopWorkStringFast(theDialogFooter), theButtonMode);
 
 	d->SetButtonFont(FONT_DEFAULT);
 	d->SetLinesFont(FONT_DEFAULT);
@@ -234,7 +234,7 @@ Dialog* GameApp::NewDialog(int theDialogId, bool isModal, const std::string& the
 //////////////////////////////////////////////////////////////////////////
 void GameApp::LostFocus()
 {
-	SexyAppBase::LostFocus();
+	AppBase::LostFocus();
 
 	// When losing focus, we should pause the game board
 	if (mBoard)
@@ -245,7 +245,7 @@ void GameApp::LostFocus()
 //////////////////////////////////////////////////////////////////////////
 void GameApp::GotFocus()
 {
-	SexyAppBase::GotFocus();
+	AppBase::GotFocus();
 
 	if (mBoard)
 		mBoard->Pause(false);
@@ -271,9 +271,9 @@ void GameApp::PlaySample(int theSoundNum)
 		if (mUpdateCount - mLastPlanetHitSoundTime > 30)
 		{
 			mLastPlanetHitSoundTime = mUpdateCount;
-			SexyAppBase::PlaySample(theSoundNum);
+			AppBase::PlaySample(theSoundNum);
 		}
 	}
 	else
-		SexyAppBase::PlaySample(theSoundNum);
+		AppBase::PlaySample(theSoundNum);
 }

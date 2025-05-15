@@ -6,21 +6,21 @@
 #include "../Res.h"
 
 // You should remember these files from the previous demos
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Graphics/Color.h"
-#include "SexyAppFramework/Math/Rect.h"
-#include "SexyAppFramework/Widget/ButtonWidget.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Graphics/ImageFont.h"
-#include "SexyAppFramework/Graphics/Image.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/graphics/color.h"
+#include "PopWork/math/rect.h"
+#include "PopWork/widget/buttonwidget.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/graphics/imagefont.h"
+#include "PopWork/graphics/image.h"
 
 // Our example dialog box
 #include "DemoDialog.h"
 
-// And for our performance profiling example, we first have to define SEXY_PERF_ENABLED
+// And for our performance profiling example, we first have to define POPWORK_PERF_ENABLED
 // before including PerfTimer.h:
-#define SEXY_PERF_ENABLED
-#include "SexyAppFramework/Debug/PerfTimer.h"
+#define POPWORK_PERF_ENABLED
+#include "PopWork/debug/perftimer.h"
 
 // Lastly, for our example of how to catch memory leaks, we first
 // enable leak detection with a #define in EACH of the files we want
@@ -29,13 +29,13 @@
 // OTHER FILE INCLUDES OR ELSE IT WILL CAUSE LINKER AND COMPILER ERRORS!
 // Memory leaks will automatically be dumped to "mem_leaks.txt" when
 // the app is closed. 
-#define SEXY_MEMTRACE
-#include "SexyAppFramework/Debug/memmgr.h"
+#define POPWORK_MEMTRACE
+#include "PopWork/Debug/memmgr.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ void Board::Update()
 	// statement below, passing in a string indicating WHAT you're
 	// profiling. The string can be anything. Enabled debug keys by
 	// pressing CTRL-ALT-D and then press F2 to enabled/disable profiling.
-	SEXY_PERF_BEGIN("Start_Of_Update");
+	POPWORK_PERF_BEGIN("Start_Of_Update");
 
 	Widget::Update();
 
@@ -111,9 +111,9 @@ void Board::Update()
 	MarkDirty();
 
 	// And you mark the end of a profiling section with
-	// SEXY_PER_END, passing in the same string you passed to
-	// SEXY_PERF_BEGIN.
-	SEXY_PERF_END("Start_Of_Update");
+	// POPWORK_PER_END, passing in the same string you passed to
+	// POPWORK_PERF_BEGIN.
+	POPWORK_PERF_END("Start_Of_Update");
 
 	
 }
@@ -166,7 +166,7 @@ void Board::Draw(Graphics* g)
 	// statement below, passing in a string indicating WHAT you're
 	// profiling. The string can be anything. Enabled debug keys by
 	// pressing CTRL-ALT-D and then press F2 to enabled/disable profiling.
-	SEXY_PERF_BEGIN("Start_Of_Draw");
+	POPWORK_PERF_BEGIN("Start_Of_Draw");
 
 	// Clear the screen to black
 	g->SetColor(Color(0, 0, 0));
@@ -203,7 +203,7 @@ void Board::Draw(Graphics* g)
 		// Remember how in previous demos we mentioned that it's common to use the
 		// smoother DrawImageF functions instead of DrawImage if the user has 3D
 		// acceleration enabled? Let's do that know. We can check if hardware acceleration
-		// is on or not with a call to SexyAppBase's Is3DAccelerated:
+		// is on or not with a call to AppBase's Is3DAccelerated:
 		if (mApp->Is3DAccelerated())
 		{
 			// Because we translated the graphics object, we can just draw our layers
@@ -232,9 +232,9 @@ void Board::Draw(Graphics* g)
 	}
 
 	// And you mark the end of a profiling section with
-	// SEXY_PER_END, passing in the same string you passed to
-	// SEXY_PERF_BEGIN.
-	SEXY_PERF_END("Start_Of_Draw");
+	// POPWORK_PER_END, passing in the same string you passed to
+	// POPWORK_PERF_BEGIN.
+	POPWORK_PERF_END("Start_Of_Draw");
 
 }
 

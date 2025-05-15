@@ -1,31 +1,31 @@
 #include "Board.h"
 #include "GameApp.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
+#include "PopWork/Graphics/Graphics.h"
 
 // See the Draw method for more information on using the Color class.
-#include "SexyAppFramework/Graphics/Color.h"
+#include "PopWork/graphics/color.h"
 
 // Why are we including ImageFont.h and not Font.h? Font.h is just a generic
 // base class. ImageFont creates fonts from an image that contains all the
 // text characters as well as a text file that indicates character widths
 // and kerning information, as well as some more advanced features not used
 // in this tutorial such as font layers, etc.
-#include "SexyAppFramework/Graphics/ImageFont.h"
+#include "PopWork/graphics/imagefont.h"
 
 // The Image.h file just declares basic functions. All images are either of 
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "SexyAppFramework/Graphics/SDLImage.h"
+#include "PopWork/graphics/sdlimage.h"
 
 // The Rectangle template, used to specify X, Y, Width, Height
-#include "SexyAppFramework/Math/Rect.h"
+#include "PopWork/math/rect.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -189,7 +189,7 @@ void Board::Draw(Graphics* g)
 	// can use a printf style function, StrFormat, which is defined in Common.h, to 
 	// format strings. You might want to look at Common.h for some...common...and handy functions.
 	g->SetColor(Color(0, 255, 255));
-	SexyString myString = StrFormat(_S("You got %d points!"), 147);
+	PopWorkString myString = StrFormat(_S("You got %d points!"), 147);
 	g->SetFont(mApp->mTextFont);
 	g->DrawString(myString, 10, 80);
 	g->SetColor(Color(0, 255, 0));

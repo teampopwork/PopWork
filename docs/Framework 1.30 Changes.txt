@@ -9,15 +9,15 @@ General
 * some wide string/localization related changes to strings/chars: Use the WideString.vcproj projects for widestring support
 * Added support to draw anti-aliased lines/polygons
 * Cached WAV files are "encrypted" (weakly) to prevent the easy copying of sound resources.
-* All demos were made to be widestring compatible and we added corresponding widestring projects. std::string has been replaced with SexyString, char with SexyChar, and a few std::string to SexyString conversion functions are now scattered about the demos, where needed.
+* All demos were made to be widestring compatible and we added corresponding widestring projects. std::string has been replaced with PopWorkString, char with PopWorkChar, and a few std::string to PopWorkString conversion functions are now scattered about the demos, where needed.
 * Irrelevant build configurations were removed from the projects
-* Fixed problem with project files where the framework wouldn't be built unless you manually built it. This caused the error with not finding sexyappframework.lib and preventing the demos from linking if you just did a rebuild all.
+* Fixed problem with project files where the framework wouldn't be built unless you manually built it. This caused the error with not finding popwork.lib and preventing the demos from linking if you just did a rebuild all.
 * Made all projects default to not use edit/continue in debug mode
 
 Vista Support
 =============
 * Added GetAppDataFolder() to get the top-level directory where you can save files to. On Vista, this returns the appropriate storage location. On non-Vista, this returns the empty string. 
-	* mFullCompanyName member of SexyAppBase is used to create this directory in the SexyAppBase::Init function.
+	* mFullCompanyName member of AppBase is used to create this directory in the AppBase::Init function.
 	* This directory looks like this: <Windows return location to ProgramData [defaults to c:\ProgramData]>\mFullCompanyName\mProdName\
 * Added CheckForVista() function that returns true if running on Vista. 
 * Added CheckFor98Mill() function that returns true if running on Win95, Win98, or WinME
@@ -81,7 +81,7 @@ Font/ImageFont
 * Make SysFonts return the correct Descent so that WriteWordWrapped works correctly.
 * Support drawing on MemoryImage objects with SysFont objects.
 
-SexyAppBase
+AppBase
 ===========
 * Added mPhysMinimized and defer alt-enter processing to ProcessDeferredMessages.
 * Added mEnableMaximizeButton option to enable/disable the maximize button.
@@ -90,7 +90,7 @@ SexyAppBase
 * Broke up the GameAlreadyRunning/NotifyGame message logic into virtual functions that can be overridden.  This is so apps can do other things if the game is already running. 
 * Add mFullCompanyName -- used for setting AppDataFolder
 * mChangeDirTo for -changedir command line parameter.
-* Add WM_QUERYOPEN hook which calls SexyAppBase::AppCanRestore.  If this method returns true, Windows will be allowed to restore the window. Otherwise, it will not.
+* Add WM_QUERYOPEN hook which calls AppBase::AppCanRestore.  If this method returns true, Windows will be allowed to restore the window. Otherwise, it will not.
 * Add mIsDisabled to track disabled state of main window.
 * Change RegistryRead to use helper function RegistryReadKey while passing in HKEY_CURRENT_USER as the key to read.
 
@@ -100,7 +100,7 @@ FlashWidget
 * fixed a crash caused by referencing invalid memory
 * Windows SDK v6.0 does not include comsuppw.lib by default with comdef.h.  Manually added it.
 
-SexyMatrix
+PopWorkMatrix
 ==========
 * Allow DrawImageTransform to have scalex = -1 for mirroring an image.
 
@@ -185,5 +185,5 @@ Common.h/.cpp
 =============
 * Fixed MkDir so it can handle backwards and forward slashes.
 * added functions: CheckForVista, GetAppDataFolder, SetAppDataFolder, AllowAllAccess. See "Vista" section for more Vista details.
-* Many helper functions introduced to support wide string, and the new framework string type: SexyString.
+* Many helper functions introduced to support wide string, and the new framework string type: PopWorkString.
 * Added macro _S() which can be used to encapsulate string or character constants.  This will ensure that strings are wide string if _USE_WIDE_STRING is defined, or narrow strings if it is undefined.

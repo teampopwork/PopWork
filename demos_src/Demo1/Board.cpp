@@ -1,16 +1,16 @@
 #include "Board.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
+#include "PopWork/graphics/graphics.h"
 
 // See the Draw method for more information on using the Color class.
-#include "SexyAppFramework/Graphics/Color.h"
+#include "PopWork/graphics/color.h"
 
 // A generic X, Y point template. See Draw() below for usage info.
-#include "SexyAppFramework/Math/Point.h"
+#include "PopWork/Math/Point.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

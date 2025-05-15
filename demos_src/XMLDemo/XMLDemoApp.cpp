@@ -1,18 +1,18 @@
 #include "XMLDemoApp.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Resources/ResourceManager.h"
-#include "SexyAppFramework/ReadWrite/XMLParser.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/resources/resourcemanager.h"
+#include "PopWork/readwrite/xmlparser.h"
 #include "Board.h"
 #include "../Res.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 XMLDemoApp::XMLDemoApp()
 {
 	mProdName = "XMLDemo";
 	mProductVersion = "1.0";
-	mTitle = StringToSexyStringFast("SexyAppFramework: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap\\SexyAppFramework\\XMLDemo";
+	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mRegKey = "PopCap\\PopWork\\XMLDemo";
 
 	mBoard = NULL;
 	mParser = NULL;

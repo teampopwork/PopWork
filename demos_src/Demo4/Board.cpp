@@ -6,33 +6,33 @@
 #include "../Res.h"
 
 // You should remember these files from the previous demos
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Graphics/Color.h"
-#include "SexyAppFramework/Math/Rect.h"
-#include "SexyAppFramework/Widget/ButtonWidget.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Graphics/ImageFont.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/graphics/color.h"
+#include "PopWork/math/rect.h"
+#include "PopWork/widget/buttonwidget.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/graphics/imagefont.h"
 
 // The following are needed for some new widgets we're going to learn about:
-#include "SexyAppFramework/Widget/EditWidget.h"
-#include "SexyAppFramework/Widget/Checkbox.h"
-#include "SexyAppFramework/Widget/ListWidget.h"
-#include "SexyAppFramework/Widget/ScrollbarWidget.h"
-#include "SexyAppFramework/Widget/ScrollListener.h"
+#include "PopWork/widget/editwidget.h"
+#include "PopWork/widget/checkbox.h"
+#include "PopWork/widget/listwidget.h"
+#include "PopWork/widget/scrollbarwidget.h"
+#include "PopWork/widget/scrolllistener.h"
 
 // As part of our pitch shifted sound example, we'll need to 
 // access the sound manager in our GameApp class as well as
 // individual sound instances:
-#include "SexyAppFramework/Audio/SoundManager.h"
-#include "SexyAppFramework/Audio/SoundInstance.h"
+#include "PopWork/audio/soundmanager.h"
+#include "PopWork/audio/soundinstance.h"
 
 // Used for file I/O:
-#include "SexyAppFramework/Misc/Buffer.h"
+#include "PopWork/misc/buffer.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -296,7 +296,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 		// file format.
 
 		while (!buffer.AtEnd())
-			mListWidget->AddLine(StringToSexyStringFast(buffer.ReadString()), true);
+			mListWidget->AddLine(StringToPopWorkStringFast(buffer.ReadString()), true);
 	}
 
 	// If you read Board::ListClicked, you'll see that we
@@ -308,7 +308,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 	// set by setting the mRegKey variable in GameApp's constructor.
 	// The functions return false if there was an error reading the
 	// key or the key doesn't exist:
-	mApp->RegistryReadString("ListItem", &SexyStringToStringFast(mText));
+	mApp->RegistryReadString("ListItem", &PopWorkStringToStringFast(mText));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -403,7 +403,7 @@ void Board::EditWidgetText(int theId, const std::string& theString)
 		if (StringToUpper(theString) == "CLEAR")
 			mListWidget->RemoveAll();
 		else
-			mListWidget->AddLine(StringToSexyStringFast(theString), true);
+			mListWidget->AddLine(StringToPopWorkStringFast(theString), true);
 
 		// Now clear the edit box
 		mEditWidget->SetText(_S(""));
@@ -419,7 +419,7 @@ void Board::EditWidgetText(int theId, const std::string& theString)
 		// And now all we do is say WriteString. There are other methods
 		// for writing other data types too:
 		for (unsigned int i = 0; i < mListWidget->mLines.size(); i++)
-			buffer.WriteString(SexyStringToStringFast(mListWidget->mLines.at(i)));
+			buffer.WriteString(PopWorkStringToStringFast(mListWidget->mLines.at(i)));
 
 		// Now we need to write the buffer to disk. GameApp can help us out with
 		// that. This data is saved in a special binary format that allows
@@ -476,14 +476,14 @@ void Board::ListClicked(int theId, int theIdx, int theClickCount)
 
 		// As an example of writing to the registry, let's write this value
 		// and later on load it in when we restart the app. You'll notice
-		// a bunch of RegistryWrite... functions in SexyAppBase. Each one
+		// a bunch of RegistryWrite... functions in AppBase. Each one
 		// of these takes as first argument the name of the value to 
 		// add to the registry. The second argument is the actual data
 		// to store in that value. The value is saved under the registry
 		// location that you set in GameApp's constructor when you
 		// set the mRegKey variable. The function returns false
 		// if there was an error, such as a lack of permission:
-		if (!mApp->RegistryWriteString("ListItem", SexyStringToStringFast(mText)))
+		if (!mApp->RegistryWriteString("ListItem", PopWorkStringToStringFast(mText)))
 			mApp->Popup("Couldn't save \"ListItem\" to registry");
 	}
 }

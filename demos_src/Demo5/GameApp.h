@@ -5,22 +5,22 @@
 //							GameApp.h
 //
 //	This is what drives the whole game. In here, you derive your class
-//	from SexyAppBase and implement common game tasks, such as 
+//	from AppBase and implement common game tasks, such as 
 //	responding to widgets (covered later), initializing and loading
 //	resources, setting up the various game screens, etc.
 //	All applications at minimum must have a class that derives from
-//	SexyAppBase.
+//	AppBase.
 //
 //	The GameApp class is used to do such things as create the main 
 //	menu screen, create the main game class (where all drawing/updating/
 //	interaction takes place), etc.
 //////////////////////////////////////////////////////////////////////////
 
-#include "SexyAppFramework/SexyAppBase.h"
+#include "PopWork/appbase.h"
 
-// We place all our classes inside the "Sexy" namespace to avoid name collisions
+// We place all our classes inside the "PopWork" namespace to avoid name collisions
 // with other libraries that might be added.
-namespace Sexy
+namespace PopWork
 {
 
 	// The GameApp class will be responsible for creating a class by the name
@@ -37,7 +37,7 @@ namespace Sexy
 	// We're going to learn about making and using dialog boxes in this demo
 	class Dialog;
 
-class GameApp : public SexyAppBase
+class GameApp : public AppBase
 {
 
 	private:
@@ -113,9 +113,9 @@ class GameApp : public SexyAppBase
 		//							"OK" "Cancel" buttons, Dialog::BUTTONS_FOOTER creates one
 		//							button with the text from theDialogFooter.
 		//
-		//	Returns: A new dialog pointer for use by SexyAppBase's DoDialog method.
+		//	Returns: A new dialog pointer for use by AppBase's DoDialog method.
 		//
-		//	Purpose: SexyAppBase contains a convenience function, DoDialog, that relies on
+		//	Purpose: AppBase contains a convenience function, DoDialog, that relies on
 		//	this overriden function. DoDialog calls NewDialog which instructs it how to make
 		//	a dialog box. You should use DoDialog to create and add your dialog boxes.
 		//	The reason for this function is to allow for customized dialog boxes and to avoid

@@ -6,9 +6,9 @@
 #ifndef __GAME_OVER_EFFECT_H__
 #define __GAME_OVER_EFFECT_H__
 
-#include "SexyAppFramework/Common.h"
+#include "PopWork/common.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 	class Graphics;
@@ -31,9 +31,9 @@ namespace Sexy
 	struct Letter
 	{
 		int		mRed;
-		SexyString mChar;
+		PopWorkString mChar;
 
-		Letter(SexyString c) {mChar = c; mRed = 0;}
+		Letter(PopWorkString c) {mChar = c; mRed = 0;}
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -41,8 +41,8 @@ namespace Sexy
 	//////////////////////////////////////////////////////////////////////////	
 	struct EndGameStats
 	{
-		SexyString		mFavoritePlanet;		// We keep track of the planet
-		SexyString		mFavoriteExport;		// and export eaten most.
+		PopWorkString		mFavoritePlanet;		// We keep track of the planet
+		PopWorkString		mFavoriteExport;		// and export eaten most.
 		int				mScore;
 		int				mLevel;
 		int				mNumPlanetsEaten;

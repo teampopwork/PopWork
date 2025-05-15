@@ -16,5 +16,5 @@ set(SRC_MAIN
 )
 
 add_executable(Demo2 ${SRC_MAIN})
-add_dependencies(Demo2 SexyAppFramework)
-target_link_libraries(Demo2 SexyAppFramework)
+add_dependencies(Demo2 PopWork)
+target_link_libraries(Demo2 PopWork)

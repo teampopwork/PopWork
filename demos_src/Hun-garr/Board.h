@@ -27,11 +27,11 @@
 //	classes where and when to draw to.
 //////////////////////////////////////////////////////////////////////////
 
-#include "SexyAppFramework/Widget/Widget.h"
-#include "SexyAppFramework/Widget/ButtonListener.h"
-#include "SexyAppFramework/Math/Rect.h"
+#include "PopWork/widget/widget.h"
+#include "PopWork/widget/buttonlistener.h"
+#include "PopWork/math/rect.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 
@@ -151,7 +151,7 @@ struct BonusText
 	int				mHue;		// See the .CPP file for info on using hue/saturation/luminance values
 	int				mAlpha;		// How faded out the text is
 	float			mX, mY;
-	SexyString		mText;
+	PopWorkString		mText;
 
 	BonusText() {mAlpha = 255; mHue = 0; mX = mY = 0;}
 };
@@ -208,7 +208,7 @@ class Board :	public Widget, public ButtonListener
 		// When a planet is eaten, we dump its name, export, and population (comma delimited) in that
 		// order into this list, which will be passed to the level up class for a stats summary of
 		// the past level.
-		std::vector<SexyString>		mPlanetsEaten;				
+		std::vector<PopWorkString>		mPlanetsEaten;				
 		std::vector<Particle>		mParticles;					
 
 		GameApp*			mApp;
@@ -518,7 +518,7 @@ class Board :	public Widget, public ButtonListener
 		//
 		//	Purpose: Adds floating bonus text to the center of the screen
 		//////////////////////////////////////////////////////////////////////////		
-		void	AddBonusText(SexyString t);
+		void	AddBonusText(PopWorkString t);
 
 		//////////////////////////////////////////////////////////////////////////
 		//	Function: AddBonusText
@@ -528,7 +528,7 @@ class Board :	public Widget, public ButtonListener
 		//
 		//	Purpose: Allows exact placement of the bonus text
 		//////////////////////////////////////////////////////////////////////////		
-		void	AddBonusText(SexyString t, float x, float y);
+		void	AddBonusText(PopWorkString t, float x, float y);
 
 		//////////////////////////////////////////////////////////////////////////
 		//	Function: LostLife
@@ -567,7 +567,7 @@ class Board :	public Widget, public ButtonListener
 		//	Purpose: Called by the WidgetManager if a key is pressed and the Board
 		//	has focus. Used to see if space was pressed, to toggle pause state.
 		//////////////////////////////////////////////////////////////////////////		
-		virtual void KeyChar(SexyChar theChar);
+		virtual void KeyChar(PopWorkChar theChar);
 
 		//////////////////////////////////////////////////////////////////////////
 		//	Function: Draw

@@ -5,13 +5,13 @@ General
 * Added Support for BASS Stream support (Needed for FFMpeg)
 * Fixed BassMusicInterface to allow music files loaded from PAK
 * Fixed MouseUp() bug in ButtonWidget that would cause an access violation if button was removed in callback
-* Added AppData folder support to Windows XP version of Sexy as APP_DATA_FOLDER has been around since NT 5.0
+* Added AppData folder support to Windows XP version of PopWork as APP_DATA_FOLDER has been around since NT 5.0
 * Fixed bug in VFormat Widestring(size of w_char != 1)
 * Fixed Rare race condition where Mouse thread would crash during Mode switch
 * Fixed bug in DDImage when trying to access an invalid surface (GetSurface() can return NULL and must be checked)
 * Added Check to make sure mOldCursorArea was not NULL in Mouse Thread
 * Fixed Dialog buttons to look in String Database for ID_YES, ID_NO instead of being hard coded for English.
-* Fixed EditWidget to allow characters > 128 if (gSexyAppBase->mbAllowExtendedChars == true) 
+* Fixed EditWidget to allow characters > 128 if (gAppBase->mbAllowExtendedChars == true) 
 * Fixed Bug in DrawLineClipHelper where floating point index would cause access violation int array
 * changed expected format of Properties.xml file to ANSI instead of UTF-8 (for porting reasons)
 * Commented out Stupid ASSERT when image refcount != 0 on Shutdown

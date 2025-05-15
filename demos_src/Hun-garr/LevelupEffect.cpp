@@ -5,11 +5,11 @@
 #include "LevelupEffect.h"
 #include "Board.h"
 #include "../Res.h"
-#include "SexyAppFramework/SexyAppBase.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Graphics/Font.h"
+#include "PopWork/appbase.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/graphics/font.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 const int STRIP_WIDTH	= 20;
 
@@ -94,7 +94,7 @@ void LevelupEffect::Activate(LevelupStats ls)
 	mActive = true;
 	mStats = ls;
 
-	gSexyAppBase->PlaySample(SOUND_LEVEL_UP1);
+	gAppBase->PlaySample(SOUND_LEVEL_UP1);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -161,11 +161,11 @@ void LevelupEffect::Update(float theFrac)
 		// just the same width but starting from the right of the screen instead
 		// of the left. The curtain moves 25 pixels per update. Once it reaches
 		// the center (and thus fully covers the screen), we switch to the next state.
-		if ((mCurtainX += 25) >= gSexyAppBase->mWidth / 2)
+		if ((mCurtainX += 25) >= gAppBase->mWidth / 2)
 		{
-			mCurtainX = gSexyAppBase->mWidth / 2;
+			mCurtainX = gAppBase->mWidth / 2;
 			mState = LevelupEffect::CURTAIN_OUT;
-			gSexyAppBase->PlaySample(SOUND_LEVEL_UP2);
+			gAppBase->PlaySample(SOUND_LEVEL_UP2);
 		}
 	}
 	else if (mState == LevelupEffect::CURTAIN_OUT)
@@ -193,7 +193,7 @@ void LevelupEffect::Update(float theFrac)
 		{
 			// Left strip is moving downward from Y of 0, right is moving up
 			// from Y of app height
-			if ((mStripHeight += mStripSizeChange) >= gSexyAppBase->mHeight)
+			if ((mStripHeight += mStripSizeChange) >= gAppBase->mHeight)
 			{
 				// Left strip and right strip are now the height of the screen.
 				// Reverse the direction they come in at and reset their heights.
@@ -201,7 +201,7 @@ void LevelupEffect::Update(float theFrac)
 				// size of one of the strip's width.
 				mStripSizeChange = -mStripSizeChange;
 				mStripHeight = 0;
-				if ((mCoverWidth += STRIP_WIDTH) >= gSexyAppBase->mWidth / 2)
+				if ((mCoverWidth += STRIP_WIDTH) >= gAppBase->mWidth / 2)
 				{
 					// The screen is fully covered. Fade out.
 					mStartNextLevel = true;
@@ -211,11 +211,11 @@ void LevelupEffect::Update(float theFrac)
 		}
 		else
 		{
-			if ((mStripHeight -= mStripSizeChange) >= gSexyAppBase->mHeight)
+			if ((mStripHeight -= mStripSizeChange) >= gAppBase->mHeight)
 			{
 				mStripSizeChange = -mStripSizeChange;
 				mStripHeight = 0;
-				if ((mCoverWidth += STRIP_WIDTH) >= gSexyAppBase->mWidth / 2)
+				if ((mCoverWidth += STRIP_WIDTH) >= gAppBase->mWidth / 2)
 				{
 					mStartNextLevel = true;
 					mState = LevelupEffect::FADE_OUT_STATS;
@@ -247,7 +247,7 @@ void LevelupEffect::Draw(Graphics* g)
 		// saturation at max and luminance at half for our particular example.
 		// The returned value is ANDed with 0xFFFFFFFF to clamp the values for
 		// the alpha, red, green, and blue to the valid region of 0 to 255. 
-		g->SetColor( (gSexyAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF) );
+		g->SetColor( (gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF) );
 		for (int i = 0; i < mText.size(); i++)
 		{
 			BouncyChar* c = &mText[i];
@@ -259,8 +259,8 @@ void LevelupEffect::Draw(Graphics* g)
 		// The righ tcurtain is just the same width as the left, but starts from the right
 		// side instead of X of 0.
 		g->SetColor(Color(0, 0, 0));
-		g->FillRect(0, 0, mCurtainX, gSexyAppBase->mHeight);
-		g->FillRect(gSexyAppBase->mWidth - mCurtainX, 0, mCurtainX, gSexyAppBase->mHeight);
+		g->FillRect(0, 0, mCurtainX, gAppBase->mHeight);
+		g->FillRect(gAppBase->mWidth - mCurtainX, 0, mCurtainX, gAppBase->mHeight);
 	}
 	else if ((mState == LevelupEffect::SHOWING_STATS) || (mState == LevelupEffect::CURTAIN_OUT) || 
 				(mState == LevelupEffect::COVERING_STATS))
@@ -269,9 +269,9 @@ void LevelupEffect::Draw(Graphics* g)
 		// beneath it), or covering up the stats with the effect triggered when the user clicks
 		// to begin the next level, we display info on the user's performance from the last level.
 		int y = 50;
-		g->SetColor(gSexyAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF);
-		SexyString s = StrFormat(_S("LEVEL %d COMPLETE!"), mStats.mLevelCompleted);
-		g->DrawString(s, gSexyAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, y);
+		g->SetColor(gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF);
+		PopWorkString s = StrFormat(_S("LEVEL %d COMPLETE!"), mStats.mLevelCompleted);
+		g->DrawString(s, gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, y);
 
 		g->SetColor(Color::White);
 		s = _S("POPULATION CONSUMED:");
@@ -306,7 +306,7 @@ void LevelupEffect::Draw(Graphics* g)
 		if (mStats.mPlanetsEaten.size() > 0)
 		{
 			y += 50;
-			int third =  gSexyAppBase->mWidth / 3;
+			int third =  gAppBase->mWidth / 3;
 			g->SetColor(Color(255, 255, 0));
 
 			s = _S("PLANET EATEN:");
@@ -326,7 +326,7 @@ void LevelupEffect::Draw(Graphics* g)
 			bool drawDotDotDot = false;
 			for (int i = 0; i < mStats.mPlanetsEaten.size(); i += 3)
 			{
-				if (y >= gSexyAppBase->mHeight - FONT_HUNGARR->GetHeight() * 2)
+				if (y >= gAppBase->mHeight - FONT_HUNGARR->GetHeight() * 2)
 				{
 					drawDotDotDot = true;
 					break;
@@ -357,7 +357,7 @@ void LevelupEffect::Draw(Graphics* g)
 
 		g->SetColor(Color::White);
 		s = _S("CLICK TO CONTINUE");
-		g->DrawString(s, gSexyAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, gSexyAppBase->mHeight - 20);		
+		g->DrawString(s, gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, gAppBase->mHeight - 20);		
 	}
 
 	if (mState == LevelupEffect::CURTAIN_OUT)
@@ -366,8 +366,8 @@ void LevelupEffect::Draw(Graphics* g)
 		// This lets the stats display underneath the curtain while it moves.
 		int alpha = mCurtainX > 255 ? 255 : mCurtainX;
 		g->SetColor(Color(255, 0, 0, alpha));
-		g->FillRect(0, 0, mCurtainX, gSexyAppBase->mHeight);
-		g->FillRect(gSexyAppBase->mWidth - mCurtainX, 0, mCurtainX, gSexyAppBase->mHeight);
+		g->FillRect(0, 0, mCurtainX, gAppBase->mHeight);
+		g->FillRect(gAppBase->mWidth - mCurtainX, 0, mCurtainX, gAppBase->mHeight);
 	}
 
 	if ((mState == LevelupEffect::COVERING_STATS) || (mState == LevelupEffect::FADE_OUT_STATS))
@@ -386,22 +386,22 @@ void LevelupEffect::Draw(Graphics* g)
 		// We draw the totally filled in regions separately, since they're easy.
 		// The strips then are drawn differently depending on if they are moving up or down.
 		// The left and right ones move oppositely.
-		g->SetColor( (gSexyAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFF) | (mFadeOutAlpha << 24) );
-		g->FillRect(0, 0, mCoverWidth, gSexyAppBase->mHeight);
-		g->FillRect(gSexyAppBase->mWidth - mCoverWidth, 0, mCoverWidth, gSexyAppBase->mHeight);
+		g->SetColor( (gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFF) | (mFadeOutAlpha << 24) );
+		g->FillRect(0, 0, mCoverWidth, gAppBase->mHeight);
+		g->FillRect(gAppBase->mWidth - mCoverWidth, 0, mCoverWidth, gAppBase->mHeight);
 
 		if (mStripSizeChange > 0)
 		{
 			g->FillRect(mCoverWidth, 0, STRIP_WIDTH, mStripHeight);
-			g->FillRect(gSexyAppBase->mWidth - mCoverWidth - STRIP_WIDTH,
-						gSexyAppBase->mHeight - mStripHeight,
+			g->FillRect(gAppBase->mWidth - mCoverWidth - STRIP_WIDTH,
+						gAppBase->mHeight - mStripHeight,
 						STRIP_WIDTH,
 						mStripHeight);
 		}
 		else
 		{			
-			g->FillRect(mCoverWidth, gSexyAppBase->mHeight - mStripHeight, STRIP_WIDTH, mStripHeight);
-			g->FillRect(gSexyAppBase->mWidth - mCoverWidth - STRIP_WIDTH, 0, STRIP_WIDTH, mStripHeight);
+			g->FillRect(mCoverWidth, gAppBase->mHeight - mStripHeight, STRIP_WIDTH, mStripHeight);
+			g->FillRect(gAppBase->mWidth - mCoverWidth - STRIP_WIDTH, 0, STRIP_WIDTH, mStripHeight);
 		}
 
 	}
@@ -419,7 +419,7 @@ void LevelupEffect::DoneViewingStats()
 	mStripHeight = 0;
 	mFadeOutAlpha = 255;
 	mStartNextLevel = false;
-	gSexyAppBase->PlaySample(SOUND_LEVEL_UP3);
+	gAppBase->PlaySample(SOUND_LEVEL_UP3);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -430,7 +430,7 @@ bool LevelupEffect::StartNextLevel()
 	if (mStartNextLevel)
 	{
 		mStartNextLevel = false;
-		gSexyAppBase->PlaySample(SOUND_LEVEL_UP4);
+		gAppBase->PlaySample(SOUND_LEVEL_UP4);
 		return true;
 	}
 

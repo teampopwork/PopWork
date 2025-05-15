@@ -2,22 +2,22 @@
 #include "DemoWidget.h"
 #include "../Res.h"
 #include "V14DemoApp.h"
-#include "SexyAppFramework/Graphics/SysFont.h"
-#include "SexyAppFramework/Graphics/Font.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Widget/ButtonWidget.h"
-#include "SexyAppFramework/Graphics/HeaderFont/LiberationSansRegular.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Widget/Dialog.h"
-#include "SexyAppFramework/Misc/Flags.h"
-#include "SexyAppFramework/ImageLib/ImageLib.h"
-#include "SexyAppFramework/Graphics/MemoryImage.h"
-#include "SexyAppFramework/Math/SexyMatrix.h"
-#include "SexyAppFramework/Math/trivertex.h"
-#include "SexyAppFramework/Audio/SoundManager.h"
-#include "SexyAppFramework/Audio/SoundInstance.h"
+#include "PopWork/graphics/sysfont.h"
+#include "PopWork/graphics/font.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/widget/buttonwidget.h"
+#include "PopWork/graphics/headerfont/liberationsansregular.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/widget/dialog.h"
+#include "PopWork/misc/flags.h"
+#include "PopWork/imagelib/imagelib.h"
+#include "PopWork/graphics/memoryimage.h"
+#include "PopWork/math/popmatrix.h"
+#include "PopWork/math/trivertex.h"
+#include "PopWork/audio/soundmanager.h"
+#include "PopWork/audio/soundinstance.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 Board::Board(V14DemoApp* theApp)
 {
@@ -189,7 +189,7 @@ void Board::DrawOverlay(Graphics* g)
 	g->SetColor(Color(0, 255, 255));
 }
 
-void Board::KeyChar(SexyChar theChar)
+void Board::KeyChar(PopWorkChar theChar)
 {
 
 }

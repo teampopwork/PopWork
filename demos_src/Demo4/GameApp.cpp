@@ -1,22 +1,22 @@
 #include "GameApp.h"
 #include "TitleScreen.h"
 #include "Board.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "PopWork/widget/widgetmanager.h"
 
 // We will be accessing the resource manager in this demo, so include it's header
-#include "SexyAppFramework/Resources/ResourceManager.h"
+#include "PopWork/resources/resourcemanager.h"
 
 // Required for playing music
-#include "SexyAppFramework/Audio/BassMusicInterface.h"
+#include "PopWork/audio/bassmusicinterface.h"
 
 // Contains all the resources from the resources.xml file in our
 // properties directory. See that file for more information.
 #include "../Res.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -30,12 +30,12 @@ GameApp::GameApp()
 	mProductVersion = "1.0";
 
 	// This is the text that appears in the title bar of the application window
-	mTitle = StringToSexyStringFast("SexyAppFramework: " + mProdName + " - " + mProductVersion);
+	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on 
 	// Windows systems.
-	mRegKey = "PopCap\\SexyAppFramework\\Demo4";
+	mRegKey = "PopCap\\PopWork\\Demo4";
 
 	// Set the application width/height in terms of pixels here. Let's
 	// use a different resolution from Demo 1 just for fun.
@@ -106,7 +106,7 @@ void GameApp::Init()
 {
 	// Let the parent class perform any needed initializations first.
 	// This should always be done.
-	SexyAppBase::Init();
+	AppBase::Init();
 
 	// We need to tell the resource manager to read in all the groups
 	// and information from that main group we made, called ResourceManifest,
@@ -227,7 +227,7 @@ void GameApp::Init()
 
 	// Next, we need to know how many resources there are to load.
 	// This is necessary so we can display our progress bar on the title screen
-	// and make it be the appropriate length. There's a variable in SexyAppBase
+	// and make it be the appropriate length. There's a variable in AppBase
 	// called mNumLoadingThreadTasks which holds the number of resources to
 	// load in the LoadingThreadProc function. You get the number of resources
 	// in a given group with a call to the resource manager's GetNumResources function
@@ -255,7 +255,7 @@ void GameApp::LoadingThreadProc()
 	// of the call to StartLoadResources above:
 	while (mResourceManager->LoadNextResource())
 	{
-		// The SexyAppBase variable, mCompletedLoadingThreadTasks, indicates the
+		// The AppBase variable, mCompletedLoadingThreadTasks, indicates the
 		// total number of resources that have so far been loaded. This is used
 		// to tell our loading screen the % progress we've made. See TitleScreen::Draw
 		// for an example of how this is used. We need to increment this value
@@ -301,7 +301,7 @@ void GameApp::LoadingThreadProc()
 void GameApp::LoadingThreadCompleted()
 {
 	// Let the base app class also know that we have completed
-	SexyAppBase::LoadingThreadCompleted();
+	AppBase::LoadingThreadCompleted();
 
 	// When we're actually loading resources, we'll set the
 	// mLoadingFailed variable to "true" if there were any problems

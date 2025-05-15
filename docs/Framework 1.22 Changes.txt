@@ -18,7 +18,7 @@ Framework 1.22 changes:
 		or at run time you get the assert "You need to call
 		SWTri_AddDrawTriFunc or SWTri_AddAllDrawTriFuncs"
 
-		1. Include "SexyAppFramework/SWTri.h"
+		1. Include "PopWork/SWTri.h"
 		2. Call the function SWTri_AddAllDrawTriFuncs()
 		3. Alternatively to #2, if you know which triangle draw
 		functions you need, you can add them specifically via

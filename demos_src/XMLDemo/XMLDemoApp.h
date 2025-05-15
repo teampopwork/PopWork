@@ -1,9 +1,9 @@
 #ifndef __XMLDEMOAPP_H__
 #define __XMLDEMOAPP_H__
 
-#include "SexyAppFramework/SexyAppBase.h"
+#include "PopWork/appbase.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 class Board;
@@ -17,27 +17,27 @@ class XMLParser;
 // The names correspond to the attributes/sections from the XML file.
 struct s_Section1
 {
-	SexyString	mItem1Text;
+	PopWorkString	mItem1Text;
 	
-	SexyString  mBoolParamText;
+	PopWorkString  mBoolParamText;
 	bool		mBoolParamElement;
 };
 
 struct s_Section2
 {
-	SexyString	mSectionAttribText;
+	PopWorkString	mSectionAttribText;
 
-	SexyString	mIntParamText;
+	PopWorkString	mIntParamText;
 	int			mIntParamElement;
 
-	SexyString	mMultiAttrib1;
-	SexyString	mMultiAttrib2;
-	SexyString	mMultiAttrib3;
+	PopWorkString	mMultiAttrib1;
+	PopWorkString	mMultiAttrib2;
+	PopWorkString	mMultiAttrib3;
 
-	SexyString		mSubsectionItem2;
+	PopWorkString		mSubsectionItem2;
 };
 
-class XMLDemoApp : public SexyAppBase
+class XMLDemoApp : public AppBase
 {
 
 public:
@@ -45,8 +45,8 @@ public:
 	Board*			mBoard;
 	s_Section1		mSection1;
 	s_Section2		mSection2;
-	SexyString		mInstructionTag;
-	SexyString		mInstruction;
+	PopWorkString		mInstructionTag;
+	PopWorkString		mInstruction;
 
 private:
 

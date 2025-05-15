@@ -1,13 +1,13 @@
 #include "Res.h"
-#include "SexyAppFramework/Resources/ResourceManager.h"
+#include "PopWork/resources/resourcemanager.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 #pragma warning(disable:4311 4312)
 
 static bool gNeedRecalcVariableToIdMap = false;
 
-bool Sexy::ExtractResourcesByName(ResourceManager *theManager, const char *theName)
+bool PopWork::ExtractResourcesByName(ResourceManager *theManager, const char *theName)
 {
 	if (strcmp(theName,"Game")==0) return ExtractGameResources(theManager);
 	if (strcmp(theName,"Hungarr")==0) return ExtractHungarrResources(theManager);
@@ -16,7 +16,7 @@ bool Sexy::ExtractResourcesByName(ResourceManager *theManager, const char *theNa
 	return false;
 }
 
-Sexy::ResourceId Sexy::GetIdByStringId(const char *theStringId)
+PopWork::ResourceId PopWork::GetIdByStringId(const char *theStringId)
 {
 	typedef std::map<std::string,int> MyMap;
 	static MyMap aMap;
@@ -34,23 +34,23 @@ Sexy::ResourceId Sexy::GetIdByStringId(const char *theStringId)
 }
 
 // Game Resources
-Image* Sexy::IMAGE_BG0;
-Image* Sexy::IMAGE_BG1;
-Image* Sexy::IMAGE_BG2;
-Image* Sexy::IMAGE_BUTTON_DOWN;
-Image* Sexy::IMAGE_BUTTON_NORMAL;
-Image* Sexy::IMAGE_BUTTON_OVER;
-Image* Sexy::IMAGE_CHECKBOX;
-Image* Sexy::IMAGE_DIALOG_BOX;
-Image* Sexy::IMAGE_DIALOG_BUTTON;
-Image* Sexy::IMAGE_ROBOTROBOT;
-Image* Sexy::IMAGE_SLIDER_THUMB;
-Image* Sexy::IMAGE_SLIDER_TRACK;
-Image* Sexy::IMAGE_TESTPIXEL;
-int Sexy::SOUND_MUTATOR;
-int Sexy::SOUND_TIMER;
+Image* PopWork::IMAGE_BG0;
+Image* PopWork::IMAGE_BG1;
+Image* PopWork::IMAGE_BG2;
+Image* PopWork::IMAGE_BUTTON_DOWN;
+Image* PopWork::IMAGE_BUTTON_NORMAL;
+Image* PopWork::IMAGE_BUTTON_OVER;
+Image* PopWork::IMAGE_CHECKBOX;
+Image* PopWork::IMAGE_DIALOG_BOX;
+Image* PopWork::IMAGE_DIALOG_BUTTON;
+Image* PopWork::IMAGE_ROBOTROBOT;
+Image* PopWork::IMAGE_SLIDER_THUMB;
+Image* PopWork::IMAGE_SLIDER_TRACK;
+Image* PopWork::IMAGE_TESTPIXEL;
+int PopWork::SOUND_MUTATOR;
+int PopWork::SOUND_TIMER;
 
-bool Sexy::ExtractGameResources(ResourceManager *theManager)
+bool PopWork::ExtractGameResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -81,36 +81,36 @@ bool Sexy::ExtractGameResources(ResourceManager *theManager)
 }
 
 // Hungarr Resources
-Image* Sexy::IMAGE_ATOMIC_EXPLOSION;
-Image* Sexy::IMAGE_BOMB_RADIAL_DEATH;
-Image* Sexy::IMAGE_HUNGARR_BEAM_DOWN;
-Image* Sexy::IMAGE_HUNGARR_BEAM_LEFT;
-Image* Sexy::IMAGE_HUNGARR_BEAM_RIGHT;
-Image* Sexy::IMAGE_HUNGARR_BEAM_UP;
-Image* Sexy::IMAGE_HUNGARR_HORIZ;
-Image* Sexy::IMAGE_HUNGARR_SMALL;
-Image* Sexy::IMAGE_HUNGARR_VERT;
-Image* Sexy::IMAGE_PARTICLE_LIGHTNING;
-Image* Sexy::IMAGE_PLANETS;
-Image* Sexy::IMAGE_SPARK;
-int Sexy::SOUND_BEAM_HIT;
-int Sexy::SOUND_BEAM_MOVING;
-int Sexy::SOUND_BUTTON;
-int Sexy::SOUND_EXPLOSION;
-int Sexy::SOUND_GAME_OVER_CLICK;
-int Sexy::SOUND_GAME_OVER_RESTART;
-int Sexy::SOUND_GAME_OVER_STATS;
-int Sexy::SOUND_GAME_OVER_TEXT;
-int Sexy::SOUND_LEVEL_UP1;
-int Sexy::SOUND_LEVEL_UP2;
-int Sexy::SOUND_LEVEL_UP3;
-int Sexy::SOUND_LEVEL_UP4;
-int Sexy::SOUND_MAGZAP;
-int Sexy::SOUND_PLANET;
-int Sexy::SOUND_PLANET_HIT;
-int Sexy::SOUND_REGION_FILLED;
+Image* PopWork::IMAGE_ATOMIC_EXPLOSION;
+Image* PopWork::IMAGE_BOMB_RADIAL_DEATH;
+Image* PopWork::IMAGE_HUNGARR_BEAM_DOWN;
+Image* PopWork::IMAGE_HUNGARR_BEAM_LEFT;
+Image* PopWork::IMAGE_HUNGARR_BEAM_RIGHT;
+Image* PopWork::IMAGE_HUNGARR_BEAM_UP;
+Image* PopWork::IMAGE_HUNGARR_HORIZ;
+Image* PopWork::IMAGE_HUNGARR_SMALL;
+Image* PopWork::IMAGE_HUNGARR_VERT;
+Image* PopWork::IMAGE_PARTICLE_LIGHTNING;
+Image* PopWork::IMAGE_PLANETS;
+Image* PopWork::IMAGE_SPARK;
+int PopWork::SOUND_BEAM_HIT;
+int PopWork::SOUND_BEAM_MOVING;
+int PopWork::SOUND_BUTTON;
+int PopWork::SOUND_EXPLOSION;
+int PopWork::SOUND_GAME_OVER_CLICK;
+int PopWork::SOUND_GAME_OVER_RESTART;
+int PopWork::SOUND_GAME_OVER_STATS;
+int PopWork::SOUND_GAME_OVER_TEXT;
+int PopWork::SOUND_LEVEL_UP1;
+int PopWork::SOUND_LEVEL_UP2;
+int PopWork::SOUND_LEVEL_UP3;
+int PopWork::SOUND_LEVEL_UP4;
+int PopWork::SOUND_MAGZAP;
+int PopWork::SOUND_PLANET;
+int PopWork::SOUND_PLANET_HIT;
+int PopWork::SOUND_REGION_FILLED;
 
-bool Sexy::ExtractHungarrResources(ResourceManager *theManager)
+bool PopWork::ExtractHungarrResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -154,15 +154,15 @@ bool Sexy::ExtractHungarrResources(ResourceManager *theManager)
 }
 
 // Init Resources
-Font* Sexy::FONT_DEFAULT;
-Font* Sexy::FONT_HUNGARR;
-Image* Sexy::IMAGE_CUSTOM_DRAGGING;
-Image* Sexy::IMAGE_CUSTOM_HAND;
-Image* Sexy::IMAGE_CUSTOM_POINTER;
-Image* Sexy::IMAGE_CUSTOM_TEXT;
-Image* Sexy::IMAGE_HUNGARR_LOGO;
+Font* PopWork::FONT_DEFAULT;
+Font* PopWork::FONT_HUNGARR;
+Image* PopWork::IMAGE_CUSTOM_DRAGGING;
+Image* PopWork::IMAGE_CUSTOM_HAND;
+Image* PopWork::IMAGE_CUSTOM_POINTER;
+Image* PopWork::IMAGE_CUSTOM_TEXT;
+Image* PopWork::IMAGE_HUNGARR_LOGO;
 
-bool Sexy::ExtractInitResources(ResourceManager *theManager)
+bool PopWork::ExtractInitResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -185,11 +185,11 @@ bool Sexy::ExtractInitResources(ResourceManager *theManager)
 }
 
 // TitleScreen Resources
-Image* Sexy::IMAGE_LOADER_BAR;
-Image* Sexy::IMAGE_LOADER_LOADINGTXT;
-int Sexy::SOUND_CONTINUE;
+Image* PopWork::IMAGE_LOADER_BAR;
+Image* PopWork::IMAGE_LOADER_LOADINGTXT;
+int PopWork::SOUND_CONTINUE;
 
-bool Sexy::ExtractTitleScreenResources(ResourceManager *theManager)
+bool PopWork::ExtractTitleScreenResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -265,27 +265,27 @@ static void* gResources[] =
 	NULL
 };
 
-Image* Sexy::LoadImageById(ResourceManager *theManager, int theId)
+Image* PopWork::LoadImageById(ResourceManager *theManager, int theId)
 {
 	return (*((Image**)gResources[theId]) = theManager->LoadImage(GetStringIdById(theId)));
 }
 
-Image* Sexy::GetImageById(int theId)
+Image* PopWork::GetImageById(int theId)
 {
 	return *(Image**)gResources[theId];
 }
 
-Font* Sexy::GetFontById(int theId)
+Font* PopWork::GetFontById(int theId)
 {
 	return *(Font**)gResources[theId];
 }
 
-int Sexy::GetSoundById(int theId)
+int PopWork::GetSoundById(int theId)
 {
 	return *(int*)gResources[theId];
 }
 
-static Sexy::ResourceId GetIdByVariable(const void *theVariable)
+static PopWork::ResourceId GetIdByVariable(const void *theVariable)
 {
 	typedef std::map<int,int> MyMap;
 	static MyMap aMap;
@@ -304,22 +304,22 @@ static Sexy::ResourceId GetIdByVariable(const void *theVariable)
 		return (ResourceId) anItr->second;
 }
 
-Sexy::ResourceId Sexy::GetIdByImage(Image *theImage)
+PopWork::ResourceId PopWork::GetIdByImage(Image *theImage)
 {
 	return GetIdByVariable(theImage);
 }
 
-Sexy::ResourceId Sexy::GetIdByFont(Font *theFont)
+PopWork::ResourceId PopWork::GetIdByFont(Font *theFont)
 {
 	return GetIdByVariable(theFont);
 }
 
-Sexy::ResourceId Sexy::GetIdBySound(int theSound)
+PopWork::ResourceId PopWork::GetIdBySound(int theSound)
 {
 	return GetIdByVariable((void*)theSound);
 }
 
-const char* Sexy::GetStringIdById(int theId)
+const char* PopWork::GetStringIdById(int theId)
 {
 	switch(theId)
 	{

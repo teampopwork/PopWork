@@ -2,16 +2,16 @@
 #include "DemoWidget.h"
 #include "../Res.h"
 #include "V12DemoApp.h"
-#include "SexyAppFramework/Graphics/Font.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Widget/ButtonWidget.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Widget/Dialog.h"
-#include "SexyAppFramework/Misc/Flags.h"
-#include "SexyAppFramework/Math/SexyMatrix.h"
-#include "SexyAppFramework/Math/trivertex.h"
+#include "PopWork/graphics/font.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/widget/buttonwidget.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/widget/dialog.h"
+#include "PopWork/misc/flags.h"
+#include "PopWork/math/popmatrix.h"
+#include "PopWork/math/trivertex.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 Board::Board(V12DemoApp* theApp)
 {
@@ -298,7 +298,7 @@ void Board::DrawOverlay(Graphics* g)
 	// DrawImageTransform/F and DrawImageMatrix use the CENTER of the image rather than the top left
 	// for XY drawing. For images of even size, the non-F form of the function will just truncate
 	// the the center, but for the F forms, they will be offset by 0.5f since floating point is used.
-	if (gSexyAppBase->Is3DAccelerated())
+	if (gAppBase->Is3DAccelerated())
 		g->DrawImageTransformF(IMAGE_HUNGARR_LOGO, t, (float)(mUpdateCnt % (mApp->mWidth + 340)), 200.0f);
 	else
 		g->DrawImageTransform(IMAGE_HUNGARR_LOGO, t, (float)(mUpdateCnt % (mApp->mWidth + 340)), 200.0f);
@@ -309,7 +309,7 @@ void Board::DrawOverlay(Graphics* g)
 	// crazy stuff, you can also do some cool little tricks. For example, previously it used be a pain
 	// to in real-time flip and mirror an image. While I won't give a tutorial on matrix algebra
 	// (that would take a loooooong time), I'll explain the essential parts:
-	SexyTransform2D matrix;
+	PopWorkTransform2D matrix;
 
 
 	// Multiplying the X coordinate by -1 (which is the 0, 0 element of the matrix) will result in our
@@ -364,7 +364,7 @@ void Board::ButtonDepress(int id)
 	{
 		// With the new 1.2 changes, you can create dialogs very easily. Previously, you had to supply
 		// images in order to skin the dialog and be able to see it in the first place. You also had to
-		// override the SexyAppBase::NewDialog method, otherwise calls to SexyAppBase::DoDialog wouldn't
+		// override the AppBase::NewDialog method, otherwise calls to AppBase::DoDialog wouldn't
 		// do anything. Not so anymore. You can rapidly prototype with dialogs even without images.
 		// A default NewDialog implementation now exists, and if a dialog doesn't have an image, it will
 		// be drawn using colored rectangles. So now, to make a little dialog box appear, it's as simple as

@@ -1,20 +1,20 @@
 #include "V12DemoApp.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Graphics/SDLImage.h"
-#include "SexyAppFramework/Resources/ResourceManager.h"
-#include "SexyAppFramework/Widget/Dialog.h"
-#include "SexyAppFramework/Graphics/SWTri/SWTri.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/graphics/sdlimage.h"
+#include "PopWork/resources/resourcemanager.h"
+#include "PopWork/widget/dialog.h"
+#include "PopWork/graphics/SWTri/SWTri.h"
 #include "Board.h"
 #include "../Res.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 V12DemoApp::V12DemoApp()
 {
 	mProdName = "V12Demo";
 	mProductVersion = "1.0";
-	mTitle = StringToSexyStringFast("SexyAppFramework: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap\\SexyAppFramework\\V12Demo";
+	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mRegKey = "PopCap\\PopWork\\V12Demo";
 
 	mNoSoundNeeded = true;
 	mBoard = NULL;

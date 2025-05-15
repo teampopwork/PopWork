@@ -16,14 +16,14 @@
 #ifndef __DEMO_DIALOG_H__
 #define __DEMO_DIALOG_H__
 
-#include "SexyAppFramework/Widget/Dialog.h"
+#include "PopWork/widget/dialog.h"
 
 // This lets us receive slider events
-#include "SexyAppFramework/Widget/SliderListener.h"
+#include "PopWork/widget/sliderlistener.h"
 
-#include "SexyAppFramework/Widget/CheckboxListener.h"
+#include "PopWork/widget/checkboxlistener.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 	class Graphics;

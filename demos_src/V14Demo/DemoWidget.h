@@ -1,10 +1,10 @@
 #ifndef __DEMO_WIDGET_H__
 #define __DEMO_WIDGET_H__
 
-#include "SexyAppFramework/Widget/Widget.h"
-#include "SexyAppFramework/Widget/ButtonListener.h"
+#include "PopWork/widget/widget.h"
+#include "PopWork/widget/buttonlistener.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 	class ButtonWidget;

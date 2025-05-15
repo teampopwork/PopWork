@@ -1,6 +1,6 @@
 #include "GameApp.h"
 #include "Board.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "PopWork/widget/widgetmanager.h"
 
 
 // The Image.h file just declares basic functions. All images are either of 
@@ -8,15 +8,15 @@
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "SexyAppFramework/Graphics/SDLImage.h"
+#include "PopWork/graphics/sdlimage.h"
 
 // We're going to create a font for Board's button widget's label
-#include "SexyAppFramework/Graphics/ImageFont.h"
+#include "PopWork/graphics/imagefont.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -30,12 +30,12 @@ GameApp::GameApp()
 	mProductVersion = "1.0";
 
 	// This is the text that appears in the title bar of the application window
-	mTitle = StringToSexyStringFast("SexyAppFramework: " + mProdName + " - " + mProductVersion);
+	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on 
 	// Windows systems.
-	mRegKey = "PopCap\\SexyAppFramework\\Demo3";
+	mRegKey = "PopCap\\PopWork\\Demo3";
 
 	// Set the application width/height in terms of pixels here. Let's
 	// use a different resolution from Demo 1 just for fun.
@@ -90,7 +90,7 @@ void GameApp::Init()
 {
 	// Let the parent class perform any needed initializations first.
 	// This should always be done.
-	SexyAppBase::Init();
+	AppBase::Init();
 
 	// In later demos, you will see more done with this function.
 	// For now, we have nothing else to initialize, so we are done.
@@ -213,7 +213,7 @@ void GameApp::LoadingThreadProc()
 void GameApp::LoadingThreadCompleted()
 {
 	// Let the base app class also know that we have completed
-	SexyAppBase::LoadingThreadCompleted();
+	AppBase::LoadingThreadCompleted();
 
 	// When we're actually loading resources, we'll set the
 	// mLoadingFailed variable to "true" if there were any problems

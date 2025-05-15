@@ -1,9 +1,9 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "SexyAppFramework/Widget/Widget.h"
+#include "PopWork/widget/widget.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 class XMLDemoApp;

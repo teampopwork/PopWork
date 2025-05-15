@@ -1,16 +1,16 @@
 #include "DemoDialog.h"
 #include "../Res.h"
 #include "GameApp.h"
-#include "SexyAppFramework/SexyAppBase.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Graphics/Font.h"
-#include "SexyAppFramework/Widget/DialogButton.h"
-#include "SexyAppFramework/Widget/Checkbox.h"
+#include "PopWork/appbase.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/graphics/font.h"
+#include "PopWork/widget/dialogbutton.h"
+#include "PopWork/widget/checkbox.h"
 
 // We're going to use a slider widget to control sound/music volume
-#include "SexyAppFramework/Widget/Slider.h"
+#include "PopWork/widget/slider.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ using namespace Sexy;
 //	The NO/CANCEL buttons have a value of 3000 + the dialog's ID.
 //////////////////////////////////////////////////////////////////////////
 DemoDialog::DemoDialog(std::string theHeader, std::string theBody) :
-Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, StringToSexyStringFast(theHeader), StringToSexyStringFast(theBody), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
+Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, StringToPopWorkStringFast(theHeader), StringToPopWorkStringFast(theBody), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
 {
 	// We can set the rectangular region in which all text/buttons are to go
 	// by changing the mContentInsets variable. The first parameter
@@ -92,15 +92,15 @@ Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, Strin
 	mMusicVolumeSlider = new Slider(IMAGE_SLIDER_TRACK, IMAGE_SLIDER_THUMB, DemoDialog::MUSIC_SLIDER_ID, this);
 
 	// Let's set the value of the music slider to what the current volume is.
-	// SexyAppBase has a GetMusicVolume function that returns this amount.
-	// But wait, we didn't get a SexyAppBase pointer passed into the constructor!
-	// Don't worry. gSexyAppBase is externed in SexyAppBase.h and we can use that instead.
-	mMusicVolumeSlider->SetValue(gSexyAppBase->GetMusicVolume());
+	// AppBase has a GetMusicVolume function that returns this amount.
+	// But wait, we didn't get a AppBase pointer passed into the constructor!
+	// Don't worry. gAppBase is externed in AppBase.h and we can use that instead.
+	mMusicVolumeSlider->SetValue(gAppBase->GetMusicVolume());
 
 	mSfxVolumeSlider = new Slider(IMAGE_SLIDER_TRACK, IMAGE_SLIDER_THUMB, DemoDialog::SFX_SLIDER_ID, this);
 
 	// Let's set the sound volume to the current volume, just like we did with the music slider
-	mSfxVolumeSlider->SetValue(gSexyAppBase->GetSfxVolume());
+	mSfxVolumeSlider->SetValue(gAppBase->GetSfxVolume());
 
 	// Let's make a button to show off how to use random numbers
 	mRandomBtn = new DialogButton(IMAGE_DIALOG_BUTTON, DemoDialog::RANDOM_BTN_ID, this);
@@ -201,10 +201,10 @@ void DemoDialog::AddedToManager(WidgetManager* theWidgetManager)
 	
 	// Let's set the initial checked state of the 3d checkbox to true if the
 	// user has 3D support enabled. We determine that via a call to Is3DAccelerated
-	m3DCheckbox->mChecked = gSexyAppBase->Is3DAccelerated();
+	m3DCheckbox->mChecked = gAppBase->Is3DAccelerated();
 	
 	// We can check if the app is fullscreen by examining the mIsWindowed variable:
-	mFSCheckbox->mChecked = !gSexyAppBase->mIsWindowed;
+	mFSCheckbox->mChecked = !gAppBase->mIsWindowed;
 
 	theWidgetManager->AddWidget(m3DCheckbox);
 	theWidgetManager->AddWidget(mFSCheckbox);
@@ -281,12 +281,12 @@ void DemoDialog::SliderVal(int theId, double theVal)
 	if (theId == DemoDialog::MUSIC_SLIDER_ID)
 	{
 		// Let's set the music volume to whatever the slider position is
-		gSexyAppBase->SetMusicVolume(theVal);
+		gAppBase->SetMusicVolume(theVal);
 	}
 	else if (theId == DemoDialog::SFX_SLIDER_ID)
 	{
 		// Set the sound value
-		gSexyAppBase->SetSfxVolume(theVal);
+		gAppBase->SetSfxVolume(theVal);
 
 		// A good idea is to play a "ding" or some similar sound when
 		// the thumb is released, to indicate to the user what the current
@@ -294,7 +294,7 @@ void DemoDialog::SliderVal(int theId, double theVal)
 		// unlike the music). We check for this by seeing if the mDragging
 		// variable is true or not.
 		if (!mSfxVolumeSlider->mDragging)
-			gSexyAppBase->PlaySample(SOUND_TIMER);
+			gAppBase->PlaySample(SOUND_TIMER);
 	}
 }
 
@@ -307,7 +307,7 @@ void DemoDialog::ButtonDepress(int theId)
 	if (theId == mRandomBtn->mId)
 	{
 		// Let's get a random integer. The Rand() function is declared
-		// in Common.h and returns a value from 0 to SEXY_RAND_MAX (2,147,483,647)
+		// in Common.h and returns a value from 0 to POPWORK_RAND_MAX (2,147,483,647)
 		int r = Rand();
 
 		// Now let's change the text of the dialog box:
@@ -340,12 +340,12 @@ void DemoDialog::ButtonDepress(int theId)
 		// Let's apply the 3D and fullscreen mode settings first though.
 		// We call SwitchScreenMode. The first parameter is whether or not to run
 		// windowed (false means fullscreen), the second is whether or not to do 3d.
-		gSexyAppBase->SwitchScreenMode(!mFSCheckbox->mChecked, m3DCheckbox->mChecked);
+		gAppBase->SwitchScreenMode(!mFSCheckbox->mChecked, m3DCheckbox->mChecked);
 
-		gSexyAppBase->KillDialog(this);
+		gAppBase->KillDialog(this);
 
 		// Set focus back to the board
-		((GameApp*)gSexyAppBase)->SetFocusToBoard();
+		((GameApp*)gAppBase)->SetFocusToBoard();
 	}
 	
 }
@@ -365,7 +365,7 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 			// Turn on 3D acceleration. But we need to check if the user is
 			// even allowed to have it on. Some cards are just not compatible
 			// with the framework (less than 8MB RAM for instance):
-			if (!gSexyAppBase->Is3DAccelerationSupported())
+			if (!gAppBase->Is3DAccelerationSupported())
 			{
 				// It's not supported. Don't let the checkbox get checked.
 				// Display an error dialog to the user to let them know why this happened.
@@ -373,18 +373,18 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 				// if the user was in full screen mode, they might not see the error message. Using
 				// a game dialog box is the safest way to warn them.
 				m3DCheckbox->SetChecked(false);
-				gSexyAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Not Supported"), 
+				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Not Supported"), 
 							_S("Hardware acceleration can not be enabled on this computer. \nYour\
 							video card does not meet the minimum requirements for this game."),
 							_S("OK"), Dialog::BUTTONS_FOOTER);
 			}
-			else if(!gSexyAppBase->Is3DAccelerationRecommended())
+			else if(!gAppBase->Is3DAccelerationRecommended())
 			{
 				// We can also check if 3D acceleration is not recommended for this computer
 				// with a call to Is3DAccelerationRecommended. This allows the user to override
 				// the default setting, but with a warning that it might not work or might cause
 				// problems. Some cards fail the detection process but wind up being OK to use.
-				gSexyAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Warning"), 
+				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Warning"), 
 					_S("Your video card may not fully support this feature.\n\
 					If you experience slower performance, please disable Hardware Acceleration."),
 					_S("OK"), Dialog::BUTTONS_FOOTER);
@@ -400,10 +400,10 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 		// game. It doesn't make sense to run a 800x600 game windowed when your desktop
 		// is 800x600 or less.
 		// We can determine if the user is not allowed to run in windowed mode by
-		// checking the value of SexyAppBase's mForceFullScreen variable.
-		if (gSexyAppBase->mForceFullscreen && !checked)
+		// checking the value of AppBase's mForceFullScreen variable.
+		if (gAppBase->mForceFullscreen && !checked)
 		{
-			gSexyAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("No Windowed Mode"),
+			gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("No Windowed Mode"),
 			_S("Windowed mode is only available if your desktop is running in\n\
 			either 16 bit or 32 bit color mode, which it is not."), _S("OK"), Dialog::BUTTONS_FOOTER);
 

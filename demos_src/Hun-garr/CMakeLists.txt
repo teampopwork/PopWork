@@ -27,5 +27,5 @@ set(SRC_MAIN
 )
 
 add_executable(Hun-garr ${SRC_MAIN})
-add_dependencies(Hun-garr SexyAppFramework)
-target_link_libraries(Hun-garr SexyAppFramework)
+add_dependencies(Hun-garr PopWork)
+target_link_libraries(Hun-garr PopWork)

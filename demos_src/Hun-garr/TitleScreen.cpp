@@ -1,14 +1,14 @@
 #include "TitleScreen.h"
 #include "GameApp.h"
 #include "../Res.h"
-#include "SexyAppFramework/Graphics/Font.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Graphics/Image.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Math/Rect.h"
-#include "SexyAppFramework/Widget/HyperlinkWidget.h"
+#include "PopWork/graphics/font.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/graphics/image.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/math/rect.h"
+#include "PopWork/widget/hyperlinkwidget.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ void TitleScreen::Draw(Graphics *g)
 	g->DrawImage(IMAGE_HUNGARR_LOGO, mWidth / 2 - IMAGE_HUNGARR_LOGO->mWidth / 2, 100);
 	g->SetColor(Color::White);
 	g->SetFont(FONT_HUNGARR);
-	SexyString s = _S("HUN-GARR NEEDS PLANETS!");
+	PopWorkString s = _S("HUN-GARR NEEDS PLANETS!");
 	g->DrawString(s, mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, 200);
 }
 
@@ -131,7 +131,7 @@ void TitleScreen::ButtonDepress(int theId)
 		// You might be thinking, "If I delete the title screen and
 		// hyperlink, won't I crash the program?" Yes, you will. That's
 		// why we aren't going to delete them using "delete". We're going
-		// to use SexyAppBase's SafeDeleteWidget method. This places the
+		// to use AppBase's SafeDeleteWidget method. This places the
 		// widget in a queue that is processed after all widgets and data
 		// get processed, and is then deleted at a time that is safe
 		// and appropriate. We still have to remove ourself and the

@@ -1,10 +1,10 @@
 #include "DemoWidget.h"
 #include "../Res.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Widget/ButtonWidget.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/widget/buttonwidget.h"
 #include "V14DemoApp.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@ DemoWidget::DemoWidget()
 
 	// Just for the heck of it, we'll resize ourselves at instantiation time.
 	int w = 200, h = 200;
-	Resize(gSexyAppBase->mWidth / 2 - w / 2, gSexyAppBase->mHeight / 2 - h / 2, w, h);
+	Resize(gAppBase->mWidth / 2 - w / 2, gAppBase->mHeight / 2 - h / 2, w, h);
 
 	// Previously, it was annoying trying to place widgets on some sort of parent widget, 
 	// since there was no notion of parent/child relationship. What you had to do was
@@ -80,12 +80,12 @@ void DemoWidget::ButtonDepress(int id)
 		// By calling Move (or Resize as well), we also move ALL our child widgets,
 		// preserving their relative positions. Previously, you would have had to
 		// manually move all child widgets yourself.
-		Move(Rand() % (gSexyAppBase->mWidth - mWidth), Rand() % (gSexyAppBase->mHeight - mHeight));
+		Move(Rand() % (gAppBase->mWidth - mWidth), Rand() % (gAppBase->mHeight - mHeight));
 	}
 	else if (id == mCloseButton->mId)
 	{
 		// We'll remove ourselves when the close button is pressed.
-		gSexyAppBase->mWidgetManager->RemoveWidget(this);
+		gAppBase->mWidgetManager->RemoveWidget(this);
 	}
 }
 

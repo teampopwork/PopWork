@@ -1,11 +1,11 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "SexyAppFramework/Widget/Widget.h"
-#include "SexyAppFramework/Widget/ButtonListener.h"
-#include "SexyAppFramework/Math/Rect.h"
+#include "PopWork/widget/widget.h"
+#include "PopWork/widget/buttonlistener.h"
+#include "PopWork/math/rect.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 class V12DemoApp;

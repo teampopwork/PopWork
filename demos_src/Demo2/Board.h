@@ -28,11 +28,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 // This file must be included so that we can derive our Board class from it
-#include "SexyAppFramework/Widget/Widget.h"
+#include "PopWork/widget/widget.h"
 
-// We place all our classes inside the "Sexy" namespace to avoid name collisions
+// We place all our classes inside the "PopWork" namespace to avoid name collisions
 // with other libraries that might be added.
-namespace Sexy
+namespace PopWork
 {
 
 

@@ -1,11 +1,11 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include "SexyAppFramework/Widget/Widget.h"
-#include "SexyAppFramework/Widget/ButtonListener.h"
-#include "SexyAppFramework/Math/Rect.h"
+#include "PopWork/widget/widget.h"
+#include "PopWork/widget/buttonlistener.h"
+#include "PopWork/math/rect.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 class V14DemoApp;
@@ -77,7 +77,7 @@ public:
 	//	using some sort of overlay widget as well.
 	//////////////////////////////////////////////////////////////////////////	
 	void		DrawOverlay(Graphics* g);
-	virtual void KeyChar(SexyChar theChar);
+	virtual void KeyChar(PopWorkChar theChar);
 	
 
 	void		SetFocusLost(bool f) {mLostFocus = f; mDeferPriority = 2;}

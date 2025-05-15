@@ -8,7 +8,7 @@
 #include "Common.cpp" // get MkDir and some other helper functions.
 
 using namespace std;
-using namespace Sexy;
+using namespace PopWork;
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;
@@ -20,7 +20,7 @@ bool unpackage = false;
 //////////////////////////////////////////////////////////////////////////
 // This is the default password for the PakInterface. 
 // The idea is to be able to change the password  on the command prompt.
-string gEncryptPassword = "PopCapSexyFramework";
+string gEncryptPassword = "PopCapPopWorkFramework";
 //////////////////////////////////////////////////////////////////////////
 
 FILE* gDestFP = NULL;
@@ -201,7 +201,7 @@ int main(int argc, char* argv[])
 	// PopCapPWE should be an internal tool.  In any event, the default Password
 	// is actually really easy to guess.
 	cout << StrFormat("Password: %s", gEncryptPassword.c_str()).c_str() << endl;
-	if (gEncryptPassword == "PopCapSexyFramework")
+	if (gEncryptPassword == "PopCapPopWorkFramework")
 		cerr << StrFormat("WARNING: %s is the Default Password and is NOT allowed for Distribution!", gEncryptPassword.c_str()).c_str() << endl;
 
 	if (argc < anArgPos + 2)

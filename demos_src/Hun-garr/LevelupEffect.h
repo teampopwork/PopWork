@@ -9,10 +9,10 @@
 #ifndef __LEVELUP_EFFECT_H__
 #define __LEVELUP_EFFECT_H__
 
-#include "SexyAppFramework/Common.h"
-#include "SexyAppFramework/Math/Rect.h"
+#include "PopWork/common.h"
+#include "PopWork/math/rect.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 	class Graphics;
@@ -23,13 +23,13 @@ namespace Sexy
 //////////////////////////////////////////////////////////////////////////
 struct BouncyChar
 {
-	SexyString		mChar;				// The character bouncing
+	PopWorkString		mChar;				// The character bouncing
 	bool			mDone;				// Completed bouncing yet?
 	float			mX, mY;				
 	float			mBounceSpeed;		// How fast up or down it's bouncing, affected by "gravity" 
 	float			mOldBounceSpeed;	// The base value that mBounceSpeed started at. Gets reduced over time.
 
-	BouncyChar(SexyString t, float x, float y, float s)
+	BouncyChar(PopWorkString t, float x, float y, float s)
 	{mChar = t; mX = x; mY = y; mBounceSpeed = mOldBounceSpeed = s; mDone = false;}
 };
 
@@ -44,7 +44,7 @@ struct LevelupStats
 
 	// Always 3 strings per planet:
 	// Planet name, exports, population (comma delimited)
-	std::vector<SexyString> mPlanetsEaten;
+	std::vector<PopWorkString> mPlanetsEaten;
 	
 };
 

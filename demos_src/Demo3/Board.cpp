@@ -1,34 +1,34 @@
 #include "Board.h"
 #include "GameApp.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
+#include "PopWork/graphics/graphics.h"
 
 // See the Draw method for more information on using the Color class.
-#include "SexyAppFramework/Graphics/Color.h"
+#include "PopWork/graphics/color.h"
 
 // The Image.h file just declares basic functions. All images are either of 
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "SexyAppFramework/Graphics/SDLImage.h"
+#include "PopWork/graphics/sdlimage.h"
 
 // The Rectangle template, used to specify X, Y, Width, Height
-#include "SexyAppFramework/Math/Rect.h"
+#include "PopWork/math/rect.h"
 
 // We're going to be making a button in this demo so we need to
 // include this file.
-#include "SexyAppFramework/Widget/ButtonWidget.h"
+#include "PopWork/widget/buttonwidget.h"
 
 // We're going to add our own button widget, which requires knowing about the
 // WidgetManager.
-#include "SexyAppFramework/Widget/WidgetManager.h"
+#include "PopWork/widget/widgetmanager.h"
 
-#include "SexyAppFramework/Graphics/ImageFont.h"
+#include "PopWork/graphics/imagefont.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -216,7 +216,7 @@ void Board::Draw(Graphics* g)
 	g->SetColor(Color(255, 255, 255));
 	g->DrawString(StrFormat(_S("X, Y is %d, %d"), mMouseX, mMouseY), 630, 20);
 	
-	SexyString buttonStr;
+	PopWorkString buttonStr;
 	if (mLeftDown)
 		buttonStr += _S("Left button is down. ");
 	if (mRightDown)

@@ -1,7 +1,7 @@
 #ifndef __Res_H__
 #define __Res_H__
 
-namespace Sexy
+namespace PopWork
 {
 	class ResourceManager;
 	class Image;
@@ -143,7 +143,7 @@ namespace Sexy
 	const char* GetStringIdById(int theId);
 	ResourceId GetIdByStringId(const char *theStringId);
 
-} // namespace Sexy
+} // namespace PopWork
 
 
 #endif

@@ -27,20 +27,20 @@
 //	classes where and when to draw to.
 //////////////////////////////////////////////////////////////////////////
 
-#include "SexyAppFramework/Widget/Widget.h"
-#include "SexyAppFramework/Widget/ButtonListener.h"
+#include "PopWork/widget/widget.h"
+#include "PopWork/widget/buttonlistener.h"
 
 // Because we're going to be learning about some new widgets, we
 // need to include some more listener classes so we can respond to each one.
-#include "SexyAppFramework/Widget/EditListener.h"
-#include "SexyAppFramework/Widget/CheckboxListener.h"
-#include "SexyAppFramework/Widget/ListListener.h"
+#include "PopWork/widget/editlistener.h"
+#include "PopWork/widget/checkboxlistener.h"
+#include "PopWork/widget/listlistener.h"
 
 
 
-// We place all our classes inside the "Sexy" namespace to avoid name collisions
+// We place all our classes inside the "PopWork" namespace to avoid name collisions
 // with other libraries that might be added.
-namespace Sexy
+namespace PopWork
 {
 
 
@@ -86,7 +86,7 @@ class Board :	public Widget, public ButtonListener,
 		ListWidget*			mListWidget;
 		ScrollbarWidget*	mScrollbarWidget;
 
-		SexyString			mText;		// When we press enter on the edit box, we'll set this string and print it
+		PopWorkString			mText;		// When we press enter on the edit box, we'll set this string and print it
 
 		// Both are floats to ensure that the only difference in the movement demo
 		// is the fact that one is updated in UpdateF and the other is in Update.
@@ -270,7 +270,7 @@ class Board :	public Widget, public ButtonListener,
 		//	more processor time. 
 		//	IMPORTANT: YOU MUST ALSO DELETE THE FOLLOWING REGISTRY KEY:
 		//	Whereever your registry settings are stored 
-		//	(HKEY_LOCAL_MACHINE\SOFTWARE\SexyAppFramework\Demo4 for this case),
+		//	(HKEY_LOCAL_MACHINE\SOFTWARE\PopWork\Demo4 for this case),
 		//	you must delete the key "WaitForVSync". This is VERY important, and it
 		//	won't work otherwise.
 		//////////////////////////////////////////////////////////////////////////

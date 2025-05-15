@@ -23,7 +23,7 @@
 #include "GameApp.h"
 
 
-using namespace Sexy;
+using namespace PopWork;
 
 int main(int argc, char* argv[])
 {

@@ -29,7 +29,7 @@ PakInterface::PakInterface()
 		*gPakInterfaceP = this;
 
 	// Init to be the same default as the default in PopPakPWE.exe
-	mDecryptPassword = "PopCapSexyFramework";
+	mDecryptPassword = "PopCapPopWorkFramework";
 }
 
 PakInterface::~PakInterface()

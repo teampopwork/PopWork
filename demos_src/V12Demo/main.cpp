@@ -50,7 +50,7 @@
 
 #include "V12DemoApp.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 int main(int argc, char* argv[])
 {

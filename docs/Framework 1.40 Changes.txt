@@ -7,7 +7,7 @@ General
 * Fixed WideString.
 
 
-SexyAppBase
+AppBase
 ===========
 * Replaced the Windows API input parsing with SDL3 events.
 

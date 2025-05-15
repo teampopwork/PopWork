@@ -21,5 +21,5 @@ set(SRC_MAIN
 )
 
 add_executable(V14Demo ${SRC_MAIN})
-add_dependencies(V14Demo SexyAppFramework)
-target_link_libraries(V14Demo SexyAppFramework)
+add_dependencies(V14Demo PopWork)
+target_link_libraries(V14Demo PopWork)

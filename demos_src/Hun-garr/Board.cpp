@@ -7,16 +7,16 @@
 #include "GameOverEffect.h"
 #include "OptionsDialog.h"
 
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Graphics/Color.h"
-#include "SexyAppFramework/Math/Rect.h"
-#include "SexyAppFramework/Widget/ButtonWidget.h"
-#include "SexyAppFramework/Widget/WidgetManager.h"
-#include "SexyAppFramework/Graphics/ImageFont.h"
-#include "SexyAppFramework/Audio/SoundManager.h"
-#include "SexyAppFramework/Audio/SoundInstance.h"
-#include "SexyAppFramework/Misc/Buffer.h"
-#include "SexyAppFramework/Audio/MusicInterface.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/graphics/color.h"
+#include "PopWork/math/rect.h"
+#include "PopWork/widget/buttonwidget.h"
+#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/graphics/imagefont.h"
+#include "PopWork/audio/soundmanager.h"
+#include "PopWork/audio/soundinstance.h"
+#include "PopWork/misc/buffer.h"
+#include "PopWork/audio/musicinterface.h"
 
 
 #define _USE_MATH_DEFINES
@@ -27,7 +27,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-using namespace Sexy;
+using namespace PopWork;
 
 // How much faster the beam gets when you eat a planet
 const float BEAM_INC_SPEED	=	0.05f;
@@ -37,7 +37,7 @@ const float MAX_BEAM_SPEED	=	2.5f;
 
 // Table of random planet names
 const int NUM_PLANET_NAMES	=	28;
-const SexyString PLANET_NAME[] = 
+const PopWorkString PLANET_NAME[] = 
 {_S("Deev-z"), _S("SEN-Hen"), _S("Wallach IX"), _S("Salusa Secundus"), _S("Ridiculous Prime"), _S("Architekt V"),
 _S("Robot Republica"), _S("Ix"), _S("XOLDOG4000"), _S("Kliprok"), _S("TR-909"), _S("TR-808"), _S("TB-303"), 
 _S("DTR011"), _S("dTech"), _S("Rotwang"), _S("Sukhtek"), _S("Romulox"), _S("Dob Reevz"), _S("Skull XII"),
@@ -45,7 +45,7 @@ _S("Beefy Prime"), _S("Haas"), _S("Reifenrath"), _S("Gehner Subulon"), _S("ACE-D
 
 // Table of random planet exports:
 const int NUM_PLANET_EXPORTS =	23;
-const SexyString PLANET_EXPORTS[] = 
+const PopWorkString PLANET_EXPORTS[] = 
 {_S("Happiness"), _S("Donkeys"), _S("Rabies"), _S("AstroPop"), _S("Idiocy"), _S("Minimal Techno"),
 _S("Citizens"), _S("Pain-relieving Pants"), _S("The Quad-Laser"), _S("Septic Systems"), _S("Video Games"),
 _S("Robots"), _S("Plaid"), _S("Octagons"), _S("Gingivitis"), _S("Recognizers"), _S("Electro"), _S("Sauce"),
@@ -668,7 +668,7 @@ void Board::MoveLines(float theFrac)
 	// the edge of them. In non-3d mode, we'll only emit half the sparks to reduce the CPU time consumed.
 	if (!mMovingLine2.mDone || !mMovingLine1.mDone)
 	{
-		int modVal = gSexyAppBase->Is3DAccelerated() ? 2 : 4;
+		int modVal = gAppBase->Is3DAccelerated() ? 2 : 4;
 		if (mUpdateCnt % modVal == 0)
 			EmitSparks();
 	}
@@ -697,7 +697,7 @@ void Board::Draw(Graphics* g)
 	g->SetColor(Color::Black);
 	g->FillRect(0, 0, mWidth, mHeight);
 
-	int incAmt = gSexyAppBase->Is3DAccelerated() ? 1 : 2;
+	int incAmt = gAppBase->Is3DAccelerated() ? 1 : 2;
 
 	// Draw less starts if not in 3D mode to reduce CPU usage, since they aren't a critical feature
 	for (int i = 0; i < MAX_STARS; i += incAmt)
@@ -829,7 +829,7 @@ void Board::DrawUI(Graphics* g)
 	int height = FONT_HUNGARR->GetHeight();
 
 	g->SetFont(FONT_HUNGARR);
-	SexyString s;
+	PopWorkString s;
 	int rightX = FONT_HUNGARR->StringWidth(_S("POPULATION CONSUMED: ")) + 5;
 	
 	int strWidth;
@@ -899,7 +899,7 @@ void Board::Beam1DrawHelper(Graphics* g)
 	// numbers till it looked right, or your artist would inform you.
 	if (mMovingLine1.mIsVertical)
 	{
-		if (gSexyAppBase->Is3DAccelerated())
+		if (gAppBase->Is3DAccelerated())
 		{
 			g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mMovingLine1.mX - 8, mMovingLine1.mY, 
 				Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), mMovingLine1.mHeight));
@@ -912,7 +912,7 @@ void Board::Beam1DrawHelper(Graphics* g)
 	}
 	else
 	{
-		if (gSexyAppBase->Is3DAccelerated())
+		if (gAppBase->Is3DAccelerated())
 		{
 			g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mMovingLine1.mX, mMovingLine1.mY - 8,
 				Rect(0, 0, mMovingLine1.mWidth, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
@@ -941,7 +941,7 @@ void Board::Beam2DrawHelper(Graphics* g)
 
 	if (mMovingLine2.mIsVertical)
 	{
-		if (gSexyAppBase->Is3DAccelerated())
+		if (gAppBase->Is3DAccelerated())
 		{
 			g->DrawImageF(IMAGE_HUNGARR_BEAM_DOWN, mMovingLine2.mX - 8, mMovingLine2.mY - 1, 
 				Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - mMovingLine2.mHeight, 
@@ -956,7 +956,7 @@ void Board::Beam2DrawHelper(Graphics* g)
 	}
 	else
 	{
-		if (gSexyAppBase->Is3DAccelerated())
+		if (gAppBase->Is3DAccelerated())
 		{
 			g->DrawImageF(IMAGE_HUNGARR_BEAM_RIGHT, mMovingLine2.mX - 1, mMovingLine2.mY - 8,
 				Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - mMovingLine2.mWidth, 0, 
@@ -1042,7 +1042,7 @@ void Board::DrawPlanets(Graphics* g)
 		{
 			Rect r = Rect(p->mImgCol * w, 0, w, IMAGE_PLANETS->GetCelHeight());
 
-			if (gSexyAppBase->Is3DAccelerated())
+			if (gAppBase->Is3DAccelerated())
 				g->DrawImageRotatedF(IMAGE_PLANETS, p->mX, p->mY, p->mRotationAngle, &r);
 			else
 				g->DrawImage(IMAGE_PLANETS, p->mX, p->mY, r);
@@ -1062,7 +1062,7 @@ void Board::DrawHungarrVertBeamsHelper(Graphics* g)
 
 	int h = IMAGE_HUNGARR_VERT->GetHeight() / 2;
 
-	if (gSexyAppBase->Is3DAccelerated())
+	if (gAppBase->Is3DAccelerated())
 	{
 		g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mLine1X, mLine1Y, 
 			Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), h));
@@ -1108,7 +1108,7 @@ void Board::DrawHungarrHorizBeamsHelper(Graphics* g)
 
 	int w = IMAGE_HUNGARR_HORIZ->GetWidth() / 2;
 
-	if (gSexyAppBase->Is3DAccelerated())
+	if (gAppBase->Is3DAccelerated())
 	{
 		g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mLine1X, mLine1Y, 
 			Rect(0, 0, w, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
@@ -1150,7 +1150,7 @@ void Board::DrawHungarr(Graphics* g)
 	// again, we use the floating point functions instead of the integer ones
 	// if the user has a 3d card.
 
-	bool is3d = gSexyAppBase->Is3DAccelerated();
+	bool is3d = gAppBase->Is3DAccelerated();
 
 	if (mHungarrIsVertical)
 	{					
@@ -1189,7 +1189,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 	mOptionsBtn->mDownImage = IMAGE_BUTTON_DOWN;
 	mOptionsBtn->mButtonImage = IMAGE_BUTTON_NORMAL;
 	mOptionsBtn->mDoFinger = true;
-	mOptionsBtn->Resize(gSexyAppBase->mWidth - IMAGE_BUTTON_NORMAL->GetWidth() - 10, FONT_HUNGARR->GetHeight() * 3 - 20, 
+	mOptionsBtn->Resize(gAppBase->mWidth - IMAGE_BUTTON_NORMAL->GetWidth() - 10, FONT_HUNGARR->GetHeight() * 3 - 20, 
 				IMAGE_BUTTON_NORMAL->GetWidth(), IMAGE_BUTTON_NORMAL->GetHeight());
 
 	theWidgetManager->AddWidget(mOptionsBtn);
@@ -1910,7 +1910,7 @@ void Board::Pause(bool p)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::KeyChar(SexyChar theChar)
+void Board::KeyChar(PopWorkChar theChar)
 {
 	if (theChar == ' ')
 		Pause(mPauseLevel == 0);
@@ -1928,8 +1928,8 @@ void Board::GivePlanetBonus(Planet* p)
 
 	++mNumPlanetsEaten;
 	
-	SexyString pName = PLANET_NAME[p->mNameIdx];
-	SexyString pExport = PLANET_EXPORTS[p->mExportIdx];
+	PopWorkString pName = PLANET_NAME[p->mNameIdx];
+	PopWorkString pExport = PLANET_EXPORTS[p->mExportIdx];
 	int points = mLevel * 1000;
 	AddBonusText(StrFormat(_S("%s: +%d"), pName.c_str(), points), p->mX, p->mY);
 	mScore += points;
@@ -2007,7 +2007,7 @@ void Board::UpdatePercentComplete(void)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddBonusText(SexyString t)
+void Board::AddBonusText(PopWorkString t)
 {
 	AddBonusText(t, mWidth / 2 - FONT_HUNGARR->StringWidth(t) / 2, 
 				    (mHeight - GRID_START_Y) / 2 - FONT_HUNGARR->GetHeight() / 2);
@@ -2015,7 +2015,7 @@ void Board::AddBonusText(SexyString t)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddBonusText(SexyString t, float x, float y)
+void Board::AddBonusText(PopWorkString t, float x, float y)
 {
 	BonusText bt;
 	bt.mText = t;

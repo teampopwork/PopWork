@@ -1,14 +1,14 @@
 #ifndef __V14DEMOAPP_H__
 #define __V14DEMOAPP_H__
 
-#include "SexyAppFramework\SexyAppBase.h"
+#include "PopWork\appbase.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 class Board;
 
-class V14DemoApp : public SexyAppBase
+class V14DemoApp : public AppBase
 {
 
 public:
@@ -37,7 +37,7 @@ public:
 	//	Purpose: This uses the same idea behind ShutdownHook in that you don't
 	//	have to worry about calling the base class' Init method anymore
 	//	and can forget about those previous hassels. This method is guaranteed
-	//	to be called only once, right after SexyAppBase::Init finishes. Thus,
+	//	to be called only once, right after AppBase::Init finishes. Thus,
 	//	you no longer need an Init() override.
 	//////////////////////////////////////////////////////////////////////////	
 	virtual void	InitHook();

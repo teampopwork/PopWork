@@ -10,11 +10,11 @@
 #ifndef __OPTIONS_DIALOG_H__
 #define __OPTIONS_DIALOG_H__
 
-#include "SexyAppFramework/Widget/Dialog.h"
-#include "SexyAppFramework/Widget/SliderListener.h"
-#include "SexyAppFramework/Widget/CheckboxListener.h"
+#include "PopWork/widget/dialog.h"
+#include "PopWork/widget/sliderlistener.h"
+#include "PopWork/widget/checkboxlistener.h"
 
-namespace Sexy
+namespace PopWork
 {
 
 	class Graphics;

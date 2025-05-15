@@ -19,5 +19,5 @@ set(SRC_MAIN
 )
 
 add_executable(XMLDemo ${SRC_MAIN})
-add_dependencies(XMLDemo SexyAppFramework)
-target_link_libraries(XMLDemo SexyAppFramework)
+add_dependencies(XMLDemo PopWork)
+target_link_libraries(XMLDemo PopWork)

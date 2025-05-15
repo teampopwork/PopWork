@@ -4,12 +4,12 @@
 #include "GameOverEffect.h"
 #include "../Res.h"
 #include "Board.h"
-#include "SexyAppFramework/SexyAppBase.h"
-#include "SexyAppFramework/Graphics/Graphics.h"
-#include "SexyAppFramework/Graphics/Font.h"
-#include "SexyAppFramework/Graphics/Image.h"
+#include "PopWork/appbase.h"
+#include "PopWork/graphics/graphics.h"
+#include "PopWork/graphics/font.h"
+#include "PopWork/graphics/image.h"
 
-using namespace Sexy;
+using namespace PopWork;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ void GameOverEffect::Init()
 
 	// Make as many lines as the screen is wide, and stagger them by a 
 	// random time up to 2 seconds, with speeds between 5 and 10 pixels per update.
-	for (int i = 0; i < gSexyAppBase->mWidth; i++)
+	for (int i = 0; i < gAppBase->mWidth; i++)
 		mLines.push_back(DrippyLine((Rand() % 5) + 5, i, Rand() % 200));
 }
 
@@ -86,7 +86,7 @@ void GameOverEffect::Update(void)
 		// planet, then 10 times per second you'd hear it, and trust me, it's really irritating.
 		if ((mState == RED_FADE_IN) || (mState == RED_HOLD))
 			if (mUpdateCnt % 40 == 0)
-				gSexyAppBase->PlaySample(SOUND_EXPLOSION);
+				gAppBase->PlaySample(SOUND_EXPLOSION);
 
 		// Update each explosion animation. When it's done, remove it.
 		for (int i = 0; i < mExplosion.size(); i++)
@@ -125,7 +125,7 @@ void GameOverEffect::Update(void)
 		{
 			mState = GameOverEffect::SHOWING_LETTERS;
 			mUpdateCnt = 0;
-			gSexyAppBase->PlaySample(SOUND_GAME_OVER_TEXT);
+			gAppBase->PlaySample(SOUND_GAME_OVER_TEXT);
 		}
 		else
 			PulseRed();
@@ -193,7 +193,7 @@ void GameOverEffect::Update(void)
 		{
 			mAlpha = 0;
 			mState = GameOverEffect::SHOWING_STATS;
-			gSexyAppBase->PlaySample(SOUND_GAME_OVER_STATS);
+			gAppBase->PlaySample(SOUND_GAME_OVER_STATS);
 		}
 
 	}
@@ -217,18 +217,18 @@ void GameOverEffect::Update(void)
 			{
 				alldone = false;
 				dl->mHeight += dl->mSpeed;
-				if (dl->mHeight >= gSexyAppBase->mHeight)
+				if (dl->mHeight >= gAppBase->mHeight)
 				{
 					dl->mHeight = 0;
 					dl->mSpeed = 10;
 					dl->mDripUp = true;
 				}
 			}
-			else if (dl->mDripUp && (dl->mHeight < gSexyAppBase->mHeight))
+			else if (dl->mDripUp && (dl->mHeight < gAppBase->mHeight))
 			{
 				dl->mHeight += dl->mSpeed;
-				if (dl->mHeight >= gSexyAppBase->mHeight)
-					dl->mHeight = gSexyAppBase->mHeight;
+				if (dl->mHeight >= gAppBase->mHeight)
+					dl->mHeight = gAppBase->mHeight;
 				else
 					alldone = false;
 			}
@@ -284,13 +284,13 @@ void GameOverEffect::Draw(Graphics* g)
 	if ((mState == GameOverEffect::RED_FADE_IN) || (mState == GameOverEffect::RED_HOLD))
 	{
 		g->SetColor(Color(mRed, 0, 0, mAlpha));
-		g->FillRect(0, 0, gSexyAppBase->mWidth, gSexyAppBase->mHeight);
+		g->FillRect(0, 0, gAppBase->mWidth, gAppBase->mHeight);
 	}
 	else if ((mState == GameOverEffect::SHOWING_LETTERS) || (mState == GameOverEffect::FADING_LETTERS))
 	{
 		g->SetFont(FONT_HUNGARR);
-		int x = gSexyAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(_S("GAME OVER")) / 2;
-		int y = gSexyAppBase->mHeight / 2;
+		int x = gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(_S("GAME OVER")) / 2;
+		int y = gAppBase->mHeight / 2;
 
 		for (int i = 0; i < mText.size(); i++)
 		{
@@ -306,18 +306,18 @@ void GameOverEffect::Draw(Graphics* g)
 		if (mAlpha > 0)
 		{
 			g->SetColor(Color(mRed, 0, 0, mAlpha));
-			g->FillRect(0, 0, gSexyAppBase->mWidth, gSexyAppBase->mHeight);
+			g->FillRect(0, 0, gAppBase->mWidth, gAppBase->mHeight);
 		}
 	}
 	else if (mState == GameOverEffect::SHOWING_STATS)
 	{		
-		g->DrawImage(IMAGE_HUNGARR_LOGO, gSexyAppBase->mWidth / 2 - IMAGE_HUNGARR_LOGO->mWidth / 2, 10);
+		g->DrawImage(IMAGE_HUNGARR_LOGO, gAppBase->mWidth / 2 - IMAGE_HUNGARR_LOGO->mWidth / 2, 10);
 
 		g->SetFont(FONT_HUNGARR);
 		g->SetColor(Color::White);
-		int rightX = gSexyAppBase->mWidth / 2;
+		int rightX = gAppBase->mWidth / 2;
 		int y = 100;
-		SexyString s;
+		PopWorkString s;
 		int strWidth;
 
 		s = _S("FINAL SCORE: ");
@@ -377,7 +377,7 @@ void GameOverEffect::Draw(Graphics* g)
 			// saturation at max and luminance at half for our particular example.
 			// The returned value is ANDed with 0xFFFFFFFF to clamp the values for
 			// the alpha, red, green, and blue to the valid region of 0 to 255. 
-			Color hue = gSexyAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF;
+			Color hue = gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF;
 			for (int i = 0; i < mLines.size(); i++)
 			{
 				DrippyLine* dl = &mLines[i];
@@ -392,14 +392,14 @@ void GameOverEffect::Draw(Graphics* g)
 				else if (dl->mDelay == 0)
 				{
 					// Moving up, draw the line in HSL and the rest in black
-					if (dl->mHeight < gSexyAppBase->mHeight)
+					if (dl->mHeight < gAppBase->mHeight)
 					{
 						g->SetColor(Color(0, 0, 0));
-						g->DrawRect(Rect(dl->mX, 0, 1, gSexyAppBase->mHeight - dl->mHeight));
+						g->DrawRect(Rect(dl->mX, 0, 1, gAppBase->mHeight - dl->mHeight));
 					}
 
 					g->SetColor(hue);
-					g->DrawRect(Rect(dl->mX, gSexyAppBase->mHeight - dl->mHeight, 1, dl->mHeight));
+					g->DrawRect(Rect(dl->mX, gAppBase->mHeight - dl->mHeight, 1, dl->mHeight));
 				}
 			}
 		}
@@ -411,9 +411,9 @@ void GameOverEffect::Draw(Graphics* g)
 			// into our HSL color. As you may recall from previous demos, the actual color
 			// structure is 32 bit, and looks like this in binary form:
 			//	AAAA RRRR GGGG BBBB  Where A,R,G,B are alpha, red, green, blue.
-			Color hue = (gSexyAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFF) | (mAlpha << 24);
+			Color hue = (gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFF) | (mAlpha << 24);
 			g->SetColor(hue);
-			g->FillRect(0, 0, gSexyAppBase->mWidth, gSexyAppBase->mHeight);
+			g->FillRect(0, 0, gAppBase->mWidth, gAppBase->mHeight);
 		}
 	}
 }
@@ -447,6 +447,6 @@ bool GameOverEffect::HideBoard()
 void GameOverEffect::DoneViewingStats()
 {
 	mState = DRIP_OUT;
-	gSexyAppBase->PlaySample(SOUND_GAME_OVER_CLICK);
-	gSexyAppBase->PlaySample(SOUND_GAME_OVER_RESTART);
+	gAppBase->PlaySample(SOUND_GAME_OVER_CLICK);
+	gAppBase->PlaySample(SOUND_GAME_OVER_RESTART);
 }

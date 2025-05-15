@@ -12,15 +12,15 @@
 //	* Widget basics: Adding, removing, drawing, updating
 //	* Standardized game logic frame rate
 //	* Intro to the Init and resource loading methods
-//	* Introduction to the structure and organization of a SexyAppBase game
+//	* Introduction to the structure and organization of a AppBase game
 //////////////////////////////////////////////////////////////////////////
 
 #include "GameApp.h"
 
-// The SexyAppFramework resides in the "Sexy" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace Sexy" to avoid
-// having to prefix everything with Sexy::
-using namespace Sexy;
+// The PopWork resides in the "PopWork" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopWork" to avoid
+// having to prefix everything with PopWork::
+using namespace PopWork;
 
 int main(int argc, char* argv[])
 {
