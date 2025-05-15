@@ -4,7 +4,7 @@
 #pragma once
 #endif
 
-#include "MusicInterface.h"
+#include "musicinterface.h"
 #include "bass.h"
 
 namespace PopWork

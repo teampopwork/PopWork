@@ -4,7 +4,7 @@
 #pragma once
 #endif
 
-#include "ButtonWidget.h"
+#include "buttonwidget.h"
 
 namespace PopWork
 {

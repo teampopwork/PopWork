@@ -1,4 +1,3 @@
-
 #include <memory>
 #include "resourcemanager.h"
 #include "readwrite/xmlparser.h"

@@ -4,7 +4,7 @@
 #pragma once
 #endif
 
-#include "SoundInstance.h"
+#include "soundinstance.h"
 #include <AL/al.h>
 #include <AL/alc.h>
 

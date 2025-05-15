@@ -51,7 +51,7 @@ typedef PopWorkString::value_type					PopWorkChar;
 #define HAS_POPWORKCHAR
 
 #endif
-#include "ReadWrite/ModVal.h"
+#include "readwrite/modval.h"
 
 #ifdef _USE_WIDE_STRING
 

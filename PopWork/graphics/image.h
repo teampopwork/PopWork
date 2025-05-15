@@ -5,7 +5,7 @@
 #endif
 
 #include "common.h"
-#include "Color.h"
+#include "color.h"
 #include "math/rect.h"
 #include "math/point.h"
 

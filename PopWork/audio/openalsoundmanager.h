@@ -4,7 +4,7 @@
 #pragma once
 #endif
 
-#include "SoundManager.h"
+#include "soundmanager.h"
 #include "bass.h"
 #include <AL/al.h>
 #include <AL/alc.h>

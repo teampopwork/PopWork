@@ -4,7 +4,7 @@
 #pragma once
 #endif
 
-#include "Common.h"
+#include "common.h"
 
 namespace PopWork
 {

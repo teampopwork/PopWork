@@ -1,8 +1,8 @@
 ﻿#include "openalsoundmanager.h"
 #include "openalsoundinterface.h"
 #include "PakLib/PakInterface.h"
-#include "Common.h"
-#include "AUReader.h"
+#include "common.h"
+#include "aureader.h"
 
 // Vorbis
 #include "vorbis/codec.h"
