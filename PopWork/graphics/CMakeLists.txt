@@ -26,8 +26,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 	sdlinterface.h
 	sharedimage.cpp
 	sharedimage.h
-	SysFont.cpp
-	SysFont.h
+	sysfont.cpp
+	sysfont.h
 	SWTri/SWTri.cpp
 	SWTri/SWTri.h
 
