@@ -454,8 +454,18 @@ void SDLInterface::Blt(Image* theImage, int theX, int theY, const Rect& theSrcRe
 	SDL_SetTextureColorMod(aTexture, theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue());
 	SDL_SetTextureAlphaMod(aTexture, theColor.GetAlpha());
 
-	SDL_FRect destRect = { theX, theY, theSrcRect.mWidth, theSrcRect.mHeight };
-	SDL_FRect srcRect = { theSrcRect.mX, theSrcRect.mY, theSrcRect.mWidth, theSrcRect.mHeight };
+	SDL_FRect destRect = {
+		(float)theX,
+		(float)theY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
+	SDL_FRect srcRect = {
+		(float)theSrcRect.mX,
+		(float)theSrcRect.mY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
 
 	SDL_SetTextureBlendMode(aTexture, ChooseBlendMode(theDrawMode));
 	SDL_RenderTexture(mRenderer, aTexture, &srcRect, &destRect);
@@ -478,13 +488,23 @@ void SDLInterface::BltClipF(Image* theImage, float theX, float theY, const Rect&
 	SDL_SetTextureColorMod(aTexture, theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue());
 	SDL_SetTextureAlphaMod(aTexture, theColor.GetAlpha());
 
-	SDL_FRect destRect = { theX, theY, theSrcRect.mWidth, theSrcRect.mHeight };
+	SDL_FRect destRect = {
+		theX,
+		theY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
 	SDL_Rect clipRect;
 	if (theClipRect == nullptr)
 		clipRect = { 0,0,theImage->mWidth, theImage->mHeight };
 	else
 		clipRect = { theClipRect->mX, theClipRect->mY, theClipRect->mWidth, theClipRect->mHeight };
-	SDL_FRect srcRect = { theSrcRect.mX, theSrcRect.mY, theSrcRect.mWidth, theSrcRect.mHeight };
+	SDL_FRect srcRect = {
+		theSrcRect.mX,
+		theSrcRect.mY,
+		theSrcRect.mWidth,
+		theSrcRect.mHeight
+	};
 
 	SDL_SetRenderClipRect(mRenderer, &clipRect);
 	SDL_SetTextureBlendMode(aTexture, ChooseBlendMode(theDrawMode));
@@ -508,8 +528,18 @@ void SDLInterface::BltMirror(Image* theImage, float theX, float theY, const Rect
 	SDL_SetTextureColorMod(aTexture, theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue());
 	SDL_SetTextureAlphaMod(aTexture, theColor.GetAlpha());
 
-	SDL_FRect destRect = { theX, theY, theSrcRect.mWidth,theSrcRect.mHeight };
-	SDL_FRect srcRect = { theSrcRect.mX, theSrcRect.mY, theSrcRect.mWidth, theSrcRect.mHeight };
+	SDL_FRect destRect = {
+		theX,
+		theY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
+	SDL_FRect srcRect = {
+		(float)theSrcRect.mX,
+		(float)theSrcRect.mY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
 
 	SDL_SetTextureBlendMode(aTexture, ChooseBlendMode(theDrawMode));
 	SDL_RenderTextureRotated(mRenderer, aTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_HORIZONTAL);
@@ -534,13 +564,23 @@ void SDLInterface::StretchBlt(Image* theImage, const Rect& theDestRect, const Re
 	SDL_SetTextureColorMod(aTexture, theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue());
 	SDL_SetTextureAlphaMod(aTexture, theColor.GetAlpha());
 
-	SDL_FRect destRect = { theDestRect.mX, theDestRect.mY, theDestRect.mWidth * xScale, theDestRect.mHeight * yScale};
+	SDL_FRect destRect = {
+		(float)theDestRect.mX,
+		(float)theDestRect.mY,
+		(float)theDestRect.mWidth * xScale,
+		(float)theDestRect.mHeight * yScale
+	};
 	SDL_Rect clipRect;
 	if (theClipRect == nullptr)
 		clipRect = { 0,0,theImage->mWidth, theImage->mHeight };
 	else
 		clipRect = { theClipRect->mX, theClipRect->mY, theClipRect->mWidth, theClipRect->mHeight };
-	SDL_FRect srcRect = { theSrcRect.mX, theSrcRect.mY, theSrcRect.mWidth, theSrcRect.mHeight};
+	SDL_FRect srcRect = {
+		(float)theSrcRect.mX,
+		(float)theSrcRect.mY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
 
 	SDL_SetRenderClipRect(mRenderer, &clipRect);
 	SDL_SetTextureBlendMode(aTexture, ChooseBlendMode(theDrawMode));
@@ -565,8 +605,18 @@ void SDLInterface::BltRotated(Image* theImage, float theX, float theY, const Rec
 	SDL_SetTextureColorMod(aTexture, theColor.GetRed(), theColor.GetGreen(), theColor.GetBlue());
 	SDL_SetTextureAlphaMod(aTexture, theColor.GetAlpha());
 
-	SDL_FRect destRect = { theX, theY, theSrcRect.mWidth, theSrcRect.mHeight };
-	SDL_FRect srcRect = { theSrcRect.mX, theSrcRect.mY, theSrcRect.mWidth, theSrcRect.mHeight };
+	SDL_FRect destRect = {
+		(float)theX,
+		(float)theY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
+	SDL_FRect srcRect = {
+		(float)theSrcRect.mX,
+		(float)theSrcRect.mY,
+		(float)theSrcRect.mWidth,
+		(float)theSrcRect.mHeight
+	};
 	SDL_Rect clipRect;
 	if (theClipRect == nullptr)
 		clipRect = { 0,0,theImage->mWidth, theImage->mHeight };
@@ -618,7 +668,12 @@ void SDLInterface::BltTransformed(Image* theImage, const Rect* theClipRect, cons
 	float x4 = x2;
 	float y4 = y3;
 
-	SDL_FColor aColor = { theColor.GetRed() , theColor.GetGreen(), theColor.GetBlue(), theColor.GetAlpha() };
+	SDL_FColor aColor = {
+		(float)theColor.GetRed(),
+		(float)theColor.GetGreen(),
+		(float)theColor.GetBlue(),
+		(float)theColor.GetAlpha()
+	};
 
 	SDL_Vertex vertices[4] = {
 		{ TransformToPoint(x1, y1, theTransform, theX, theY), aColor, {0, 0} },     // Top-left
@@ -651,7 +706,12 @@ void SDLInterface::FillRect(const Rect& theRect, const Color& theColor, int theD
 {
 	SDL_SetRenderTarget(mRenderer, mScreenTexture);
 
-	SDL_FRect theSDLRect = { theRect.mX, theRect.mY, theRect.mWidth, theRect.mHeight };
+	SDL_FRect theSDLRect = {
+		(float)theRect.mX,
+		(float)theRect.mY,
+		(float)theRect.mWidth,
+		(float)theRect.mHeight
+	};
 
 	SDL_SetRenderDrawColor(mRenderer, theColor.mRed, theColor.mGreen, theColor.mBlue, theColor.mAlpha);
 
@@ -665,7 +725,12 @@ void SDLInterface::DrawTriangle(const TriVertex& p1, const TriVertex& p2, const 
 {
 	SDL_SetRenderTarget(mRenderer, mScreenTexture);
 
-	SDL_FColor aColor = { theColor.GetRed() , theColor.GetGreen(), theColor.GetBlue(), theColor.GetAlpha() };
+	SDL_FColor aColor = {
+		(float)theColor.GetRed(),
+		(float)theColor.GetGreen(),
+		(float)theColor.GetBlue(),
+		(float)theColor.GetAlpha()
+	};
 
 	int indices[] = { 0, 1, 2}; 
 
@@ -697,7 +762,12 @@ void SDLInterface::DrawTriangleTex(const TriVertex& p1, const TriVertex& p2, con
 
 	SDL_SetRenderTarget(mRenderer, mScreenTexture);
 
-	SDL_FColor aColor = { theColor.GetRed() , theColor.GetGreen(), theColor.GetBlue(), theColor.GetAlpha() };
+	SDL_FColor aColor = {
+		(float)theColor.GetRed(),
+		(float)theColor.GetGreen(),
+		(float)theColor.GetBlue(),
+		(float)theColor.GetAlpha()
+	};
 
 	int indices[] = { 0, 1, 2 };
 

@@ -356,7 +356,7 @@ AppBase::~AppBase()
 					aMessageboxData.window = mSDLInterface->mWindow;
 
 					int aResult;
-					if (SDL_ShowMessageBox(&aMessageboxData, &aResult) < 0) {
+					if (!SDL_ShowMessageBox(&aMessageboxData, &aResult)) {
 						SDL_Log("Error displaying message box: %s", SDL_GetError());
 					}
 					mSDLInterface->mIs3D = aResult == 1 ? true : false;

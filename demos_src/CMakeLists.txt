@@ -1,15 +1,10 @@
 # CMakeLists.txt
 cmake_minimum_required(VERSION 3.18)
 
-add_subdirectory(Demo1)
-add_subdirectory(Demo2)
-add_subdirectory(Demo3)
-add_subdirectory(Demo4)
-add_subdirectory(Demo5)
-add_subdirectory(Hun-garr)
-add_subdirectory(V12Demo)
-add_subdirectory(V14Demo)
-add_subdirectory(XMLDemo)
+# maybe. maybe not.
+foreach(dir demo1 demo2 demo3 demo4 demo5 hun-garr v12demo v14demo xmldemo)
+    add_subdirectory(${dir})
+endforeach()
 
 # installing and stuff
 install(FILES

@@ -10,7 +10,7 @@
 namespace PopWork
 {
 
-typedef enum KeyCode
+enum KeyCode
 {
 	KEYCODE_UNKNOWN		  = 0x00,
 	KEYCODE_LBUTTON		  = 0x01,

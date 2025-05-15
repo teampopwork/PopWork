@@ -1492,12 +1492,12 @@ bool MemoryImage::BltRotatedClipHelper(float &theX, float &theY, const Rect &the
 	float aSin = sinf(theRot);
 
 	// Map the four corners and find the bounding rectangle
-	float px[4] = { 0, theSrcRect.mWidth, theSrcRect.mWidth, 0 };
-	float py[4] = { 0, 0, theSrcRect.mHeight, theSrcRect.mHeight };
-	float aMinX = 10000000;
-	float aMaxX = -10000000;
-	float aMinY = 10000000;
-	float aMaxY = -10000000;
+	float px[4] = { 0.f, (float)theSrcRect.mWidth, (float)theSrcRect.mWidth, 0.f };
+	float py[4] = { 0.f, 0.f, (float)theSrcRect.mHeight, (float)theSrcRect.mHeight };
+	float aMinX = 10000000.f;
+	float aMaxX = -10000000.f;
+	float aMinY = 10000000.f;
+	float aMaxY = -10000000.f;
 
 	for (int i=0; i<4; i++)
 	{
@@ -1768,10 +1768,10 @@ void MemoryImage::BltMatrixHelper(Image* theImage, float x, float y, const PopWo
 
 	SWHelper::XYZStruct aVerts[4] =
 	{
-		{ -w2,	-h2,	u0, v0, 0xFFFFFFFF },
-		{ w2,	-h2,	u1,	v0,	0xFFFFFFFF },
-		{ -w2,	h2,		u0,	v1,	0xFFFFFFFF },
-		{ w2,	h2,		u1,	v1,	0xFFFFFFFF }
+		{ -w2,	-h2,	u0, v0, (long)0xFFFFFFFF },
+		{ w2,	-h2,	u1,	v0,	(long)0xFFFFFFFF },
+		{ -w2,	h2,		u0,	v1,	(long)0xFFFFFFFF },
+		{ w2,	h2,		u1,	v1,	(long)0xFFFFFFFF }
 	};
 
 	for (int i=0; i<4; i++)

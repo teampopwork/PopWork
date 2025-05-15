@@ -183,7 +183,12 @@ int	SysFont::StringWidth(const PopWorkString& theString)
 void SysFont::DrawString(Graphics* g, int theX, int theY, const PopWorkString& theString, const Color& theColor, const Rect& theClipRect)
 {
 	SDL_Renderer* renderer = mApp->mSDLInterface->mRenderer;
-	SDL_Color aColor = { theColor.mRed, theColor.mGreen, theColor.mBlue , theColor.mAlpha };
+	SDL_Color aColor = {
+		(Uint8)theColor.mRed,
+		(Uint8)theColor.mGreen,
+		(Uint8)theColor.mBlue,
+		(Uint8)theColor.mAlpha
+	};
 	SDL_Surface* textSurface = TTF_RenderText_Blended(mTTFFont, PopWorkStringToStringFast(theString).c_str(), NULL, aColor);
 	if (!textSurface) {
 		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to render text: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
@@ -191,7 +196,12 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const PopWorkString& t
 	}
 
 	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-	SDL_FRect dstRect = { theX, theY - mAscent, textSurface->w, textSurface->h };
+	SDL_FRect dstRect = {
+		(float)theX,
+		(float)theY - (float)mAscent,
+		(float)textSurface->w,
+		(float)textSurface->h
+	};
 	SDL_FRect srcRect = { 0, 0, dstRect.w, dstRect.h };
 	SDL_DestroySurface(textSurface);
 
@@ -200,7 +210,12 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const PopWorkString& t
 	}
 
 	if (mDrawShadow) {
-		SDL_FRect shadowRect = { theX + 1, theY - mAscent + 1, dstRect.w, dstRect.h };
+		SDL_FRect shadowRect = {
+			(float)theX + 1.f,
+			(float)theY - (float)mAscent + 1.f,
+			dstRect.w,
+			dstRect.h
+		};
 		mApp->mSDLInterface->BltTexture(textTexture, srcRect, shadowRect, Color(0,0,0), g->GetDrawMode());
 	}
 
