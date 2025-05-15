@@ -1,4 +1,8 @@
+#ifndef __AUREADER_H__
+#define __AUREADER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include <vector>
 
@@ -72,3 +76,5 @@ inline bool LoadAU(const uint8_t* data, size_t size, AuFile& out) {
     }
     return true;
 }
+
+#endif

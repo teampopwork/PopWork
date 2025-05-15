@@ -1,6 +1,10 @@
+#ifndef __DEBUG_H__
+#define __DEBUG_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
+#include "common.h"
 #include <cassert>
 
 extern bool gInAssert;
@@ -26,3 +30,5 @@ extern void OutputDebug(const SexyChar* fmt ...);
 #define DBG_ASSERT(exp)		{ gInAssert = true; assert(exp); gInAssert = false; }
 
 #endif // NDEBUG
+
+#endif

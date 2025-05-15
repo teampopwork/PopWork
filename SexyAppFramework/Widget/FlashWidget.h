@@ -1,7 +1,11 @@
+#ifndef __FLASHWIDGET_H__
+#define __FLASHWIDGET_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "Widget.h"
+#include "common.h"
+#include "widget.h"
 
 struct IOleObject;
 struct IOleInPlaceObjectWindowless;
@@ -118,3 +122,5 @@ public:
 };
 
 }
+
+#endif // __FLASHWIDGET_H__

@@ -1,7 +1,11 @@
+#ifndef __AUTOCRIT_H__
+#define __AUTOCRIT_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "CritSect.h"
+#include "common.h"
+#include "critsect.h"
 
 namespace Sexy
 {
@@ -26,3 +30,5 @@ public:
 };
 
 }
+
+#endif

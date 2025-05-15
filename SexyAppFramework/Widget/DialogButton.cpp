@@ -1,7 +1,7 @@
-#include "DialogButton.h"
-#include "../Graphics/SysFont.h"
-#include "WidgetManager.h"
-#include "../Graphics/HeaderFont/LiberationSansRegular.h"
+#include "dialogbutton.h"
+#include "graphics/sysfont.h"
+#include "widgetmanager.h"
+#include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace Sexy;
 

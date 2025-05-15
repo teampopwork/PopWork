@@ -1,4 +1,4 @@
-name: Build SexyAppFramework
+name: Build
 
 on:
   push:
@@ -30,7 +30,8 @@ jobs:
 
       - name: Build project
         run: cmake --build build --config Release
-  # Windows x32
+  
+  # Windows x86
   build_win32:
     runs-on: windows-latest
 
@@ -51,6 +52,7 @@ jobs:
 
       - name: Build project
         run: cmake --build build --config Release
+  
   # Linux
   build-linux:
     name: Build (Linux)

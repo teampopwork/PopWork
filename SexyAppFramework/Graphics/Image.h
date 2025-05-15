@@ -1,9 +1,13 @@
+#ifndef __IMAGE_H__
+#define __IMAGE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
+#include "common.h"
 #include "Color.h"
-#include "../Math/Rect.h"
-#include "../Math/Point.h"
+#include "math/rect.h"
+#include "math/point.h"
 
 namespace Sexy
 {
@@ -100,3 +104,5 @@ public:
 };
 
 }
+
+#endif // __IMAGE_H__

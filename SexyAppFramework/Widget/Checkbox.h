@@ -1,6 +1,10 @@
+#ifndef __CHECKBOX_H__
+#define __CHECKBOX_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "Widget.h"
+#include "widget.h"
 
 namespace Sexy
 {
@@ -41,3 +45,5 @@ public:
 };
 
 }
+
+#endif

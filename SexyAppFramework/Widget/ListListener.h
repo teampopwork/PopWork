@@ -1,4 +1,8 @@
+#ifndef __LISTLISTENER_H__
+#define __LISTLISTENER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 namespace Sexy 
 {
@@ -13,3 +17,4 @@ public:
 
 }
 
+#endif

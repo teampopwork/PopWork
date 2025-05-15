@@ -1,8 +1,12 @@
+#ifndef __PERFTIMER_H__
+#define __PERFTIMER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
+#include "common.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <time.h>
 #else
 #include <sys/time.h>
@@ -123,3 +127,5 @@ public:
 #endif
 
 #pragma warning(pop)
+
+#endif

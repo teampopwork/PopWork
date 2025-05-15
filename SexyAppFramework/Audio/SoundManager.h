@@ -1,4 +1,8 @@
+#ifndef __SOUNDMANAGER_H__
+#define __SOUNDMANAGER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include "../Common.h"
 
@@ -44,3 +48,5 @@ public:
 
 
 }
+
+#endif

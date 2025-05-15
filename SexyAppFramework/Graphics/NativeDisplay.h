@@ -1,6 +1,10 @@
+#ifndef __NATIVE_DISPLAY_H__
+#define __NATIVE_DISPLAY_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
+#include "common.h"
 
 namespace Sexy
 {
@@ -27,3 +31,5 @@ public:
 };
 
 };
+
+#endif

@@ -1,4 +1,4 @@
-#include "NativeDisplay.h"
+#include "nativedisplay.h"
 
 using namespace Sexy;
 

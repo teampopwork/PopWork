@@ -1,9 +1,10 @@
-#include "SDLInterface.h"
-#include "SDLImage.h"
-#include "../SexyAppBase.h"
-#include "../Misc/AutoCrit.h"
-#include "Graphics.h"
-#include "MemoryImage.h"
+#include "sdlinterface.h"
+#include "sdlimage.h"
+#include "sexyappbase.h"
+#include "misc/autocrit.h"
+#include "graphics.h"
+#include "memoryimage.h"
+
 #include <SDL3_ttf/SDL_ttf.h>
 
 using namespace Sexy;

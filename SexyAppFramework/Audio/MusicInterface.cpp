@@ -1,5 +1,5 @@
 #include "MusicInterface.h"
-#include "../SexyAppBase.h"
+#include "SexyAppBase.h"
 
 using namespace Sexy;
 

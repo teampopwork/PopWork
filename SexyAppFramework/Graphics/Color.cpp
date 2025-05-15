@@ -1,4 +1,4 @@
-#include "Color.h"
+#include "color.h"
 
 using namespace Sexy;
 

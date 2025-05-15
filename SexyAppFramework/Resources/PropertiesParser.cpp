@@ -1,5 +1,5 @@
-#include "PropertiesParser.h"
-#include "../ReadWrite/XMLParser.h"
+#include "propertiesparser.h"
+#include "readwrite/xmlparser.h"
 #include <stdlib.h>
 
 using namespace Sexy;

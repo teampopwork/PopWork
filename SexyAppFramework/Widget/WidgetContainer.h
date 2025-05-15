@@ -1,9 +1,12 @@
+#ifndef __WIDGETCONTAINER_H__
+#define __WIDGETCONTAINER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-
-#include "../Common.h"
-#include "../Math/Rect.h"
-#include "../Misc/Flags.h"
+#include "common.h"
+#include "math/rect.h"
+#include "misc/flags.h"
 
 namespace Sexy
 {
@@ -83,3 +86,5 @@ public:
 };
 
 };
+
+#endif

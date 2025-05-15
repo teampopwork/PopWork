@@ -1,4 +1,8 @@
+#ifndef __SCROLLBUTTONWIDGET_H__
+#define __SCROLLBUTTONWIDGET_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include "ButtonWidget.h"
 
@@ -24,3 +28,5 @@ public:
 };
 
 }
+
+#endif // __SCROLLBUTTONWIDGET_H__

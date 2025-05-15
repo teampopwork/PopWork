@@ -1,4 +1,4 @@
-#include "Insets.h"
+#include "insets.h"
 
 using namespace Sexy;
 

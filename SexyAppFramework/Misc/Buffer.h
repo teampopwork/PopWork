@@ -1,7 +1,11 @@
+#ifndef __BUFFER_H__
+#define __BUFFER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include <string>
-#include "../Common.h"
+#include "common.h"
 
 namespace Sexy
 {
@@ -61,3 +65,5 @@ public:
 };
 
 }
+
+#endif

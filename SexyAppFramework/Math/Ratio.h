@@ -1,4 +1,8 @@
+#ifndef __RATIO_H__
+#define __RATIO_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 namespace Sexy
 {
@@ -53,3 +57,5 @@ namespace Sexy
 	}
 
 }
+
+#endif // __RATIO_H__

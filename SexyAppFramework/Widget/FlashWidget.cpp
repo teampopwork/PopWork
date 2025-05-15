@@ -1,8 +1,8 @@
-#include "FlashWidget.h"
-#include "../Graphics/SDLImage.h"
-#include "../SexyAppBase.h"
-#include "WidgetManager.h"
-#include "../Debug/Debug.h"
+#include "flashwidget.h"
+#include "graphics/sdlimage.h"
+#include "sexyappbase.h"
+#include "widgetmanager.h"
+#include "debug/debug.h"
 
 using namespace Sexy;
 

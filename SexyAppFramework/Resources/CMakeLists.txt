@@ -1,6 +1,11 @@
+# CMakeLists.txt
+target_include_directories(${PROJECT_NAME} PUBLIC
+	../
+)
+
 target_sources(${PROJECT_NAME} PRIVATE
-	PropertiesParser.cpp
-	PropertiesParser.h
-	ResourceManager.cpp
-	ResourceManager.h
+	propertiesparser.cpp
+	propertiesparser.h
+	resourcemanager.cpp
+	resourcemanager.h
 )

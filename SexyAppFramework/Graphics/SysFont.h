@@ -1,6 +1,12 @@
+#ifndef __SYSFONT_H__
+#define __SYSFONT_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "Font.h"
+#include "font.h"
+#include "common.h"
+
 #include <SDL3_ttf/SDL_ttf.h>
 
 namespace Sexy
@@ -35,3 +41,5 @@ public:
 };
 
 }
+
+#endif // __SYSFONT_H__

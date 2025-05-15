@@ -1,7 +1,7 @@
-#include "ScrollbarWidget.h"
-#include "WidgetManager.h"
-#include "ScrollListener.h"
-#include "ScrollbuttonWidget.h"
+#include "scrollbarwidget.h"
+#include "widgetmanager.h"
+#include "scrolllistener.h"
+#include "scrollbuttonwidget.h"
 
 using namespace Sexy;
 

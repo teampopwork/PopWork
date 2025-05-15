@@ -1,14 +1,13 @@
-#include "../Common.h"
-#include "Dialog.h"
-#include "DialogButton.h"
-#include "../SexyAppBase.h"
-#include "WidgetManager.h"
-#include "../Graphics/SysFont.h"
-#include "../Graphics/ImageFont.h"
-#include "../Graphics/HeaderFont/LiberationSansRegular.h"
+#include "common.h"
+#include "dialog.h"
+#include "dialogbutton.h"
+#include "sexyappbase.h"
+#include "widgetmanager.h"
+#include "graphics/sysfont.h"
+#include "graphics/ImageFont.h"
+#include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace Sexy;
-
 
 SexyString Sexy::DIALOG_YES_STRING				= _S("YES");
 SexyString Sexy::DIALOG_NO_STRING				= _S("NO");

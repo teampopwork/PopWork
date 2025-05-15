@@ -1,4 +1,4 @@
-#include "KeyCodes.h"
+#include "keycodes.h"
 
 using namespace Sexy;
 

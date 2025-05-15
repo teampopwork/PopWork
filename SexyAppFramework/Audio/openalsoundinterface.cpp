@@ -1,8 +1,7 @@
-#include "OpenALSoundInstance.h"
-#include "OpenALSoundManager.h"
+#include "openalsoundinterface.h"
+#include "openalsoundmanager.h"
 
 using namespace Sexy;
-
 
 OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, ALuint theSourceSound)
 {

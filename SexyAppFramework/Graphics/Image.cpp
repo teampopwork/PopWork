@@ -1,8 +1,7 @@
-#include "Image.h"
-#include "Graphics.h"
+#include "image.h"
+#include "graphics.h"
 
 #include <SDL3/SDL.h>
-
 
 using namespace Sexy;
 

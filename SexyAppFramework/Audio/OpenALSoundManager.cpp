@@ -1,14 +1,12 @@
-﻿#include "OpenALSoundManager.h"
-#include "OpenALSoundInstance.h"
-#include "../PakLib/PakInterface.h"
-#include "../Common.h"
+﻿#include "openalsoundmanager.h"
+#include "openalsoundinterface.h"
+#include "PakLib/PakInterface.h"
+#include "Common.h"
 #include "AUReader.h"
-#define USE_OGG_LIB
 
-#ifdef USE_OGG_LIB
-#include "ogg/ivorbiscodec.h"
-#include "ogg/ivorbisfile.h"
-#endif
+// Vorbis
+#include "vorbis/codec.h"
+#include "vorbis/vorbisfile.h"
 
 #include <miniaudio.h>
 #include <SDL3/SDL.h>
@@ -251,7 +249,16 @@ bool OpenALSoundManager::LoadOGGSound(unsigned int theSfxID, const std::string& 
 	int aNumBytes = aLenBytes;
 	while (aNumBytes > 0)
 	{
-		long ret = ov_read(&vf, aPtr, aNumBytes, &current_section);
+		long ret = ov_read(
+			&vf,
+			aPtr,
+			aNumBytes,
+			/* little‑endian: */ 0,
+			/* 2 bytes/sample: */ 2,
+			/* signed PCM:   */ 1,
+			&current_section
+		);
+		
 		if (ret == 0)
 			break;
 		else if (ret < 0)

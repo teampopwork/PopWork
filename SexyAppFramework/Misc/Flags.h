@@ -1,4 +1,8 @@
+#ifndef __FLAGS_H__
+#define __FLAGS_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 namespace Sexy
 {
@@ -71,3 +75,5 @@ public:
 };
 
 }
+
+#endif // __FLAGS_H__

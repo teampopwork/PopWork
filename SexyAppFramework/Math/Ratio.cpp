@@ -1,5 +1,4 @@
-
-#include "Ratio.h"
+#include "ratio.h"
 
 namespace Sexy
 {

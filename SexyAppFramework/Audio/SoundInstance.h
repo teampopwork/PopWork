@@ -1,4 +1,8 @@
+#ifndef __SOUNDINSTANCE_H__
+#define __SOUNDINSTANCE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include "../Common.h"
 
@@ -28,3 +32,5 @@ public:
 };
 
 }
+
+#endif

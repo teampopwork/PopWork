@@ -1,6 +1,10 @@
+#ifndef __DIALOGBUTTON_H__
+#define __DIALOGBUTTON_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "ButtonWidget.h"
+#include "buttonwidget.h"
 
 namespace Sexy
 {
@@ -19,3 +23,5 @@ public:
 };
 
 }
+
+#endif

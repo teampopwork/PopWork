@@ -1,9 +1,9 @@
-#include "Slider.h"
-#include "../Graphics/Graphics.h"
-#include "../Graphics/Image.h"
-#include "SliderListener.h"
-#include "WidgetManager.h"
-#include "../SexyAppBase.h"
+#include "slider.h"
+#include "graphics/graphics.h"
+#include "graphics/image.h"
+#include "sliderlistener.h"
+#include "widgetmanager.h"
+#include "sexyappbase.h"
 
 using namespace Sexy;
 

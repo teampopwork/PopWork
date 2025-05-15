@@ -1,4 +1,4 @@
-// XMLWriter.h: interface for the XMLWriter class.
+// xmlwriter.h: interface for the XMLWriter class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -14,10 +14,10 @@
 
 
 #include <stack>
-#include "XMLParser.h"
-#include "../Common.h"
+#include "xmlparser.h"
+#include "common.h"
 
-#include "../Debug/PerfTimer.h"
+#include "debug/perftimer.h"
 
 namespace Sexy
 {

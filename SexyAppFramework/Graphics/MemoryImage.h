@@ -1,6 +1,10 @@
+#ifndef __MEMORYIMAGE_H__
+#define __MEMORYIMAGE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "Image.h"
+#include "image.h"
 
 #define OPTIMIZE_SOFTWARE_DRAWING
 #ifdef OPTIMIZE_SOFTWARE_DRAWING
@@ -108,3 +112,5 @@ public:
 };
 
 }
+
+#endif // __MEMORYIMAGE_H__

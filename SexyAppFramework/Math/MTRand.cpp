@@ -35,8 +35,8 @@ http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
 email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 */
 
-#include "MTRand.h"
-#include "../Debug/Debug.h"
+#include "mtrand.h"
+#include "debug/debug.h"
 #include <stdio.h>
 
 using namespace Sexy;

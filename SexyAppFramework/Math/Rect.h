@@ -1,7 +1,11 @@
+#ifndef __RECT_H__
+#define __RECT_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "Point.h"
+#include "common.h"
+#include "point.h"
 
 #include <list>
 
@@ -113,3 +117,5 @@ typedef TRect<double> FRect;
 
 
 }
+
+#endif

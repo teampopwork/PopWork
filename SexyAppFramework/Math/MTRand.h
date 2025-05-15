@@ -1,4 +1,8 @@
+#ifndef __MTRAND_H__
+#define __MTRAND_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include <string>
 
@@ -38,3 +42,5 @@ struct MTAutoDisallowRand
 };
 
 }
+
+#endif

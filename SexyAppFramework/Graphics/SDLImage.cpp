@@ -1,12 +1,11 @@
-#include "SDLImage.h"
-#include "../Misc/CritSect.h"
-#include "../Debug/Debug.h"
-#include "SDLInterface.h"
-#include "../SexyAppBase.h"
-#include "Image.h"
+#include "sdlimage.h"
+#include "misc/critsect.h"
+#include "debug/debug.h"
+#include "sdlinterface.h"
+#include "sexyappbase.h"
+#include "image.h"
 
 using namespace Sexy;
-
 
 SDLImage::SDLImage() : MemoryImage(gSexyAppBase)
 {

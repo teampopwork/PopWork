@@ -1,7 +1,11 @@
+#ifndef __CURSORWIDGET_H__
+#define __CURSORWIDGET_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "Widget.h"
-#include "Point.h"
+#include "widget.h"
+#include "point.h"
 
 namespace Sexy
 {
@@ -23,3 +27,5 @@ public:
 };
 
 }
+
+#endif // __CURSORWIDGET_H__

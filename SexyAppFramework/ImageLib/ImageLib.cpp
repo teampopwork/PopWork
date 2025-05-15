@@ -1,19 +1,12 @@
-//======= Copyright PopCap, All rights reserved =======//
-//
-//======================2009===========================//
-
 #ifdef _WIN32
 #include <Windows.h>
 #include <tchar.h>
 #endif
 
-#include "ImageLib.h"
-#include "../PakLib/PakInterface.h"
+#include "imagelib.h"
+#include "paklib/pakinterface.h"
 
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#define STBI_MSC_SECURE_CRT
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
 #include <cmath>

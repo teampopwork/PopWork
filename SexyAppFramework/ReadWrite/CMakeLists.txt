@@ -1,10 +1,15 @@
+# CMakeLists.txt
+target_include_directories(${PROJECT_NAME} PUBLIC
+	../
+)
+
 target_sources(${PROJECT_NAME} PRIVATE
-	DescParser.cpp
-	DescParser.h
-	ModVal.cpp
-	ModVal.h
-	XMLParser.cpp
-	XMLParser.h
-	XMLWriter.cpp
-	XMLWriter.h
+	descparser.cpp
+	descparser.h
+	modval.cpp
+	modval.h
+	xmlparser.cpp
+	xmlparser.h
+	xmlwriter.cpp
+	xmlwriter.h
 )

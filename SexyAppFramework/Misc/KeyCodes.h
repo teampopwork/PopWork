@@ -1,6 +1,10 @@
+#ifndef __KEYCODES_H__
+#define __KEYCODES_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
+#include "common.h"
 #include <SDL3/SDL.h>
 
 namespace Sexy
@@ -106,3 +110,5 @@ KeyCode	GetKeyCodeFromSDLKeycode(const SDL_Keycode key);
 const std::string GetKeyNameFromCode(const KeyCode& theKeyCode);
 
 }
+
+#endif

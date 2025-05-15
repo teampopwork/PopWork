@@ -1,9 +1,9 @@
-#include "ListWidget.h"
-#include "../Graphics/Font.h"
-#include "WidgetManager.h"
-#include "ScrollbarWidget.h"
-#include "ListListener.h"
-#include "../SexyAppBase.h"
+#include "listwidget.h"
+#include "graphics/font.h"
+#include "widgetmanager.h"
+#include "scrollbarwidget.h"
+#include "listlistener.h"
+#include "sexyappbase.h"
 
 using namespace Sexy;
 

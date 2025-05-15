@@ -1,4 +1,8 @@
+#ifndef __DIALOGLISTENER_H__
+#define __DIALOGLISTENER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 namespace Sexy
 {
@@ -11,3 +15,5 @@ public:
 };
 
 }
+
+#endif

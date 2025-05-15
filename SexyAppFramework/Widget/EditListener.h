@@ -1,7 +1,11 @@
+#ifndef __EDITLISTENER_H__
+#define __EDITLISTENER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "../Misc/KeyCodes.h"
+#include "common.h"
+#include "misc/keycodes.h"
 
 namespace Sexy
 {
@@ -17,3 +21,5 @@ public:
 };
 
 }
+
+#endif

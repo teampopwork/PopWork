@@ -1,12 +1,11 @@
-#include "WidgetManager.h"
-#include "Widget.h"
-#include "../Graphics/Graphics.h"
-#include "../Graphics/Image.h"
-#include "../Misc/KeyCodes.h"
-#include "../Graphics/SDLImage.h"
-#include "../SexyAppBase.h"
-#include "../Debug/PerfTimer.h"
-#include "../Debug/Debug.h"
+#include "widgetmanager.h"
+#include "widget.h"
+#include "graphics/graphics.h"
+#include "graphics/image.h"
+#include "graphics/sdlimage.h"
+#include "sexyappbase.h"
+#include "debug/perftimer.h"
+#include "debug/debug.h"
 
 using namespace Sexy;
 using namespace std;

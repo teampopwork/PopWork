@@ -1,8 +1,12 @@
+#ifndef __FONT_H__
+#define __FONT_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "../Math/Rect.h"
-#include "Color.h"
+#include "common.h"
+#include "math/rect.h"
+#include "color.h"
 
 namespace Sexy
 {
@@ -38,3 +42,5 @@ public:
 };
 
 }
+
+#endif

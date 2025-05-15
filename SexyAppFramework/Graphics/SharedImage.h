@@ -1,6 +1,10 @@
+#ifndef __SHAREDIMAGE_H__
+#define __SHAREDIMAGE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
+#include "common.h"
 
 namespace Sexy
 {
@@ -45,3 +49,5 @@ public:
 };
 
 }
+
+#endif

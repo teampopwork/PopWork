@@ -1,9 +1,12 @@
+#ifndef __WIDGETMANAGER_H__
+#define __WIDGETMANAGER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-
-#include "../Common.h"
-#include "../Misc/KeyCodes.h"
-#include "WidgetContainer.h"
+#include "common.h"
+#include "misc/keycodes.h"
+#include "widgetcontainer.h"
 
 namespace Sexy
 {
@@ -130,3 +133,5 @@ public:
 };
 
 }
+
+#endif

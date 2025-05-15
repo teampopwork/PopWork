@@ -1,7 +1,11 @@
+#ifndef __LISTWIDGET_H__
+#define __LISTWIDGET_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "ScrollListener.h"
-#include "Widget.h"
+#include "scrolllistener.h"
+#include "widget.h"
 
 namespace Sexy 
 {
@@ -91,3 +95,5 @@ public:
 };
 
 }
+
+#endif

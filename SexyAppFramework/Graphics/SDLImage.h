@@ -1,6 +1,10 @@
+#ifndef __SDLIMAGE_H__
+#define __SDLIMAGE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "MemoryImage.h"
+#include "memoryimage.h"
 
 namespace Sexy
 {
@@ -43,3 +47,5 @@ namespace Sexy
 		virtual void			PurgeBits();
 	};
 }
+
+#endif // __SDLIMAGE_H__

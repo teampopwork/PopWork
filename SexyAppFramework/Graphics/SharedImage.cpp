@@ -1,6 +1,6 @@
-#include "SharedImage.h"
-#include "SDLImage.h"
-#include "../SexyAppBase.h"
+#include "sharedimage.h"
+#include "sdlimage.h"
+#include "sexyappbase.h"
 
 using namespace Sexy;
 

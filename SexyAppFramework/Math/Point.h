@@ -1,7 +1,10 @@
 #ifndef __POINT_H__
 #define __POINT_H__
+#ifdef _WIN32
+#pragma once
+#endif
 
-#include "../Common.h"
+#include "common.h"
 
 namespace Sexy
 {

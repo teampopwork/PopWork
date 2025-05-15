@@ -1,5 +1,5 @@
-#include "HTTPTransfer.h"
-#include "../SexyAppBase.h"
+#include "httptransfer.h"
+#include "sexyappbase.h"
 #include <process.h>
 #include <winsock.h>
 

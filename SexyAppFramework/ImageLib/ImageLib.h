@@ -1,6 +1,10 @@
 #ifndef __IMAGELIB_H__
 #define __IMAGELIB_H__
+#ifdef _WIN32
+#pragma once
+#endif
 
+#include "common.h"
 #include <string>
 
 namespace ImageLib

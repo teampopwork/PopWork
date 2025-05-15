@@ -1,8 +1,12 @@
+#ifndef __RESOURCEMANAGER_H__
+#define __RESOURCEMANAGER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "../Graphics/Image.h"
-#include "../SexyAppBase.h"
+#include "common.h"
+#include "graphics/image.h"
+#include "sexyappbase.h"
 #include <string>
 #include <map>
 
@@ -227,3 +231,5 @@ struct ResourceManagerException : public std::exception
 };
 
 }
+
+#endif

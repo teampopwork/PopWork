@@ -1,5 +1,10 @@
+#ifndef __SMARTPTR_H__
+#define __SMARTPTR_H__
+#ifdef _WIN32
 #pragma once
-#include "Common.h"
+#endif
+
+#include "common.h"
 
 #pragma pack(push,8) // need 8 byte alignment for InterlockedIncrement
 
@@ -150,3 +155,5 @@ namespace Sexy
 // Helper macro to forward declare reference counted classes along with their smart pointer definitions
 #define SEXY_PTR_FORWARD(X) class X; typedef SmartPtr<X> X##Ptr
 #define SEXY_PTR_FORWARDNS(X) class X; typedef Sexy::SmartPtr<X> X##Ptr
+
+#endif

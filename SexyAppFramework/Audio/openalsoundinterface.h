@@ -1,4 +1,8 @@
+#ifndef __OPENALSOUNDINTERFACE_H__
+#define __OPENALSOUNDINTERFACE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include "SoundInstance.h"
 #include <AL/al.h>
@@ -55,3 +59,5 @@ namespace Sexy
 	};
 
 }
+
+#endif

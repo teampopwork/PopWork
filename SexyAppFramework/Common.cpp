@@ -1,6 +1,6 @@
-#include "Common.h"
-#include "Math/MTRand.h"
-#include "Debug/Debug.h"
+#include "common.h"
+#include "math/mtrand.h"
+#include "debug/debug.h"
 #include <direct.h>
 #include <io.h>
 #include <sys/types.h>
@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <aclapi.h>
 
-#include "Debug/PerfTimer.h"
+#include "debug/debug.h"
 
 bool Sexy::gDebug = false;
 static Sexy::MTRand gMTRand;

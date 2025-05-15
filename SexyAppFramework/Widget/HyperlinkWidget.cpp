@@ -1,9 +1,9 @@
-#include "HyperlinkWidget.h"
-#include "../Graphics/Graphics.h"
-#include "../Graphics/ImageFont.h"
-#include "../Graphics/SysFont.h"
-#include "WidgetManager.h"
-#include "../Graphics/HeaderFont/LiberationSansRegular.h"
+#include "hyperlinkwidget.h"
+#include "graphics/graphics.h"
+#include "graphics/imagefont.h"
+#include "graphics/sysfont.h"
+#include "widgetmanager.h"
+#include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace Sexy;
 

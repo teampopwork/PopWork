@@ -1,9 +1,10 @@
+#ifndef __PROFILE_H__
+#define __PROFILE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#ifndef PROFILE_HEADER_FILE
-#define PROFILE_HEADER_FILE
-
-#include "../Common.h"
+#include "common.h"
 #include <map>
 
 namespace Sexy

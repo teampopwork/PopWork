@@ -1,9 +1,9 @@
-#include "ButtonWidget.h"
-#include "../Graphics/Image.h"
-#include "../Graphics/SysFont.h"
-#include "WidgetManager.h"
-#include "ButtonListener.h"
-#include "../Graphics/HeaderFont/LiberationSansRegular.h"
+#include "buttonwidget.h"
+#include "graphics/image.h"
+#include "graphics/sysfont.h"
+#include "widgetmanager.h"
+#include "buttonlistener.h"
+#include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace Sexy;
 

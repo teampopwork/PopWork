@@ -1,8 +1,12 @@
+#ifndef __IMAGEFONT_H__
+#define __IMAGEFONT_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "Font.h"
-#include "../ReadWrite/DescParser.h"
-#include "SharedImage.h"
+#include "font.h"
+#include "readwrite/descparser.h"
+#include "sharedimage.h"
 
 namespace Sexy
 {
@@ -166,3 +170,5 @@ public:
 };
 
 }
+
+#endif

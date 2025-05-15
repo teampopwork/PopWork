@@ -1,16 +1,15 @@
 
 #include <memory>
-#include "ResourceManager.h"
-#include "../ReadWrite/XMLParser.h"
-#include "../Audio/SoundManager.h"
-#include "../Graphics/SDLImage.h"
-#include "../Graphics/SDLInterface.h"
-#include "../Graphics/ImageFont.h"
-#include "../Graphics/SysFont.h"
-#include "../ImageLib/ImageLib.h"
+#include "resourcemanager.h"
+#include "readwrite/xmlparser.h"
+#include "audio/soundmanager.h"
+#include "graphics/sdlimage.h"
+#include "graphics/sdlinterface.h"
+#include "graphics/imagefont.h"
+#include "graphics/sysfont.h"
+#include "imagelib/imagelib.h"
 
-//#define SEXY_PERF_ENABLED
-#include "../Debug/PerfTimer.h"
+#include "debug/perftimer.h"
 
 using namespace Sexy;
 

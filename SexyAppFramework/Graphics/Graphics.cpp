@@ -1,11 +1,9 @@
-#include "Graphics.h"
-#include "Image.h"
-#include "Font.h"
-#include "SDLImage.h"
-#include "MemoryImage.h"
-#include "../Math/Rect.h"
-#include "../Debug/Debug.h"
-#include "../Math/SexyMatrix.h"
+#include "graphics.h"
+#include "font.h"
+#include "sdlimage.h"
+#include "memoryimage.h"
+#include "debug/debug.h"
+#include "math/sexymatrix.h"
 #include <math.h>
 
 using namespace Sexy;

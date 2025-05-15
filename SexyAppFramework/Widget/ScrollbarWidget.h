@@ -2,10 +2,14 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#ifndef __SCROLLBARWIDGET_H__
+#define __SCROLLBARWIDGET_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "Widget.h"
-#include "ButtonListener.h"
+#include "widget.h"
+#include "buttonlistener.h"
 
 namespace Sexy 
 {
@@ -85,3 +89,5 @@ public:
 };
 
 }
+
+#endif

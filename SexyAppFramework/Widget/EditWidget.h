@@ -1,6 +1,10 @@
+#ifndef __EDITWIDGET_H__
+#define __EDITWIDGET_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "Widget.h"
+#include "widget.h"
 
 namespace Sexy
 {
@@ -97,3 +101,5 @@ public:
 };
 
 }
+
+#endif

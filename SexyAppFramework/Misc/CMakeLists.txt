@@ -1,15 +1,20 @@
+# CMakeLists.txt
+target_include_directories(${PROJECT_NAME} PUBLIC
+	../
+)
+
 target_sources(${PROJECT_NAME} PRIVATE
-	Buffer.cpp
-	Buffer.h
-	AutoCrit.h
-	CritSect.h
-	Flags.cpp
-	Flags.h
-	HTTPTransfer.cpp
-	HTTPTransfer.h
-	KeyCodes.cpp
-	KeyCodes.h
-	Profile.cpp
-	Profile.h
-	SmartPtr.h
+	buffer.cpp
+	buffer.h
+	autocrit.h
+	critsect.h
+	flags.cpp
+	flags.h
+	httptransfer.cpp
+	httptransfer.h
+	keycodes.cpp
+	keycodes.h
+	profile.cpp
+	profile.h
+	smartptr.h
 )

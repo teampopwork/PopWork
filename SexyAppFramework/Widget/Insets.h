@@ -1,4 +1,8 @@
+#ifndef __INSETS_H__
+#define __INSETS_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 namespace Sexy
 {
@@ -18,3 +22,5 @@ public:
 };
 
 }
+
+#endif

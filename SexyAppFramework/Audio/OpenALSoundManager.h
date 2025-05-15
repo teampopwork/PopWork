@@ -1,4 +1,8 @@
+#ifndef __OPENALSOUNDMANAGER_H__
+#define __OPENALSOUNDMANAGER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include "SoundManager.h"
 #include "bass.h"
@@ -64,3 +68,5 @@ namespace Sexy
 	};
 
 }
+
+#endif

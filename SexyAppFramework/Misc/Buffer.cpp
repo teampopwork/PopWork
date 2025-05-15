@@ -1,5 +1,5 @@
-#include "Buffer.h"
-#include "../Debug/Debug.h"
+#include "buffer.h"
+#include "debug/debug.h"
 
 #define POLYNOMIAL 0x04c11db7L
 

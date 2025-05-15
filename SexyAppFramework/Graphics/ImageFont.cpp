@@ -1,14 +1,12 @@
-#include "ImageFont.h"
-#include "Graphics.h"
-#include "Image.h"
-#include "../SexyAppBase.h"
-#include "MemoryImage.h"
-#include "SDLImage.h"
-#include "../Misc/AutoCrit.h"
+#include "imagefont.h"
+#include "graphics.h"
+#include "image.h"
+#include "sexyappbase.h"
+#include "memoryimage.h"
+#include "sdlimage.h"
+#include "misc/autocrit.h"
 
 using namespace Sexy;
-
-////
 
 DataElement::DataElement() :
 	mIsList(false)

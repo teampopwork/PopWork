@@ -1,9 +1,8 @@
-#include "BassMusicInterface.h"
+#include "bassmusicinterface.h"
 #include "bass.h"
-#include "../PakLib/PakInterface.h"
+#include "paklib/pakinterface.h"
 
 using namespace Sexy;
-
 
 bool BASS_MusicSetAmplify(HMUSIC handle, DWORD amp)
 {
@@ -11,12 +10,10 @@ bool BASS_MusicSetAmplify(HMUSIC handle, DWORD amp)
 	return true;
 }
 
-
 bool BASS_MusicPlay(HMUSIC handle)
 {
 	return BASS_ChannelPlay(handle, true);
 }
-
 
 bool BASS_MusicPlayEx(HMUSIC handle, DWORD pos, int flags, bool reset)
 {
@@ -26,7 +23,6 @@ bool BASS_MusicPlayEx(HMUSIC handle, DWORD pos, int flags, bool reset)
 
 	return BASS_ChannelPlay(handle, reset);
 }
-
 
 bool BASS_ChannelResume(DWORD handle)
 {

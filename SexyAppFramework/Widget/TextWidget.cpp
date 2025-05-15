@@ -1,8 +1,8 @@
-#include "TextWidget.h"
-#include "../Graphics/Graphics.h"
-#include "ScrollbarWidget.h"
-#include "WidgetManager.h"
-#include "../Graphics/Font.h"
+#include "textwidget.h"
+#include "graphics/graphics.h"
+#include "scrollbarwidget.h"
+#include "widgetmanager.h"
+#include "graphics/font.h"
 
 using namespace Sexy;
 

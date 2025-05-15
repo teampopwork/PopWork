@@ -1,12 +1,12 @@
-#include "MemoryImage.h"
+#include "memoryimage.h"
 
-#include "../SexyAppBase.h"
-#include "Graphics.h"
-#include "NativeDisplay.h"
-#include "SDLInterface.h"
-#include "../Debug/Debug.h"
-#include "Quantize.h"
-#include "../Debug/PerfTimer.h"
+#include "sexyappbase.h"
+#include "graphics.h"
+#include "nativedisplay.h"
+#include "sdlinterface.h"
+#include "debug/debug.h"
+#include "quantize.h"
+#include "debug/perftimer.h"
 #include "SWTri/SWTri.h"
 
 #include <math.h>

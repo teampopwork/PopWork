@@ -1,4 +1,4 @@
-#include "SexyMatrix.h"
+#include "sexymatrix.h"
 
 #include <math.h>
 

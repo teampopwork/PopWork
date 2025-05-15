@@ -1,4 +1,8 @@
+#ifndef __MEMMGR_H__
+#define __MEMMGR_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 //						HOW TO USE THIS FILE
@@ -91,3 +95,4 @@ inline void __cdecl operator delete[](void* pMem, const char *file, int line)
 
 #endif // SEXY_MEMTRACE
 
+#endif

@@ -1,12 +1,12 @@
-#include "SysFont.h"
-#include "SDLImage.h"
-#include "../SexyAppBase.h"
-#include "Graphics.h"
-#include "ImageFont.h"
-#include "MemoryImage.h"
-#include "SDLInterface.h"
-#include "../Widget/WidgetManager.h"
-#include "../Common.h"
+#include "sysfont.h"
+#include "sdlimage.h"
+#include "sexyappbase.h"
+#include "graphics.h"
+#include "imagefont.h"
+#include "memoryimage.h"
+#include "sdlinterface.h"
+#include "widget/widgetmanager.h"
+
 #include <stdlib.h>
 
 using namespace Sexy;

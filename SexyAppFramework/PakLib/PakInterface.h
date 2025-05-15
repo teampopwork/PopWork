@@ -1,5 +1,8 @@
 ﻿#ifndef __PAKINTERFACE_H__
 #define __PAKINTERFACE_H__
+#ifdef _WIN32
+#pragma once
+#endif
 
 #include <map>
 #include <list>

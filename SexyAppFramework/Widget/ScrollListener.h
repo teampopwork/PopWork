@@ -1,4 +1,8 @@
+#ifndef __SCROLLLISTENER_H__
+#define __SCROLLLISTENER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 namespace Sexy 
 {
@@ -10,3 +14,5 @@ public:
 };
 
 }
+
+#endif // __SCROLLLISTENER_H__

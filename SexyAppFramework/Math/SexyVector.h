@@ -1,4 +1,8 @@
+#ifndef __SEXYVECTOR_H__
+#define __SEXYVECTOR_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include <math.h>
 
@@ -72,3 +76,5 @@ public:
 };
 
 };
+
+#endif

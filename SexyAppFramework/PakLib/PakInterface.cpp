@@ -1,7 +1,7 @@
-#include "PakInterface.h"
+#include "pakinterface.h"
 
 #include <direct.h>
-#include "../Common.h"
+#include "common.h"
 
 typedef unsigned char uchar;
 typedef unsigned short ushort;

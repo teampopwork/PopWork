@@ -1,4 +1,8 @@
+#ifndef __SEXYAPPBASE_H__
+#define __SEXYAPPBASE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #include "Common.h"
 #include "Math/Rect.h"
@@ -504,3 +508,5 @@ public:
 extern SexyAppBase* gSexyAppBase;
 
 };
+
+#endif

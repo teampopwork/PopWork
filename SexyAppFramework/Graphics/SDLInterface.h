@@ -1,12 +1,16 @@
+#ifndef __SDLINTERFACE_H__
+#define __SDLINTERFACE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "MemoryImage.h"
-#include "../Misc/CritSect.h"
-#include "NativeDisplay.h"
-#include "../Math/Rect.h"
-#include "../Math/Ratio.h"
-#include "../Math/SexyMatrix.h"
+#include "common.h"
+#include "memoryimage.h"
+#include "misc/critsect.h"
+#include "nativedisplay.h"
+#include "math/rect.h"
+#include "math/ratio.h"
+#include "math/sexymatrix.h"
 
 #include <SDL3/SDL.h>
 
@@ -163,3 +167,5 @@ namespace Sexy
 
 	};
 }
+
+#endif // __SDLINTERFACE_H__

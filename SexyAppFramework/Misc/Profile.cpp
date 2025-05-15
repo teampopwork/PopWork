@@ -1,5 +1,5 @@
 // ***************************************************************
-//  Profile   version:  2.0   ·  date: 01/02/2008
+//  Profile   version:  2.0   ï¿½  date: 01/02/2008
 //  -------------------------------------------------------------
 //  Version 2.0 of the Profile class!  Allows you to retrieve
 //	any of the four basic types {String, Int, Float, Boolean}
@@ -19,12 +19,12 @@
 // 
 // ***************************************************************
 
-#include "Profile.h"
-#include "../ReadWrite/XMLWriter.h"		// Write
-#include "../ReadWrite/XMLParser.h"		// Read
-#include "../SexyAppBase.h"
+#include "profile.h"
+#include "readwrite/xmlwriter.h"		// Write
+#include "readwrite/xmlparser.h"		// Read
+#include "sexyappbase.h"
 
-#include "../Common.h"			// Sexy Functions like FileExists()
+#include "common.h"			// Sexy Functions like FileExists()
 
 using namespace Sexy;
 
@@ -434,7 +434,7 @@ bool Profile::DeleteUser(SexyString theUserName)
 //************************************
 bool Profile::SetUserName(SexyString theUserName)
 {
-	// don´t allow the following chars in a username
+	// donï¿½t allow the following chars in a username
 	for (unsigned int i = 0; i < theUserName.length(); i++)
 	{
 		if (theUserName[i] == '\\' || theUserName[i] == '/' || 

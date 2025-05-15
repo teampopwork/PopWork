@@ -1,4 +1,8 @@
+#ifndef __COMMON_H__
+#define __COMMON_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 #pragma warning(disable:4786)
 #pragma warning(disable:4503)
@@ -225,3 +229,5 @@ inline void			inlineTrim(std::string &theData, const std::string& theChars = " \
 struct StringLessNoCase { bool operator()(const std::string &s1, const std::string &s2) const { return _stricmp(s1.c_str(),s2.c_str())<0; } };
 
 }
+
+#endif

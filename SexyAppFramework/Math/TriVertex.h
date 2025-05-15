@@ -1,4 +1,8 @@
+#ifndef __TRIVERTEX_H__
+#define __TRIVERTEX_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
 namespace Sexy
 {
@@ -19,3 +23,5 @@ public:
 };
 
 } // namespace Sexy
+
+#endif

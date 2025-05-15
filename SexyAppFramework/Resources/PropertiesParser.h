@@ -1,7 +1,10 @@
-#ifndef __SEXYAPPFRAMEWORK_NO_PROPERTIES_PARSER__
+#ifndef __PROPERTIES_PARSER_H__
+#define __PROPERTIES_PARSER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../SexyAppBase.h"
+#include "sexyappbase.h"
 
 namespace Sexy
 {

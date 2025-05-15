@@ -1,8 +1,11 @@
+#ifndef __XMLPARSER_H__
+#define __XMLPARSER_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-
-#include "../Debug/PerfTimer.h"
+#include "common.h"
+#include "debug/perftimer.h"
 
 struct PFILE;
 
@@ -101,3 +104,5 @@ public:
 };
 
 };
+
+#endif

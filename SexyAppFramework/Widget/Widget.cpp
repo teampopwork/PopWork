@@ -1,10 +1,10 @@
-#include "Widget.h"
-#include "WidgetManager.h"
-#include "../Graphics/Graphics.h"
-#include "../Graphics/Font.h"
-#include "../Graphics/Image.h"
-#include "../SexyAppBase.h"
-#include "../Debug/debug.h"
+#include "widget.h"
+#include "widgetmanager.h"
+#include "graphics/graphics.h"
+#include "graphics/font.h"
+#include "graphics/image.h"
+#include "sexyappbase.h"
+#include "debug/debug.h"
 
 using namespace Sexy;
 

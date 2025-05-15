@@ -1,10 +1,14 @@
+#ifndef __GRAPHICS_H__
+#define __GRAPHICS_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
-#include "../Math/Rect.h"
-#include "Color.h"
-#include "Image.h"
-#include "../Math/TriVertex.h"
+#include "common.h"
+#include "math/rect.h"
+#include "color.h"
+#include "image.h"
+#include "math/trivertex.h"
 
 namespace Sexy
 {
@@ -195,3 +199,5 @@ public:
 };
 
 }
+
+#endif

@@ -1,6 +1,10 @@
+#ifndef __MUSICINTERFACE_H__
+#define __MUSICINTERFACE_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-#include "../Common.h"
+#include "Common.h"
 
 namespace Sexy
 {
@@ -38,3 +42,5 @@ public:
 };
 
 }
+
+#endif

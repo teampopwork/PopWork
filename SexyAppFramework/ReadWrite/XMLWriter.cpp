@@ -1,8 +1,8 @@
-// XMLWriter.cpp: implementation of the XMLWriter class.
+// xmlwriter.cpp: implementation of the XMLWriter class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "XMLWriter.h"
+#include "xmlwriter.h"
 
 #pragma warning(disable : 4018)
 #ifndef _CRT_SECURE_NO_WARNINGS

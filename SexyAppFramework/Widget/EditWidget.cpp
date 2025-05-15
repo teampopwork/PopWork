@@ -1,9 +1,9 @@
-#include "EditWidget.h"
-#include "../Graphics/SysFont.h"
-#include "WidgetManager.h"
-#include "../SexyAppBase.h"
-#include "EditListener.h"
-#include "../Graphics/HeaderFont/LiberationSansRegular.h"
+#include "editwidget.h"
+#include "graphics/sysfont.h"
+#include "widgetmanager.h"
+#include "sexyappbase.h"
+#include "editlistener.h"
+#include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace Sexy;
 
@@ -249,7 +249,7 @@ bool EditWidget::IsPartOfWord(SexyChar theChar)
 	return (((theChar >= _S('A')) && (theChar <= _S('Z'))) ||
 			((theChar >= _S('a')) && (theChar <= _S('z'))) ||
 			((theChar >= _S('0')) && (theChar <= _S('9'))) ||
-			(((unsigned int)theChar >= (unsigned int)(L'À')) && ((unsigned int)theChar <= (unsigned int)(L'ÿ'))) ||
+			(((unsigned int)theChar >= (unsigned int)(L'ï¿½')) && ((unsigned int)theChar <= (unsigned int)(L'ï¿½'))) ||
 			(theChar == _S('_')));
 }
 

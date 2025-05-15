@@ -1,7 +1,7 @@
-#include "WidgetContainer.h"
-#include "WidgetManager.h"
-#include "Widget.h"
-#include "../Debug/Debug.h"
+#include "widgetcontainer.h"
+#include "widgetmanager.h"
+#include "widget.h"
+#include "debug/debug.h"
 #include <algorithm>
 
 using namespace Sexy;

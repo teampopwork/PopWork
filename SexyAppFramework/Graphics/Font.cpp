@@ -1,5 +1,5 @@
-#include "Font.h"
-#include "Image.h"
+#include "font.h"
+#include "image.h"
 
 using namespace Sexy;
 

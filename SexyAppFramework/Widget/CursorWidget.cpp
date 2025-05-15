@@ -1,5 +1,5 @@
-#include "CursorWidget.h"
-#include "Image.h"
+#include "cursorwidget.h"
+#include "image.h"
 
 using namespace Sexy;
 

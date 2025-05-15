@@ -1,12 +1,15 @@
+#ifndef __WIDGET_H__
+#define __WIDGET_H__
+#ifdef _WIN32
 #pragma once
+#endif
 
-
-#include "../Common.h"
-#include "../Graphics/Color.h"
-#include "Insets.h"
-#include "../Graphics/Graphics.h"
-#include "../Misc/KeyCodes.h"
-#include "WidgetContainer.h"
+#include "common.h"
+#include "graphics/color.h"
+#include "insets.h"
+#include "graphics/graphics.h"
+#include "misc/keycodes.h"
+#include "widgetcontainer.h"
 
 namespace Sexy
 {
@@ -142,3 +145,5 @@ enum LayoutFlags
 
 
 }
+
+#endif
