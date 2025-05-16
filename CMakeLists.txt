@@ -60,3 +60,25 @@ endif()
 if (BUILD_DEMOS)
 	add_subdirectory(demos_src)
 endif()
+
+# djugjsfgufdgujdfgiujgdijfgifjdgidfjgifdgjfdgufdguifdg electr0gunner told me to add this
+if(BUILD_DEMOS OR BUILD_TOOLS)
+    set(demo_deps PopWork)
+
+    if(BUILD_DEMOS)
+        list(APPEND demo_deps
+            Demo1 Demo2 Demo3 Demo4 Demo5
+            Hun-garr V12Demo V14Demo XMLDemo
+        )
+    endif()
+
+    if(BUILD_DEMOS AND BUILD_TOOLS AND WIN32)
+        list(APPEND demo_deps PopPak PopPakPWE)
+    endif()
+
+    add_custom_target(alldemos ALL DEPENDS ${demo_deps})
+endif()
+
+add_custom_command(TARGET alldemos POST_BUILD
+    COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR} --config $<CONFIG>
+)
