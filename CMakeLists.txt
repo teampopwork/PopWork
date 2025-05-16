@@ -15,7 +15,7 @@ set(_Python3_EXECUTABLE_DEBUG "" CACHE FILEPATH "Python debug executable")
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 option(USE_WIDESTRING "Wide Strings" ON)
-option(BUILD_DEMOS "Build Demos" ON)
+option(BUILD_EXAMPLES "Build Examples" ON)
 option(CONSOLE "Show the console on Windows" ON)
 option(BUILD_TOOLS "Build Tools" ON)
 
@@ -57,8 +57,8 @@ add_subdirectory(tools/PopPak)
 add_subdirectory(tools/PopPakPWE)
 endif()
 
-if (BUILD_DEMOS)
-	add_subdirectory(demos_src)
+if(BUILD_EXAMPLES)
+	add_subdirectory(examples)
 endif()
 
 # djugjsfgufdgujdfgiujgdijfgifjdgidfjgifdgjfdgufdguifdg electr0gunner told me to add this

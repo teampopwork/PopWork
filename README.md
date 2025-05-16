@@ -10,12 +10,20 @@
 - Replaced **zlib, libpng, libjpeg, ~~JPEG2000~~** with **stb_image**
 
 ## Third-party libraries
-> see THIRD_PARTY_NOTICES.txt
+> see NOTICE
+
+## Contributing
+> see CONTRIBUTING.md
+
+## License
+> see LICENSE
+
+*PopWork* is licensed under the **GNU Affero General Public License v3.0** (AGPL v3) license.
+
+You are free to use, modify, and redistribute *PopWork*, provided that you:
+- Include the original license
+- Make the source code available to people who interact with your project (even over a network)
+- License any derivative works under **AGPL v3** as well
 
 ## Building
-The building process is the same as every single CMake project, just run:
-```
-cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A x64
-cmake --build build --config Release
-```
-, assuming you want to build for **x64, Release**.
+> see docs/getting_started.md

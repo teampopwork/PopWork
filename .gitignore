@@ -7,6 +7,6 @@
 build/
 game/*.exe
 game/*.dll
-demos/*.exe
-demos/*.dll
+examples/bin/*.exe
+examples/bin/*.dll
 config.cmd

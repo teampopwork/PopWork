@@ -1,0 +1,32 @@
+Third Party Notices
+===================
+
+PopWork includes the following third-party libraries:
+
+1. stb_image
+   - License: Public Domain / MIT License
+   - Source: https://github.com/nothings/stb
+
+2. SDL3 (Simple DirectMedia Layer)
+   - License: zlib License
+   - Source: https://www.libsdl.org/
+
+3. OpenAL Soft
+   - License: LGPL 2.1, PFFFT
+   - Source: https://openal-soft.org/
+
+4. miniaudio
+   - License: MIT License / Public Domain
+   - Source: https://github.com/mackron/miniaudio
+
+5. SDL_ttf
+   - License: zlib License
+   - Source: https://github.com/libsdl-org/SDL_ttf
+
+6. Vorbis (libvorbis)
+   - License: BSD-style License
+   - Source: https://xiph.org/vorbis/
+
+---
+
+For full license texts, please refer to the respective projects or the LICENSE files included in their distributions.
