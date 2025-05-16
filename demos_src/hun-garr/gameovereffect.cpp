@@ -1,5 +1,5 @@
-#pragma warning(disable:4244) 
-#pragma warning(disable:4018)
+#pragma warning(disable : 4244)
+#pragma warning(disable : 4018)
 
 #include "gameovereffect.h"
 #include "res.h"
@@ -12,12 +12,11 @@
 
 using namespace PopWork;
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 GameOverEffect::GameOverEffect()
 {
-	Init();	
+	Init();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,7 @@ void GameOverEffect::Init()
 
 	mLines.clear();
 
-	// Make as many lines as the screen is wide, and stagger them by a 
+	// Make as many lines as the screen is wide, and stagger them by a
 	// random time up to 2 seconds, with speeds between 5 and 10 pixels per update.
 	for (int i = 0; i < gAppBase->mWidth; i++)
 		mLines.push_back(DrippyLine((Rand() % 5) + 5, i, Rand() % 200));
@@ -63,7 +62,7 @@ void GameOverEffect::Update(void)
 	// HSL is an alternative to specifying an RGB color format.
 	// Using HSL lets us easily do the hyper blinking crazy weird
 	// flashing effect commonly found in old games, such as Robotron.
-	// Below, we increment the value by 7 per update. The &0xFF is an 
+	// Below, we increment the value by 7 per update. The &0xFF is an
 	// easy way to clamp the value between 0 and 255 instead of having to
 	// do a separate if (mHue > 255) mHue -= 255. This lets the value
 	// rollover and keep cycling.
@@ -80,9 +79,9 @@ void GameOverEffect::Update(void)
 			e.mX = GRID_START_X + (Rand() % (GRID_END_X - GRID_START_X - IMAGE_ATOMIC_EXPLOSION->GetCelWidth()));
 			e.mY = GRID_START_Y + (Rand() % (GRID_END_Y - GRID_START_Y - IMAGE_ATOMIC_EXPLOSION->GetCelHeight()));
 
-			mExplosion.push_back(e);							
+			mExplosion.push_back(e);
 		}
-		
+
 		// Play a sound of a planet exploding ever 4th new planet. If we did this every single
 		// planet, then 10 times per second you'd hear it, and trust me, it's really irritating.
 		if ((mState == RED_FADE_IN) || (mState == RED_HOLD))
@@ -92,12 +91,12 @@ void GameOverEffect::Update(void)
 		// Update each explosion animation. When it's done, remove it.
 		for (int i = 0; i < mExplosion.size(); i++)
 		{
-			Explosion* e = &mExplosion[i];
+			Explosion *e = &mExplosion[i];
 
 			// The animation runs at 20FPS, so every 5 updates step the frame.
 			if (mUpdateCnt % 5 == 0)
 			{
-				if (++e->mFrame >+ IMAGE_ATOMIC_EXPLOSION->GetCelWidth())
+				if (++e->mFrame > +IMAGE_ATOMIC_EXPLOSION->GetCelWidth())
 				{
 					mExplosion.erase(mExplosion.begin() + i);
 					--i;
@@ -148,7 +147,7 @@ void GameOverEffect::Update(void)
 		bool done = true;
 		for (int i = 0; i < mText.size(); i++)
 		{
-			Letter* l = &mText[i];
+			Letter *l = &mText[i];
 
 			if (l->mRed < 254)
 			{
@@ -175,7 +174,7 @@ void GameOverEffect::Update(void)
 		bool done = true;
 		for (int i = (int)mText.size() - 1; i >= 0; i--)
 		{
-			Letter* l = &mText[i];
+			Letter *l = &mText[i];
 
 			if (l->mRed > 1)
 			{
@@ -196,7 +195,6 @@ void GameOverEffect::Update(void)
 			mState = GameOverEffect::SHOWING_STATS;
 			gAppBase->PlaySample(SOUND_GAME_OVER_STATS);
 		}
-
 	}
 	else if ((mState == GameOverEffect::DRIP_OUT) && !mFadeOut)
 	{
@@ -208,7 +206,7 @@ void GameOverEffect::Update(void)
 			// Once it reaches the bottom of the screen, it begins to then
 			// move back upward. When all lines have moved upward, and thus the
 			// whole screen is totally opaque, we can begin the fade out sequence.
-			DrippyLine* dl = &mLines[i];
+			DrippyLine *dl = &mLines[i];
 			if (dl->mDelay > 0)
 			{
 				alldone = false;
@@ -233,7 +231,6 @@ void GameOverEffect::Update(void)
 				else
 					alldone = false;
 			}
-
 		}
 
 		if (alldone)
@@ -270,14 +267,14 @@ void GameOverEffect::PulseRed()
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void GameOverEffect::Draw(Graphics* g)
+void GameOverEffect::Draw(Graphics *g)
 {
 	// Draw explosions for every state except the final fade out
 	if (!mFadeOut)
 	{
 		for (int i = 0; i < mExplosion.size(); i++)
 		{
-			Explosion* e = &mExplosion[i];
+			Explosion *e = &mExplosion[i];
 			g->DrawImageCel(IMAGE_ATOMIC_EXPLOSION, e->mX, e->mY, e->mFrame);
 		}
 	}
@@ -295,7 +292,7 @@ void GameOverEffect::Draw(Graphics* g)
 
 		for (int i = 0; i < mText.size(); i++)
 		{
-			Letter* l = &mText[i];
+			Letter *l = &mText[i];
 			if (l->mRed > 0)
 			{
 				g->SetColor(Color(l->mRed, 0, 0));
@@ -311,7 +308,7 @@ void GameOverEffect::Draw(Graphics* g)
 		}
 	}
 	else if (mState == GameOverEffect::SHOWING_STATS)
-	{		
+	{
 		g->DrawImage(IMAGE_HUNGARR_LOGO, gAppBase->mWidth / 2 - IMAGE_HUNGARR_LOGO->mWidth / 2, 10);
 
 		g->SetFont(FONT_HUNGARR);
@@ -326,7 +323,7 @@ void GameOverEffect::Draw(Graphics* g)
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(255, 0, 0));
 		g->DrawString(CommaSeperate(mStats.mScore), rightX, y);
-		
+
 		g->SetColor(Color::White);
 		y += FONT_HUNGARR->GetHeight();
 		s = _S("LEVEL REACHED: ");
@@ -359,7 +356,6 @@ void GameOverEffect::Draw(Graphics* g)
 		g->SetColor(Color(0, 255, 0));
 		g->DrawString(mStats.mFavoritePlanet, rightX, y);
 
-
 		g->SetColor(Color::White);
 		y += FONT_HUNGARR->GetHeight();
 		s = _S("EXPORT EATEN MOST: ");
@@ -377,11 +373,11 @@ void GameOverEffect::Draw(Graphics* g)
 			// takes as parameters: hue, saturation, luminance. We want to leave the
 			// saturation at max and luminance at half for our particular example.
 			// The returned value is ANDed with 0xFFFFFFFF to clamp the values for
-			// the alpha, red, green, and blue to the valid region of 0 to 255. 
+			// the alpha, red, green, and blue to the valid region of 0 to 255.
 			Color hue = gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF;
 			for (int i = 0; i < mLines.size(); i++)
 			{
-				DrippyLine* dl = &mLines[i];
+				DrippyLine *dl = &mLines[i];
 				if (!dl->mDripUp && (dl->mDelay == 0))
 				{
 					// Draw a black line, with its bottommost pixel using the HSL color
@@ -407,7 +403,7 @@ void GameOverEffect::Draw(Graphics* g)
 		else
 		{
 			// We AND the color with 0xFFFFFF instead of 0xFFFFFFFF. Then, we OR it with the alpha value
-			// that we're fading out with shifted left 24 bits. 
+			// that we're fading out with shifted left 24 bits.
 			//	This then sticks the alpha value, which changes over time,
 			// into our HSL color. As you may recall from previous demos, the actual color
 			// structure is 32 bit, and looks like this in binary form:
@@ -425,7 +421,7 @@ bool GameOverEffect::CanInitFirstLevel(void)
 {
 	if (mCanInitFirstLevel)
 	{
-		mCanInitFirstLevel = false;		
+		mCanInitFirstLevel = false;
 		return true;
 	}
 
@@ -436,11 +432,9 @@ bool GameOverEffect::CanInitFirstLevel(void)
 //////////////////////////////////////////////////////////////////////////
 bool GameOverEffect::HideBoard()
 {
-	return (mState == GameOverEffect::SHOWING_LETTERS) ||
-			(mState == GameOverEffect::RED_HOLD) || 
-			(mState == GameOverEffect::FADING_LETTERS) ||
-			(mState == GameOverEffect::SHOWING_STATS) ||
-			((mState == GameOverEffect::DRIP_OUT) && !mFadeOut);
+	return (mState == GameOverEffect::SHOWING_LETTERS) || (mState == GameOverEffect::RED_HOLD) ||
+		   (mState == GameOverEffect::FADING_LETTERS) || (mState == GameOverEffect::SHOWING_STATS) ||
+		   ((mState == GameOverEffect::DRIP_OUT) && !mFadeOut);
 }
 
 //////////////////////////////////////////////////////////////////////////

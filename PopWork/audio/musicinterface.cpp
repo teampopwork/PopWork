@@ -4,19 +4,19 @@
 using namespace PopWork;
 
 MusicInterface::MusicInterface()
-{		
+{
 }
 
 MusicInterface::~MusicInterface()
 {
 }
 
-bool MusicInterface::LoadMusic(int theSongId, const std::string& theFileName)
+bool MusicInterface::LoadMusic(int theSongId, const std::string &theFileName)
 {
 	return false;
 }
 
-void MusicInterface::PlayMusic(int theSongId, int theOffset, bool noLoop)	
+void MusicInterface::PlayMusic(int theSongId, int theOffset, bool noLoop)
 {
 }
 
@@ -32,7 +32,7 @@ void MusicInterface::ResumeMusic(int theSongId)
 {
 }
 
-void MusicInterface::StopAllMusic()		
+void MusicInterface::StopAllMusic()
 {
 }
 

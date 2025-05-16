@@ -20,7 +20,7 @@
 #include "PopWork/widget/scrollbarwidget.h"
 #include "PopWork/widget/scrolllistener.h"
 
-// As part of our pitch shifted sound example, we'll need to 
+// As part of our pitch shifted sound example, we'll need to
 // access the sound manager in our GameApp class as well as
 // individual sound instances:
 #include "PopWork/audio/soundmanager.h"
@@ -36,10 +36,9 @@ using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-Board::Board(GameApp* theApp)
+Board::Board(GameApp *theApp)
 {
 	mApp = theApp;
-
 
 	mButton1 = NULL;
 	mButton2 = NULL;
@@ -72,10 +71,10 @@ void Board::Update()
 
 	// As an example to illustrate the difference between smooth motion via UpdateF
 	// and the traditional motion via Update, we'll udpate the two MotionX variables
-	// separately. 
+	// separately.
 	if ((mMotionX += 5.0f) >= mWidth)
-		mMotionX = (float) -IMAGE_ROBOTROBOT->GetWidth();
-	
+		mMotionX = (float)-IMAGE_ROBOTROBOT->GetWidth();
+
 	MarkDirty();
 }
 
@@ -90,14 +89,14 @@ void Board::UpdateF(float theFrac)
 	// update by "theFrac" to get our smooth motion. See the header
 	// comment for this function in Board.h for more details.
 	if ((mUpdateFMotionX += 5.0f * theFrac) >= mWidth)
-		mUpdateFMotionX = (float) -IMAGE_ROBOTROBOT->GetWidth();
+		mUpdateFMotionX = (float)-IMAGE_ROBOTROBOT->GetWidth();
 
 	// No need to MarkDirty: We're doing it in Board::Update already.
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::Draw(Graphics* g)
+void Board::Draw(Graphics *g)
 {
 	// Clear the screen to black
 	g->SetColor(Color(0, 0, 0));
@@ -115,7 +114,7 @@ void Board::Draw(Graphics* g)
 	// it takes floating point values instead of integer ones. This is
 	// slower than DrawImage, as the resulting image is anti-aliased to
 	// give the illusion of moving at sub-pixel increments. A common
-	// optimization technique at PopCap is to use DrawImageF 
+	// optimization technique at PopCap is to use DrawImageF
 	// for motion when the user has a supported 3D card and DrawImage if
 	// the user has to run in software mode.
 	g->DrawImageF(IMAGE_ROBOTROBOT, mMotionX, 120.0f);
@@ -128,11 +127,9 @@ void Board::Draw(Graphics* g)
 	g->DrawString(mText, mListWidget->mX, mListWidget->mY + mListWidget->mHeight + 20);
 }
 
-
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddedToManager(WidgetManager* theWidgetManager)
+void Board::AddedToManager(WidgetManager *theWidgetManager)
 {
 	// At this point, the Board class has already been added to the
 	// widget manager. We should call our parent class' method
@@ -166,7 +163,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 	// We can't type in text if we don't have a font! Set one:
 	mEditWidget->SetFont(FONT_DEFAULT);
 
-	// Let's also set a maximum number of characters allowed. 
+	// Let's also set a maximum number of characters allowed.
 	// How about 15:
 	mEditWidget->mMaxChars = 15;
 
@@ -174,7 +171,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 	// mEditWidget->mPasswordChar. Any character typed in would
 	// then be visually replaced by mPasswordChar. We don't
 	// want to do that in this demo though.
-	
+
 	mEditWidget->Resize(10, 300, 100, 15);
 	theWidgetManager->AddWidget(mEditWidget);
 
@@ -210,14 +207,13 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 	// Now we need to set up the colors to use for the listbox. We create
 	// a 2D array containing RGB values, which we pass via SetColors.
 	// An explanation of each of the colors is below:
-	int listWidgetColors[][3] = 
-	{
-		{255, 255, 255},	//Background color
-		{255, 0, 0},		//Outline color
-		{0, 0, 0},			//Plain text not hilited
-		{0, 0, 255},		//Text color when mouse is over text
-		{128, 128, 128},	//Color of the bar displayed when an item is selected
-		{190, 0, 80}		//Color of the text if it has the bar behind it and mouse is not over it
+	int listWidgetColors[][3] = {
+		{255, 255, 255}, // Background color
+		{255, 0, 0},	 // Outline color
+		{0, 0, 0},		 // Plain text not hilited
+		{0, 0, 255},	 // Text color when mouse is over text
+		{128, 128, 128}, // Color of the bar displayed when an item is selected
+		{190, 0, 80}	 // Color of the text if it has the bar behind it and mouse is not over it
 	};
 
 	// Now we set the colors, and tell it that we're setting 6 of them
@@ -226,7 +222,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 	// Let's create a scrollbar for the list widget.
 	// The list widget is already a scrollbar listener, so we will
 	// specify it as the widget responsible for dealing with the
-	// scrollbar's messages. 
+	// scrollbar's messages.
 	mScrollbarWidget = new ScrollbarWidget(1, mListWidget);
 
 	// We also need to let the list widget know that it actually has a scrollbar.
@@ -236,16 +232,14 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 
 	// Now resize the list widget
 	mListWidget->Resize(300, 300, 100, 100);
-	
 
 	// Let's resize the scrollbar to the right of the list box. Instead of using
 	// Resize(...), we use ResizeScrollbar to indicate that the entire scrollbar,
 	// arrows and thumb included, are to be evenly resized. This will appropriately
 	// scale all the items in the scrollbar.
-	mScrollbarWidget->ResizeScrollbar(mListWidget->mX + mListWidget->mWidth, 
-										mListWidget->mY,
-										25,						// an arbitrary width for the bar itself
-										mListWidget->mHeight);
+	mScrollbarWidget->ResizeScrollbar(mListWidget->mX + mListWidget->mWidth, mListWidget->mY,
+									  25, // an arbitrary width for the bar itself
+									  mListWidget->mHeight);
 
 	// Let's make the scrollbar invisible until there are enough items in the list box
 	// to make them all not fit
@@ -268,7 +262,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 	//
 	// Let's load in the contents of that file, if it exists,
 	// and repopulate the list box with it. The first step is to create
-	// a Buffer object. The Buffer object will contain all the data 
+	// a Buffer object. The Buffer object will contain all the data
 	// in the file:
 	Buffer buffer;
 
@@ -313,13 +307,13 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::RemovedFromManager(WidgetManager* theWidgetManager)
+void Board::RemovedFromManager(WidgetManager *theWidgetManager)
 {
 	// This is called after we've been removed from the widget manager.
 	// Again, we should let our base class do anything it needs to, first.
 	Widget::RemovedFromManager(theWidgetManager);
 
-	// We should now also remove any widgets we are responsible for. 
+	// We should now also remove any widgets we are responsible for.
 	theWidgetManager->RemoveWidget(mButton1);
 	theWidgetManager->RemoveWidget(mButton2);
 	theWidgetManager->RemoveWidget(mEditWidget);
@@ -334,7 +328,7 @@ void Board::ButtonDepress(int theId)
 {
 	if (theId == 1)
 	{
-		// Our "left" button was clicked. Let's play a sound 
+		// Our "left" button was clicked. Let's play a sound
 		// in the left speaker with a slight pitch shift.
 		// In order to play a pitch shifted sample, we have to do more
 		// than just say "PlaySample." We have to get a pointer to the sound
@@ -342,23 +336,24 @@ void Board::ButtonDepress(int theId)
 		// app's sound manager to return us a sound instance, and we tell it
 		// the ID of the sound file that we want. Let's do that now,
 		// using the sound "SOUND_MUTATOR" which we set up in properties/resources.xml:
-		SoundInstance* sample = mApp->mSoundManager->GetSoundInstance(SOUND_MUTATOR);
+		SoundInstance *sample = mApp->mSoundManager->GetSoundInstance(SOUND_MUTATOR);
 
 		// It's good to make sure the sample isn't NULL. It would be NULL if you
-		// specified an invalid sound id. 
+		// specified an invalid sound id.
 		if (sample != NULL)
 		{
-			//Now we actually adjust the pitch. Specify the number of
-			//steps to raise (positive) or lower (negative) the original sound by.
-			//We'll just arbitrarily choose 13.
+			// Now we actually adjust the pitch. Specify the number of
+			// steps to raise (positive) or lower (negative) the original sound by.
+			// We'll just arbitrarily choose 13.
 			sample->AdjustPitch(13);
 
-			//Let's make it play on the left speaker only. We set a panning value
-			//in decibels, which for DirectX range from -10000 to +10000, where
+			// Let's make it play on the left speaker only. We set a panning value
+			// in decibels, which for DirectX range from -10000 to +10000, where
 			//-10000 is fully left and +10000 is fully right:
-			//OpenAL doesn't do this, but we automatically convert the value, so  you can keep using the DirectX values until later.
+			// OpenAL doesn't do this, but we automatically convert the value, so  you can keep using the DirectX values
+			// until later.
 			sample->SetPan(-10000);
-			
+
 			// Now we have the sample play. This is again slightly different than
 			// our PlaySample from previous demos. The first parameter indicates
 			// whether or not we want the sample to loop (in this case, no), and
@@ -374,7 +369,7 @@ void Board::ButtonDepress(int theId)
 	{
 		// Let's do the same as we did for the left button, except make it
 		// play on the right speaker and pitch shift it down
-		SoundInstance* sample = mApp->mSoundManager->GetSoundInstance(SOUND_MUTATOR);
+		SoundInstance *sample = mApp->mSoundManager->GetSoundInstance(SOUND_MUTATOR);
 		if (sample != NULL)
 		{
 			sample->AdjustPitch(-5);
@@ -382,14 +377,11 @@ void Board::ButtonDepress(int theId)
 			sample->Play(false, true);
 		}
 	}
-
-
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::EditWidgetText(int theId, const std::string& theString)
+void Board::EditWidgetText(int theId, const std::string &theString)
 {
 	// This is called when enter is pressed. Let's add the string
 	// to the list box and tell it to sort it alphabetically, if the string
@@ -409,13 +401,13 @@ void Board::EditWidgetText(int theId, const std::string& theString)
 		mEditWidget->SetText(_S(""));
 
 		// As an example of saving data to files, let's write out the contents
-		// of the list box. Instead of using the C or C++ way of 
+		// of the list box. Instead of using the C or C++ way of
 		// file I/O, we use buffers. As you'll see in a later demo,
 		// buffers are useful for the demo playback system and are a powerful
 		// feature of the framework. Plus, they make file I/O easy. The first
 		// step is to make a buffer:
 		Buffer buffer;
-		
+
 		// And now all we do is say WriteString. There are other methods
 		// for writing other data types too:
 		for (unsigned int i = 0; i < mListWidget->mLines.size(); i++)
@@ -427,7 +419,6 @@ void Board::EditWidgetText(int theId, const std::string& theString)
 		mApp->WriteBufferToFile("list_items.dat", &buffer);
 
 		// That's it!
-		
 	}
 }
 
@@ -439,23 +430,23 @@ bool Board::AllowChar(int theId, char theChar)
 	// from typing in the following: :-+.@#$%^&*()
 	switch (theChar)
 	{
-		case ':':
-		case '-':
-		case '+':
-		case '.':
-		case '@':
-		case '#':
-		case '$':
-		case '%':
-		case '^':
-		case '&':
-		case '*':
-		case '(':
-		case ')':
-			return false;
+	case ':':
+	case '-':
+	case '+':
+	case '.':
+	case '@':
+	case '#':
+	case '$':
+	case '%':
+	case '^':
+	case '&':
+	case '*':
+	case '(':
+	case ')':
+		return false;
 
-		default:
-			return true;
+	default:
+		return true;
 	}
 }
 
@@ -477,7 +468,7 @@ void Board::ListClicked(int theId, int theIdx, int theClickCount)
 		// As an example of writing to the registry, let's write this value
 		// and later on load it in when we restart the app. You'll notice
 		// a bunch of RegistryWrite... functions in AppBase. Each one
-		// of these takes as first argument the name of the value to 
+		// of these takes as first argument the name of the value to
 		// add to the registry. The second argument is the actual data
 		// to store in that value. The value is saved under the registry
 		// location that you set in GameApp's constructor when you

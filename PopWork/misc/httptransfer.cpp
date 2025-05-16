@@ -12,19 +12,19 @@ HTTPTransfer::HTTPTransfer()
 	mTransferId = gCurTransferId++;
 	mResult = RESULT_NOT_STARTED;
 	mContentLength = 0;
-	mThreadRunning = false;	
+	mThreadRunning = false;
 }
 
 HTTPTransfer::~HTTPTransfer()
 {
 	Abort();
 	while (mThreadRunning)
-	{		
+	{
 		Sleep(20);
 	}
 }
 
-std::string HTTPTransfer::GetAbsURL(const std::string& theBaseURL, const std::string& theRelURL)
+std::string HTTPTransfer::GetAbsURL(const std::string &theBaseURL, const std::string &theRelURL)
 {
 	std::string aURL;
 
@@ -49,7 +49,7 @@ std::string HTTPTransfer::GetAbsURL(const std::string& theBaseURL, const std::st
 		int aLastSlashPos = theBaseURL.rfind('/');
 		if (aLastSlashPos >= 7)
 		{
-			aURL = theBaseURL.substr(0, aLastSlashPos+1) + theRelURL;
+			aURL = theBaseURL.substr(0, aLastSlashPos + 1) + theRelURL;
 		}
 		else
 		{
@@ -61,7 +61,7 @@ std::string HTTPTransfer::GetAbsURL(const std::string& theBaseURL, const std::st
 }
 
 void HTTPTransfer::Fail(int theResult)
-{	
+{
 	mResult = theResult;
 	mExiting = true;
 }
@@ -90,11 +90,11 @@ bool HTTPTransfer::SocketWait(bool checkRead, bool checkWrite)
 		int aReadTime = 100;
 
 		TIMEVAL aTimeout;
-		aTimeout.tv_sec = aReadTime/1000;
-		aTimeout.tv_usec = (aReadTime%1000)*1000;
+		aTimeout.tv_sec = aReadTime / 1000;
+		aTimeout.tv_usec = (aReadTime % 1000) * 1000;
 
 		int aVal = select(FD_SETSIZE, &aReadSet, &aWriteSet, &anExceptSet, &aTimeout);
-		
+
 		if (aVal == SOCKET_ERROR)
 		{
 			Fail(RESULT_SOCKET_ERROR);
@@ -111,7 +111,7 @@ bool HTTPTransfer::SocketWait(bool checkRead, bool checkWrite)
 			return true;
 
 		if (FD_ISSET(mSocket, &aWriteSet))
-			return true;	
+			return true;
 	}
 
 	// Return true on abort
@@ -121,10 +121,10 @@ bool HTTPTransfer::SocketWait(bool checkRead, bool checkWrite)
 void HTTPTransfer::GetThreadProc()
 {
 	WSADATA aDat;
-	WSAStartup(MAKEWORD(1,1),&aDat);
-	
+	WSAStartup(MAKEWORD(1, 1), &aDat);
+
 	mSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (mSocket == 0)	
+	if (mSocket == 0)
 		Fail(RESULT_SOCKET_ERROR);
 
 	// Set non-blocking
@@ -135,9 +135,9 @@ void HTTPTransfer::GetThreadProc()
 	{
 		unsigned long anAddr = inet_addr(mHost.c_str());
 		if (anAddr == INADDR_NONE)
-		{		
+		{
 			HOSTENT *aHostEnt = gethostbyname(mHost.c_str());
-			if (aHostEnt != NULL) 
+			if (aHostEnt != NULL)
 				memcpy(&anAddr, aHostEnt->h_addr_list[0], 4);
 		}
 
@@ -145,15 +145,15 @@ void HTTPTransfer::GetThreadProc()
 		{
 			Fail(RESULT_INVALID_ADDR);
 		}
-		else 
+		else
 		{
-			SOCKADDR_IN aSockAddrIn;		
-			memset((char*) &aSockAddrIn, 0, sizeof(aSockAddrIn));
-			aSockAddrIn.sin_family      = AF_INET;
+			SOCKADDR_IN aSockAddrIn;
+			memset((char *)&aSockAddrIn, 0, sizeof(aSockAddrIn));
+			aSockAddrIn.sin_family = AF_INET;
 			aSockAddrIn.sin_addr.s_addr = anAddr;
-			aSockAddrIn.sin_port        = htons(mPort);
-			
-			if (::connect(mSocket, (sockaddr*) &aSockAddrIn, sizeof(SOCKADDR_IN)) != 0)
+			aSockAddrIn.sin_port = htons(mPort);
+
+			if (::connect(mSocket, (sockaddr *)&aSockAddrIn, sizeof(SOCKADDR_IN)) != 0)
 			{
 				if (WSAGetLastError() != WSAEWOULDBLOCK)
 					Fail(RESULT_CONNECT_FAIL);
@@ -161,7 +161,7 @@ void HTTPTransfer::GetThreadProc()
 				// Wait for socket to become writable to know we connected
 				if (!SocketWait(false, true))
 					Fail(RESULT_CONNECT_FAIL);
-			}		
+			}
 
 			while ((mSendStr.length() > 0) && (!mExiting))
 			{
@@ -172,42 +172,42 @@ void HTTPTransfer::GetThreadProc()
 				{
 					mSendStr = mSendStr.substr(aResult);
 				}
-				else 
+				else
 				{
-					int anError = WSAGetLastError();					
+					int anError = WSAGetLastError();
 					Fail(RESULT_DISCONNECTED);
 				}
-			}			
+			}
 
 			bool chunked = false;
 			bool gotHeader = false;
 			int aPos = 0;
 			int aLastPos = 0;
-			int aChunkLengthLeft = 0; 
+			int aChunkLengthLeft = 0;
 			int aContentLengthLeft = 0;
 			std::string aRecvStr;
 
 			while (!mExiting)
 			{
-				// Wait for more characters if we couldn't do any processing with the 
+				// Wait for more characters if we couldn't do any processing with the
 				//  current ones
 				if (aLastPos == aPos)
 				{
 					char aBuffer[257];
-					SocketWait(true, false);					
+					SocketWait(true, false);
 					int aResult = recv(mSocket, aBuffer, 256, 0);
 					if (aResult > 0)
 					{
-						aRecvStr.insert(aRecvStr.end(), aBuffer, aBuffer+aResult);
+						aRecvStr.insert(aRecvStr.end(), aBuffer, aBuffer + aResult);
 
-						aBuffer[aResult] = 0;						
+						aBuffer[aResult] = 0;
 					}
 					else
 					{
-						int anError = WSAGetLastError();						
+						int anError = WSAGetLastError();
 						break;
 					}
-				}				
+				}
 
 				aLastPos = aPos;
 
@@ -217,8 +217,8 @@ void HTTPTransfer::GetThreadProc()
 					int anEndLPos = aRecvStr.find("\r\n", aPos);
 					if (anEndLPos == -1)
 						continue; // Not enough for a full line yet
-					std::string aLine = aRecvStr.substr(aPos, anEndLPos-aPos);
-					aPos = anEndLPos+2;
+					std::string aLine = aRecvStr.substr(aPos, anEndLPos - aPos);
+					aPos = anEndLPos + 2;
 
 					if (aLine.substr(0, 7) == "HTTP/1.")
 					{
@@ -238,14 +238,14 @@ void HTTPTransfer::GetThreadProc()
 						chunked = true;
 					}
 
-					char* aCheckStr = (char*)"Transfer-Encoding: ";
+					char *aCheckStr = (char *)"Transfer-Encoding: ";
 					if (strncmp(aLine.c_str(), aCheckStr, strlen(aCheckStr)) == 0)
 					{
 						if (strcmp(aLine.c_str() + strlen(aCheckStr), "identity") != 0)
 							chunked = true;
 					}
 
-					aCheckStr = (char*)"Content-Length: ";
+					aCheckStr = (char *)"Content-Length: ";
 					if (strncmp(aLine.c_str(), aCheckStr, strlen(aCheckStr)) == 0)
 					{
 						aContentLengthLeft = atoi(aLine.c_str() + strlen(aCheckStr));
@@ -268,13 +268,13 @@ void HTTPTransfer::GetThreadProc()
 							if (anEndLPos == -1)
 								continue; // Not enough for a full line yet
 
-							std::string aLine = aRecvStr.substr(aPos, anEndLPos-aPos);
+							std::string aLine = aRecvStr.substr(aPos, anEndLPos - aPos);
 							if (!StringToInt("0x" + Trim(aLine), &aChunkLengthLeft))
 								break; // End transfer on conversion error
 							if (aChunkLengthLeft == 0)
 								break; // Zero-size chunk marks end of chunked transfer
-														
-							aPos = anEndLPos+2;
+
+							aPos = anEndLPos + 2;
 						}
 
 						// Chunk it in
@@ -313,7 +313,7 @@ void HTTPTransfer::GetThreadProc()
 						}
 					}
 				}
-			}			
+			}
 		}
 	}
 
@@ -332,15 +332,15 @@ void HTTPTransfer::GetThreadProc()
 
 void HTTPTransfer::GetThreadProcStub(void *theArg)
 {
-	((HTTPTransfer*) theArg)->GetThreadProc();
+	((HTTPTransfer *)theArg)->GetThreadProc();
 }
 
-void HTTPTransfer::PrepareTransfer(const std::string& theURL)
+void HTTPTransfer::PrepareTransfer(const std::string &theURL)
 {
-	Reset();	
-	
+	Reset();
+
 	mTransferId = gCurTransferId++;
-	mURL = theURL;	
+	mURL = theURL;
 	mExiting = false;
 	mAborted = false;
 	mResult = RESULT_NOT_COMPLETED;
@@ -348,20 +348,20 @@ void HTTPTransfer::PrepareTransfer(const std::string& theURL)
 	mContentLength = 0;
 
 	mPort = 80;
-		
+
 	int aSSPos = mURL.find("//");
 	int aPos = 0;
-	
+
 	if (aSSPos != -1)
 		aPos = aSSPos + 2;
 
 	if (aSSPos != -1)
-		mProto = mURL.substr(0, aSSPos-1);
+		mProto = mURL.substr(0, aSSPos - 1);
 
 	int aSlashPos = mURL.find("/", aPos);
 	if (aSlashPos != -1)
 	{
-		mHost = mURL.substr(aPos, aSlashPos-aPos);
+		mHost = mURL.substr(aPos, aSlashPos - aPos);
 		mPath = mURL.substr(aSlashPos);
 	}
 	else
@@ -370,83 +370,86 @@ void HTTPTransfer::PrepareTransfer(const std::string& theURL)
 		mPath = "/";
 	}
 
-	int aSemiPos = (int) mHost.find(':');
+	int aSemiPos = (int)mHost.find(':');
 	if (aSemiPos != -1)
 	{
 		mPort = atoi(mHost.substr(aSemiPos + 1).c_str());
 		mHost = mHost.substr(0, aSemiPos);
-	}	
+	}
 }
 
 void HTTPTransfer::StartTransfer()
-{	
+{
 	mTransferPending = true;
 
 	mThreadRunning = true;
 	_beginthread(GetThreadProcStub, 0, this);
 }
 
-void HTTPTransfer::GetHelper(const std::string& theURL)
+void HTTPTransfer::GetHelper(const std::string &theURL)
 {
 	PrepareTransfer(theURL);
 
-	mSendStr = 
-		"GET " + mPath + " HTTP/1.0\r\n" 
-		"User-Agent: Mozilla/4.0 (compatible; popcap)\r\n"
-		"Host: " + mHost + "\r\n"
-		"Connection: close\r\n" +
-		"\r\n";
+	mSendStr = "GET " + mPath +
+			   " HTTP/1.0\r\n"
+			   "User-Agent: Mozilla/4.0 (compatible; popcap)\r\n"
+			   "Host: " +
+			   mHost +
+			   "\r\n"
+			   "Connection: close\r\n" +
+			   "\r\n";
 
 	StartTransfer();
 }
 
-void HTTPTransfer::PostHelper(const std::string& theURL, const std::string& theParams)
+void HTTPTransfer::PostHelper(const std::string &theURL, const std::string &theParams)
 {
 	PrepareTransfer(theURL);
 
-	mSendStr = 
-		"POST " + mPath + " HTTP/1.0\r\n" 
-		"Content-Type: application/x-www-form-urlencoded\r\n" + 
-		"User-Agent: Mozilla/4.0 (compatible; popcap)\r\n"
-		"Host: " + mHost + "\r\n"
-		"Content-Length: " + StrFormat("%d", theParams.length()) + "\r\n" +
-		"Connection: close\r\n" +
-		"\r\n" + theParams;
+	mSendStr = "POST " + mPath +
+			   " HTTP/1.0\r\n"
+			   "Content-Type: application/x-www-form-urlencoded\r\n" +
+			   "User-Agent: Mozilla/4.0 (compatible; popcap)\r\n"
+			   "Host: " +
+			   mHost +
+			   "\r\n"
+			   "Content-Length: " +
+			   StrFormat("%d", theParams.length()) + "\r\n" + "Connection: close\r\n" + "\r\n" + theParams;
 
 	StartTransfer();
 }
 
-void HTTPTransfer::Get(const std::string& theURL)
+void HTTPTransfer::Get(const std::string &theURL)
 {
 	mSpecifiedBaseURL = "";
 	mSpecifiedRelURL = theURL;
 	GetHelper(theURL);
 }
 
-void HTTPTransfer::Post(const std::string& theURL, const std::string& theParams)
+void HTTPTransfer::Post(const std::string &theURL, const std::string &theParams)
 {
 	mSpecifiedBaseURL = "";
 	mSpecifiedRelURL = theURL;
 	PostHelper(theURL, theParams);
 }
 
-void HTTPTransfer::Get(const std::string& theBaseURL, const std::string& theRelURL)
+void HTTPTransfer::Get(const std::string &theBaseURL, const std::string &theRelURL)
 {
 	mSpecifiedBaseURL = theBaseURL;
 	mSpecifiedRelURL = theRelURL;
-	
+
 	GetHelper(GetAbsURL(theBaseURL, theRelURL));
 }
 
-void HTTPTransfer::Post(const std::string& theBaseURL, const std::string& theRelURL, const std::string& theParams)
+void HTTPTransfer::Post(const std::string &theBaseURL, const std::string &theRelURL, const std::string &theParams)
 {
 	mSpecifiedBaseURL = theBaseURL;
 	mSpecifiedRelURL = theRelURL;
-	
+
 	PostHelper(GetAbsURL(theBaseURL, theRelURL), theParams);
 }
 
-void HTTPTransfer::SendRequestString(const std::string& theHost, const std::string& theSendString)
+void HTTPTransfer::SendRequestString(const std::string &theHost, const std::string &theSendString)
 {
 	mSpecifiedBaseURL.erase();
 	mSpecifiedRelURL.erase();
@@ -456,33 +459,33 @@ void HTTPTransfer::SendRequestString(const std::string& theHost, const std::stri
 }
 
 void HTTPTransfer::Abort()
-{	
+{
 	mAborted = true;
-	mExiting = true;	
+	mExiting = true;
 }
 
 void HTTPTransfer::Reset()
-{	
+{
 	if (mThreadRunning)
 	{
 		Abort();
 		WaitFor();
-	}	
+	}
 
 	mResult = RESULT_NOT_STARTED;
-	mTransferId = gCurTransferId++;	
+	mTransferId = gCurTransferId++;
 	mContent.erase();
 	mExiting = false;
 	mAborted = false;
 	mURL.erase();
-	mSendStr.erase();	
+	mSendStr.erase();
 	mPath.erase();
 }
 
 static int aLastThreadId = 0;
 
 void HTTPTransfer::UpdateStatus()
-{	
+{
 }
 
 void HTTPTransfer::WaitFor()

@@ -11,9 +11,9 @@
 
 using namespace PopWork;
 
-
-OptionsDialog::OptionsDialog(Board* b) :
-Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, OptionsDialog::DIALOG_ID, true, _S("OPTIONS"), _S(""), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
+OptionsDialog::OptionsDialog(Board *b)
+	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, OptionsDialog::DIALOG_ID, true, _S("OPTIONS"), _S(""), _S("CLOSE"),
+			 Dialog::BUTTONS_FOOTER)
 {
 	mContentInsets = Insets(23, 20, 23, 20);
 	mSpaceAfterHeader = 30;
@@ -32,7 +32,7 @@ Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, OptionsDialog::DIALOG_ID, true, _S
 
 	mSfxVolumeSlider = new Slider(IMAGE_SLIDER_TRACK, IMAGE_SLIDER_THUMB, OptionsDialog::SFX_SLIDER_ID, this);
 	mSfxVolumeSlider->SetValue(gAppBase->GetSfxVolume());
-	
+
 	mQuitBtn = new DialogButton(IMAGE_DIALOG_BUTTON, OptionsDialog::QUIT_BTN_ID, this);
 	mQuitBtn->mLabel = _S("QUIT GAME");
 	mQuitBtn->SetFont(FONT_DEFAULT);
@@ -56,7 +56,7 @@ OptionsDialog::~OptionsDialog()
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void OptionsDialog::Draw(Graphics* g)
+void OptionsDialog::Draw(Graphics *g)
 {
 	Dialog::Draw(g);
 
@@ -71,26 +71,24 @@ void OptionsDialog::Draw(Graphics* g)
 	// widget, the graphics object is already moved (translated) to the widget's
 	// coordinates. Thus, in using the Graphics object, g, (0, 0) is located
 	// at the top left corner of the widget (our dialog box). So we
-	// just take the difference between the widget locations to produce the 
+	// just take the difference between the widget locations to produce the
 	// actual location we want to drawour text at:
-	g->DrawString(_S("Music volume:"), mMusicVolumeSlider->mX - mX, 
-		mMusicVolumeSlider->mY - mY - mMusicVolumeSlider->mHeight);
+	g->DrawString(_S("Music volume:"), mMusicVolumeSlider->mX - mX,
+				  mMusicVolumeSlider->mY - mY - mMusicVolumeSlider->mHeight);
 
-	g->DrawString(_S("Sound volume:"), mSfxVolumeSlider->mX - mX, 
-		mSfxVolumeSlider->mY - mY - mSfxVolumeSlider->mHeight);
+	g->DrawString(_S("Sound volume:"), mSfxVolumeSlider->mX - mX,
+				  mSfxVolumeSlider->mY - mY - mSfxVolumeSlider->mHeight);
 
 	// Do the same for the checkboxes:
 	g->DrawString(_S("3D Mode:"), m3DCheckbox->mX - mX - 25, m3DCheckbox->mY - mY - m3DCheckbox->mHeight + 20);
 	g->DrawString(_S("Full Screen:"), mFSCheckbox->mX - mX - 25, mFSCheckbox->mY - mY - mFSCheckbox->mHeight + 20);
-	g->DrawString(_S("Custom Cursors:"), mCustomCursorsCheckbox->mX - mX - 25, 
-					mCustomCursorsCheckbox->mY - mY - mCustomCursorsCheckbox->mHeight + 20);
-
+	g->DrawString(_S("Custom Cursors:"), mCustomCursorsCheckbox->mX - mX - 25,
+				  mCustomCursorsCheckbox->mY - mY - mCustomCursorsCheckbox->mHeight + 20);
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void OptionsDialog::AddedToManager(WidgetManager* theWidgetManager)
+void OptionsDialog::AddedToManager(WidgetManager *theWidgetManager)
 {
 	Dialog::AddedToManager(theWidgetManager);
 	theWidgetManager->AddWidget(mMusicVolumeSlider);
@@ -118,7 +116,7 @@ void OptionsDialog::AddedToManager(WidgetManager* theWidgetManager)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void OptionsDialog::RemovedFromManager(WidgetManager* theWidgetManager)
+void OptionsDialog::RemovedFromManager(WidgetManager *theWidgetManager)
 {
 	Dialog::RemovedFromManager(theWidgetManager);
 	theWidgetManager->RemoveWidget(mMusicVolumeSlider);
@@ -135,17 +133,15 @@ void OptionsDialog::Resize(int theX, int theY, int theWidth, int theHeight)
 {
 	Dialog::Resize(theX, theY, theWidth, theHeight);
 
-	mMusicVolumeSlider->Resize(theX + mContentInsets.mLeft + 50, 
-		theY + 100, 245, IMAGE_SLIDER_THUMB->GetHeight());
+	mMusicVolumeSlider->Resize(theX + mContentInsets.mLeft + 50, theY + 100, 245, IMAGE_SLIDER_THUMB->GetHeight());
 
-	mSfxVolumeSlider->Layout(LAY_SameLeft | LAY_Below | LAY_SameWidth | LAY_SameHeight, 
-		mMusicVolumeSlider, 0, 40, 0, 0);
+	mSfxVolumeSlider->Layout(LAY_SameLeft | LAY_Below | LAY_SameWidth | LAY_SameHeight, mMusicVolumeSlider, 0, 40, 0,
+							 0);
 
 	mQuitBtn->Layout(LAY_SameLeft | LAY_SameSize | LAY_Above, mYesButton);
 
 	m3DCheckbox->Layout(LAY_SameLeft | LAY_Below, mSfxVolumeSlider, 0, 40, 0, 0);
-	m3DCheckbox->Resize(m3DCheckbox->mX, m3DCheckbox->mY,
-		IMAGE_CHECKBOX->mWidth / 2, IMAGE_CHECKBOX->mHeight);
+	m3DCheckbox->Resize(m3DCheckbox->mX, m3DCheckbox->mY, IMAGE_CHECKBOX->mWidth / 2, IMAGE_CHECKBOX->mHeight);
 
 	mFSCheckbox->Layout(LAY_SameTop | LAY_SameWidth | LAY_SameHeight | LAY_Right, m3DCheckbox, 80);
 
@@ -207,7 +203,6 @@ void OptionsDialog::ButtonDepress(int theId)
 		// Quit button pressed. Shut down the app.
 		gAppBase->Shutdown();
 	}
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -233,23 +228,22 @@ void OptionsDialog::CheckboxChecked(int theId, bool checked)
 				// if the user was in full screen mode, they might not see the error message. Using
 				// a game dialog box is the safest way to warn them.
 				m3DCheckbox->SetChecked(false);
-				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("Not Supported"), 
-					_S("Hardware acceleration can not be enabled on this computer. \nYour \
+				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("Not Supported"),
+								   _S("Hardware acceleration can not be enabled on this computer. \nYour \
 					video card does not meet the minimum requirements for this game."),
-					_S("OK"), Dialog::BUTTONS_FOOTER);
+								   _S("OK"), Dialog::BUTTONS_FOOTER);
 			}
-			else if(!gAppBase->Is3DAccelerationRecommended())
+			else if (!gAppBase->Is3DAccelerationRecommended())
 			{
 				// We can also check if 3D acceleration is not recommended for this computer
 				// with a call to Is3DAccelerationRecommended. This allows the user to override
 				// the default setting, but with a warning that it might not work or might cause
 				// problems. Some cards fail the detection process but wind up being OK to use.
-				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("Warning"), 
-					_S("Your video card may not fully support this feature.\n\
+				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("Warning"),
+								   _S("Your video card may not fully support this feature.\n\
 					If you experience slower performance, please disable Hardware Acceleration."),
-					_S("OK"), Dialog::BUTTONS_FOOTER);
+								   _S("OK"), Dialog::BUTTONS_FOOTER);
 			}
-
 		}
 	}
 	else if (theId == mFSCheckbox->mId)
@@ -264,8 +258,9 @@ void OptionsDialog::CheckboxChecked(int theId, bool checked)
 		if (gAppBase->mForceFullscreen && !checked)
 		{
 			gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("No Windowed Mode"),
-				_S("Windowed mode is only available if your desktop is running in\n\
-				either 16 bit or 32 bit color mode, which it is not."), _S("OK"), Dialog::BUTTONS_FOOTER);
+							   _S("Windowed mode is only available if your desktop is running in\n\
+				either 16 bit or 32 bit color mode, which it is not."),
+							   _S("OK"), Dialog::BUTTONS_FOOTER);
 
 			// re-check the box to indicate that fullscreen is still the selected mode:
 			mFSCheckbox->SetChecked(true);

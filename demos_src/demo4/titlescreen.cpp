@@ -24,7 +24,7 @@ using namespace PopWork;
 //////////////////////////////////////////////////////////////////////////
 TitleScreen::TitleScreen(GameApp *pApp)
 {
-	mApp = pApp;		
+	mApp = pApp;
 	mContinueLink = NULL;
 }
 
@@ -63,7 +63,6 @@ void TitleScreen::Init(void)
 	mContinueLink->mOverColor = Color(0, 255, 0);
 	mContinueLink->mUnderlineSize = 1;
 
-
 	// We're not going to place the widget just yet. Why? Well,
 	// the TitleScreen hasn't been added to the widget manager.
 	// We'll wait until the AddedToManager method is called before
@@ -74,7 +73,7 @@ void TitleScreen::Init(void)
 //////////////////////////////////////////////////////////////////////////
 void TitleScreen::AddedToManager(WidgetManager *theWidgetManager)
 {
-	Widget::AddedToManager(theWidgetManager);	
+	Widget::AddedToManager(theWidgetManager);
 
 	// Just like with the button widget from Demo3, we're going to add our
 	// hyperlink widget in this method. However, we want the link to be
@@ -100,10 +99,7 @@ void TitleScreen::AddedToManager(WidgetManager *theWidgetManager)
 	// is discussed in the next demo.
 	int labelWidth = FONT_DEFAULT->StringWidth(mContinueLink->mLabel);
 	int labelHeight = FONT_DEFAULT->GetHeight();
-	mContinueLink->Resize(	mWidth / 2 - labelWidth / 2, 
-							mHeight - labelHeight - 40,
-							labelWidth,
-							labelHeight+4);
+	mContinueLink->Resize(mWidth / 2 - labelWidth / 2, mHeight - labelHeight - 40, labelWidth, labelHeight + 4);
 
 	// Almost done. Let's make it so that when the user mouses over the widget,
 	// that the cursor changes from the standard Windows arrow to a hand icon.
@@ -112,11 +108,10 @@ void TitleScreen::AddedToManager(WidgetManager *theWidgetManager)
 	// is inside the widget's bounds, and to reset it back to the arrow when it
 	// is not. Note that ALL widgets have this functionality.
 	mContinueLink->mDoFinger = true;
-	
+
 	// And finally, we add the widget just like we added the button widget
 	// from demo 3 and the Board widget.
 	theWidgetManager->AddWidget(mContinueLink);
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -125,7 +120,7 @@ void TitleScreen::RemovedFromManager(WidgetManager *theWidgetManager)
 {
 	// This is just like what we did in Board in Demo3.
 	// Let our parent class know about the removal, and get rid
-	// of our hyperlink widget. 
+	// of our hyperlink widget.
 	Widget::RemovedFromManager(theWidgetManager);
 	theWidgetManager->RemoveWidget(mContinueLink);
 }
@@ -138,7 +133,6 @@ void TitleScreen::Draw(Graphics *g)
 	// for black/white, you can use Color::Black and Color::White.
 	g->SetColor(Color::Black);
 	g->FillRect(0, 0, mWidth, mHeight);
-
 
 	// We want to draw our loader bar to indicate the progress made in
 	// loading all our resources. As you recalll, GameApp::LoadingThreadProc is
@@ -157,16 +151,15 @@ void TitleScreen::Draw(Graphics *g)
 		// the loader bar, but we only want to draw "drawWidth" wide. This will
 		// give the illusion that the progress bar is expanding as the resources
 		// are loaded in.
-		g->DrawImage(IMAGE_LOADER_BAR, mWidth / 2 - loaderBarWidth / 2, 
-					 400, 
-					Rect(0, 0, drawWidth, IMAGE_LOADER_BAR->GetHeight()));
+		g->DrawImage(IMAGE_LOADER_BAR, mWidth / 2 - loaderBarWidth / 2, 400,
+					 Rect(0, 0, drawWidth, IMAGE_LOADER_BAR->GetHeight()));
 	}
 
 	// If our hyperlink widget is false, let's instead draw some
 	// "Loading" text (er, actually in this case it's an image) where
 	// it is located.
 	if (mContinueLink->mVisible == false)
-		g->DrawImage(IMAGE_LOADER_LOADINGTXT, mContinueLink->mX, mContinueLink->mY - 20);	
+		g->DrawImage(IMAGE_LOADER_LOADINGTXT, mContinueLink->mX, mContinueLink->mY - 20);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -188,7 +181,7 @@ void TitleScreen::ButtonDepress(int theId)
 	{
 		// Our hyperlink widget was pressed. We want to remove ourselves
 		// and the hyperlink widget, and tell the app to display the
-		// main board and get the game started. 
+		// main board and get the game started.
 		// You might be thinking, "If I delete the title screen and
 		// hyperlink, won't I crash the program?" Yes, you will. That's
 		// why we aren't going to delete them using "delete". We're going

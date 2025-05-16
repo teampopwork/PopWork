@@ -17,7 +17,6 @@ class WidgetManager;
 // A new widget that we'll be learning about. It's explained in the .CPP code.
 class HyperlinkWidget;
 
-
 // If you forgot about the ButtonListener class, you should review Demo3.
 // The hyperlink widget is essentially the same thing as a button widget,
 // and emits the same messages that a button does. Thus, to act on its
@@ -25,21 +24,19 @@ class HyperlinkWidget;
 class TitleScreen : public Widget, public ButtonListener
 {
 
-private:
+  private:
+	GameApp *mApp;
+	HyperlinkWidget *mContinueLink;
 
-	GameApp*			mApp;
-	HyperlinkWidget*	mContinueLink;		
-
-public:
-
+  public:
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: TitleScreen
 	//	Parameters:
 	//		theApp	- Pointer to the main application class
-	//	
+	//
 	//	Returns: none
 	//////////////////////////////////////////////////////////////////////////
-	TitleScreen(GameApp* pApp);
+	TitleScreen(GameApp *pApp);
 
 	virtual ~TitleScreen();
 
@@ -51,7 +48,7 @@ public:
 	//	Purpose: Called BEFORE the title screen is added to the widget manager
 	//	by GameApp. This initializes some things like the images used for
 	//	our hyperlink widget.
-	//////////////////////////////////////////////////////////////////////////	
+	//////////////////////////////////////////////////////////////////////////
 	void Init(void);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -67,8 +64,8 @@ public:
 	//	added to its list of widgets. Every widget gets this function
 	//	called when it is first added. It useful to use this function to
 	//	set up any other widgets that the class might contain, such as buttons.
-	//////////////////////////////////////////////////////////////////////////	
-	void AddedToManager(WidgetManager* theWidgetManager);
+	//////////////////////////////////////////////////////////////////////////
+	void AddedToManager(WidgetManager *theWidgetManager);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: RemovedFromManager
@@ -84,7 +81,7 @@ public:
 	//	called when it is finally removed. It useful to use this function to
 	//	also remove any widgets that were added and created in AddedToManager.
 	//////////////////////////////////////////////////////////////////////////
-	void RemovedFromManager(WidgetManager* theWidgetManager);
+	void RemovedFromManager(WidgetManager *theWidgetManager);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: ButtonDepress
@@ -97,21 +94,21 @@ public:
 	//	is first pressed and THEN released. You can use ButtonPress if you want
 	//	to know when the button is first pressed (before it is released).
 	//	theId is the integer ID that was assigned to the button when it was
-	//	first created. 
-	//////////////////////////////////////////////////////////////////////////		
+	//	first created.
+	//////////////////////////////////////////////////////////////////////////
 	virtual void ButtonDepress(int theId);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: Draw
 	//	Parameters:
 	//		g	- Graphics object used to draw all images and fonts to the screen.
-	//	
+	//
 	//	Returns: none
 	//
 	//	Purpose: Called automatically by GameApp's WidgetManager. This is where
 	//	we'll do all our display routines for the loading screen.
 	//////////////////////////////////////////////////////////////////////////
-	void Draw(Graphics* g);
+	void Draw(Graphics *g);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: LoadingComplete
@@ -125,6 +122,6 @@ public:
 	void LoadingComplete();
 };
 
-} 
+} // namespace PopWork
 
 #endif //__TITLE_SCREEN_H__

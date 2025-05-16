@@ -3,7 +3,7 @@
 
 using namespace PopWork;
 
-OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, ALuint theSourceSound)
+OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager *theSoundManager, ALuint theSourceSound)
 {
 	mSoundManagerP = theSoundManager;
 	mReleased = false;
@@ -20,7 +20,7 @@ OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, AL
 
 	mDefaultFrequency = 44100;
 
-	//Generate the OpenAL source.
+	// Generate the OpenAL source.
 	if (mSourceSoundBuffer != NULL)
 	{
 		alGenSources(1, &mSoundSource);
@@ -32,9 +32,9 @@ OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager, AL
 
 OpenALSoundInstance::~OpenALSoundInstance()
 {
-	alSourceStop(mSoundSource); //Stop the source first
-	alSourcei(mSoundSource, AL_BUFFER, 0); //Detach buffer
-	alDeleteSources(1, &mSoundSource); ///Delete the source
+	alSourceStop(mSoundSource);			   // Stop the source first
+	alSourcei(mSoundSource, AL_BUFFER, 0); // Detach buffer
+	alDeleteSources(1, &mSoundSource);	   /// Delete the source
 }
 
 void OpenALSoundInstance::RehupVolume()
@@ -50,9 +50,11 @@ void OpenALSoundInstance::RehupPan()
 	if (mSoundSource != NULL)
 	{
 		float converted_panning = (mBasePan + mPan) / 10000.0f;
-		if (converted_panning < -1.0f) converted_panning = -1.0f;
-		if (converted_panning > 1.0f) converted_panning = 1.0f;
-		
+		if (converted_panning < -1.0f)
+			converted_panning = -1.0f;
+		if (converted_panning > 1.0f)
+			converted_panning = 1.0f;
+
 		alSource3f(mSoundSource, AL_POSITION, converted_panning, 0.0f, 0.0f);
 	}
 }
@@ -87,7 +89,6 @@ void OpenALSoundInstance::SetPan(int thePosition)
 	RehupPan();
 }
 
-
 bool OpenALSoundInstance::Play(bool looping, bool autoRelease)
 {
 	Stop();
@@ -112,7 +113,6 @@ void OpenALSoundInstance::Stop()
 		alSourcei(mSoundSource, AL_SEC_OFFSET, 0);
 		mAutoRelease = false;
 	}
-
 }
 
 void OpenALSoundInstance::AdjustPitch(double theNumSteps)

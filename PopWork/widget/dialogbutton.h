@@ -11,17 +11,17 @@ namespace PopWork
 
 class DialogButton : public ButtonWidget
 {
-public:	
-	Image*					mComponentImage;
-	int						mTranslateX, mTranslateY;
-	int						mTextOffsetX, mTextOffsetY;
+  public:
+	Image *mComponentImage;
+	int mTranslateX, mTranslateY;
+	int mTextOffsetX, mTextOffsetY;
 
-public:
-	DialogButton(Image* theComponentImage, int theId, ButtonListener* theListener);
+  public:
+	DialogButton(Image *theComponentImage, int theId, ButtonListener *theListener);
 
-	virtual void			Draw(Graphics* g);
+	virtual void Draw(Graphics *g);
 };
 
-}
+} // namespace PopWork
 
 #endif

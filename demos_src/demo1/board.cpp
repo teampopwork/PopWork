@@ -14,7 +14,7 @@ using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-Board::Board(GameApp* theApp)
+Board::Board(GameApp *theApp)
 {
 	mApp = theApp;
 }
@@ -30,7 +30,7 @@ Board::~Board()
 void Board::Update()
 {
 	// Let the parent class update as well. This will increment
-	// the variable mUpdateCnt which is an integer that indicates 
+	// the variable mUpdateCnt which is an integer that indicates
 	// how many times the Update() method has been called. Since our
 	// Board class is updated 100 times per second, this variable will
 	// increment 100 times per second. As you will see in later demos,
@@ -39,7 +39,6 @@ void Board::Update()
 	// enough timer value and doesn't rely on the system clock function
 	// call.
 	Widget::Update();
-
 
 	// For this and most of the other demos, you will see the function
 	// below called every Update() call. MarkDirty() tells the widget
@@ -55,7 +54,7 @@ void Board::Update()
 	// other things besides play your game. Of course, everyone
 	// will want to play your game at all times, but it's good to be
 	// nice to those rare people that might want to read email or
-	// do other things at the same time. 
+	// do other things at the same time.
 	//		In this particular demo, we
 	// won't be nice, as the purpose is to bring you up to speed as
 	// quickly as possible, and so we'll dispense with optimizations
@@ -71,24 +70,24 @@ void Board::Update()
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::Draw(Graphics* g)
+void Board::Draw(Graphics *g)
 {
-	// And now for the good stuff! The Graphics object, "g", is 
-	// automatically created and passed to this method by the 
-	// WidgetManager and can be thought of as the main screen 
+	// And now for the good stuff! The Graphics object, "g", is
+	// automatically created and passed to this method by the
+	// WidgetManager and can be thought of as the main screen
 	// bitmap/canvas upon which all drawing will be done. This object
 	// is double buffered automatically so you don't need to worry
 	// about those details. All you need to do is instruct the object
 	// that you would like to draw something to it, and when the
 	// WidgetManager gets done letting all widgets draw to the
 	// Graphics object, it will then blit everything to the screen
-	// at once. 
+	// at once.
 
 	// First, let's start by drawing some geometric primitives. By
 	// default, the drawing color is black. We will change it later
-	// on. The first command clears the screen by drawing a 
+	// on. The first command clears the screen by drawing a
 	// black rectangle (black due to the default color) that is
-	// located at coordinate 0, 0 and is the same size as our 
+	// located at coordinate 0, 0 and is the same size as our
 	// Board widget, which is the same size as the application and
 	// thus is the same size of the game window.
 	g->FillRect(0, 0, mWidth, mHeight);
@@ -105,35 +104,35 @@ void Board::Draw(Graphics* g)
 	// alpha value, is set to 255 for fully opaque. The first three are
 	// in order, red, green, and blue. They range from 0 to 255.
 
-	g->SetColor(Color(255, 128, 64));	// some ugly orangish color
-	
+	g->SetColor(Color(255, 128, 64)); // some ugly orangish color
+
 	// Let's draw a smaller rectangle with its upper left corner
-	// in the center of the screen. 
+	// in the center of the screen.
 	g->FillRect(mWidth / 2, mHeight / 2, 50, 50);
 
 	// Now let's continue with some other primitives. How about
 	// drawing a few lines? We'll use a few other colors too.
-	
-	g->SetColor(Color(255, 0, 0));	// red
+
+	g->SetColor(Color(255, 0, 0)); // red
 
 	// Parameter order is X1, Y1, X2, Y2
 	g->DrawLine(0, 0, 200, 150);
 
-	g->SetColor(Color(0, 255, 0));	// green
+	g->SetColor(Color(0, 255, 0)); // green
 	g->DrawLine(mWidth, 0, mWidth - 200, 150);
 
-	g->SetColor(Color(0, 0, 255));	// blue
+	g->SetColor(Color(0, 0, 255)); // blue
 	g->DrawLine(0, mHeight, 200, mHeight - 150);
 
-	g->SetColor(Color(255, 255, 255));	// white
+	g->SetColor(Color(255, 255, 255)); // white
 	g->DrawLine(mWidth, mHeight, mWidth - 200, mHeight - 150);
 
 	// Let's draw another rectangle, with vertices where each of
 	// the previous 4 lines were. This time, however, let's not
 	// fill it in and just draw its outline instead. We
 	// accomplish that with the DrawRect function, which doesn't
-	// fill in the center. 
-	g->SetColor(Color(255, 0, 255));	// purple
+	// fill in the center.
+	g->SetColor(Color(255, 0, 255)); // purple
 	g->DrawRect(200, 150, (mWidth - 200) - 200, (mHeight - 150) - 150);
 
 	// Tired of drawing lines and quads? How about drawing a triangle
@@ -149,11 +148,11 @@ void Board::Draw(Graphics* g)
 	trianglePoints[0] = Point(30, 30);
 	trianglePoints[1] = Point(30, 60);
 	trianglePoints[2] = Point(60, 45);
-	g->SetColor(Color(255, 255, 0));	// yellow
+	g->SetColor(Color(255, 255, 0)); // yellow
 	g->PolyFill(trianglePoints, 3);
 
 	// And how about a pentagram as well?
-	g->SetColor(Color(0, 255, 255));	// cyan	
+	g->SetColor(Color(0, 255, 255)); // cyan
 	Point pentaPoints[5];
 	pentaPoints[0] = Point(200, 0);
 	pentaPoints[1] = Point(150, 40);
@@ -161,6 +160,4 @@ void Board::Draw(Graphics* g)
 	pentaPoints[3] = Point(250, 80);
 	pentaPoints[4] = Point(250, 40);
 	g->PolyFill(pentaPoints, 5);
-
-
 }

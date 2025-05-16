@@ -12,14 +12,23 @@ namespace PopWork
 
 class EditListener
 {
-public:
-	virtual void			EditWidgetText(int theId, const PopWorkString& theString) {};
+  public:
+	virtual void EditWidgetText(int theId, const PopWorkString &theString){};
 
-	virtual bool			AllowKey(int theId, KeyCode theKey) { return true; }
-	virtual bool			AllowChar(int theId, PopWorkChar theChar) { return true; }
-	virtual bool			AllowText(int theId, const PopWorkString& theText) { return true; }
+	virtual bool AllowKey(int theId, KeyCode theKey)
+	{
+		return true;
+	}
+	virtual bool AllowChar(int theId, PopWorkChar theChar)
+	{
+		return true;
+	}
+	virtual bool AllowText(int theId, const PopWorkString &theText)
+	{
+		return true;
+	}
 };
 
-}
+} // namespace PopWork
 
 #endif

@@ -17,29 +17,34 @@ class AppBase;
 
 class SysFont : public Font
 {
-public:	
-	TTF_Font*				mTTFFont;
-	AppBase*			mApp;
-	bool					mDrawShadow;
-	bool					mSimulateBold;
-	
-	void Init(AppBase* theApp, const std::string& theFace, int thePointSize, int theScript, bool bold, bool italics, bool underline, bool useDevCaps);
+  public:
+	TTF_Font *mTTFFont;
+	AppBase *mApp;
+	bool mDrawShadow;
+	bool mSimulateBold;
 
-public:
-	SysFont(const std::string& theFace, int thePointSize, bool bold = false, bool italics = false, bool underline = false);
-	SysFont(AppBase* theApp, const std::string& theFace, int thePointSize, int theScript = ANSI_CHARSET, bool bold = false, bool italics = false, bool underline = false);
-	SysFont(AppBase* theApp, const unsigned char aData[], size_t aDataSize, int thePointSize, int theScript = ANSI_CHARSET, bool bold = false, bool italics = false, bool underline = false);
-	SysFont(const SysFont& theSysFont);
+	void Init(AppBase *theApp, const std::string &theFace, int thePointSize, int theScript, bool bold, bool italics,
+			  bool underline, bool useDevCaps);
+
+  public:
+	SysFont(const std::string &theFace, int thePointSize, bool bold = false, bool italics = false,
+			bool underline = false);
+	SysFont(AppBase *theApp, const std::string &theFace, int thePointSize, int theScript = ANSI_CHARSET,
+			bool bold = false, bool italics = false, bool underline = false);
+	SysFont(AppBase *theApp, const unsigned char aData[], size_t aDataSize, int thePointSize,
+			int theScript = ANSI_CHARSET, bool bold = false, bool italics = false, bool underline = false);
+	SysFont(const SysFont &theSysFont);
 
 	virtual ~SysFont();
 
-	ImageFont*				CreateImageFont();
-	virtual int				StringWidth(const PopWorkString& theString);
-	virtual void			DrawString(Graphics* g, int theX, int theY, const PopWorkString& theString, const Color& theColor, const Rect& theClipRect);
+	ImageFont *CreateImageFont();
+	virtual int StringWidth(const PopWorkString &theString);
+	virtual void DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+							const Rect &theClipRect);
 
-	virtual Font*			Duplicate();
+	virtual Font *Duplicate();
 };
 
-}
+} // namespace PopWork
 
 #endif // __SYSFONT_H__

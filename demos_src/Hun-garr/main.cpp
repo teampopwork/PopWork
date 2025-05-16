@@ -24,9 +24,9 @@
 
 using namespace PopWork;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-	GameApp* anApp = new GameApp();
+	GameApp *anApp = new GameApp();
 	anApp->Init();
 	anApp->Start();
 

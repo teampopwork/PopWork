@@ -40,7 +40,7 @@
 
 using namespace PopWork;
 
-AppBase* PopWork::gAppBase = NULL;
+AppBase *PopWork::gAppBase = NULL;
 
 static bool gScreenSaverActive = false;
 
@@ -48,71 +48,60 @@ static bool gScreenSaverActive = false;
 #define SPI_GETSCREENSAVERRUNNING 114
 #endif
 
-
-//HotSpot: 11 4
-//Size: 32 32
+// HotSpot: 11 4
+// Size: 32 32
 unsigned char gFingerCursorData[] = {
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
-	0xff, 0xff, 0xe7, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 
-	0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc0, 0xff, 0xff, 0xff, 0xc0, 0x1f, 0xff, 0xff, 
-	0xc0, 0x07, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xfc, 0x40, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff, 
-	0xfc, 0x00, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01, 
-	0xff, 0xff, 0x80, 0x01, 0xff, 0xff, 0x80, 0x03, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xff, 0xc0, 
-	0x03, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 
-	0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 
-	0x18, 0x00, 0x00, 0x00, 0x1b, 0x00, 0x00, 0x00, 0x1b, 0x60, 0x00, 0x00, 0x1b, 0x68, 0x00, 
-	0x00, 0x1b, 0x6c, 0x00, 0x01, 0x9f, 0xec, 0x00, 0x01, 0xdf, 0xfc, 0x00, 0x00, 0xdf, 0xfc, 
-	0x00, 0x00, 0x5f, 0xfc, 0x00, 0x00, 0x7f, 0xfc, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x3f, 
-	0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x0f, 0xf0, 0x00, 0x00, 
-	0x0f, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00
-};
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xff,
+	0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc0,
+	0xff, 0xff, 0xff, 0xc0, 0x1f, 0xff, 0xff, 0xc0, 0x07, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xfc, 0x40, 0x01, 0xff, 0xfc,
+	0x00, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01, 0xff,
+	0xff, 0x80, 0x01, 0xff, 0xff, 0x80, 0x03, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xff, 0xe0, 0x07,
+	0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00,
+	0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x1b, 0x00,
+	0x00, 0x00, 0x1b, 0x60, 0x00, 0x00, 0x1b, 0x68, 0x00, 0x00, 0x1b, 0x6c, 0x00, 0x01, 0x9f, 0xec, 0x00, 0x01, 0xdf,
+	0xfc, 0x00, 0x00, 0xdf, 0xfc, 0x00, 0x00, 0x5f, 0xfc, 0x00, 0x00, 0x7f, 0xfc, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00,
+	0x3f, 0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x0f, 0xf0, 0x00, 0x00, 0x0f, 0xf0, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-//HotSpot: 15 10
-//Size: 32 32
+// HotSpot: 15 10
+// Size: 32 32
 unsigned char gDraggingCursorData[] = {
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
-	0xff, 0xff, 0xfe, 0x7f, 0xff, 0xff, 0xfc, 0x0f, 0xff, 0xff, 0xf0, 0x07, 0xff, 0xff, 0xe0, 
-	0x01, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 
-	0xe0, 0x00, 0xff, 0xfe, 0x60, 0x00, 0xff, 0xfc, 0x20, 0x00, 0xff, 0xfc, 0x00, 0x00, 0xff, 
-	0xfe, 0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x80, 0x00, 
-	0xff, 0xff, 0x80, 0x01, 0xff, 0xff, 0xc0, 0x01, 0xff, 0xff, 0xe0, 0x01, 0xff, 0xff, 0xf0, 
-	0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 
-	0x80, 0x00, 0x00, 0x01, 0xb0, 0x00, 0x00, 0x0d, 0xb0, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 
-	0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 
-	0x01, 0x8d, 0xb6, 0x00, 0x01, 0xcf, 0xfe, 0x00, 0x00, 0xef, 0xfe, 0x00, 0x00, 0xff, 0xfe, 
-	0x00, 0x00, 0x7f, 0xfe, 0x00, 0x00, 0x3f, 0xfe, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x1f, 
-	0xfc, 0x00, 0x00, 0x0f, 0xfc, 0x00, 0x00, 0x07, 0xf8, 0x00, 0x00, 0x03, 0xf8, 0x00, 0x00, 
-	0x03, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00
-};
-static SDLImage* gFPSImage = NULL; 
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f,
+	0xff, 0xff, 0xfc, 0x0f, 0xff, 0xff, 0xf0, 0x07, 0xff, 0xff, 0xe0, 0x01, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0,
+	0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xfe, 0x60, 0x00, 0xff, 0xfc, 0x20, 0x00, 0xff, 0xfc,
+	0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x80, 0x00, 0xff,
+	0xff, 0x80, 0x01, 0xff, 0xff, 0xc0, 0x01, 0xff, 0xff, 0xe0, 0x01, 0xff, 0xff, 0xf0, 0x03, 0xff, 0xff, 0xf8, 0x03,
+	0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x80, 0x00,
+	0x00, 0x01, 0xb0, 0x00, 0x00, 0x0d, 0xb0, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6,
+	0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x01, 0x8d, 0xb6, 0x00, 0x01, 0xcf, 0xfe, 0x00, 0x00, 0xef,
+	0xfe, 0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0x7f, 0xfe, 0x00, 0x00, 0x3f, 0xfe, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00,
+	0x1f, 0xfc, 0x00, 0x00, 0x0f, 0xfc, 0x00, 0x00, 0x07, 0xf8, 0x00, 0x00, 0x03, 0xf8, 0x00, 0x00, 0x03, 0xf8, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+static SDLImage *gFPSImage = NULL;
 
 //////////////////////////////////////////////////////////////////////////
 
-typedef HRESULT (WINAPI *SHGetFolderPathFunc)(HWND, int, HANDLE, DWORD, LPTSTR);
-void* GetSHGetFolderPath(const char* theDLL, HMODULE* theMod)
+typedef HRESULT(WINAPI *SHGetFolderPathFunc)(HWND, int, HANDLE, DWORD, LPTSTR);
+void *GetSHGetFolderPath(const char *theDLL, HMODULE *theMod)
 {
 	HMODULE aMod = LoadLibrary(theDLL);
 	SHGetFolderPathFunc aFunc = NULL;
 
 	if (aMod != NULL)
 	{
-		*((void**)&aFunc) = (void*)GetProcAddress(aMod, "SHGetFolderPathA");
+		*((void **)&aFunc) = (void *)GetProcAddress(aMod, "SHGetFolderPathA");
 		if (aFunc == NULL)
 		{
 			FreeLibrary(aMod);
 			aMod = NULL;
 		}
-	}	
+	}
 
 	*theMod = aMod;
 	return aFunc;
@@ -140,12 +129,12 @@ AppBase::AppBase()
 #endif
 
 	// Extract product version
-	//char aPath[_MAX_PATH];
-	//GetModuleFileNameA(NULL, aPath, 256);
-	//mProductVersion = GetProductVersion(aPath);	
-	//mChangeDirTo = GetFileDir(aPath);
+	// char aPath[_MAX_PATH];
+	// GetModuleFileNameA(NULL, aPath, 256);
+	// mProductVersion = GetProductVersion(aPath);
+	// mChangeDirTo = GetFileDir(aPath);
 
-	mNoDefer = false;	
+	mNoDefer = false;
 	mFullScreenPageFlip = true; // should we page flip in fullscreen?
 	mTimeLoaded = SDL_GetTicks();
 	mSEHOccured = false;
@@ -163,20 +152,20 @@ AppBase::AppBase()
 	mPreferredY = -1;
 	mIsScreenSaver = false;
 	mAllowMonitorPowersave = true;
-	mSDLInterface = NULL;	
+	mSDLInterface = NULL;
 	mMusicInterface = NULL;
 	mFrameTime = 10;
 	mNonDrawCount = 0;
 	mDrawCount = 0;
 	mSleepCount = 0;
-	mUpdateCount = 0;	
+	mUpdateCount = 0;
 	mUpdateAppState = 0;
 	mUpdateAppDepth = 0;
 	mPendingUpdatesAcc = 0.0;
 	mUpdateFTimeAcc = 0.0;
 	mHasPendingDraw = true;
 	mIsDrawing = false;
-	mLastDrawWasEmpty = false;	
+	mLastDrawWasEmpty = false;
 	mLastTimeCheck = 0;
 	mUpdateMultiplier = 1;
 	mPaused = false;
@@ -184,38 +173,38 @@ AppBase::AppBase()
 	mFastForwardToMarker = false;
 	mFastForwardStep = false;
 	mSoundManager = NULL;
-	mCursorNum = CURSOR_POINTER;		
+	mCursorNum = CURSOR_POINTER;
 	mMouseIn = false;
 	mRunning = false;
 	mActive = true;
 	mProcessInTimer = false;
-	mMinimized = false;	
+	mMinimized = false;
 	mPhysMinimized = false;
 	mIsDisabled = false;
-	mLoaded = false;	
-	mYieldMainThread = false; 
-	mLoadingFailed = false;	
+	mLoaded = false;
+	mYieldMainThread = false;
+	mLoadingFailed = false;
 	mLoadingThreadStarted = false;
 	mAutoStartLoadingThread = true;
 	mLoadingThreadCompleted = false;
 	mCursorThreadRunning = false;
 	mNumLoadingThreadTasks = 0;
-	mCompletedLoadingThreadTasks = 0;	
+	mCompletedLoadingThreadTasks = 0;
 	mLastDrawTick = SDL_GetTicks();
 	mNextDrawTick = SDL_GetTicks();
-	mSysCursor = true;	
+	mSysCursor = true;
 	mForceFullscreen = false;
 	mForceWindowed = false;
-	mHasFocus = true;			
-	mCustomCursorsEnabled = false;	
+	mHasFocus = true;
+	mCustomCursorsEnabled = false;
 	mCustomCursorDirty = false;
 	mOverrideCursor = NULL;
-	mIsOpeningURL = false;		
-	mInitialized = false;	
-	mLastShutdownWasGraceful = true;	
-	mReadFromRegistry = false;	
+	mIsOpeningURL = false;
+	mInitialized = false;
+	mLastShutdownWasGraceful = true;
+	mReadFromRegistry = false;
 	mCmdLineParsed = false;
-	mSkipSignatureChecks = false;	
+	mSkipSignatureChecks = false;
 	mCtrlDown = false;
 	mAltDown = false;
 	mStepMode = 0;
@@ -226,7 +215,7 @@ AppBase::AppBase()
 
 	mMusicVolume = 0.85;
 	mSfxVolume = 0.85;
-	mMuteCount = 0;	
+	mMuteCount = 0;
 	mAutoMuteCount = 0;
 	mMuteOnLostFocus = true;
 	mFPSTime = 0;
@@ -238,7 +227,7 @@ AppBase::AppBase()
 	mShowFPSMode = FPS_ShowFPS;
 	mDrawTime = 0;
 	mScreenBltTime = 0;
-	mAlphaDisabled = false;	
+	mAlphaDisabled = false;
 	mDebugKeysEnabled = false;
 	mOldWndProc = 0;
 	mNoSoundNeeded = false;
@@ -265,25 +254,26 @@ AppBase::AppBase()
 	int i;
 
 	for (i = 0; i < NUM_CURSORS; i++)
-		mCursorImages[i] = NULL;	
+		mCursorImages[i] = NULL;
 
 	for (i = 0; i < 256; i++)
 		mAdd8BitMaxTable[i] = i;
 
 	for (i = 256; i < 512; i++)
 		mAdd8BitMaxTable[i] = 255;
-	
+
 	// Set default strings.  Init could read in overrides from partner.xml
-	SetString("DIALOG_BUTTON_OK",		L"OK");
-	SetString("DIALOG_BUTTON_CANCEL",	L"CANCEL");
+	SetString("DIALOG_BUTTON_OK", L"OK");
+	SetString("DIALOG_BUTTON_CANCEL", L"CANCEL");
 
-	SetString("UPDATE_CHECK_TITLE",		L"Update Check");
-	SetString("UPDATE_CHECK_BODY",		L"Checking if there are any updates available for this product ...");
+	SetString("UPDATE_CHECK_TITLE", L"Update Check");
+	SetString("UPDATE_CHECK_BODY", L"Checking if there are any updates available for this product ...");
 
-	SetString("UP_TO_DATE_TITLE",		L"Up to Date");	
-	SetString("UP_TO_DATE_BODY",		L"There are no updates available for this product at this time.");
-	SetString("NEW_VERSION_TITLE",		L"New Version");
-	SetString("NEW_VERSION_BODY",		L"There is an update available for this product.  Would you like to visit the web site to download it?");
+	SetString("UP_TO_DATE_TITLE", L"Up to Date");
+	SetString("UP_TO_DATE_BODY", L"There are no updates available for this product at this time.");
+	SetString("NEW_VERSION_TITLE", L"New Version");
+	SetString("NEW_VERSION_BODY",
+			  L"There is an update available for this product.  Would you like to visit the web site to download it?");
 
 	mWidgetManager = new WidgetManager(this);
 	mResourceManager = new ResourceManager(this);
@@ -296,31 +286,31 @@ AppBase::AppBase()
 		mFullScreenPageFlip = false; // so that tablet keyboard can show up
 	}
 	else
-		mTabletPC = false;	
+		mTabletPC = false;
 
-	//std::wifstream stringsFile(_wfopen(L".\\properties\\fstrings", L"rb"));
+	// std::wifstream stringsFile(_wfopen(L".\\properties\\fstrings", L"rb"));
 	//
-	//if(!stringsFile)
+	// if(!stringsFile)
 	//{
-	//	MessageBox(NULL, "file missing: 'install-folder\\properties\\fstrings' Please re-install", "FATAL ERROR", MB_OK);
-	//	DoExit(1);
-	//}
-	//std::getline(stringsFile, mString_HardwareAccelSwitchedOn);
-	//std::getline(stringsFile, mString_HardwareAccelConfirm);
-	//std::getline(stringsFile, mString_HardwareAccelNotWorking);
-	//std::getline(stringsFile, mString_SetColorDepth);
-	//std::getline(stringsFile, mString_FailedInitDirectDrawColon);
-	//std::getline(stringsFile, mString_UnableOpenProperties);
-	//std::getline(stringsFile, mString_SigCheckFailed);
-	//std::getline(stringsFile, mString_InvalidCommandLineParam);
-	//std::getline(stringsFile, mString_RequiresDirectX);
-	//std::getline(stringsFile, mString_YouNeedDirectX);
-	//std::getline(stringsFile, mString_FailedInitDirectDraw);
-	//std::getline(stringsFile, mString_FatalError);
-	//std::getline(stringsFile, mString_UnexpectedErrorOccured);
-	//std::getline(stringsFile, mString_PleaseHelpBy);
-	//std::getline(stringsFile, mString_FailedConnectPopcap);
-	//stringsFile.close();
+	//	MessageBox(NULL, "file missing: 'install-folder\\properties\\fstrings' Please re-install", "FATAL ERROR",
+	//MB_OK); 	DoExit(1);
+	// }
+	// std::getline(stringsFile, mString_HardwareAccelSwitchedOn);
+	// std::getline(stringsFile, mString_HardwareAccelConfirm);
+	// std::getline(stringsFile, mString_HardwareAccelNotWorking);
+	// std::getline(stringsFile, mString_SetColorDepth);
+	// std::getline(stringsFile, mString_FailedInitDirectDrawColon);
+	// std::getline(stringsFile, mString_UnableOpenProperties);
+	// std::getline(stringsFile, mString_SigCheckFailed);
+	// std::getline(stringsFile, mString_InvalidCommandLineParam);
+	// std::getline(stringsFile, mString_RequiresDirectX);
+	// std::getline(stringsFile, mString_YouNeedDirectX);
+	// std::getline(stringsFile, mString_FailedInitDirectDraw);
+	// std::getline(stringsFile, mString_FatalError);
+	// std::getline(stringsFile, mString_UnexpectedErrorOccured);
+	// std::getline(stringsFile, mString_PleaseHelpBy);
+	// std::getline(stringsFile, mString_FailedConnectPopcap);
+	// stringsFile.close();
 }
 
 AppBase::~AppBase()
@@ -334,24 +324,25 @@ AppBase::~AppBase()
 		bool writeToRegistry = true;
 		bool is3D = false;
 		bool is3DOptionSet = RegistryReadBoolean("Is3D", &is3D);
-		if(!is3DOptionSet) // should we write the option?
+		if (!is3DOptionSet) // should we write the option?
 		{
-			if(!Is3DAccelerationRecommended()) // may need to prompt user if he wants to keep 3d acceleration on
+			if (!Is3DAccelerationRecommended()) // may need to prompt user if he wants to keep 3d acceleration on
 			{
 				if (Is3DAccelerated())
 				{
 					showedMsgBox = true;
-					SDL_MessageBoxButtonData buttons[] = {
-						{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes" },
-						{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "No" }
-					};
+					SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
+														  {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "No"}};
 
-					std::string aTitle = PopWorkStringToStringFast(StringToPopWorkStringFast(mCompanyName) + _S(" ") + GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
+					std::string aTitle = PopWorkStringToStringFast(
+						StringToPopWorkStringFast(mCompanyName) + _S(" ") +
+						GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
-					std::string aMessage = PopWorkStringToStringFast(GetString("HARDWARE_ACCEL_SWITCHED_ON",
-						_S("Hardware Acceleration was switched on during this session.\n")
-						_S("If this resulted in slower performance, it should be switched off.\n")
-						_S("Would you like to keep Hardware Acceleration switched on?")));
+					std::string aMessage = PopWorkStringToStringFast(
+						GetString("HARDWARE_ACCEL_SWITCHED_ON",
+								  _S("Hardware Acceleration was switched on during this session.\n")
+									  _S("If this resulted in slower performance, it should be switched off.\n")
+										  _S("Would you like to keep Hardware Acceleration switched on?")));
 
 					SDL_MessageBoxData aMessageboxData = {};
 					aMessageboxData.flags = SDL_MESSAGEBOX_INFORMATION;
@@ -362,13 +353,13 @@ AppBase::~AppBase()
 					aMessageboxData.window = mSDLInterface->mWindow;
 
 					int aResult;
-					if (!SDL_ShowMessageBox(&aMessageboxData, &aResult)) {
+					if (!SDL_ShowMessageBox(&aMessageboxData, &aResult))
+					{
 						SDL_Log("Error displaying message box: %s", SDL_GetError());
 					}
 					mSDLInterface->mIs3D = aResult == 1 ? true : false;
 
-
-					if (aResult!=1)
+					if (aResult != 1)
 						writeToRegistry = false;
 				}
 				else
@@ -384,33 +375,27 @@ AppBase::~AppBase()
 	if (!showedMsgBox && gSDLInterfacePreDrawError && !IsScreenSaver())
 	{
 		const SDL_MessageBoxButtonData buttons[] = {
-		{ 0, 0, "No" },
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes" },
+			{0, 0, "No"},
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
 		};
 
-		std::string aMessage = PopWorkStringToStringFast(GetString("HARDWARE_ACCEL_NOT_WORKING",
-			_S("Hardware Acceleration may not have been working correctly during this session.\r\n")
-			_S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
-			_S("Would you like to keep Hardware Acceleration switched on?")));
+		std::string aMessage = PopWorkStringToStringFast(
+			GetString("HARDWARE_ACCEL_NOT_WORKING",
+					  _S("Hardware Acceleration may not have been working correctly during this session.\r\n")
+						  _S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
+							  _S("Would you like to keep Hardware Acceleration switched on?")));
 
-		std::string aTitle = PopWorkStringToStringFast(StringToPopWorkStringFast(mCompanyName) + _S(" ") + GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
+		std::string aTitle = PopWorkStringToStringFast(
+			StringToPopWorkStringFast(mCompanyName) + _S(" ") +
+			GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
 		SDL_MessageBoxData messageBoxData = {
-			SDL_MESSAGEBOX_INFORMATION,
-			NULL,
-			aTitle.c_str(),
-			aMessage.c_str(),
-			SDL_arraysize(buttons),
-			buttons,
-			NULL
-		};
-
+			SDL_MESSAGEBOX_INFORMATION, NULL, aTitle.c_str(), aMessage.c_str(), SDL_arraysize(buttons), buttons, NULL};
 
 		int aResult = mSDLInterface->MakeResultMessageBox(messageBoxData);
-		if (aResult==0)
+		if (aResult == 0)
 			RegistryWriteBoolean("Is3D", false);
 	}
-
 
 	DialogMap::iterator aDialogItr = mDialogMap.begin();
 	while (aDialogItr != mDialogMap.end())
@@ -422,33 +407,32 @@ AppBase::~AppBase()
 	mDialogMap.clear();
 	mDialogList.clear();
 
-	delete mWidgetManager;	
+	delete mWidgetManager;
 	delete mResourceManager;
 	delete gFPSImage;
 	gFPSImage = NULL;
-	
+
 	SharedImageMap::iterator aSharedImageItr = mSharedImageMap.begin();
 	while (aSharedImageItr != mSharedImageMap.end())
 	{
-		SharedImage* aSharedImage = &aSharedImageItr->second;
-		DBG_ASSERTE(aSharedImage->mRefCount == 0);		
+		SharedImage *aSharedImage = &aSharedImageItr->second;
+		DBG_ASSERTE(aSharedImage->mRefCount == 0);
 		delete aSharedImage->mImage;
-		mSharedImageMap.erase(aSharedImageItr++);		
+		mSharedImageMap.erase(aSharedImageItr++);
 	}
-	
+
 	delete mSDLInterface;
 	delete mMusicInterface;
-	delete mSoundManager;			
+	delete mSoundManager;
 
 	BASS_Stop();
-	
-	WaitForLoadingThread();	
+
+	WaitForLoadingThread();
 
 	SDL_DestroyCursor(mHandCursor);
 	SDL_DestroyCursor(mDraggingCursor);
 
 	gAppBase = NULL;
-
 }
 
 void AppBase::ClearUpdateBacklog(bool relaxForASecond)
@@ -470,29 +454,31 @@ bool AppBase::AppCanRestore()
 	return !mIsDisabled;
 }
 
-Dialog* AppBase::NewDialog(int theDialogId, bool isModal, const PopWorkString& theDialogHeader, const PopWorkString& theDialogLines, const PopWorkString& theDialogFooter, int theButtonMode)
-{	
-	Dialog* aDialog = new Dialog(NULL, NULL, theDialogId, isModal, theDialogHeader,	theDialogLines, theDialogFooter, theButtonMode);		
+Dialog *AppBase::NewDialog(int theDialogId, bool isModal, const PopWorkString &theDialogHeader,
+						   const PopWorkString &theDialogLines, const PopWorkString &theDialogFooter, int theButtonMode)
+{
+	Dialog *aDialog =
+		new Dialog(NULL, NULL, theDialogId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
 	return aDialog;
 }
 
-Dialog* AppBase::DoDialog(int theDialogId, bool isModal, const PopWorkString& theDialogHeader, const PopWorkString& theDialogLines, const PopWorkString& theDialogFooter, int theButtonMode)
+Dialog *AppBase::DoDialog(int theDialogId, bool isModal, const PopWorkString &theDialogHeader,
+						  const PopWorkString &theDialogLines, const PopWorkString &theDialogFooter, int theButtonMode)
 {
 	KillDialog(theDialogId);
 
-	Dialog* aDialog = NewDialog(theDialogId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);		
+	Dialog *aDialog = NewDialog(theDialogId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
 
 	AddDialog(theDialogId, aDialog);
 
 	return aDialog;
 }
 
-
-Dialog*	AppBase::GetDialog(int theDialogId)
+Dialog *AppBase::GetDialog(int theDialogId)
 {
 	DialogMap::iterator anItr = mDialogMap.find(theDialogId);
 
-	if (anItr != mDialogMap.end())	
+	if (anItr != mDialogMap.end())
 		return anItr->second;
 
 	return NULL;
@@ -504,31 +490,31 @@ bool AppBase::KillDialog(int theDialogId, bool removeWidget, bool deleteWidget)
 
 	if (anItr != mDialogMap.end())
 	{
-		Dialog* aDialog = anItr->second;
+		Dialog *aDialog = anItr->second;
 
-		// set the result to something else so DoMainLoop knows that the dialog is gone 
-		// in case nobody else sets mResult		
-		if (aDialog->mResult == -1) 
+		// set the result to something else so DoMainLoop knows that the dialog is gone
+		// in case nobody else sets mResult
+		if (aDialog->mResult == -1)
 			aDialog->mResult = 0;
-		
-		DialogList::iterator aListItr = std::find(mDialogList.begin(),mDialogList.end(),aDialog);
+
+		DialogList::iterator aListItr = std::find(mDialogList.begin(), mDialogList.end(), aDialog);
 		if (aListItr != mDialogList.end())
 			mDialogList.erase(aListItr);
-		
+
 		mDialogMap.erase(anItr);
 
 		if (removeWidget || deleteWidget)
-		mWidgetManager->RemoveWidget(aDialog);
+			mWidgetManager->RemoveWidget(aDialog);
 
 		if (aDialog->IsModal())
-		{			
+		{
 			ModalClose();
 			mWidgetManager->RemoveBaseModal(aDialog);
-		}				
+		}
 
 		if (deleteWidget)
-		SafeDeleteWidget(aDialog);
-		
+			SafeDeleteWidget(aDialog);
+
 		return true;
 	}
 
@@ -537,10 +523,10 @@ bool AppBase::KillDialog(int theDialogId, bool removeWidget, bool deleteWidget)
 
 bool AppBase::KillDialog(int theDialogId)
 {
-	return KillDialog(theDialogId,true,true);
+	return KillDialog(theDialogId, true, true);
 }
 
-bool AppBase::KillDialog(Dialog* theDialog)
+bool AppBase::KillDialog(Dialog *theDialog)
 {
 	return KillDialog(theDialog->mId);
 }
@@ -550,15 +536,15 @@ int AppBase::GetDialogCount()
 	return mDialogMap.size();
 }
 
-void AppBase::AddDialog(int theDialogId, Dialog* theDialog)
+void AppBase::AddDialog(int theDialogId, Dialog *theDialog)
 {
 	KillDialog(theDialogId);
 
 	if (theDialog->mWidth == 0)
 	{
 		// Set the dialog position ourselves
-		int aWidth = mWidth/2;
-		theDialog->Resize((mWidth - aWidth)/2, mHeight / 5, aWidth, theDialog->GetPreferredHeight(aWidth));
+		int aWidth = mWidth / 2;
+		theDialog->Resize((mWidth - aWidth) / 2, mHeight / 5, aWidth, theDialog->GetPreferredHeight(aWidth));
 	}
 
 	mDialogMap.insert(DialogMap::value_type(theDialogId, theDialog));
@@ -572,7 +558,7 @@ void AppBase::AddDialog(int theDialogId, Dialog* theDialog)
 	}
 }
 
-void AppBase::AddDialog(Dialog* theDialog)
+void AppBase::AddDialog(Dialog *theDialog)
 {
 	AddDialog(theDialog->mId, theDialog);
 }
@@ -586,11 +572,11 @@ void AppBase::ModalClose()
 }
 
 void AppBase::DialogButtonPress(int theDialogId, int theButtonId)
-{	
+{
 	if (theButtonId == Dialog::ID_YES)
 		ButtonPress(2000 + theDialogId);
 	else if (theButtonId == Dialog::ID_NO)
-		ButtonPress(3000 + theDialogId);	
+		ButtonPress(3000 + theDialogId);
 }
 
 void AppBase::DialogButtonDepress(int theDialogId, int theButtonId)
@@ -602,34 +588,34 @@ void AppBase::DialogButtonDepress(int theDialogId, int theButtonId)
 }
 
 void AppBase::GotFocus()
-{	
+{
 }
 
 void AppBase::LostFocus()
-{	
+{
 }
 
-void AppBase::URLOpenFailed(const std::string& theURL)
+void AppBase::URLOpenFailed(const std::string &theURL)
 {
 	mIsOpeningURL = false;
 }
 
-void AppBase::URLOpenSucceeded(const std::string& theURL)
-{	
+void AppBase::URLOpenSucceeded(const std::string &theURL)
+{
 	mIsOpeningURL = false;
 
 	if (mShutdownOnURLOpen)
-		Shutdown();	
+		Shutdown();
 }
 
-bool AppBase::OpenURL(const std::string& theURL, bool shutdownOnOpen)
+bool AppBase::OpenURL(const std::string &theURL, bool shutdownOnOpen)
 {
 	if ((!mIsOpeningURL) || (theURL != mOpeningURL))
 	{
 		mShutdownOnURLOpen = shutdownOnOpen;
 		mIsOpeningURL = true;
 		mOpeningURL = theURL;
-		mOpeningURLTime = SDL_GetTicks();		
+		mOpeningURLTime = SDL_GetTicks();
 
 		if (SDL_OpenURL(theURL.c_str()))
 		{
@@ -645,8 +631,8 @@ bool AppBase::OpenURL(const std::string& theURL, bool shutdownOnOpen)
 	return true;
 }
 
-std::string AppBase::GetProductVersion(const std::string& thePath)
-{	
+std::string AppBase::GetProductVersion(const std::string &thePath)
+{
 	/*
 	// Dynamically Load Version.dll
 	typedef DWORD (APIENTRY *GetFileVersionInfoSizeFunc)(LPSTR lptstrFilename, LPDWORD lpdwHandle);
@@ -666,29 +652,29 @@ std::string AppBase::GetProductVersion(const std::string& thePath)
 
 	// Get Product Version
 	std::string aProductVersion;
-	
+
 	uint aSize = aGetFileVersionInfoSizeFunc((char*) thePath.c_str(), 0);
-	if (aSize > 0)		
+	if (aSize > 0)
 	{
 		uchar* aVersionBuffer = new uchar[aSize];
-		aGetFileVersionInfoFunc((char*) thePath.c_str(), 0, aSize, aVersionBuffer);	
-		char* aBuffer;	
-		if (aVerQueryValueFunc(aVersionBuffer, 
-				  "\\StringFileInfo\\040904B0\\ProductVersion", 
-				  (void**) &aBuffer, 
+		aGetFileVersionInfoFunc((char*) thePath.c_str(), 0, aSize, aVersionBuffer);
+		char* aBuffer;
+		if (aVerQueryValueFunc(aVersionBuffer,
+				  "\\StringFileInfo\\040904B0\\ProductVersion",
+				  (void**) &aBuffer,
 				  &aSize))
 		{
 			aProductVersion = aBuffer;
 		}
-		else if (aVerQueryValueFunc(aVersionBuffer, 
-				  "\\StringFileInfo\\040904E4\\ProductVersion", 
-				  (void**) &aBuffer, 
+		else if (aVerQueryValueFunc(aVersionBuffer,
+				  "\\StringFileInfo\\040904E4\\ProductVersion",
+				  (void**) &aBuffer,
 				  &aSize))
 		{
 			aProductVersion = aBuffer;
 		}
 
-		delete aVersionBuffer;	
+		delete aVersionBuffer;
 	}
 	*/
 	return "0";
@@ -698,10 +684,9 @@ void AppBase::WaitForLoadingThread()
 {
 	while ((mLoadingThreadStarted) && (!mLoadingThreadCompleted))
 		SDL_Delay(20);
-	
 }
 
-void AppBase::SetCursorImage(int theCursorNum, Image* theImage)
+void AppBase::SetCursorImage(int theCursorNum, Image *theImage)
 {
 	if ((theCursorNum >= 0) && (theCursorNum < NUM_CURSORS))
 	{
@@ -710,13 +695,13 @@ void AppBase::SetCursorImage(int theCursorNum, Image* theImage)
 	}
 }
 
-
-int WriteScreenShotThread(void* theArg)
+int WriteScreenShotThread(void *theArg)
 {
 	//////////////////////////////////////////////////////////////////////////
 	// Validate the passed parameter
-	SDL_Surface* theSurface = (SDL_Surface*)theArg;
-	if (theSurface == NULL) return 1;
+	SDL_Surface *theSurface = (SDL_Surface *)theArg;
+	if (theSurface == NULL)
+		return 1;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Get free image name
@@ -726,16 +711,16 @@ int WriteScreenShotThread(void* theArg)
 
 	int aMaxId = 0;
 	std::string anImagePrefix = "image";
-	//add the automatic id later.
+	// add the automatic id later.
 	std::string anImageName = anImageDir + anImagePrefix + StrFormat("%d.png", aMaxId + 1);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Write image
 	ImageLib::Image aSaveImage;
-	aSaveImage.mBits = (ulong*)theSurface->pixels;
+	aSaveImage.mBits = (ulong *)theSurface->pixels;
 	aSaveImage.mWidth = theSurface->w;
 	aSaveImage.mHeight = theSurface->h;
-	ImageLib::WriteImage(anImageName, ".png", & aSaveImage);
+	ImageLib::WriteImage(anImageName, ".png", &aSaveImage);
 	aSaveImage.mBits = NULL;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -747,12 +732,12 @@ int WriteScreenShotThread(void* theArg)
 
 void AppBase::TakeScreenshot()
 {
-	//TODO: Reimplement screenshots
+	// TODO: Reimplement screenshots
 }
 
 void AppBase::DumpProgramInfo()
 {
-	
+
 	Deltree(GetAppDataFolder() + "_dump");
 
 	for (;;)
@@ -766,9 +751,10 @@ void AppBase::DumpProgramInfo()
 
 	time_t aTime;
 	time(&aTime);
-	tm* aTM = localtime(&aTime);
+	tm *aTM = localtime(&aTime);
 
-	aDumpStream << "<HTML><BODY BGCOLOR=EEEEFF><CENTER><FONT SIZE=+2><B>" << asctime(aTM) << "</B></FONT><BR>" << std::endl;
+	aDumpStream << "<HTML><BODY BGCOLOR=EEEEFF><CENTER><FONT SIZE=+2><B>" << asctime(aTM) << "</B></FONT><BR>"
+				<< std::endl;
 
 	int anImgNum = 0;
 
@@ -778,9 +764,9 @@ void AppBase::DumpProgramInfo()
 	ImageLib::Image anImageLibImage;
 	anImageLibImage.mWidth = aThumbWidth;
 	anImageLibImage.mHeight = aThumbHeight;
-	anImageLibImage.mBits = new unsigned long[aThumbWidth*aThumbHeight];	
+	anImageLibImage.mBits = new unsigned long[aThumbWidth * aThumbHeight];
 
-	typedef std::multimap<int, MemoryImage*, std::greater<int> > SortedImageMap;
+	typedef std::multimap<int, MemoryImage *, std::greater<int>> SortedImageMap;
 
 	int aTotalMemory = 0;
 
@@ -788,11 +774,11 @@ void AppBase::DumpProgramInfo()
 	MemoryImageSet::iterator anItr = mMemoryImageSet.begin();
 	while (anItr != mMemoryImageSet.end())
 	{
-		MemoryImage* aMemoryImage = *anItr;				
+		MemoryImage *aMemoryImage = *anItr;
 
-		int aNumPixels = aMemoryImage->mWidth*aMemoryImage->mHeight;
+		int aNumPixels = aMemoryImage->mWidth * aMemoryImage->mHeight;
 
-		SDLImage* aSDLImage = dynamic_cast<SDLImage*>(aMemoryImage);
+		SDLImage *aSDLImage = dynamic_cast<SDLImage *>(aMemoryImage);
 
 		int aBitsMemory = 0;
 		int aSurfaceMemory = 0;
@@ -808,11 +794,11 @@ void AppBase::DumpProgramInfo()
 		if ((aSDLImage != NULL) && (aSDLImage->mD3DData != NULL))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
 		if (aMemoryImage->mColorTable != NULL)
-			aPalletizedMemory = aNumPixels + 256*4;
+			aPalletizedMemory = aNumPixels + 256 * 4;
 		if (aMemoryImage->mNativeAlphaData != NULL)
 		{
 			if (aMemoryImage->mColorTable != NULL)
-				aNativeAlphaMemory = 256*4;
+				aNativeAlphaMemory = 256 * 4;
 			else
 				aNativeAlphaMemory = aNumPixels * 4;
 		}
@@ -821,9 +807,10 @@ void AppBase::DumpProgramInfo()
 		if (aMemoryImage->mRLAdditiveData != NULL)
 			aRLAdditiveMemory = aNumPixels;
 		if (aMemoryImage->mD3DData != NULL)
-			aTextureMemory += ((SDLTextureData*)aMemoryImage->mD3DData)->GetMemSize();
+			aTextureMemory += ((SDLTextureData *)aMemoryImage->mD3DData)->GetMemSize();
 
-		aMemorySize = aBitsMemory + aSurfaceMemory + aPalletizedMemory + aNativeAlphaMemory + aRLAlphaMemory + aRLAdditiveMemory + aTextureMemory;
+		aMemorySize = aBitsMemory + aSurfaceMemory + aPalletizedMemory + aNativeAlphaMemory + aRLAlphaMemory +
+					  aRLAdditiveMemory + aTextureMemory;
 		aTotalMemory += aMemorySize;
 
 		aSortedImageMap.insert(SortedImageMap::value_type(aMemorySize, aMemoryImage));
@@ -846,21 +833,22 @@ void AppBase::DumpProgramInfo()
 	SortedImageMap::iterator aSortedItr = aSortedImageMap.begin();
 	while (aSortedItr != aSortedImageMap.end())
 	{
-		MemoryImage* aMemoryImage = aSortedItr->second;				
+		MemoryImage *aMemoryImage = aSortedItr->second;
 
 		char anImageName[256];
 		sprintf(anImageName, "img%04d", anImgNum);
 
 		char aThumbName[256];
 		sprintf(aThumbName, "thumb%04d", anImgNum);
-		
+
 		aDumpStream << "<TR>" << std::endl;
 
-		aDumpStream << "<TD><A HREF=" << anImageName << ".png><IMG SRC=" << aThumbName << ".jpeg WIDTH=" << aThumbWidth << " HEIGHT=" << aThumbHeight << "></A></TD>" << std::endl;
-		
-		int aNumPixels = aMemoryImage->mWidth*aMemoryImage->mHeight;
+		aDumpStream << "<TD><A HREF=" << anImageName << ".png><IMG SRC=" << aThumbName << ".jpeg WIDTH=" << aThumbWidth
+					<< " HEIGHT=" << aThumbHeight << "></A></TD>" << std::endl;
 
-		SDLImage* aSDLImage = dynamic_cast<SDLImage*>(aMemoryImage);
+		int aNumPixels = aMemoryImage->mWidth * aMemoryImage->mHeight;
+
+		SDLImage *aSDLImage = dynamic_cast<SDLImage *>(aMemoryImage);
 
 		int aMemorySize = aSortedItr->first;
 
@@ -872,80 +860,111 @@ void AppBase::DumpProgramInfo()
 		int aRLAdditiveMemory = 0;
 		int aTextureMemory = 0;
 		std::string aTextureFormatName;
-		
+
 		if (aMemoryImage->mBits != NULL)
 			aBitsMemory = aNumPixels * 4;
 		if ((aSDLImage != NULL) && (aSDLImage->mD3DData != NULL))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
 		if (aMemoryImage->mColorTable != NULL)
-			aPalletizedMemory = aNumPixels + 256*4;
+			aPalletizedMemory = aNumPixels + 256 * 4;
 		if (aMemoryImage->mNativeAlphaData != NULL)
 		{
 			if (aMemoryImage->mColorTable != NULL)
-				aNativeAlphaMemory = 256*4;
+				aNativeAlphaMemory = 256 * 4;
 			else
 				aNativeAlphaMemory = aNumPixels * 4;
 		}
 		if (aMemoryImage->mRLAlphaData != NULL)
 			aRLAlphaMemory = aNumPixels;
 		if (aMemoryImage->mRLAdditiveData != NULL)
-			aRLAdditiveMemory = aNumPixels;		
+			aRLAdditiveMemory = aNumPixels;
 		if (aMemoryImage->mD3DData != NULL)
 		{
-			aTextureMemory += ((SDLTextureData*)aMemoryImage->mD3DData)->GetMemSize();
+			aTextureMemory += ((SDLTextureData *)aMemoryImage->mD3DData)->GetMemSize();
 
-			aTextureFormatName = "ARGB8888"; //They are always like this
+			aTextureFormatName = "ARGB8888"; // They are always like this
 		}
 
-		aTotalMemorySize		+= aMemorySize;
-		aTotalBitsMemory		+= aBitsMemory;
-		aTotalTextureMemory		+= aTextureMemory;
-		aTotalSurfaceMemory		+= aSurfaceMemory;
-		aTotalPalletizedMemory	+= aPalletizedMemory;
-		aTotalNativeAlphaMemory	+= aNativeAlphaMemory;
-		aTotalRLAlphaMemory		+= aRLAlphaMemory;
-		aTotalRLAdditiveMemory	+= aRLAdditiveMemory;
-
-				
+		aTotalMemorySize += aMemorySize;
+		aTotalBitsMemory += aBitsMemory;
+		aTotalTextureMemory += aTextureMemory;
+		aTotalSurfaceMemory += aSurfaceMemory;
+		aTotalPalletizedMemory += aPalletizedMemory;
+		aTotalNativeAlphaMemory += aNativeAlphaMemory;
+		aTotalRLAlphaMemory += aRLAlphaMemory;
+		aTotalRLAdditiveMemory += aRLAdditiveMemory;
 
 		char aStr[256];
-		sprintf(aStr, "%d x %d<BR>%s bytes", aMemoryImage->mWidth, aMemoryImage->mHeight, CommaSeperate(aMemorySize).c_str());
+		sprintf(aStr, "%d x %d<BR>%s bytes", aMemoryImage->mWidth, aMemoryImage->mHeight,
+				CommaSeperate(aMemorySize).c_str());
 		aDumpStream << "<TD ALIGN=RIGHT>" << aStr << "</TD>" << std::endl;
 
-		aDumpStream << "<TD>" << PopWorkStringToString(((aBitsMemory != 0) ? _S("mBits<BR>") + CommaSeperate(aBitsMemory) : _S("&nbsp;"))) << "</TD>" << std::endl;	
-		aDumpStream << "<TD>" << PopWorkStringToString(((aPalletizedMemory != 0) ? _S("Palletized<BR>") + CommaSeperate(aPalletizedMemory) : _S("&nbsp;"))) << "</TD>" << std::endl;				
-		aDumpStream << "<TD>" << PopWorkStringToString(((aSurfaceMemory != 0) ? _S("DDSurface<BR>") + CommaSeperate(aSurfaceMemory) : _S("&nbsp;"))) << "</TD>" << std::endl;		
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mD3DData!=NULL) ? _S("Texture<BR>") + StringToPopWorkString(aTextureFormatName) + _S("<BR>") + CommaSeperate(aTextureMemory) : _S("&nbsp;"))) << "</TD>" << std::endl;
+		aDumpStream << "<TD>"
+					<< PopWorkStringToString(
+						   ((aBitsMemory != 0) ? _S("mBits<BR>") + CommaSeperate(aBitsMemory) : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>"
+					<< PopWorkStringToString(((aPalletizedMemory != 0)
+												  ? _S("Palletized<BR>") + CommaSeperate(aPalletizedMemory)
+												  : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>"
+					<< PopWorkStringToString(
+						   ((aSurfaceMemory != 0) ? _S("DDSurface<BR>") + CommaSeperate(aSurfaceMemory) : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>"
+					<< PopWorkStringToString(((aMemoryImage->mD3DData != NULL)
+												  ? _S("Texture<BR>") + StringToPopWorkString(aTextureFormatName) +
+														_S("<BR>") + CommaSeperate(aTextureMemory)
+												  : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
 
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mIsVolatile) ? _S("Volatile") : _S("&nbsp;"))) << "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mForcedMode) ? _S("Forced") : _S("&nbsp;"))) << "</TD>" << std::endl;		
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mHasAlpha) ? _S("HasAlpha") : _S("&nbsp;"))) << "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mHasTrans) ? _S("HasTrans") : _S("&nbsp;"))) << "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aNativeAlphaMemory != 0) ? _S("NativeAlpha<BR>") + CommaSeperate(aNativeAlphaMemory) : _S("&nbsp;"))) << "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aRLAlphaMemory != 0) ? _S("RLAlpha<BR>") + CommaSeperate(aRLAlphaMemory) : _S("&nbsp;"))) << "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aRLAdditiveMemory != 0) ? _S("RLAdditive<BR>") + CommaSeperate(aRLAdditiveMemory) : _S("&nbsp;"))) << "</TD>" << std::endl;
-		aDumpStream << "<TD>" << (aMemoryImage->mFilePath.empty()? "&nbsp;":aMemoryImage->mFilePath) << "</TD>" << std::endl;
+		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mIsVolatile) ? _S("Volatile") : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mForcedMode) ? _S("Forced") : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mHasAlpha) ? _S("HasAlpha") : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mHasTrans) ? _S("HasTrans") : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>"
+					<< PopWorkStringToString(((aNativeAlphaMemory != 0)
+												  ? _S("NativeAlpha<BR>") + CommaSeperate(aNativeAlphaMemory)
+												  : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>"
+					<< PopWorkStringToString(
+						   ((aRLAlphaMemory != 0) ? _S("RLAlpha<BR>") + CommaSeperate(aRLAlphaMemory) : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>"
+					<< PopWorkStringToString(((aRLAdditiveMemory != 0)
+												  ? _S("RLAdditive<BR>") + CommaSeperate(aRLAdditiveMemory)
+												  : _S("&nbsp;")))
+					<< "</TD>" << std::endl;
+		aDumpStream << "<TD>" << (aMemoryImage->mFilePath.empty() ? "&nbsp;" : aMemoryImage->mFilePath) << "</TD>"
+					<< std::endl;
 
 		aDumpStream << "</TR>" << std::endl;
-		
+
 		// Write thumb
 
 		MemoryImage aCopiedImage(*aMemoryImage);
 
-		ulong* aBits = aCopiedImage.GetBits();
+		ulong *aBits = aCopiedImage.GetBits();
 
-		ulong* aThumbBitsPtr = anImageLibImage.mBits;
+		ulong *aThumbBitsPtr = anImageLibImage.mBits;
 
 		for (int aThumbY = 0; aThumbY < aThumbHeight; aThumbY++)
 			for (int aThumbX = 0; aThumbX < aThumbWidth; aThumbX++)
 			{
-				int aSrcX = (int) (aCopiedImage.mWidth  * (aThumbX + 0.5)) / aThumbWidth;
-				int aSrcY = (int) (aCopiedImage.mHeight * (aThumbY + 0.5)) / aThumbHeight;
-				
-				*(aThumbBitsPtr++) = aBits[aSrcX + (aSrcY*aCopiedImage.mWidth)];
+				int aSrcX = (int)(aCopiedImage.mWidth * (aThumbX + 0.5)) / aThumbWidth;
+				int aSrcY = (int)(aCopiedImage.mHeight * (aThumbY + 0.5)) / aThumbHeight;
+
+				*(aThumbBitsPtr++) = aBits[aSrcX + (aSrcY * aCopiedImage.mWidth)];
 			}
 
-		ImageLib::WriteImage((GetAppDataFolder() + std::string("_dump/") + aThumbName).c_str(), ".jpeg", &anImageLibImage);
+		ImageLib::WriteImage((GetAppDataFolder() + std::string("_dump/") + aThumbName).c_str(), ".jpeg",
+							 &anImageLibImage);
 
 		// Write high resolution image
 
@@ -960,15 +979,15 @@ void AppBase::DumpProgramInfo()
 
 		anImgNum++;
 
-		aSortedItr++;		
+		aSortedItr++;
 	}
 
 	aDumpStream << "<TD>Totals</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalMemorySize)) << "</TD>" << std::endl;	
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalBitsMemory)) << "</TD>" << std::endl;	
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalPalletizedMemory)) << "</TD>" << std::endl;				
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalSurfaceMemory)) << "</TD>" << std::endl;		
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalTextureMemory)) << "</TD>" << std::endl;		
+	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalMemorySize)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalBitsMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalPalletizedMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalSurfaceMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalTextureMemory)) << "</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
@@ -989,20 +1008,20 @@ double AppBase::GetLoadingThreadProgress()
 		return 0.0;
 	if (mNumLoadingThreadTasks == 0)
 		return 0.0;
-	return std::min(mCompletedLoadingThreadTasks / (double) mNumLoadingThreadTasks, 1.0);
+	return std::min(mCompletedLoadingThreadTasks / (double)mNumLoadingThreadTasks, 1.0);
 }
 
-bool AppBase::RegistryWrite(const std::string& theValueName, ulong theType, const uchar* theValue, ulong theLength)
+bool AppBase::RegistryWrite(const std::string &theValueName, ulong theType, const uchar *theValue, ulong theLength)
 {
 	if (mRegKey.length() == 0)
 		return false;
 
 	HKEY aGameKey;
-	
+
 	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
 	std::string aValueName;
 
-	int aSlashPos = (int) theValueName.rfind('\\');
+	int aSlashPos = (int)theValueName.rfind('\\');
 	if (aSlashPos != -1)
 	{
 		aKeyName += "\\" + theValueName.substr(0, aSlashPos);
@@ -1018,82 +1037,82 @@ bool AppBase::RegistryWrite(const std::string& theValueName, ulong theType, cons
 	{
 		ulong aDisp;
 		aResult = RegCreateKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, "Key", REG_OPTION_NON_VOLATILE,
-			KEY_ALL_ACCESS, NULL, &aGameKey, &aDisp);
+								  KEY_ALL_ACCESS, NULL, &aGameKey, &aDisp);
 	}
 
 	if (aResult != ERROR_SUCCESS)
 	{
 		return false;
 	}
-		
+
 	RegSetValueExA(aGameKey, aValueName.c_str(), 0, theType, theValue, theLength);
 	RegCloseKey(aGameKey);
 
 	return true;
 }
 
-bool AppBase::RegistryWriteString(const std::string& theValueName, const std::string& theString)
+bool AppBase::RegistryWriteString(const std::string &theValueName, const std::string &theString)
 {
-	return RegistryWrite(theValueName, REG_SZ, (uchar*) theString.c_str(), theString.length());
+	return RegistryWrite(theValueName, REG_SZ, (uchar *)theString.c_str(), theString.length());
 }
 
-bool AppBase::RegistryWriteInteger(const std::string& theValueName, int theValue)
+bool AppBase::RegistryWriteInteger(const std::string &theValueName, int theValue)
 {
-	return RegistryWrite(theValueName, REG_DWORD, (uchar*) &theValue, sizeof(int));
+	return RegistryWrite(theValueName, REG_DWORD, (uchar *)&theValue, sizeof(int));
 }
 
-bool AppBase::RegistryWriteBoolean(const std::string& theValueName, bool theValue)
+bool AppBase::RegistryWriteBoolean(const std::string &theValueName, bool theValue)
 {
 	int aValue = theValue ? 1 : 0;
-	return RegistryWrite(theValueName, REG_DWORD, (uchar*) &aValue, sizeof(int));
+	return RegistryWrite(theValueName, REG_DWORD, (uchar *)&aValue, sizeof(int));
 }
 
-bool AppBase::RegistryWriteData(const std::string& theValueName, const uchar* theValue, ulong theLength)
+bool AppBase::RegistryWriteData(const std::string &theValueName, const uchar *theValue, ulong theLength)
 {
-	return RegistryWrite(theValueName, REG_BINARY, (uchar*) theValue, theLength);
+	return RegistryWrite(theValueName, REG_BINARY, (uchar *)theValue, theLength);
 }
 
 void AppBase::WriteToRegistry()
-{	
-	RegistryWriteInteger("MusicVolume", (int) (mMusicVolume * 100));
-	RegistryWriteInteger("SfxVolume", (int) (mSfxVolume * 100));
+{
+	RegistryWriteInteger("MusicVolume", (int)(mMusicVolume * 100));
+	RegistryWriteInteger("SfxVolume", (int)(mSfxVolume * 100));
 	RegistryWriteInteger("Muted", (mMuteCount - mAutoMuteCount > 0) ? 1 : 0);
 	RegistryWriteInteger("ScreenMode", mIsWindowed ? 0 : 1);
 	RegistryWriteInteger("PreferredX", mPreferredX);
 	RegistryWriteInteger("PreferredY", mPreferredY);
-	RegistryWriteInteger("CustomCursors", mCustomCursorsEnabled ? 1 : 0);		
+	RegistryWriteInteger("CustomCursors", mCustomCursorsEnabled ? 1 : 0);
 	RegistryWriteInteger("InProgress", 0);
-	RegistryWriteBoolean("WaitForVSync", mWaitForVSync);	
+	RegistryWriteBoolean("WaitForVSync", mWaitForVSync);
 }
 
-bool AppBase::RegistryEraseKey(const PopWorkString& _theKeyName)
+bool AppBase::RegistryEraseKey(const PopWorkString &_theKeyName)
 {
 	std::string theKeyName = PopWorkStringToStringFast(_theKeyName);
 	if (mRegKey.length() == 0)
 		return false;
-	
+
 	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey) + "\\" + theKeyName;
 
 	int aResult = RegDeleteKeyA(HKEY_CURRENT_USER, aKeyName.c_str());
 	if (aResult != ERROR_SUCCESS)
 	{
 		return false;
-	}		
+	}
 
 	return true;
 }
 
-void AppBase::RegistryEraseValue(const PopWorkString& _theValueName)
+void AppBase::RegistryEraseValue(const PopWorkString &_theValueName)
 {
 	std::string theValueName = PopWorkStringToStringFast(_theValueName);
 	if (mRegKey.length() == 0)
 		return;
 
-	HKEY aGameKey;	
+	HKEY aGameKey;
 	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
 	std::string aValueName;
 
-	int aSlashPos = (int) theValueName.rfind('\\');
+	int aSlashPos = (int)theValueName.rfind('\\');
 	if (aSlashPos != -1)
 	{
 		aKeyName += "\\" + theValueName.substr(0, aSlashPos);
@@ -1106,13 +1125,13 @@ void AppBase::RegistryEraseValue(const PopWorkString& _theValueName)
 
 	int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_WRITE, &aGameKey);
 	if (aResult == ERROR_SUCCESS)
-	{		
+	{
 		RegDeleteValueA(aGameKey, aValueName.c_str());
 		RegCloseKey(aGameKey);
 	}
 }
 
-bool AppBase::RegistryGetSubKeys(const std::string& theKeyName, StringVector* theSubKeys)
+bool AppBase::RegistryGetSubKeys(const std::string &theKeyName, StringVector *theSubKeys)
 {
 	theSubKeys->clear();
 
@@ -1126,7 +1145,7 @@ bool AppBase::RegistryGetSubKeys(const std::string& theKeyName, StringVector* th
 
 	if (aResult == ERROR_SUCCESS)
 	{
-		for (int anIdx = 0; ; anIdx++)
+		for (int anIdx = 0;; anIdx++)
 		{
 			char aStr[1024];
 
@@ -1144,12 +1163,13 @@ bool AppBase::RegistryGetSubKeys(const std::string& theKeyName, StringVector* th
 	return false;
 }
 
-bool AppBase::RegistryRead(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength)
+bool AppBase::RegistryRead(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength)
 {
 	return RegistryReadKey(theValueName, theType, theValue, theLength, HKEY_CURRENT_USER);
 }
 
-bool AppBase::RegistryReadKey(const std::string& theValueName, ulong* theType, uchar* theValue, ulong* theLength, HKEY theKey)
+bool AppBase::RegistryReadKey(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength,
+							  HKEY theKey)
 {
 	if (mRegKey.length() == 0)
 		return false;
@@ -1172,7 +1192,7 @@ bool AppBase::RegistryReadKey(const std::string& theValueName, ulong* theType, u
 
 	if (RegOpenKeyExA(theKey, aKeyName.c_str(), 0, KEY_READ, &aGameKey) == ERROR_SUCCESS)
 	{
-		if (RegQueryValueExA(aGameKey, aValueName.c_str(), 0, theType, (uchar*)theValue, theLength) == ERROR_SUCCESS)
+		if (RegQueryValueExA(aGameKey, aValueName.c_str(), 0, theType, (uchar *)theValue, theLength) == ERROR_SUCCESS)
 		{
 
 			RegCloseKey(aGameKey);
@@ -1185,13 +1205,13 @@ bool AppBase::RegistryReadKey(const std::string& theValueName, ulong* theType, u
 	return false;
 }
 
-bool AppBase::RegistryReadString(const std::string& theKey, std::string* theString)
+bool AppBase::RegistryReadString(const std::string &theKey, std::string *theString)
 {
 	char aStr[1024];
-	
-	ulong aType;	
+
+	ulong aType;
 	ulong aLen = sizeof(aStr) - 1;
-	if (!RegistryRead(theKey, &aType, (uchar*) aStr, &aLen))
+	if (!RegistryRead(theKey, &aType, (uchar *)aStr, &aLen))
 		return false;
 
 	if (aType != REG_SZ)
@@ -1203,12 +1223,12 @@ bool AppBase::RegistryReadString(const std::string& theKey, std::string* theStri
 	return true;
 }
 
-bool AppBase::RegistryReadInteger(const std::string& theKey, int* theValue)
+bool AppBase::RegistryReadInteger(const std::string &theKey, int *theValue)
 {
 	ulong aType;
 	ulong aLong;
 	ulong aLen = 4;
-	if (!RegistryRead(theKey, &aType, (uchar*) &aLong, &aLen))
+	if (!RegistryRead(theKey, &aType, (uchar *)&aLong, &aLen))
 		return false;
 
 	if (aType != REG_DWORD)
@@ -1218,26 +1238,26 @@ bool AppBase::RegistryReadInteger(const std::string& theKey, int* theValue)
 	return true;
 }
 
-bool AppBase::RegistryReadBoolean(const std::string& theKey, bool* theValue)
+bool AppBase::RegistryReadBoolean(const std::string &theKey, bool *theValue)
 {
 	int aValue;
 	if (!RegistryReadInteger(theKey, &aValue))
 		return false;
-	
+
 	*theValue = aValue != 0;
 	return true;
 }
 
-bool AppBase::RegistryReadData(const std::string& theKey, uchar* theValue, ulong* theLength)
-{		
+bool AppBase::RegistryReadData(const std::string &theKey, uchar *theValue, ulong *theLength)
+{
 	ulong aType;
 	ulong aLen = *theLength;
-	if (!RegistryRead(theKey, &aType, (uchar*) theValue, theLength))
+	if (!RegistryRead(theKey, &aType, (uchar *)theValue, theLength))
 		return false;
 
 	if (aType != REG_BINARY)
 		return false;
-	
+
 	return true;
 }
 
@@ -1247,12 +1267,12 @@ void AppBase::ReadFromRegistry()
 	mRegKey = PopWorkStringToString(GetString("RegistryKey", StringToPopWorkString(mRegKey)));
 
 	if (mRegKey.length() == 0)
-		return;				
+		return;
 
 	int anInt;
 	if (RegistryReadInteger("MusicVolume", &anInt))
 		mMusicVolume = anInt / 100.0;
-	
+
 	if (RegistryReadInteger("SfxVolume", &anInt))
 		mSfxVolume = anInt / 100.0;
 
@@ -1263,25 +1283,25 @@ void AppBase::ReadFromRegistry()
 		mIsWindowed = anInt == 0;
 
 	RegistryReadInteger("PreferredX", &mPreferredX);
-	RegistryReadInteger("PreferredY", &mPreferredY);	
+	RegistryReadInteger("PreferredY", &mPreferredY);
 
 	if (RegistryReadInteger("CustomCursors", &anInt))
-		EnableCustomCursors(anInt != 0);	
-			
-	RegistryReadBoolean("WaitForVSync", &mWaitForVSync);	
+		EnableCustomCursors(anInt != 0);
+
+	RegistryReadBoolean("WaitForVSync", &mWaitForVSync);
 
 	if (RegistryReadInteger("InProgress", &anInt))
 		mLastShutdownWasGraceful = anInt == 0;
-		
+
 	if (!IsScreenSaver())
-		RegistryWriteInteger("InProgress", 1);	
+		RegistryWriteInteger("InProgress", 1);
 }
 
-bool AppBase::WriteBytesToFile(const std::string& theFileName, const void *theData, unsigned long theDataLen)
+bool AppBase::WriteBytesToFile(const std::string &theFileName, const void *theData, unsigned long theDataLen)
 {
 
 	MkDir(GetFileDir(theFileName));
-	FILE* aFP = fopen(theFileName.c_str(), "w+b");
+	FILE *aFP = fopen(theFileName.c_str(), "w+b");
 
 	if (aFP == NULL)
 	{
@@ -1294,14 +1314,14 @@ bool AppBase::WriteBytesToFile(const std::string& theFileName, const void *theDa
 	return true;
 }
 
-bool AppBase::WriteBufferToFile(const std::string& theFileName, const Buffer* theBuffer)
+bool AppBase::WriteBufferToFile(const std::string &theFileName, const Buffer *theBuffer)
 {
-	return WriteBytesToFile(theFileName,theBuffer->GetDataPtr(),theBuffer->GetDataLen());
+	return WriteBytesToFile(theFileName, theBuffer->GetDataPtr(), theBuffer->GetDataLen());
 }
 
-bool AppBase::ReadBufferFromFile(const std::string& theFileName, Buffer* theBuffer)
+bool AppBase::ReadBufferFromFile(const std::string &theFileName, Buffer *theBuffer)
 {
-	PFILE* aFP = p_fopen(theFileName.c_str(), "rb");
+	PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
 
 	if (aFP == NULL)
 	{
@@ -1312,7 +1332,7 @@ bool AppBase::ReadBufferFromFile(const std::string& theFileName, Buffer* theBuff
 	int aFileSize = p_ftell(aFP);
 	p_fseek(aFP, 0, SEEK_SET);
 
-	uchar* aData = new uchar[aFileSize];
+	uchar *aData = new uchar[aFileSize];
 
 	p_fread(aData, 1, aFileSize, aFP);
 	p_fclose(aFP);
@@ -1325,9 +1345,9 @@ bool AppBase::ReadBufferFromFile(const std::string& theFileName, Buffer* theBuff
 	return true;
 }
 
-bool AppBase::FileExists(const std::string& theFileName)
+bool AppBase::FileExists(const std::string &theFileName)
 {
-	PFILE* aFP = p_fopen(theFileName.c_str(), "rb");
+	PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
 
 	if (aFP == NULL)
 		return false;
@@ -1336,7 +1356,7 @@ bool AppBase::FileExists(const std::string& theFileName)
 	return true;
 }
 
-bool AppBase::EraseFile(const std::string& theFileName)
+bool AppBase::EraseFile(const std::string &theFileName)
 {
 	return remove(theFileName.c_str()) != 0;
 }
@@ -1353,24 +1373,25 @@ std::string AppBase::GetGameSEHInfo()
 	int aSecLoaded = (SDL_GetTicks() - mTimeLoaded) / 1000;
 
 	char aTimeStr[16];
-	sprintf(aTimeStr, "%02d:%02d:%02d", (aSecLoaded/60/60), (aSecLoaded/60)%60, aSecLoaded%60);
-	
+	sprintf(aTimeStr, "%02d:%02d:%02d", (aSecLoaded / 60 / 60), (aSecLoaded / 60) % 60, aSecLoaded % 60);
+
 	char aThreadIdStr[16];
 	sprintf(aThreadIdStr, "%X", mPrimaryThreadId);
 
-	std::string anInfoString = 
-		"Product: " + mProdName + "\r\n" +		
-		"Version: " + mProductVersion + "\r\n";			
+	std::string anInfoString = "Product: " + mProdName + "\r\n" + "Version: " + mProductVersion + "\r\n";
 
-	anInfoString +=
-		"Time Loaded: " + std::string(aTimeStr) + "\r\n"
-		"Fullscreen: " + (mIsWindowed ? std::string("No") : std::string("Yes")) + "\r\n"
-		"Primary ThreadId: " + aThreadIdStr + "\r\n";	
+	anInfoString += "Time Loaded: " + std::string(aTimeStr) +
+					"\r\n"
+					"Fullscreen: " +
+					(mIsWindowed ? std::string("No") : std::string("Yes")) +
+					"\r\n"
+					"Primary ThreadId: " +
+					aThreadIdStr + "\r\n";
 
-	return anInfoString;						
+	return anInfoString;
 }
 
-void AppBase::GetSEHWebParams(DefinesMap* theDefinesMap)
+void AppBase::GetSEHWebParams(DefinesMap *theDefinesMap)
 {
 }
 
@@ -1395,9 +1416,9 @@ void AppBase::Shutdown()
 		{
 			SDL_Delay(10);
 		}
-		
+
 		if (mMusicInterface != NULL)
-			mMusicInterface->StopAllMusic();		
+			mMusicInterface->StopAllMusic();
 
 		RestoreScreenResolution();
 
@@ -1413,7 +1434,7 @@ void AppBase::RestoreScreenResolution()
 		mFullScreenWindow = false;
 	}
 }
-	
+
 void AppBase::DoExit(int theCode)
 {
 	RestoreScreenResolution();
@@ -1422,22 +1443,22 @@ void AppBase::DoExit(int theCode)
 
 void AppBase::UpdateFrames()
 {
-	mUpdateCount++;	
+	mUpdateCount++;
 
 	if (!mMinimized)
-	{		
+	{
 		if (mWidgetManager->UpdateFrame())
 			++mFPSDirtyCount;
 	}
 
-	mMusicInterface->Update();	
+	mMusicInterface->Update();
 	CleanSharedImages();
 }
 
 void AppBase::DoUpdateFramesF(float theFrac)
 {
 	if ((mVSyncUpdates) && (!mMinimized))
-		mWidgetManager->UpdateFrameF(theFrac);	
+		mWidgetManager->UpdateFrameF(theFrac);
 }
 
 bool AppBase::DoUpdateFrames()
@@ -1461,7 +1482,7 @@ bool AppBase::DoUpdateFrames()
 
 bool gIsFailing = false;
 
-void AppBase::Redraw(Rect* theClipRect)
+void AppBase::Redraw(Rect *theClipRect)
 {
 	POPWORK_AUTO_PERF("AppBase::Redraw");
 
@@ -1489,20 +1510,22 @@ void AppBase::Redraw(Rect* theClipRect)
 		ZeroMemory(&aWindowPlacement, sizeof(aWindowPlacement));
 		aWindowPlacement.length = sizeof(aWindowPlacement);
 		::GetWindowPlacement(mHWnd, &aWindowPlacement);
-		
+
 		DWORD aTick = SDL_GetTicks();
-		if ((mActive || (aTick-aRetryTick>1000 && mIsPhysWindowed)) && (aWindowPlacement.showCmd != SW_SHOWMINIMIZED) && (!mMinimized))
+		if ((mActive || (aTick-aRetryTick>1000 && mIsPhysWindowed)) && (aWindowPlacement.showCmd != SW_SHOWMINIMIZED) &&
+	(!mMinimized))
 		{
 			aRetryTick = aTick;
 
 			mWidgetManager->mImage = NULL;
 
 			// Re-check resolution at this point, because we hit here when you change your resolution.
-			if (((mWidth >= GetSystemMetrics(SM_CXFULLSCREEN)) || (mHeight >= GetSystemMetrics(SM_CYFULLSCREEN))) && (mIsWindowed))
+			if (((mWidth >= GetSystemMetrics(SM_CXFULLSCREEN)) || (mHeight >= GetSystemMetrics(SM_CYFULLSCREEN))) &&
+	(mIsWindowed))
 			{
 				if (mForceWindowed)
 				{
-					Popup(GetString("PLEASE_SET_COLOR_DEPTH", _S("Please set your desktop color depth to 16 bit."))); 
+					Popup(GetString("PLEASE_SET_COLOR_DEPTH", _S("Please set your desktop color depth to 16 bit.")));
 					Shutdown();
 					return;
 				}
@@ -1516,7 +1539,7 @@ void AppBase::Redraw(Rect* theClipRect)
 			int aResult = InitDDInterface();
 
 			//gDebugStream << SDL_GetTicks() << " ReInit..." << std::endl;
-			
+
 			if ((mIsWindowed) && (aResult == DDInterface::RESULT_INVALID_COLORDEPTH))
 			{
 				//gDebugStream << SDL_GetTicks() << "ReInit Invalid Colordepth" << std::endl;
@@ -1536,10 +1559,10 @@ void AppBase::Redraw(Rect* theClipRect)
 			{
 				//gDebugStream << SDL_GetTicks() << " ReInit Failed" << std::endl;
 				//Fail("Failed to initialize DirectDraw");
-				//Sleep(1000);				
-				
+				//Sleep(1000);
+
 				return;
-			}						
+			}
 
 			ReInitImages();
 
@@ -1575,14 +1598,14 @@ static void CalculateFPS()
 	gFrameCount++;
 
 	static SysFont aFont(gAppBase, LiberationSans_Regular, LiberationSans_Regular_Size, 8);
-	if (gFPSImage==NULL)
+	if (gFPSImage == NULL)
 	{
 		gFPSImage = new SDLImage(gAppBase->mSDLInterface);
-		gFPSImage->Create(50,aFont.GetHeight()+4);
-		gFPSImage->SetImageMode(false,false);
+		gFPSImage->Create(50, aFont.GetHeight() + 4);
+		gFPSImage->SetImageMode(false, false);
 		gFPSImage->SetVolatile(true);
 		gFPSImage->mPurgeBits = false;
-		//gFPSImage->mWantDDSurface = true;
+		// gFPSImage->mWantDDSurface = true;
 		gFPSImage->PurgeBits();
 	}
 
@@ -1590,7 +1613,7 @@ static void CalculateFPS()
 	{
 		gFPSTimer.Stop();
 		if (!gForceDisplay)
-			gFPSDisplay = (int)(gFrameCount*1000/gFPSTimer.GetDuration() + 0.5f);
+			gFPSDisplay = (int)(gFrameCount * 1000 / gFPSTimer.GetDuration() + 0.5f);
 		else
 		{
 			gForceDisplay = false;
@@ -1604,11 +1627,11 @@ static void CalculateFPS()
 		aDrawG.SetFont(&aFont);
 		PopWorkString aFPS = StrFormat(_S("FPS: %d"), gFPSDisplay);
 		aDrawG.SetColor(Color(0, 0, 0));
-		aDrawG.FillRect(0,0,gFPSImage->GetWidth(),gFPSImage->GetHeight());
-		aDrawG.SetColor(Color(255,255,255));
-		aDrawG.DrawString(aFPS,2,aFont.GetAscent());
-		//gFPSImage->mKeepBits = false;
-		//gFPSImage->GenerateDDSurface();
+		aDrawG.FillRect(0, 0, gFPSImage->GetWidth(), gFPSImage->GetHeight());
+		aDrawG.SetColor(Color(255, 255, 255));
+		aDrawG.DrawString(aFPS, 2, aFont.GetAscent());
+		// gFPSImage->mKeepBits = false;
+		// gFPSImage->GenerateDDSurface();
 		gFPSImage->mBitsChangedCount++;
 	}
 }
@@ -1616,25 +1639,25 @@ static void CalculateFPS()
 ///////////////////////////// FPS Stuff to draw mouse coords
 static void FPSDrawCoords(int theX, int theY)
 {
-	static SysFont aFont(gAppBase,"Tahoma",8);
-	if (gFPSImage==NULL)
+	static SysFont aFont(gAppBase, "Tahoma", 8);
+	if (gFPSImage == NULL)
 	{
 		gFPSImage = new SDLImage(gAppBase->mSDLInterface);
-		gFPSImage->Create(50,aFont.GetHeight()+4);
-		gFPSImage->SetImageMode(false,false);
+		gFPSImage->Create(50, aFont.GetHeight() + 4);
+		gFPSImage->SetImageMode(false, false);
 		gFPSImage->SetVolatile(true);
 		gFPSImage->mPurgeBits = false;
-		//gFPSImage->mWantDDSurface = true;
+		// gFPSImage->mWantDDSurface = true;
 		gFPSImage->PurgeBits();
 	}
 
 	Graphics aDrawG(gFPSImage);
 	aDrawG.SetFont(&aFont);
-	PopWorkString aFPS = StrFormat(_S("%d,%d"),theX,theY);
+	PopWorkString aFPS = StrFormat(_S("%d,%d"), theX, theY);
 	aDrawG.SetColor(0x000000);
-	aDrawG.FillRect(0,0,gFPSImage->GetWidth(),gFPSImage->GetHeight());
+	aDrawG.FillRect(0, 0, gFPSImage->GetWidth(), gFPSImage->GetHeight());
 	aDrawG.SetColor(0xFFFFFF);
-	aDrawG.DrawString(aFPS,2,aFont.GetAscent());	
+	aDrawG.DrawString(aFPS, 2, aFont.GetAscent());
 	gFPSImage->mBitsChangedCount++;
 }
 
@@ -1653,19 +1676,21 @@ bool AppBase::DrawDirtyStuff()
 	{
 		Redraw(NULL);
 		mHasPendingDraw = false;
-		mLastDrawWasEmpty = true;		
+		mLastDrawWasEmpty = true;
 		return false;
-	}	
+	}
 
 	if (mShowFPS)
 	{
-		switch(mShowFPSMode)
+		switch (mShowFPSMode)
 		{
-			case FPS_ShowFPS: CalculateFPS(); break;
-			case FPS_ShowCoords:
-				if (mWidgetManager!=NULL)
-					FPSDrawCoords(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY); 
-				break;
+		case FPS_ShowFPS:
+			CalculateFPS();
+			break;
+		case FPS_ShowCoords:
+			if (mWidgetManager != NULL)
+				FPSDrawCoords(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY);
+			break;
 		}
 	}
 
@@ -1673,7 +1698,7 @@ bool AppBase::DrawDirtyStuff()
 
 	// Update user input and screen saver info
 	static DWORD aPeriodicTick = 0;
-	if (aStartTime-aPeriodicTick > 1000)
+	if (aStartTime - aPeriodicTick > 1000)
 	{
 		aPeriodicTick = aStartTime;
 		UpdateScreenSaverInfo(aStartTime);
@@ -1682,7 +1707,7 @@ bool AppBase::DrawDirtyStuff()
 	if (gScreenSaverActive)
 	{
 		mHasPendingDraw = false;
-		mLastDrawWasEmpty = true;		
+		mLastDrawWasEmpty = true;
 		return false;
 	}
 
@@ -1691,11 +1716,11 @@ bool AppBase::DrawDirtyStuff()
 	mIsDrawing = false;
 
 	if ((drewScreen || (aStartTime - mLastDrawTick >= 1000) || (mCustomCursorDirty)) &&
-		((int) (aStartTime - mNextDrawTick) >= 0))
+		((int)(aStartTime - mNextDrawTick) >= 0))
 	{
 		mLastDrawWasEmpty = false;
 
-		mDrawCount++;		
+		mDrawCount++;
 
 		DWORD aMidTime = SDL_GetTicks();
 
@@ -1707,23 +1732,23 @@ bool AppBase::DrawDirtyStuff()
 		if (mShowFPS)
 		{
 			Graphics g(mSDLInterface->GetScreenImage());
-			g.DrawImage(gFPSImage,mWidth-gFPSImage->GetWidth()-10,mHeight-gFPSImage->GetHeight()-10);
+			g.DrawImage(gFPSImage, mWidth - gFPSImage->GetWidth() - 10, mHeight - gFPSImage->GetHeight() - 10);
 		}
 
 		if (mWaitForVSync && mIsPhysWindowed && mSoftVSyncWait)
 		{
 			DWORD aTick = SDL_GetTicks();
-			if (aTick-mLastDrawTick < mSDLInterface->mMillisecondsPerFrame)
-				SDL_Delay(mSDLInterface->mMillisecondsPerFrame - (aTick-mLastDrawTick));
+			if (aTick - mLastDrawTick < mSDLInterface->mMillisecondsPerFrame)
+				SDL_Delay(mSDLInterface->mMillisecondsPerFrame - (aTick - mLastDrawTick));
 		}
 
 		DWORD aPreScreenBltTime = SDL_GetTicks();
 		mLastDrawTick = aPreScreenBltTime;
 
-		Redraw(NULL);		
+		Redraw(NULL);
 
 		// This is our one UpdateFTimeAcc if we are vsynched
-		UpdateFTimeAcc(); 
+		UpdateFTimeAcc();
 
 		DWORD aEndTime = SDL_GetTicks();
 
@@ -1735,8 +1760,9 @@ bool AppBase::DrawDirtyStuff()
 			ulong aTickNow = SDL_GetTicks();
 
 			OutputDebugString(StrFormat(_S("Theoretical FPS: %d\r\n"), (int) (mFPSCount * 1000 / mFPSTime)).c_str());
-			OutputDebugString(StrFormat(_S("Actual      FPS: %d\r\n"), (mFPSFlipCount * 1000) / max((aTickNow - mFPSStartTick), 1)).c_str());
-			OutputDebugString(StrFormat(_S("Dirty Rate     : %d\r\n"), (mFPSDirtyCount * 1000) / max((aTickNow - mFPSStartTick), 1)).c_str());
+			OutputDebugString(StrFormat(_S("Actual      FPS: %d\r\n"), (mFPSFlipCount * 1000) / max((aTickNow -
+		mFPSStartTick), 1)).c_str()); OutputDebugString(StrFormat(_S("Dirty Rate     : %d\r\n"), (mFPSDirtyCount * 1000)
+		/ max((aTickNow - mFPSStartTick), 1)).c_str());
 
 			mFPSTime = 0;
 			mFPSCount = 0;
@@ -1752,8 +1778,8 @@ bool AppBase::DrawDirtyStuff()
 
 			mNextDrawTick += 35 + std::max(aTotalTime, 15);
 
-			if ((int) (aEndTime - mNextDrawTick) >= 0)			
-				mNextDrawTick = aEndTime;			
+			if ((int)(aEndTime - mNextDrawTick) >= 0)
+				mNextDrawTick = aEndTime;
 
 			/*char aStr[256];
 			sprintf(aStr, "Next Draw Time: %d\r\n", mNextDrawTick);
@@ -1762,15 +1788,15 @@ bool AppBase::DrawDirtyStuff()
 		else
 			mNextDrawTick = aEndTime;
 
-		mHasPendingDraw = false;		
+		mHasPendingDraw = false;
 		mCustomCursorDirty = false;
 
 		return true;
 	}
 	else
-	{		
+	{
 		mHasPendingDraw = false;
-		mLastDrawWasEmpty = true;		
+		mLastDrawWasEmpty = true;
 		return false;
 	}
 }
@@ -1780,26 +1806,26 @@ void AppBase::LogScreenSaverError(const std::string &theError)
 	static bool firstTime = true;
 	char aBuf[512];
 
-	const char *aFlag = firstTime?"w":"a+";
+	const char *aFlag = firstTime ? "w" : "a+";
 	firstTime = false;
 
-	FILE *aFile = fopen("ScrError.txt",aFlag);
+	FILE *aFile = fopen("ScrError.txt", aFlag);
 	if (aFile != NULL)
 	{
-		fprintf(aFile,"%s %s %u\n",theError.c_str(),_strtime(aBuf),SDL_GetTicks());
+		fprintf(aFile, "%s %s %u\n", theError.c_str(), _strtime(aBuf), SDL_GetTicks());
 		fclose(aFile);
 	}
 }
 
 void AppBase::BeginPopup()
 {
-	//if (!mIsPhysWindowed)
+	// if (!mIsPhysWindowed)
 	//{
-		//if (mSDLInterface && mDDInterface->mDD)
-		//{
-			//mDDInterface->mDD->FlipToGDISurface();
-			//mNoDefer = true;
-		//}
+	// if (mSDLInterface && mDDInterface->mDD)
+	//{
+	// mDDInterface->mDD->FlipToGDISurface();
+	// mNoDefer = true;
+	//}
 	//}
 }
 
@@ -1818,8 +1844,7 @@ void AppBase::EndPopup()
 	}
 }
 
-
-int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int theFlags)
+int AppBase::MsgBox(const std::string &theText, const std::string &theTitle, int theFlags)
 {
 	if (IsScreenSaver())
 	{
@@ -1828,19 +1853,12 @@ int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int
 	}
 
 	SDL_MessageBoxData messageBoxData = {
-		SDL_MESSAGEBOX_INFORMATION,
-		NULL,
-		theTitle.c_str(),
-		theText.c_str(),
-		NULL,
-		NULL,
-		NULL
-	};
+		SDL_MESSAGEBOX_INFORMATION, NULL, theTitle.c_str(), theText.c_str(), NULL, NULL, NULL};
 
 	if (theFlags & MsgBoxFlags::MsgBox_OK)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK"},
 		};
 
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
@@ -1849,8 +1867,8 @@ int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int
 	else if (theFlags & MsgBoxFlags::MsgBox_OKCANCEL)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
-			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1858,9 +1876,9 @@ int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int
 	else if (theFlags & MsgBoxFlags::MsgBox_ABORTRETRYIGNORE)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Abort" },
-			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Retry" },
-			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Ignore" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Abort"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Retry"},
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Ignore"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1868,9 +1886,9 @@ int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int
 	else if (theFlags & MsgBoxFlags::MsgBox_YESNOCANCEL)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
-		{ 0, 1, "No" },
-		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes"},
+			{0, 1, "No"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1878,8 +1896,8 @@ int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int
 	else if (theFlags & MsgBoxFlags::MsgBox_YESNO)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
-		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "No" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "No"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1887,8 +1905,8 @@ int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int
 	else if (theFlags & MsgBoxFlags::MsgBox_RETRYCANCEL)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Retry" },
-		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Retry"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1901,7 +1919,7 @@ int AppBase::MsgBox(const std::string& theText, const std::string& theTitle, int
 	return aResult;
 }
 
-int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, int theFlags)
+int AppBase::MsgBox(const std::wstring &theText, const std::wstring &theTitle, int theFlags)
 {
 	if (IsScreenSaver())
 	{
@@ -1909,21 +1927,18 @@ int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, i
 		return IDOK;
 	}
 
-
-	SDL_MessageBoxData messageBoxData = {
-		SDL_MESSAGEBOX_INFORMATION,
-		NULL,
-		WStringToString(theTitle).c_str(),
-		WStringToString(theText).c_str(),
-		NULL,
-		NULL,
-		NULL
-	};
+	SDL_MessageBoxData messageBoxData = {SDL_MESSAGEBOX_INFORMATION,
+										 NULL,
+										 WStringToString(theTitle).c_str(),
+										 WStringToString(theText).c_str(),
+										 NULL,
+										 NULL,
+										 NULL};
 
 	if (theFlags & MsgBoxFlags::MsgBox_OK)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK"},
 		};
 
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
@@ -1932,8 +1947,8 @@ int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, i
 	else if (theFlags & MsgBoxFlags::MsgBox_OKCANCEL)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
-			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1941,9 +1956,9 @@ int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, i
 	else if (theFlags & MsgBoxFlags::MsgBox_ABORTRETRYIGNORE)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Abort" },
-			{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Retry" },
-			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Ignore" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Abort"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Retry"},
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Ignore"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1951,9 +1966,9 @@ int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, i
 	else if (theFlags & MsgBoxFlags::MsgBox_YESNOCANCEL)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
-		{ 0, 1, "No" },
-		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes"},
+			{0, 1, "No"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1961,8 +1976,8 @@ int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, i
 	else if (theFlags & MsgBoxFlags::MsgBox_YESNO)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes" },
-		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "No" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "No"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1970,8 +1985,8 @@ int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, i
 	else if (theFlags & MsgBoxFlags::MsgBox_RETRYCANCEL)
 	{
 		SDL_MessageBoxButtonData buttons[] = {
-		{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Retry" },
-		{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel" },
+			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Retry"},
+			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel"},
 		};
 		messageBoxData.numbuttons = SDL_arraysize(buttons);
 		messageBoxData.buttons = buttons;
@@ -1984,7 +1999,7 @@ int AppBase::MsgBox(const std::wstring& theText, const std::wstring& theTitle, i
 	return aResult;
 }
 
-void AppBase::Popup(const std::string& theString)
+void AppBase::Popup(const std::string &theString)
 {
 	if (IsScreenSaver())
 	{
@@ -1994,11 +2009,12 @@ void AppBase::Popup(const std::string& theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		mSDLInterface->MakeSimpleMessageBox(PopWorkStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), theString.c_str(), SDL_MESSAGEBOX_ERROR);
+		mSDLInterface->MakeSimpleMessageBox(PopWorkStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(),
+											theString.c_str(), SDL_MESSAGEBOX_ERROR);
 	EndPopup();
 }
 
-void AppBase::Popup(const std::wstring& theString)
+void AppBase::Popup(const std::wstring &theString)
 {
 	if (IsScreenSaver())
 	{
@@ -2008,12 +2024,14 @@ void AppBase::Popup(const std::wstring& theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		//::MessageBoxW(mHWnd, theString.c_str(), PopWorkStringToWString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
-		//mSDLInterface->MakeSimpleMessageBox(PopWorkStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(), theString.c_str(), SDL_MESSAGEBOX_ERROR); readding after wstring is working properly
-	EndPopup();
+		//::MessageBoxW(mHWnd, theString.c_str(), PopWorkStringToWString(GetString("FATAL_ERROR", _S("FATAL
+		//:ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
+		// mSDLInterface->MakeSimpleMessageBox(PopWorkStringToString(GetString("FATAL_ERROR", _S("FATAL
+		// ERROR"))).c_str(), theString.c_str(), SDL_MESSAGEBOX_ERROR); readding after wstring is working properly
+		EndPopup();
 }
 
-void AppBase::SafeDeleteWidget(Widget* theWidget)
+void AppBase::SafeDeleteWidget(Widget *theWidget)
 {
 	WidgetSafeDeleteInfo aWidgetSafeDeleteInfo;
 	aWidgetSafeDeleteInfo.mUpdateAppDepth = mUpdateAppDepth;
@@ -2023,7 +2041,6 @@ void AppBase::SafeDeleteWidget(Widget* theWidget)
 
 void AppBase::HandleNotifyGameMessage(int theType, int theParam)
 {
-
 }
 
 void AppBase::RehupFocus()
@@ -2031,14 +2048,14 @@ void AppBase::RehupFocus()
 	bool wantHasFocus = mActive && !mMinimized;
 
 	if (wantHasFocus != mHasFocus)
-	{					
+	{
 		mHasFocus = wantHasFocus;
 
 		if (mHasFocus)
 		{
 			if (mMuteOnLostFocus)
 				Unmute(true);
-	
+
 			mWidgetManager->GotFocus();
 			GotFocus();
 		}
@@ -2046,7 +2063,7 @@ void AppBase::RehupFocus()
 		{
 			if (mMuteOnLostFocus)
 				Mute(true);
-	
+
 			mWidgetManager->LostFocus();
 			LostFocus();
 
@@ -2077,7 +2094,7 @@ void AppBase::ShowMemoryUsage()
 	{
 		DDSCAPS2 aCaps;
 		ZeroMemory(&aCaps,sizeof(aCaps));
-		aCaps.dwCaps = DDSCAPS_VIDEOMEMORY;	
+		aCaps.dwCaps = DDSCAPS_VIDEOMEMORY;
 		mDDInterface->mDD7->GetAvailableVidMem(&aCaps,&aTotal,&aFree);
 	}
 
@@ -2088,7 +2105,7 @@ void AppBase::ShowMemoryUsage()
 	int aTextureMemory = 0;
 	while (anItr != mMemoryImageSet.end())
 	{
-		MemoryImage* aMemoryImage = *anItr;				
+		MemoryImage* aMemoryImage = *anItr;
 		if (aMemoryImage->mD3DData != NULL)
 		{
 			TextureData *aData = (TextureData*)aMemoryImage->mD3DData;
@@ -2116,18 +2133,20 @@ void AppBase::ShowMemoryUsage()
 
 	aStr += StrFormat("Num Images: %d\r\n",(int)mMemoryImageSet.size());
 	aStr += StrFormat("Num Sounds: %d\r\n",mSoundManager->GetNumSounds());
-	aStr += StrFormat("Video Memory: %s/%s KB\r\n", PopWorkStringToString(CommaSeperate((aTotal-aFree)/1024)).c_str(), PopWorkStringToString(CommaSeperate(aTotal/1024)).c_str());
-	aStr += StrFormat("Texture Memory: %s KB\r\n",CommaSeperate(aTextureMemory/1024).c_str());
+	aStr += StrFormat("Video Memory: %s/%s KB\r\n", PopWorkStringToString(CommaSeperate((aTotal-aFree)/1024)).c_str(),
+	PopWorkStringToString(CommaSeperate(aTotal/1024)).c_str()); aStr += StrFormat("Texture Memory: %s
+	KB\r\n",CommaSeperate(aTextureMemory/1024).c_str());
 
 	FormatUsage aUsage = aFormatMap[PixelFormat_A8R8G8B8];
-	aStr += StrFormat("A8R8G8B8: %d - %s KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str());
-	aUsage = aFormatMap[PixelFormat_A4R4G4B4];
-	aStr += StrFormat("A4R4G4B4: %d - %s KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str());
-	aUsage = aFormatMap[PixelFormat_R5G6B5];
-	aStr += StrFormat("R5G6B5: %d - %s KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str());
-	aUsage = aFormatMap[PixelFormat_Palette8];
-	aStr += StrFormat("Palette8: %d - %s KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str());
-	
+	aStr += StrFormat("A8R8G8B8: %d - %s
+	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
+	aFormatMap[PixelFormat_A4R4G4B4]; aStr += StrFormat("A4R4G4B4: %d - %s
+	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
+	aFormatMap[PixelFormat_R5G6B5]; aStr += StrFormat("R5G6B5: %d - %s
+	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
+	aFormatMap[PixelFormat_Palette8]; aStr += StrFormat("Palette8: %d - %s
+	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str());
+
 	MsgBox(aStr,"Video Stats",MB_OK);
 	mLastTime = SDL_GetTicks();
 	*/
@@ -2138,21 +2157,21 @@ bool AppBase::IsAltKeyUsed(WPARAM wParam)
 	int aChar = tolower(wParam);
 	switch (aChar)
 	{
-		case 13: // alt-enter
-		case 'r': 
-			return true;		
-		default: 
-			return false;
+	case 13: // alt-enter
+	case 'r':
+		return true;
+	default:
+		return false;
 	}
 }
 
 bool AppBase::DebugKeyDown(int theKey)
 {
 	if ((theKey == 'R') && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
-	{	
+	{
 #ifndef RELEASEFINAL
 		if (ReparseModValues())
-			PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);				
+			PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);
 		else
 		{
 			for (int aKeyNum = 0; aKeyNum < 0xFF; aKeyNum++) // prevent alt from getting stuck
@@ -2162,7 +2181,7 @@ bool AppBase::DebugKeyDown(int theKey)
 	}
 	else if (theKey == SDLK_F3)
 	{
-		if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
+		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
 			mShowFPS = true;
 			if (++mShowFPSMode >= Num_FPS_Types)
@@ -2183,13 +2202,13 @@ bool AppBase::DebugKeyDown(int theKey)
 	}
 	else if (theKey == SDLK_F8)
 	{
-		if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
+		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
 			Set3DAcclerated(!Is3DAccelerated());
 
 			char aBuf[512];
-			sprintf(aBuf,"3D-Mode: %s",Is3DAccelerated()?"ON":"OFF");
-			MsgBox(aBuf,"Mode Switch",MB_OK);
+			sprintf(aBuf, "3D-Mode: %s", Is3DAccelerated() ? "ON" : "OFF");
+			MsgBox(aBuf, "Mode Switch", MB_OK);
 			mLastTime = SDL_GetTicks();
 		}
 		else
@@ -2202,12 +2221,12 @@ bool AppBase::DebugKeyDown(int theKey)
 #ifndef RELEASEFINAL
 		if (mWidgetManager->mKeyDown[KEYCODE_CONTROL])
 		{
-			if (mUpdateMultiplier==0.25)
+			if (mUpdateMultiplier == 0.25)
 				mUpdateMultiplier = 1.0;
 			else
 				mUpdateMultiplier = 0.25;
 		}
-		else if(mWidgetManager->mKeyDown[KEYCODE_SHIFT])
+		else if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
 		{
 			mStepMode = 0;
 			ClearUpdateBacklog();
@@ -2232,7 +2251,7 @@ bool AppBase::DebugKeyDown(int theKey)
 		bool isPerfOn = !PopWorkPerf::IsPerfOn();
 		if (isPerfOn)
 		{
-//			MsgBox("Perf Monitoring: ON", "Perf Monitoring", MB_OK);
+			//			MsgBox("Perf Monitoring: ON", "Perf Monitoring", MB_OK);
 			ClearUpdateBacklog();
 			PopWorkPerf::BeginPerf();
 		}
@@ -2263,106 +2282,116 @@ void AppBase::CloseRequestAsync()
 bool AppBase::ProcessDeferredMessages(bool singleMessage)
 {
 	SDL_Event event;
-	if (SDL_PollEvent(&event)) {
-		switch (event.type) {
-			case SDL_EVENT_QUIT:
-				Shutdown();
-				break;
-			case SDL_EVENT_WINDOW_FOCUS_GAINED:
-				mActive = true;
-				RehupFocus();
-				if (!mIsWindowed)
-					mWidgetManager->MarkAllDirty();
-				if (mIsOpeningURL && !mActive)
-					URLOpenSucceeded(mOpeningURL);
-				break;
-			case SDL_EVENT_WINDOW_FOCUS_LOST:
-				mActive = false;
-				RehupFocus();
-				if (mIsOpeningURL && mActive)
-					URLOpenFailed(mOpeningURL);
-				break;
-			case SDL_EVENT_WINDOW_MINIMIZED:
-				mMinimized = true;
-				if (mMuteOnLostFocus)
-					Mute(true);
-				break;
-			case SDL_EVENT_WINDOW_RESTORED:
-				mMinimized = false;
-				if (mMuteOnLostFocus)
-					Unmute(true);
+	if (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_EVENT_QUIT:
+			Shutdown();
+			break;
+		case SDL_EVENT_WINDOW_FOCUS_GAINED:
+			mActive = true;
+			RehupFocus();
+			if (!mIsWindowed)
 				mWidgetManager->MarkAllDirty();
-				break;
-			case SDL_EVENT_MOUSE_MOTION:
-				if (!gInAssert && !mSEHOccured) {
-					int x = event.motion.x;
-					int y = event.motion.y;
-					mWidgetManager->RemapMouse(x, y);
-					mLastUserInputTick = mLastTimerTime;
-					mWidgetManager->MouseMove(x, y);
-					if (!mMouseIn) {
-						mMouseIn = true;
-						EnforceCursor();
-					}
-				}
-				break;
-			case SDL_EVENT_MOUSE_BUTTON_DOWN:
-			case SDL_EVENT_MOUSE_BUTTON_UP:
-				if (!gInAssert && !mSEHOccured) {
-					int btnCode = 0;
-					bool down = event.type == SDL_EVENT_MOUSE_BUTTON_DOWN;
-
-					switch (event.button.button) {
-					case SDL_BUTTON_LEFT:    btnCode = 1; break;
-					case SDL_BUTTON_RIGHT:   btnCode = -1; break;
-					case SDL_BUTTON_MIDDLE:  btnCode = 3; break;
-					}
-
-					int x = event.button.x;
-					int y = event.button.y;
-
-					int renderWidth, renderHeight;
-					SDL_GetCurrentRenderOutputSize(mSDLInterface->mRenderer, &renderWidth, &renderHeight);
-
-					int scaledX = static_cast<int>(event.button.x * ((float)mWidth / renderWidth));
-					int scaledY = static_cast<int>(event.button.y * ((float)mHeight / renderHeight));
-
-					if (down)
-						mWidgetManager->MouseDown(scaledX, scaledY, btnCode);
-					else
-						mWidgetManager->MouseUp(scaledX, scaledY, btnCode);
-				}
-				break;
-			case SDL_EVENT_MOUSE_WHEEL:
-				mWidgetManager->MouseWheel(event.wheel.y);
-
-				break;
-			case SDL_EVENT_KEY_DOWN:
-			case SDL_EVENT_KEY_UP:
+			if (mIsOpeningURL && !mActive)
+				URLOpenSucceeded(mOpeningURL);
+			break;
+		case SDL_EVENT_WINDOW_FOCUS_LOST:
+			mActive = false;
+			RehupFocus();
+			if (mIsOpeningURL && mActive)
+				URLOpenFailed(mOpeningURL);
+			break;
+		case SDL_EVENT_WINDOW_MINIMIZED:
+			mMinimized = true;
+			if (mMuteOnLostFocus)
+				Mute(true);
+			break;
+		case SDL_EVENT_WINDOW_RESTORED:
+			mMinimized = false;
+			if (mMuteOnLostFocus)
+				Unmute(true);
+			mWidgetManager->MarkAllDirty();
+			break;
+		case SDL_EVENT_MOUSE_MOTION:
+			if (!gInAssert && !mSEHOccured)
 			{
-				bool isDown = event.type == SDL_EVENT_KEY_DOWN;
-				SDL_Keycode key = event.key.key;
-
+				int x = event.motion.x;
+				int y = event.motion.y;
+				mWidgetManager->RemapMouse(x, y);
 				mLastUserInputTick = mLastTimerTime;
+				mWidgetManager->MouseMove(x, y);
+				if (!mMouseIn)
+				{
+					mMouseIn = true;
+					EnforceCursor();
+				}
+			}
+			break;
+		case SDL_EVENT_MOUSE_BUTTON_DOWN:
+		case SDL_EVENT_MOUSE_BUTTON_UP:
+			if (!gInAssert && !mSEHOccured)
+			{
+				int btnCode = 0;
+				bool down = event.type == SDL_EVENT_MOUSE_BUTTON_DOWN;
 
-				if (isDown && mDebugKeysEnabled && DebugKeyDown(key))
+				switch (event.button.button)
+				{
+				case SDL_BUTTON_LEFT:
+					btnCode = 1;
 					break;
+				case SDL_BUTTON_RIGHT:
+					btnCode = -1;
+					break;
+				case SDL_BUTTON_MIDDLE:
+					btnCode = 3;
+					break;
+				}
 
-				if (isDown)
-					mWidgetManager->KeyDown(GetKeyCodeFromSDLKeycode(key));
+				int x = event.button.x;
+				int y = event.button.y;
+
+				int renderWidth, renderHeight;
+				SDL_GetCurrentRenderOutputSize(mSDLInterface->mRenderer, &renderWidth, &renderHeight);
+
+				int scaledX = static_cast<int>(event.button.x * ((float)mWidth / renderWidth));
+				int scaledY = static_cast<int>(event.button.y * ((float)mHeight / renderHeight));
+
+				if (down)
+					mWidgetManager->MouseDown(scaledX, scaledY, btnCode);
 				else
-					mWidgetManager->KeyUp(GetKeyCodeFromSDLKeycode(key));
+					mWidgetManager->MouseUp(scaledX, scaledY, btnCode);
 			}
-				break;
-			case SDL_EVENT_TEXT_INPUT:
-			{
-				mLastUserInputTick = mLastTimerTime;
+			break;
+		case SDL_EVENT_MOUSE_WHEEL:
+			mWidgetManager->MouseWheel(event.wheel.y);
 
-				PopWorkChar aChar = event.text.text[0]; // assumes UTF-8 safe
+			break;
+		case SDL_EVENT_KEY_DOWN:
+		case SDL_EVENT_KEY_UP: {
+			bool isDown = event.type == SDL_EVENT_KEY_DOWN;
+			SDL_Keycode key = event.key.key;
 
-				mWidgetManager->KeyChar((PopWorkChar)aChar);
+			mLastUserInputTick = mLastTimerTime;
+
+			if (isDown && mDebugKeysEnabled && DebugKeyDown(key))
 				break;
-			}
+
+			if (isDown)
+				mWidgetManager->KeyDown(GetKeyCodeFromSDLKeycode(key));
+			else
+				mWidgetManager->KeyUp(GetKeyCodeFromSDLKeycode(key));
+		}
+		break;
+		case SDL_EVENT_TEXT_INPUT: {
+			mLastUserInputTick = mLastTimerTime;
+
+			PopWorkChar aChar = event.text.text[0]; // assumes UTF-8 safe
+
+			mWidgetManager->KeyChar((PopWorkChar)aChar);
+			break;
+		}
 		}
 	}
 
@@ -2374,7 +2403,7 @@ void AppBase::Done3dTesting()
 }
 
 // return file name that you want to upload
-std::string	AppBase::NotifyCrashHook()
+std::string AppBase::NotifyCrashHook()
 {
 	return "";
 }
@@ -2406,7 +2435,7 @@ void AppBase::MakeWindow()
 	int aResult = InitSDLInterface();
 
 	bool isActive = mActive;
-	//mActive = GetActiveWindow() == mHWnd;
+	// mActive = GetActiveWindow() == mHWnd;
 
 	mPhysMinimized = false;
 	if (mMinimized)
@@ -2418,7 +2447,7 @@ void AppBase::MakeWindow()
 		isActive = mActive; // set this here so we don't call RehupFocus again.
 		RehupFocus();
 	}
-	
+
 	if (isActive != mActive)
 		RehupFocus();
 
@@ -2427,7 +2456,7 @@ void AppBase::MakeWindow()
 	mWidgetManager->mImage = mSDLInterface->GetScreenImage();
 	mWidgetManager->MarkAllDirty();
 
-//	SetTimer(mHWnd, 100, mFrameTime, NULL);
+	//	SetTimer(mHWnd, 100, mFrameTime, NULL);
 }
 
 void AppBase::DeleteNativeImageData()
@@ -2435,8 +2464,8 @@ void AppBase::DeleteNativeImageData()
 	MemoryImageSet::iterator anItr = mMemoryImageSet.begin();
 	while (anItr != mMemoryImageSet.end())
 	{
-		MemoryImage* aMemoryImage = *anItr;		
-		aMemoryImage->DeleteNativeData();			
+		MemoryImage *aMemoryImage = *anItr;
+		aMemoryImage->DeleteNativeData();
 		++anItr;
 	}
 }
@@ -2447,7 +2476,7 @@ void AppBase::DeleteExtraImageData()
 	MemoryImageSet::iterator anItr = mMemoryImageSet.begin();
 	while (anItr != mMemoryImageSet.end())
 	{
-		MemoryImage* aMemoryImage = *anItr;
+		MemoryImage *aMemoryImage = *anItr;
 		aMemoryImage->DeleteExtraBuffers();
 		++anItr;
 	}
@@ -2458,12 +2487,11 @@ void AppBase::ReInitImages()
 	MemoryImageSet::iterator anItr = mMemoryImageSet.begin();
 	while (anItr != mMemoryImageSet.end())
 	{
-		MemoryImage* aMemoryImage = *anItr;				
+		MemoryImage *aMemoryImage = *anItr;
 		aMemoryImage->ReInit();
 		++anItr;
 	}
 }
-
 
 void AppBase::LoadingThreadProc()
 {
@@ -2475,9 +2503,9 @@ void AppBase::LoadingThreadCompleted()
 
 int AppBase::LoadingThreadProcStub(void *theArg)
 {
-	AppBase* aPopWorkApp = (AppBase*) theArg;
-	
-	aPopWorkApp->LoadingThreadProc();		
+	AppBase *aPopWorkApp = (AppBase *)theArg;
+
+	aPopWorkApp->LoadingThreadProc();
 
 	char aStr[256];
 	sprintf(aStr, "Resource Loading Time: %d\r\n", (SDL_GetTicks() - aPopWorkApp->mTimeLoaded));
@@ -2489,20 +2517,20 @@ int AppBase::LoadingThreadProcStub(void *theArg)
 }
 
 void AppBase::StartLoadingThread()
-{	
+{
 	if (!mLoadingThreadStarted)
 	{
-		mYieldMainThread = true; 
+		mYieldMainThread = true;
 		SDL_SetCurrentThreadPriority(SDL_THREAD_PRIORITY_HIGH);
 		mLoadingThreadStarted = true;
-		SDL_Thread* aThread = SDL_CreateThread(LoadingThreadProcStub, "LoadingThread", (void*)this);
+		SDL_Thread *aThread = SDL_CreateThread(LoadingThreadProcStub, "LoadingThread", (void *)this);
 		SDL_DetachThread(aThread);
 	}
 }
 void AppBase::CursorThreadProc()
 {
 	SDL_SetCurrentThreadPriority(SDL_THREAD_PRIORITY_HIGH);
-	SDL_Point aLastCursorPos = { 0, 0 };
+	SDL_Point aLastCursorPos = {0, 0};
 	int aLastDrawCount = 0;
 
 	while (!mShutdown)
@@ -2519,18 +2547,17 @@ void AppBase::CursorThreadProc()
 
 		if (aLastDrawCount != mDrawCount)
 		{
-			// We did a draw so we may have committed a pending mNextCursorX/Y 
+			// We did a draw so we may have committed a pending mNextCursorX/Y
 			aLastCursorPos.x = mSDLInterface->mCursorX;
 			aLastCursorPos.y = mSDLInterface->mCursorY;
 		}
 
-		if ((aCursorPos.x != aLastCursorPos.x) ||
-			(aCursorPos.y != aLastCursorPos.y))
+		if ((aCursorPos.x != aLastCursorPos.x) || (aCursorPos.y != aLastCursorPos.y))
 		{
 			Uint32 aTimeNow = SDL_GetTicks();
 			if (aTimeNow - mNextDrawTick > mSDLInterface->mMillisecondsPerFrame + 5)
 			{
-				// Do the special drawing if we are rendering at less than full framerate				
+				// Do the special drawing if we are rendering at less than full framerate
 				mSDLInterface->SetCursorPos(aCursorPos.x, aCursorPos.y);
 				aLastCursorPos = aCursorPos;
 			}
@@ -2550,7 +2577,7 @@ void AppBase::CursorThreadProc()
 
 int AppBase::CursorThreadProcStub(void *theArg)
 {
-	AppBase* aPopWorkApp = (AppBase*) theArg;
+	AppBase *aPopWorkApp = (AppBase *)theArg;
 	aPopWorkApp->CursorThreadProc();
 	return 0;
 }
@@ -2561,7 +2588,7 @@ void AppBase::StartCursorThread()
 	{
 		mCursorThreadRunning = true;
 		SDL_SetCurrentThreadPriority(SDL_THREAD_PRIORITY_HIGH);
-		SDL_Thread* aThread = SDL_CreateThread(CursorThreadProcStub, "CursorThread", (void*)this);
+		SDL_Thread *aThread = SDL_CreateThread(CursorThreadProcStub, "CursorThread", (void *)this);
 		SDL_DetachThread(aThread);
 	}
 }
@@ -2578,22 +2605,22 @@ void AppBase::SwitchScreenMode(bool wantWindowed, bool is3d, bool force)
 	}
 
 	// Set 3d acceleration preference
-	Set3DAcclerated(is3d,false);
+	Set3DAcclerated(is3d, false);
 
 	// Always make the app windowed when playing demos, in order to
 	//  make it easier to track down bugs.  We place this after the
 	//  sanity check just so things get re-initialized and stuff
-	//if (mPlayingDemoBuffer)
+	// if (mPlayingDemoBuffer)
 	//	wantWindowed = true;
 
-	mIsWindowed = wantWindowed;	
+	mIsWindowed = wantWindowed;
 
 	MakeWindow();
 
-	if (mSoundManager!=NULL)
+	if (mSoundManager != NULL)
 	{
 		mSoundManager->SetCooperativeWindow(mIsWindowed);
-	}	
+	}
 
 	mLastTime = SDL_GetTicks();
 }
@@ -2634,8 +2661,7 @@ void AppBase::EnforceCursor()
 	}
 	else
 	{
-		if ((mCursorImages[mCursorNum] == NULL) ||
-			((!mCustomCursorsEnabled) && (mCursorNum != CURSOR_CUSTOM)))
+		if ((mCursorImages[mCursorNum] == NULL) || ((!mCustomCursorsEnabled) && (mCursorNum != CURSOR_CUSTOM)))
 		{
 			switch (mCursorNum)
 			{
@@ -2693,8 +2719,8 @@ void AppBase::EnforceCursor()
 		mSysCursor = wantSysCursor;
 
 		// Don't hide the hardware cursor when playing back a demo buffer
-//		if (!mPlayingDemoBuffer)
-//			::ShowCursor(mSysCursor);
+		//		if (!mPlayingDemoBuffer)
+		//			::ShowCursor(mSysCursor);
 	}
 }
 
@@ -2705,7 +2731,7 @@ void AppBase::ProcessSafeDeleteList()
 	WidgetSafeDeleteList::iterator anItr = mSafeDeleteList.begin();
 	while (anItr != mSafeDeleteList.end())
 	{
-		WidgetSafeDeleteInfo* aWidgetSafeDeleteInfo = &(*anItr);
+		WidgetSafeDeleteInfo *aWidgetSafeDeleteInfo = &(*anItr);
 		if (mUpdateAppDepth <= aWidgetSafeDeleteInfo->mUpdateAppDepth)
 		{
 			delete aWidgetSafeDeleteInfo->mWidget;
@@ -2713,7 +2739,7 @@ void AppBase::ProcessSafeDeleteList()
 		}
 		else
 			++anItr;
-	}	
+	}
 }
 
 void AppBase::UpdateFTimeAcc()
@@ -2721,20 +2747,20 @@ void AppBase::UpdateFTimeAcc()
 	DWORD aCurTime = SDL_GetTicks();
 
 	if (mLastTimeCheck != 0)
-	{				
-		int aDeltaTime = aCurTime - mLastTimeCheck;		
+	{
+		int aDeltaTime = aCurTime - mLastTimeCheck;
 
 		mUpdateFTimeAcc = std::min(mUpdateFTimeAcc + aDeltaTime, 200.0);
 
-		if (mRelaxUpdateBacklogCount > 0)				
-			mRelaxUpdateBacklogCount = std::max(mRelaxUpdateBacklogCount - aDeltaTime, 0);				
+		if (mRelaxUpdateBacklogCount > 0)
+			mRelaxUpdateBacklogCount = std::max(mRelaxUpdateBacklogCount - aDeltaTime, 0);
 	}
 
 	mLastTimeCheck = aCurTime;
 }
 
-//int aNumCalls = 0;
-//DWORD aLastCheck = 0;
+// int aNumCalls = 0;
+// DWORD aLastCheck = 0;
 
 bool AppBase::Process(bool allowSleep)
 {
@@ -2748,16 +2774,16 @@ bool AppBase::Process(bool allowSleep)
 
 	if (mLoadingFailed)
 		Shutdown();
-	
+
 	bool isVSynched = mVSyncUpdates && (!mLastDrawWasEmpty) && (!mVSyncBroken) &&
-		((!mIsPhysWindowed) || (mIsPhysWindowed && mWaitForVSync && !mSoftVSyncWait));
+					  ((!mIsPhysWindowed) || (mIsPhysWindowed && mWaitForVSync && !mSoftVSyncWait));
 	double aFrameFTime;
 	double anUpdatesPerUpdateF;
 
 	if (mVSyncUpdates)
 	{
 		aFrameFTime = (1000.0 / mSyncRefreshRate) / mUpdateMultiplier;
-		anUpdatesPerUpdateF = (float) (1000.0 / (mFrameTime * mSyncRefreshRate));
+		anUpdatesPerUpdateF = (float)(1000.0 / (mFrameTime * mSyncRefreshRate));
 	}
 	else
 	{
@@ -2769,31 +2795,31 @@ bool AppBase::Process(bool allowSleep)
 	if ((!mPaused) && (mUpdateMultiplier > 0))
 	{
 		ulong aStartTime = SDL_GetTicks();
-		
-		ulong aCurTime = aStartTime;		
+
+		ulong aCurTime = aStartTime;
 		int aCumSleepTime = 0;
-		
+
 		// When we are VSynching, only calculate this FTimeAcc right after drawing
-		
-		if (!isVSynched)		
-			UpdateFTimeAcc();					
+
+		if (!isVSynched)
+			UpdateFTimeAcc();
 
 		// mNonDrawCount is used to make sure we draw the screen at least
 		// 10 times per second, even if it means we have to slow down
 		// the updates to make it draw 10 times per second in "game time"
-		
+
 		bool didUpdate = false;
-		
+
 		if (mUpdateAppState == UPDATESTATE_PROCESS_1)
 		{
-			if ((++mNonDrawCount < (int) ceil(10*mUpdateMultiplier)) || (!mLoaded))
+			if ((++mNonDrawCount < (int)ceil(10 * mUpdateMultiplier)) || (!mLoaded))
 			{
 				bool doUpdate = false;
-				
+
 				if (isVSynched)
 				{
 					// Synch'ed to vertical refresh, so update as soon as possible after draw
-					doUpdate = (!mHasPendingDraw) || (mUpdateFTimeAcc >= (int) (aFrameFTime * 0.75));
+					doUpdate = (!mHasPendingDraw) || (mUpdateFTimeAcc >= (int)(aFrameFTime * 0.75));
 				}
 				else if (mUpdateFTimeAcc >= aFrameFTime)
 				{
@@ -2807,7 +2833,7 @@ bool AppBase::Process(bool allowSleep)
 					if (mUpdateMultiplier == 1.0)
 					{
 						mVSyncBrokenTestUpdates++;
-						if (mVSyncBrokenTestUpdates >= (DWORD) ((1000+mFrameTime-1)/mFrameTime))
+						if (mVSyncBrokenTestUpdates >= (DWORD)((1000 + mFrameTime - 1) / mFrameTime))
 						{
 							// It has to be running 33% fast to be "broken" (25% = 1/0.800)
 							if (aStartTime - mVSyncBrokenTestStartTick <= 800)
@@ -2825,10 +2851,10 @@ bool AppBase::Process(bool allowSleep)
 							mVSyncBrokenTestUpdates = 0;
 						}
 					}
-					
+
 					bool hadRealUpdate = DoUpdateFrames();
 					if (hadRealUpdate)
-						mUpdateAppState = UPDATESTATE_PROCESS_2;					
+						mUpdateAppState = UPDATESTATE_PROCESS_2;
 
 					mHasPendingDraw = true;
 					didUpdate = true;
@@ -2838,14 +2864,14 @@ bool AppBase::Process(bool allowSleep)
 		else if (mUpdateAppState == UPDATESTATE_PROCESS_2)
 		{
 			mUpdateAppState = UPDATESTATE_PROCESS_DONE;
-			
+
 			mPendingUpdatesAcc += anUpdatesPerUpdateF;
 			mPendingUpdatesAcc -= 1.0;
 			ProcessSafeDeleteList();
 
 			// Process any extra updates
 			while (mPendingUpdatesAcc >= 1.0)
-			{											
+			{
 
 				++mNonDrawCount;
 				bool hasRealUpdate = DoUpdateFrames();
@@ -2853,19 +2879,19 @@ bool AppBase::Process(bool allowSleep)
 
 				if (!hasRealUpdate)
 					break;
-										
+
 				ProcessSafeDeleteList();
 				mPendingUpdatesAcc -= 1.0;
-			}					
+			}
 
-			//aNumCalls++;
-			DoUpdateFramesF((float) anUpdatesPerUpdateF);
-			ProcessSafeDeleteList();		
-		
+			// aNumCalls++;
+			DoUpdateFramesF((float)anUpdatesPerUpdateF);
+			ProcessSafeDeleteList();
+
 			// Don't let mUpdateFTimeAcc dip below 0
 			//  Subtract an extra 0.2ms, because sometimes refresh rates have some
 			//  fractional component that gets truncated, and it's better to take off
-			//  too much to keep our timing tending toward occuring right after 
+			//  too much to keep our timing tending toward occuring right after
 			//  redraws
 			if (isVSynched)
 				mUpdateFTimeAcc = std::max(mUpdateFTimeAcc - aFrameFTime - 0.2f, 0.0);
@@ -2877,21 +2903,21 @@ bool AppBase::Process(bool allowSleep)
 
 			didUpdate = true;
 		}
-		
+
 		if (!didUpdate)
-		{			
+		{
 			mUpdateAppState = UPDATESTATE_PROCESS_DONE;
 
 			mNonDrawCount = 0;
-			
+
 			if (mHasPendingDraw)
 			{
 				DrawDirtyStuff();
 			}
 			else
 			{
-				// Let us take into account the time it took to draw dirty stuff			
-				int aTimeToNextFrame = (int) (aFrameFTime - mUpdateFTimeAcc);
+				// Let us take into account the time it took to draw dirty stuff
+				int aTimeToNextFrame = (int)(aFrameFTime - mUpdateFTimeAcc);
 				if (aTimeToNextFrame > 0)
 				{
 					if (!allowSleep)
@@ -2901,14 +2927,14 @@ bool AppBase::Process(bool allowSleep)
 					++mSleepCount;
 					SDL_Delay(aTimeToNextFrame);
 
-					aCumSleepTime += aTimeToNextFrame;					
+					aCumSleepTime += aTimeToNextFrame;
 				}
 			}
 		}
 
 		if (mYieldMainThread)
 		{
-			// This is to make sure that the title screen doesn't take up any more than 
+			// This is to make sure that the title screen doesn't take up any more than
 			// 1/3 of the processor time
 
 			ulong anEndTime = SDL_GetTicks();
@@ -2925,7 +2951,7 @@ bool AppBase::Process(bool allowSleep)
 		}
 	}
 
-	ProcessSafeDeleteList();	
+	ProcessSafeDeleteList();
 	return true;
 }
 
@@ -2941,7 +2967,7 @@ bool AppBase::Process(bool allowSleep)
 	}
 
 	while (!mShutdown)
-	{		
+	{
 		MSG msg;
 		while ((PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) && (!mShutdown))
 		{
@@ -2949,7 +2975,7 @@ bool AppBase::Process(bool allowSleep)
 			DispatchMessage(&msg);
 		}
 
-		ProcessDemo();		
+		ProcessDemo();
 		ProcessDeferredMessages();
 
 		if ((aDialog != NULL) && (aDialog->mResult != -1))
@@ -2959,7 +2985,7 @@ bool AppBase::Process(bool allowSleep)
 		{
 			//++aCount;
 			Process();
-		}		
+		}
 	}
 }*/
 
@@ -2973,7 +2999,7 @@ void AppBase::DoMainLoop()
 	}
 }
 
-bool AppBase::UpdateAppStep(bool* updated)
+bool AppBase::UpdateAppStep(bool *updated)
 {
 	if (updated != NULL)
 		*updated = false;
@@ -2987,11 +3013,11 @@ bool AppBase::UpdateAppStep(bool* updated)
 	mUpdateAppDepth++;
 
 	// We update in two stages to avoid doing a Process if our loop termination
-	//  condition has already been met by processing windows messages		
+	//  condition has already been met by processing windows messages
 	if (mUpdateAppState == UPDATESTATE_MESSAGES)
-	{		
+	{
 		if (!ProcessDeferredMessages(true))
-		{			
+		{
 			mUpdateAppState = UPDATESTATE_PROCESS_1;
 		}
 	}
@@ -3000,7 +3026,7 @@ bool AppBase::UpdateAppStep(bool* updated)
 		// Process changes state by itself
 		if (mStepMode)
 		{
-			if (mStepMode==2)
+			if (mStepMode == 2)
 			{
 				SDL_Delay(mFrameTime);
 				mUpdateAppState = UPDATESTATE_PROCESS_DONE; // skip actual update until next step
@@ -3016,9 +3042,9 @@ bool AppBase::UpdateAppStep(bool* updated)
 		else
 		{
 			int anOldUpdateCnt = mUpdateCount;
-			Process();		
+			Process();
 			if (updated != NULL)
-				*updated = mUpdateCount != anOldUpdateCnt;			
+				*updated = mUpdateCount != anOldUpdateCnt;
 		}
 	}
 
@@ -3044,10 +3070,10 @@ int AppBase::InitSDLInterface()
 	PreSDLInterfaceInitHook();
 	DeleteNativeImageData();
 	int aResult = mSDLInterface->Init(mIsWindowed);
-	if ( SDLInterface::RESULT_OK == aResult )
+	if (SDLInterface::RESULT_OK == aResult)
 	{
-		mScreenBounds.mX = ( mWidth - mSDLInterface->mWidth ) / 2;
-		mScreenBounds.mY = ( mHeight - mSDLInterface->mHeight ) / 2;
+		mScreenBounds.mX = (mWidth - mSDLInterface->mWidth) / 2;
+		mScreenBounds.mY = (mHeight - mSDLInterface->mHeight) / 2;
 		mScreenBounds.mWidth = mSDLInterface->mWidth;
 		mScreenBounds.mHeight = mSDLInterface->mHeight;
 		mSDLInterface->UpdateViewport();
@@ -3076,7 +3102,7 @@ void AppBase::Start()
 	int aCount = 0;
 	int aSleepCount = 0;
 
-	Uint64 aStartTime = SDL_GetTicks();		
+	Uint64 aStartTime = SDL_GetTicks();
 
 	mRunning = true;
 	mLastTime = aStartTime;
@@ -3093,8 +3119,8 @@ void AppBase::Start()
 	char aString[256];
 	sprintf(aString, "Seconds       = %g\r\n", (SDL_GetTicks() - aStartTime) / 1000.0);
 	OutputDebugStringA(aString);
-	//sprintf(aString, "Count         = %d\r\n", aCount);
-	//OutputDebugString(aString);
+	// sprintf(aString, "Count         = %d\r\n", aCount);
+	// OutputDebugString(aString);
 	sprintf(aString, "Sleep Count   = %d\r\n", mSleepCount);
 	OutputDebugStringA(aString);
 	sprintf(aString, "Update Count  = %d\r\n", mUpdateCount);
@@ -3105,9 +3131,9 @@ void AppBase::Start()
 	OutputDebugStringA(aString);
 	sprintf(aString, "Screen Blt    = %d\r\n", mScreenBltTime);
 	OutputDebugStringA(aString);
-	if (mDrawTime+mScreenBltTime > 0)
+	if (mDrawTime + mScreenBltTime > 0)
 	{
-		sprintf(aString, "Avg FPS       = %d\r\n", (mDrawCount*1000)/(mDrawTime+mScreenBltTime));
+		sprintf(aString, "Avg FPS       = %d\r\n", (mDrawCount * 1000) / (mDrawTime + mScreenBltTime));
 		OutputDebugStringA(aString);
 	}
 
@@ -3116,13 +3142,13 @@ void AppBase::Start()
 	WriteToRegistry();
 }
 
-bool AppBase::CheckSignature(const Buffer& theBuffer, const std::string& theFileName)
+bool AppBase::CheckSignature(const Buffer &theBuffer, const std::string &theFileName)
 {
 	// Add your own signature checking code here
 	return false;
 }
 
-bool AppBase::LoadProperties(const std::string& theFileName, bool required, bool checkSig)
+bool AppBase::LoadProperties(const std::string &theFileName, bool required, bool checkSig)
 {
 	Buffer aBuffer;
 	if (!ReadBufferFromFile(theFileName, &aBuffer))
@@ -3131,7 +3157,8 @@ bool AppBase::LoadProperties(const std::string& theFileName, bool required, bool
 			return true;
 		else
 		{
-			Popup(GetString("UNABLE_OPEN_PROPERTIES", _S("Unable to open properties file ")) + StringToPopWorkString(theFileName));
+			Popup(GetString("UNABLE_OPEN_PROPERTIES", _S("Unable to open properties file ")) +
+				  StringToPopWorkString(theFileName));
 			return false;
 		}
 	}
@@ -3139,7 +3166,8 @@ bool AppBase::LoadProperties(const std::string& theFileName, bool required, bool
 	{
 		if (!CheckSignature(aBuffer, theFileName))
 		{
-			Popup(GetString("PROPERTIES_SIG_FAILED", _S("Signature check failed on ")) + StringToPopWorkString(theFileName + "'"));
+			Popup(GetString("PROPERTIES_SIG_FAILED", _S("Signature check failed on ")) +
+				  StringToPopWorkString(theFileName + "'"));
 			return false;
 		}
 	}
@@ -3147,13 +3175,13 @@ bool AppBase::LoadProperties(const std::string& theFileName, bool required, bool
 	PropertiesParser aPropertiesParser(this);
 
 	// Load required language-file properties
-		if (!aPropertiesParser.ParsePropertiesBuffer(aBuffer))
-		{
-			Popup(aPropertiesParser.GetErrorText());		
-			return false;
-		}
-		else
-			return true;
+	if (!aPropertiesParser.ParsePropertiesBuffer(aBuffer))
+	{
+		Popup(aPropertiesParser.GetErrorText());
+		return false;
+	}
+	else
+		return true;
 }
 
 bool AppBase::LoadProperties()
@@ -3170,157 +3198,158 @@ void AppBase::LoadResourceManifest()
 
 void AppBase::ShowResourceError(bool doExit)
 {
-	Popup(mResourceManager->GetErrorText());	
+	Popup(mResourceManager->GetErrorText());
 	if (doExit)
 		DoExit(0);
 }
 
-bool AppBase::GetBoolean(const std::string& theId)
+bool AppBase::GetBoolean(const std::string &theId)
 {
 	StringBoolMap::iterator anItr = mBoolProperties.find(theId);
 	DBG_ASSERTE(anItr != mBoolProperties.end());
-	
-	if (anItr != mBoolProperties.end())	
+
+	if (anItr != mBoolProperties.end())
 		return anItr->second;
 	else
 		return false;
 }
 
-bool AppBase::GetBoolean(const std::string& theId, bool theDefault)
+bool AppBase::GetBoolean(const std::string &theId, bool theDefault)
 {
-	StringBoolMap::iterator anItr = mBoolProperties.find(theId);	
-	
-	if (anItr != mBoolProperties.end())	
+	StringBoolMap::iterator anItr = mBoolProperties.find(theId);
+
+	if (anItr != mBoolProperties.end())
 		return anItr->second;
 	else
-		return theDefault;	
+		return theDefault;
 }
 
-int AppBase::GetInteger(const std::string& theId)
+int AppBase::GetInteger(const std::string &theId)
 {
 	StringIntMap::iterator anItr = mIntProperties.find(theId);
 	DBG_ASSERTE(anItr != mIntProperties.end());
-	
-	if (anItr != mIntProperties.end())	
+
+	if (anItr != mIntProperties.end())
 		return anItr->second;
 	else
 		return false;
 }
 
-int AppBase::GetInteger(const std::string& theId, int theDefault)
+int AppBase::GetInteger(const std::string &theId, int theDefault)
 {
-	StringIntMap::iterator anItr = mIntProperties.find(theId);	
-	
-	if (anItr != mIntProperties.end())	
+	StringIntMap::iterator anItr = mIntProperties.find(theId);
+
+	if (anItr != mIntProperties.end())
 		return anItr->second;
 	else
-		return theDefault;	
+		return theDefault;
 }
 
-double AppBase::GetDouble(const std::string& theId)
+double AppBase::GetDouble(const std::string &theId)
 {
 	StringDoubleMap::iterator anItr = mDoubleProperties.find(theId);
 	DBG_ASSERTE(anItr != mDoubleProperties.end());
-	
-	if (anItr != mDoubleProperties.end())	
+
+	if (anItr != mDoubleProperties.end())
 		return anItr->second;
 	else
 		return false;
 }
 
-double AppBase::GetDouble(const std::string& theId, double theDefault)
+double AppBase::GetDouble(const std::string &theId, double theDefault)
 {
-	StringDoubleMap::iterator anItr = mDoubleProperties.find(theId);	
-	
-	if (anItr != mDoubleProperties.end())	
+	StringDoubleMap::iterator anItr = mDoubleProperties.find(theId);
+
+	if (anItr != mDoubleProperties.end())
 		return anItr->second;
 	else
-		return theDefault;	
+		return theDefault;
 }
 
-PopWorkString AppBase::GetString(const std::string& theId)
+PopWorkString AppBase::GetString(const std::string &theId)
 {
 	StringWStringMap::iterator anItr = mStringProperties.find(theId);
 	DBG_ASSERTE(anItr != mStringProperties.end());
-	
-	if (anItr != mStringProperties.end())	
+
+	if (anItr != mStringProperties.end())
 		return WStringToPopWorkString(anItr->second);
 	else
 		return _S("");
 }
 
-PopWorkString AppBase::GetString(const std::string& theId, const PopWorkString& theDefault)
+PopWorkString AppBase::GetString(const std::string &theId, const PopWorkString &theDefault)
 {
-	StringWStringMap::iterator anItr = mStringProperties.find(theId);	
-	
-	if (anItr != mStringProperties.end())	
+	StringWStringMap::iterator anItr = mStringProperties.find(theId);
+
+	if (anItr != mStringProperties.end())
 		return WStringToPopWorkString(anItr->second);
 	else
-		return theDefault;	
+		return theDefault;
 }
 
-StringVector AppBase::GetStringVector(const std::string& theId)
+StringVector AppBase::GetStringVector(const std::string &theId)
 {
 	StringStringVectorMap::iterator anItr = mStringVectorProperties.find(theId);
 	DBG_ASSERTE(anItr != mStringVectorProperties.end());
-	
-	if (anItr != mStringVectorProperties.end())	
+
+	if (anItr != mStringVectorProperties.end())
 		return anItr->second;
 	else
 		return StringVector();
 }
 
-void AppBase::SetString(const std::string& theId, const std::wstring& theValue)
+void AppBase::SetString(const std::string &theId, const std::wstring &theValue)
 {
-	std::pair<StringWStringMap::iterator, bool> aPair = mStringProperties.insert(StringWStringMap::value_type(theId, theValue));
+	std::pair<StringWStringMap::iterator, bool> aPair =
+		mStringProperties.insert(StringWStringMap::value_type(theId, theValue));
 	if (!aPair.second) // Found it, change value
 		aPair.first->second = theValue;
 }
 
-
-void AppBase::SetBoolean(const std::string& theId, bool theValue)
+void AppBase::SetBoolean(const std::string &theId, bool theValue)
 {
 	std::pair<StringBoolMap::iterator, bool> aPair = mBoolProperties.insert(StringBoolMap::value_type(theId, theValue));
 	if (!aPair.second) // Found it, change value
 		aPair.first->second = theValue;
 }
 
-void AppBase::SetInteger(const std::string& theId, int theValue)
+void AppBase::SetInteger(const std::string &theId, int theValue)
 {
 	std::pair<StringIntMap::iterator, bool> aPair = mIntProperties.insert(StringIntMap::value_type(theId, theValue));
 	if (!aPair.second) // Found it, change value
 		aPair.first->second = theValue;
 }
 
-void AppBase::SetDouble(const std::string& theId, double theValue)
+void AppBase::SetDouble(const std::string &theId, double theValue)
 {
-	std::pair<StringDoubleMap::iterator, bool> aPair = mDoubleProperties.insert(StringDoubleMap::value_type(theId, theValue));
+	std::pair<StringDoubleMap::iterator, bool> aPair =
+		mDoubleProperties.insert(StringDoubleMap::value_type(theId, theValue));
 	if (!aPair.second) // Found it, change value
 		aPair.first->second = theValue;
 }
 
 void AppBase::DoParseCmdLine()
 {
-	char* aCmdLine = GetCommandLineA();	
-	char* aCmdLinePtr = aCmdLine;
+	char *aCmdLine = GetCommandLineA();
+	char *aCmdLinePtr = aCmdLine;
 	if (aCmdLinePtr[0] == '"')
 	{
 		aCmdLinePtr = strchr(aCmdLinePtr + 1, '"');
 		if (aCmdLinePtr != NULL)
 			aCmdLinePtr++;
 	}
-	
+
 	if (aCmdLinePtr != NULL)
 	{
 		aCmdLinePtr = strchr(aCmdLinePtr, ' ');
 		if (aCmdLinePtr != NULL)
-			ParseCmdLine(aCmdLinePtr+1);	
+			ParseCmdLine(aCmdLinePtr + 1);
 	}
 
 	mCmdLineParsed = true;
 }
 
-void AppBase::ParseCmdLine(const std::string& theCmdLine)
+void AppBase::ParseCmdLine(const std::string &theCmdLine)
 {
 	// Command line example:  -play -demofile="game demo.dmo"
 	// Results in HandleCmdLineParam("-play", ""); HandleCmdLineParam("-demofile", "game demo.dmo");
@@ -3331,11 +3360,11 @@ void AppBase::ParseCmdLine(const std::string& theCmdLine)
 	bool inQuote = false;
 	bool onValue = false;
 
-	for (int i = 0; i < (int) theCmdLine.length(); i++)
+	for (int i = 0; i < (int)theCmdLine.length(); i++)
 	{
 		char c = theCmdLine[i];
 		bool atEnd = false;
-		
+
 		if (c == '"')
 		{
 			inQuote = !inQuote;
@@ -3351,41 +3380,42 @@ void AppBase::ParseCmdLine(const std::string& theCmdLine)
 			aCurParamValue += c;
 		else
 			aCurParamName += c;
-		
+
 		if (i == theCmdLine.length() - 1)
 			atEnd = true;
-		
+
 		if (atEnd && !aCurParamName.empty())
 		{
 			HandleCmdLineParam(aCurParamName, aCurParamValue);
 			aCurParamName = "";
 			aCurParamValue = "";
 			onValue = false;
-		}	
+		}
 	}
 }
 
-static int GetMaxDemoFileNum(const std::string& theDemoPrefix, int theMaxToKeep, bool doErase)
+static int GetMaxDemoFileNum(const std::string &theDemoPrefix, int theMaxToKeep, bool doErase)
 {
 	WIN32_FIND_DATAA aData;
 	HANDLE aHandle = FindFirstFileA((theDemoPrefix + "*.dmo").c_str(), &aData);
-	if (aHandle==INVALID_HANDLE_VALUE)
+	if (aHandle == INVALID_HANDLE_VALUE)
 		return 0;
 
 	typedef std::set<int> IntSet;
 	IntSet aSet;
 
-	do {
+	do
+	{
 		int aNum = 0;
-		if (sscanf(aData.cFileName,(theDemoPrefix + "%d.dmo").c_str(), &aNum)==1)
+		if (sscanf(aData.cFileName, (theDemoPrefix + "%d.dmo").c_str(), &aNum) == 1)
 			aSet.insert(aNum);
 
-	} while(FindNextFileA(aHandle,&aData));
+	} while (FindNextFileA(aHandle, &aData));
 	FindClose(aHandle);
 
 	IntSet::iterator anItr = aSet.begin();
-	if ((int)aSet.size()>theMaxToKeep-1 && doErase)
-		DeleteFile(StrFormat((theDemoPrefix + "%d.dmo").c_str(),*anItr).c_str());
+	if ((int)aSet.size() > theMaxToKeep - 1 && doErase)
+		DeleteFile(StrFormat((theDemoPrefix + "%d.dmo").c_str(), *anItr).c_str());
 
 	if (aSet.empty())
 		return 0;
@@ -3395,7 +3425,7 @@ static int GetMaxDemoFileNum(const std::string& theDemoPrefix, int theMaxToKeep,
 	return (*anItr);
 }
 
-void AppBase::HandleCmdLineParam(const std::string& theParamName, const std::string& theParamValue)
+void AppBase::HandleCmdLineParam(const std::string &theParamName, const std::string &theParamValue)
 {
 	/*
 	if (theParamName == "-play")
@@ -3410,8 +3440,9 @@ void AppBase::HandleCmdLineParam(const std::string& theParamName, const std::str
 			aNum=5;
 
 		int aDemoFileNum = GetMaxDemoFileNum(mDemoPrefix, aNum, true) + 1;
-		mDemoFileName = PopWorkStringToString(StrFormat(StringToPopWorkString(mDemoPrefix + "%d.dmo").c_str(),aDemoFileNum));
-		if (mDemoFileName.length() < 2 || (mDemoFileName[1] != ':' && mDemoFileName[2] != '\\'))
+		mDemoFileName = PopWorkStringToString(StrFormat(StringToPopWorkString(mDemoPrefix +
+	"%d.dmo").c_str(),aDemoFileNum)); if (mDemoFileName.length() < 2 || (mDemoFileName[1] != ':' && mDemoFileName[2] !=
+	'\\'))
 		{
 			mDemoFileName = GetAppDataFolder() + mDemoFileName;
 		}
@@ -3425,9 +3456,8 @@ void AppBase::HandleCmdLineParam(const std::string& theParamName, const std::str
 			aNum=0;
 
 		int aDemoFileNum = GetMaxDemoFileNum(mDemoPrefix, aNum, false)-aNum;
-		mDemoFileName = PopWorkStringToString(StrFormat(StringToPopWorkString(mDemoPrefix + "%d.dmo").c_str(),aDemoFileNum));
-		mRecordingDemoBuffer = false;
-		mPlayingDemoBuffer = true;
+		mDemoFileName = PopWorkStringToString(StrFormat(StringToPopWorkString(mDemoPrefix +
+	"%d.dmo").c_str(),aDemoFileNum)); mRecordingDemoBuffer = false; mPlayingDemoBuffer = true;
 	}
 	else if (theParamName == "-record")
 	{
@@ -3441,12 +3471,13 @@ void AppBase::HandleCmdLineParam(const std::string& theParamName, const std::str
 		{
 			mDemoFileName = GetAppDataFolder() + mDemoFileName;
 		}
-	}	
-	else */if (theParamName == "-crash")
+	}
+	else */
+	if (theParamName == "-crash")
 	{
 		// Try to access NULL
-		char* a = 0;
-		*a = '!';		
+		char *a = 0;
+		*a = '!';
 	}
 	else if (theParamName == "-screensaver")
 	{
@@ -3458,7 +3489,8 @@ void AppBase::HandleCmdLineParam(const std::string& theParamName, const std::str
 	}
 	else
 	{
-		Popup(GetString("INVALID_COMMANDLINE_PARAM", _S("Invalid command line parameter: ")) + StringToPopWorkString(theParamName));
+		Popup(GetString("INVALID_COMMANDLINE_PARAM", _S("Invalid command line parameter: ")) +
+			  StringToPopWorkString(theParamName));
 		DoExit(0);
 	}
 }
@@ -3480,11 +3512,11 @@ bool AppBase::ChangeDirHook(const char *theIntendedPath)
 	return false;
 }
 
-MusicInterface* AppBase::CreateMusicInterface()
+MusicInterface *AppBase::CreateMusicInterface()
 {
 	if (mNoSoundNeeded)
 		return new MusicInterface;
-	else 
+	else
 		return new BassMusicInterface();
 }
 
@@ -3498,19 +3530,19 @@ void AppBase::InitHook()
 
 void AppBase::Init()
 {
-	mPrimaryThreadId = SDL_GetCurrentThreadID();	
-	
+	mPrimaryThreadId = SDL_GetCurrentThreadID();
+
 	if (mShutdown)
 		return;
 
 	InitPropertiesHook();
-	ReadFromRegistry();	
+	ReadFromRegistry();
 
 	if (!mCmdLineParsed)
 		DoParseCmdLine();
 
-	if (IsScreenSaver())	
-		mOnlyAllowOneCopyToRun = false;	
+	if (IsScreenSaver())
+		mOnlyAllowOneCopyToRun = false;
 
 	// Change directory
 	if (!ChangeDirHook(mChangeDirTo.c_str()))
@@ -3519,7 +3551,8 @@ void AppBase::Init()
 	gPakInterface->AddPakFile("main.pak");
 
 	// Create a message we can use to talk to ourselves inter-process
-	mNotifyGameMessage = RegisterWindowMessage(PopWorkStringToStringFast(_S("Notify") + StringToPopWorkStringFast(mProdName)).c_str());
+	mNotifyGameMessage =
+		RegisterWindowMessage(PopWorkStringToStringFast(_S("Notify") + StringToPopWorkStringFast(mProdName)).c_str());
 
 	// Create a globally unique mutex
 	mMutex = new std::mutex();
@@ -3527,8 +3560,8 @@ void AppBase::Init()
 		HandleGameAlreadyRunning();
 
 	mRandSeed = SDL_GetTicks();
-	SRand(mRandSeed);	
-	 
+	SRand(mRandSeed);
+
 	srand(SDL_GetTicks());
 
 	// Let app do something before showing window, or switching to fullscreen mode
@@ -3543,8 +3576,7 @@ void AppBase::Init()
 	if (mIsWindowed && !mFullScreenWindow)
 	{
 		// How can we be windowed if our screen isn't even big enough?
-		if ((mWidth >= GetSystemMetrics(SM_CXFULLSCREEN)) ||
-			(mHeight >= GetSystemMetrics(SM_CYFULLSCREEN)))
+		if ((mWidth >= GetSystemMetrics(SM_CXFULLSCREEN)) || (mHeight >= GetSystemMetrics(SM_CYFULLSCREEN)))
 		{
 			mIsWindowed = false;
 			mForceFullscreen = true;
@@ -3553,14 +3585,14 @@ void AppBase::Init()
 
 	MakeWindow();
 
-	if (mSoundManager == NULL)		
+	if (mSoundManager == NULL)
 		mSoundManager = new OpenALSoundManager();
 
 	SetSfxVolume(mSfxVolume);
-	
-	mMusicInterface = CreateMusicInterface();	
 
-	SetMusicVolume(mMusicVolume);	
+	mMusicInterface = CreateMusicInterface();
+
+	SetMusicVolume(mMusicVolume);
 
 	if (IsScreenSaver())
 	{
@@ -3574,7 +3606,7 @@ void AppBase::Init()
 
 void AppBase::HandleGameAlreadyRunning()
 {
-	if(mOnlyAllowOneCopyToRun)
+	if (mOnlyAllowOneCopyToRun)
 	{
 		// Notify the other window and then shut ourselves down
 		if (mNotifyGameMessage != 0)
@@ -3584,14 +3616,14 @@ void AppBase::HandleGameAlreadyRunning()
 	}
 }
 
-void AppBase::CopyToClipboard(const std::string& theString)
+void AppBase::CopyToClipboard(const std::string &theString)
 {
 	SDL_SetClipboardText(theString.c_str());
 }
 
-std::string	AppBase::GetClipboard()
+std::string AppBase::GetClipboard()
 {
-	std::string			aString;
+	std::string aString;
 	aString = SDL_GetClipboardText();
 	return aString;
 }
@@ -3613,40 +3645,39 @@ void AppBase::EnableCustomCursors(bool enabled)
 	EnforceCursor();
 }
 
-PopWork::SDLImage* AppBase::GetImage(const std::string& theFileName, bool commitBits)
-{	
-	ImageLib::Image* aLoadedImage = ImageLib::GetImage(theFileName, true);
-	
-	if (aLoadedImage == NULL)
-		return NULL;	
+PopWork::SDLImage *AppBase::GetImage(const std::string &theFileName, bool commitBits)
+{
+	ImageLib::Image *aLoadedImage = ImageLib::GetImage(theFileName, true);
 
-	SDLImage* anImage = new SDLImage(mSDLInterface);
+	if (aLoadedImage == NULL)
+		return NULL;
+
+	SDLImage *anImage = new SDLImage(mSDLInterface);
 	anImage->mFilePath = theFileName;
-	anImage->SetBits(aLoadedImage->GetBits(), aLoadedImage->GetWidth(), aLoadedImage->GetHeight(), commitBits);	
+	anImage->SetBits(aLoadedImage->GetBits(), aLoadedImage->GetWidth(), aLoadedImage->GetHeight(), commitBits);
 	anImage->mFilePath = theFileName;
 	delete aLoadedImage;
-	
+
 	return anImage;
 }
 
-PopWork::SDLImage* AppBase::CreateCrossfadeImage(PopWork::Image* theImage1, const Rect& theRect1, PopWork::Image* theImage2, const Rect& theRect2, double theFadeFactor)
+PopWork::SDLImage *AppBase::CreateCrossfadeImage(PopWork::Image *theImage1, const Rect &theRect1,
+												 PopWork::Image *theImage2, const Rect &theRect2, double theFadeFactor)
 {
-	MemoryImage* aMemoryImage1 = dynamic_cast<MemoryImage*>(theImage1);
-	MemoryImage* aMemoryImage2 = dynamic_cast<MemoryImage*>(theImage2);
+	MemoryImage *aMemoryImage1 = dynamic_cast<MemoryImage *>(theImage1);
+	MemoryImage *aMemoryImage2 = dynamic_cast<MemoryImage *>(theImage2);
 
 	if ((aMemoryImage1 == NULL) || (aMemoryImage2 == NULL))
 		return NULL;
 
-	if ((theRect1.mX < 0) || (theRect1.mY < 0) || 
-		(theRect1.mX + theRect1.mWidth > theImage1->GetWidth()) ||
+	if ((theRect1.mX < 0) || (theRect1.mY < 0) || (theRect1.mX + theRect1.mWidth > theImage1->GetWidth()) ||
 		(theRect1.mY + theRect1.mHeight > theImage1->GetHeight()))
 	{
 		DBG_ASSERTE("Crossfade Rect1 out of bounds");
 		return NULL;
 	}
 
-	if ((theRect2.mX < 0) || (theRect2.mY < 0) || 
-		(theRect2.mX + theRect2.mWidth > theImage2->GetWidth()) ||
+	if ((theRect2.mX < 0) || (theRect2.mY < 0) || (theRect2.mX + theRect2.mWidth > theImage2->GetWidth()) ||
 		(theRect2.mY + theRect2.mHeight > theImage2->GetHeight()))
 	{
 		DBG_ASSERTE("Crossfade Rect2 out of bounds");
@@ -3656,78 +3687,75 @@ PopWork::SDLImage* AppBase::CreateCrossfadeImage(PopWork::Image* theImage1, cons
 	int aWidth = theRect1.mWidth;
 	int aHeight = theRect1.mHeight;
 
-	SDLImage* anImage = new SDLImage(mSDLInterface);
+	SDLImage *anImage = new SDLImage(mSDLInterface);
 	anImage->Create(aWidth, aHeight);
 
-	ulong* aDestBits = anImage->GetBits();
-	ulong* aSrcBits1 = aMemoryImage1->GetBits();
-	ulong* aSrcBits2 = aMemoryImage2->GetBits();
+	ulong *aDestBits = anImage->GetBits();
+	ulong *aSrcBits1 = aMemoryImage1->GetBits();
+	ulong *aSrcBits2 = aMemoryImage2->GetBits();
 
 	int aSrc1Width = aMemoryImage1->GetWidth();
 	int aSrc2Width = aMemoryImage2->GetWidth();
-	ulong aMult = (int) (theFadeFactor*256);
+	ulong aMult = (int)(theFadeFactor * 256);
 	ulong aOMM = (256 - aMult);
 
 	for (int y = 0; y < aHeight; y++)
 	{
-		ulong* s1 = &aSrcBits1[(y+theRect1.mY)*aSrc1Width+theRect1.mX];
-		ulong* s2 = &aSrcBits2[(y+theRect2.mY)*aSrc2Width+theRect2.mX];
-		ulong* d = &aDestBits[y*aWidth];
+		ulong *s1 = &aSrcBits1[(y + theRect1.mY) * aSrc1Width + theRect1.mX];
+		ulong *s2 = &aSrcBits2[(y + theRect2.mY) * aSrc2Width + theRect2.mX];
+		ulong *d = &aDestBits[y * aWidth];
 
 		for (int x = 0; x < aWidth; x++)
 		{
 			ulong p1 = *s1++;
 			ulong p2 = *s2++;
 
-			//p1 = 0;
-			//p2 = 0xFFFFFFFF;
+			// p1 = 0;
+			// p2 = 0xFFFFFFFF;
 
-			*d++ = 
-				((((p1 & 0x000000FF)*aOMM + (p2 & 0x000000FF)*aMult)>>8) & 0x000000FF) |
-				((((p1 & 0x0000FF00)*aOMM + (p2 & 0x0000FF00)*aMult)>>8) & 0x0000FF00) |
-				((((p1 & 0x00FF0000)*aOMM + (p2 & 0x00FF0000)*aMult)>>8) & 0x00FF0000) |
-				((((p1 >> 24)*aOMM + (p2 >> 24)*aMult)<<16) & 0xFF000000);
+			*d++ = ((((p1 & 0x000000FF) * aOMM + (p2 & 0x000000FF) * aMult) >> 8) & 0x000000FF) |
+				   ((((p1 & 0x0000FF00) * aOMM + (p2 & 0x0000FF00) * aMult) >> 8) & 0x0000FF00) |
+				   ((((p1 & 0x00FF0000) * aOMM + (p2 & 0x00FF0000) * aMult) >> 8) & 0x00FF0000) |
+				   ((((p1 >> 24) * aOMM + (p2 >> 24) * aMult) << 16) & 0xFF000000);
 		}
 	}
 
 	anImage->BitsChanged();
-	
+
 	return anImage;
 }
 
-void AppBase::ColorizeImage(Image* theImage, const Color& theColor)
+void AppBase::ColorizeImage(Image *theImage, const Color &theColor)
 {
-	MemoryImage* aSrcMemoryImage = dynamic_cast<MemoryImage*>(theImage);
+	MemoryImage *aSrcMemoryImage = dynamic_cast<MemoryImage *>(theImage);
 
 	if (aSrcMemoryImage == NULL)
 		return;
 
-	ulong* aBits;	
+	ulong *aBits;
 	int aNumColors;
 
 	if (aSrcMemoryImage->mColorTable == NULL)
 	{
-		aBits = aSrcMemoryImage->GetBits();		
-		aNumColors = theImage->GetWidth()*theImage->GetHeight();				
+		aBits = aSrcMemoryImage->GetBits();
+		aNumColors = theImage->GetWidth() * theImage->GetHeight();
 	}
 	else
 	{
-		aBits = aSrcMemoryImage->mColorTable;		
-		aNumColors = 256;				
+		aBits = aSrcMemoryImage->mColorTable;
+		aNumColors = 256;
 	}
-						
-	if ((theColor.mAlpha <= 255) && (theColor.mRed <= 255) && 
-		(theColor.mGreen <= 255) && (theColor.mBlue <= 255))
+
+	if ((theColor.mAlpha <= 255) && (theColor.mRed <= 255) && (theColor.mGreen <= 255) && (theColor.mBlue <= 255))
 	{
 		for (int i = 0; i < aNumColors; i++)
 		{
 			ulong aColor = aBits[i];
 
-			aBits[i] = 
-				((((aColor & 0xFF000000) >> 8) * theColor.mAlpha) & 0xFF000000) |
-				((((aColor & 0x00FF0000) * theColor.mRed) >> 8) & 0x00FF0000) |
-				((((aColor & 0x0000FF00) * theColor.mGreen) >> 8) & 0x0000FF00)|
-				((((aColor & 0x000000FF) * theColor.mBlue) >> 8) & 0x000000FF);
+			aBits[i] = ((((aColor & 0xFF000000) >> 8) * theColor.mAlpha) & 0xFF000000) |
+					   ((((aColor & 0x00FF0000) * theColor.mRed) >> 8) & 0x00FF0000) |
+					   ((((aColor & 0x0000FF00) * theColor.mGreen) >> 8) & 0x0000FF00) |
+					   ((((aColor & 0x000000FF) * theColor.mBlue) >> 8) & 0x000000FF);
 		}
 	}
 	else
@@ -3752,54 +3780,52 @@ void AppBase::ColorizeImage(Image* theImage, const Color& theColor)
 
 			aBits[i] = (aAlpha << 24) | (aRed << 16) | (aGreen << 8) | (aBlue);
 		}
-	}	
+	}
 
 	aSrcMemoryImage->BitsChanged();
 }
 
-SDLImage* AppBase::CreateColorizedImage(Image* theImage, const Color& theColor)
+SDLImage *AppBase::CreateColorizedImage(Image *theImage, const Color &theColor)
 {
-	MemoryImage* aSrcMemoryImage = dynamic_cast<MemoryImage*>(theImage);
+	MemoryImage *aSrcMemoryImage = dynamic_cast<MemoryImage *>(theImage);
 
 	if (aSrcMemoryImage == NULL)
 		return NULL;
 
-	SDLImage* anImage = new SDLImage(mSDLInterface);
-	
+	SDLImage *anImage = new SDLImage(mSDLInterface);
+
 	anImage->Create(theImage->GetWidth(), theImage->GetHeight());
-	
-	ulong* aSrcBits;
-	ulong* aDestBits;
+
+	ulong *aSrcBits;
+	ulong *aDestBits;
 	int aNumColors;
 
 	if (aSrcMemoryImage->mColorTable == NULL)
 	{
 		aSrcBits = aSrcMemoryImage->GetBits();
 		aDestBits = anImage->GetBits();
-		aNumColors = theImage->GetWidth()*theImage->GetHeight();				
+		aNumColors = theImage->GetWidth() * theImage->GetHeight();
 	}
 	else
 	{
 		aSrcBits = aSrcMemoryImage->mColorTable;
 		aDestBits = anImage->mColorTable = new ulong[256];
 		aNumColors = 256;
-		
-		anImage->mColorIndices = new uchar[anImage->mWidth*theImage->mHeight];
-		memcpy(anImage->mColorIndices, aSrcMemoryImage->mColorIndices, anImage->mWidth*theImage->mHeight);
+
+		anImage->mColorIndices = new uchar[anImage->mWidth * theImage->mHeight];
+		memcpy(anImage->mColorIndices, aSrcMemoryImage->mColorIndices, anImage->mWidth * theImage->mHeight);
 	}
-						
-	if ((theColor.mAlpha <= 255) && (theColor.mRed <= 255) && 
-		(theColor.mGreen <= 255) && (theColor.mBlue <= 255))
+
+	if ((theColor.mAlpha <= 255) && (theColor.mRed <= 255) && (theColor.mGreen <= 255) && (theColor.mBlue <= 255))
 	{
 		for (int i = 0; i < aNumColors; i++)
 		{
 			ulong aColor = aSrcBits[i];
 
-			aDestBits[i] = 
-				((((aColor & 0xFF000000) >> 8) * theColor.mAlpha) & 0xFF000000) |
-				((((aColor & 0x00FF0000) * theColor.mRed) >> 8) & 0x00FF0000) |
-				((((aColor & 0x0000FF00) * theColor.mGreen) >> 8) & 0x0000FF00)|
-				((((aColor & 0x000000FF) * theColor.mBlue) >> 8) & 0x000000FF);
+			aDestBits[i] = ((((aColor & 0xFF000000) >> 8) * theColor.mAlpha) & 0xFF000000) |
+						   ((((aColor & 0x00FF0000) * theColor.mRed) >> 8) & 0x00FF0000) |
+						   ((((aColor & 0x0000FF00) * theColor.mGreen) >> 8) & 0x0000FF00) |
+						   ((((aColor & 0x000000FF) * theColor.mBlue) >> 8) & 0x000000FF);
 		}
 	}
 	else
@@ -3824,19 +3850,19 @@ SDLImage* AppBase::CreateColorizedImage(Image* theImage, const Color& theColor)
 
 			aDestBits[i] = (aAlpha << 24) | (aRed << 16) | (aGreen << 8) | (aBlue);
 		}
-	}	
+	}
 
 	anImage->BitsChanged();
 
 	return anImage;
 }
 
-SDLImage* AppBase::CopyImage(Image* theImage, const Rect& theRect)
+SDLImage *AppBase::CopyImage(Image *theImage, const Rect &theRect)
 {
-	SDLImage* anImage = new SDLImage(mSDLInterface);
+	SDLImage *anImage = new SDLImage(mSDLInterface);
 
 	anImage->Create(theRect.mWidth, theRect.mHeight);
-	
+
 	Graphics g(anImage);
 	g.DrawImage(theImage, -theRect.mX, -theRect.mY);
 
@@ -3845,22 +3871,22 @@ SDLImage* AppBase::CopyImage(Image* theImage, const Rect& theRect)
 	return anImage;
 }
 
-SDLImage* AppBase::CopyImage(Image* theImage)
+SDLImage *AppBase::CopyImage(Image *theImage)
 {
 	return CopyImage(theImage, Rect(0, 0, theImage->GetWidth(), theImage->GetHeight()));
 }
 
-void AppBase::MirrorImage(Image* theImage)
+void AppBase::MirrorImage(Image *theImage)
 {
-	MemoryImage* aSrcMemoryImage = dynamic_cast<MemoryImage*>(theImage);	
+	MemoryImage *aSrcMemoryImage = dynamic_cast<MemoryImage *>(theImage);
 
-	ulong* aSrcBits = aSrcMemoryImage->GetBits();
+	ulong *aSrcBits = aSrcMemoryImage->GetBits();
 
 	int aPhysSrcWidth = aSrcMemoryImage->mWidth;
 	for (int y = 0; y < aSrcMemoryImage->mHeight; y++)
 	{
-		ulong* aLeftBits = aSrcBits + (y * aPhysSrcWidth);		
-		ulong* aRightBits = aLeftBits + (aPhysSrcWidth - 1);
+		ulong *aLeftBits = aSrcBits + (y * aPhysSrcWidth);
+		ulong *aRightBits = aLeftBits + (aPhysSrcWidth - 1);
 
 		for (int x = 0; x < (aPhysSrcWidth >> 1); x++)
 		{
@@ -3871,21 +3897,21 @@ void AppBase::MirrorImage(Image* theImage)
 		}
 	}
 
-	aSrcMemoryImage->BitsChanged();	
+	aSrcMemoryImage->BitsChanged();
 }
 
-void AppBase::FlipImage(Image* theImage)
+void AppBase::FlipImage(Image *theImage)
 {
-	MemoryImage* aSrcMemoryImage = dynamic_cast<MemoryImage*>(theImage);
+	MemoryImage *aSrcMemoryImage = dynamic_cast<MemoryImage *>(theImage);
 
-	ulong* aSrcBits = aSrcMemoryImage->GetBits();
+	ulong *aSrcBits = aSrcMemoryImage->GetBits();
 
 	int aPhysSrcHeight = aSrcMemoryImage->mHeight;
 	int aPhysSrcWidth = aSrcMemoryImage->mWidth;
 	for (int x = 0; x < aPhysSrcWidth; x++)
 	{
-		ulong* aTopBits    = aSrcBits + x;
-		ulong* aBottomBits = aTopBits + (aPhysSrcWidth * (aPhysSrcHeight - 1));
+		ulong *aTopBits = aSrcBits + x;
+		ulong *aBottomBits = aTopBits + (aPhysSrcWidth * (aPhysSrcHeight - 1));
 
 		for (int y = 0; y < (aPhysSrcHeight >> 1); y++)
 		{
@@ -3898,7 +3924,7 @@ void AppBase::FlipImage(Image* theImage)
 		}
 	}
 
-	aSrcMemoryImage->BitsChanged();	
+	aSrcMemoryImage->BitsChanged();
 }
 
 void AppBase::RotateImageHue(PopWork::MemoryImage *theImage, int theDelta)
@@ -3908,32 +3934,32 @@ void AppBase::RotateImageHue(PopWork::MemoryImage *theImage, int theDelta)
 
 	int aSize = theImage->mWidth * theImage->mHeight;
 	DWORD *aPtr = theImage->GetBits();
-	for (int i=0; i<aSize; i++)
+	for (int i = 0; i < aSize; i++)
 	{
 		DWORD aPixel = *aPtr;
-		int alpha = aPixel&0xff000000;
-		int r = (aPixel>>16)&0xff;
-		int g = (aPixel>>8) &0xff;
-		int b = aPixel&0xff;
+		int alpha = aPixel & 0xff000000;
+		int r = (aPixel >> 16) & 0xff;
+		int g = (aPixel >> 8) & 0xff;
+		int b = aPixel & 0xff;
 
 		int maxval = std::max(r, std::max(g, b));
 		int minval = std::min(r, std::min(g, b));
 		int h = 0;
 		int s = 0;
-		int l = (minval+maxval)/2;
+		int l = (minval + maxval) / 2;
 		int delta = maxval - minval;
 
 		if (delta != 0)
-		{			
+		{
 			s = (delta * 256) / ((l <= 128) ? (minval + maxval) : (512 - maxval - minval));
-			
+
 			if (r == maxval)
-				h = (g == minval ? 1280 + (((maxval-b) * 256) / delta) :  256 - (((maxval - g) * 256) / delta));
+				h = (g == minval ? 1280 + (((maxval - b) * 256) / delta) : 256 - (((maxval - g) * 256) / delta));
 			else if (g == maxval)
-				h = (b == minval ?  256 + (((maxval-r) * 256) / delta) :  768 - (((maxval - b) * 256) / delta));
+				h = (b == minval ? 256 + (((maxval - r) * 256) / delta) : 768 - (((maxval - b) * 256) / delta));
 			else
-				h = (r == minval ?  768 + (((maxval-g) * 256) / delta) : 1280 - (((maxval - r) * 256) / delta));
-			
+				h = (r == minval ? 768 + (((maxval - g) * 256) / delta) : 1280 - (((maxval - r) * 256) / delta));
+
 			h /= 6;
 		}
 
@@ -3941,33 +3967,59 @@ void AppBase::RotateImageHue(PopWork::MemoryImage *theImage, int theDelta)
 		if (h >= 256)
 			h -= 256;
 
-		double v= (l < 128) ? (l * (255+s))/255 :
-				(l+s-l*s/255);
-		
-		int y = (int) (2*l-v);
+		double v = (l < 128) ? (l * (255 + s)) / 255 : (l + s - l * s / 255);
+
+		int y = (int)(2 * l - v);
 
 		int aColorDiv = (6 * h) / 256;
-		int x = (int)(y+(v-y)*((h - (aColorDiv * 256 / 6)) * 6)/255);
+		int x = (int)(y + (v - y) * ((h - (aColorDiv * 256 / 6)) * 6) / 255);
 		if (x > 255)
 			x = 255;
 
-		int z = (int) (v-(v-y)*((h - (aColorDiv * 256 / 6)) * 6)/255);
+		int z = (int)(v - (v - y) * ((h - (aColorDiv * 256 / 6)) * 6) / 255);
 		if (z < 0)
 			z = 0;
-		
+
 		switch (aColorDiv)
 		{
-			case 0: r = (int) v; g = x; b = y; break;
-			case 1: r = z; g= (int) v; b = y; break;
-			case 2: r = y; g= (int) v; b = x; break;
-			case 3: r = y; g = z; b = (int) v; break;
-			case 4: r = x; g = y; b = (int) v; break;
-			case 5: r = (int) v; g = y; b = z; break;
-			default: r = (int) v; g = x; b = y; break;
+		case 0:
+			r = (int)v;
+			g = x;
+			b = y;
+			break;
+		case 1:
+			r = z;
+			g = (int)v;
+			b = y;
+			break;
+		case 2:
+			r = y;
+			g = (int)v;
+			b = x;
+			break;
+		case 3:
+			r = y;
+			g = z;
+			b = (int)v;
+			break;
+		case 4:
+			r = x;
+			g = y;
+			b = (int)v;
+			break;
+		case 5:
+			r = (int)v;
+			g = y;
+			b = z;
+			break;
+		default:
+			r = (int)v;
+			g = x;
+			b = y;
+			break;
 		}
 
-		*aPtr++ = alpha | (r<<16) | (g << 8) | (b);	 
-
+		*aPtr++ = alpha | (r << 16) | (g << 8) | (b);
 	}
 
 	theImage->BitsChanged();
@@ -3979,61 +4031,88 @@ ulong AppBase::HSLToRGB(int h, int s, int l)
 	int g;
 	int b;
 
-	double v= (l < 128) ? (l * (255+s))/255 :
-			(l+s-l*s/255);
-	
-	int y = (int) (2*l-v);
+	double v = (l < 128) ? (l * (255 + s)) / 255 : (l + s - l * s / 255);
+
+	int y = (int)(2 * l - v);
 
 	int aColorDiv = (6 * h) / 256;
-	int x = (int)(y+(v-y)*((h - (aColorDiv * 256 / 6)) * 6)/255);
+	int x = (int)(y + (v - y) * ((h - (aColorDiv * 256 / 6)) * 6) / 255);
 	if (x > 255)
 		x = 255;
 
-	int z = (int) (v-(v-y)*((h - (aColorDiv * 256 / 6)) * 6)/255);
+	int z = (int)(v - (v - y) * ((h - (aColorDiv * 256 / 6)) * 6) / 255);
 	if (z < 0)
 		z = 0;
-	
+
 	switch (aColorDiv)
 	{
-		case 0: r = (int) v; g = x; b = y; break;
-		case 1: r = z; g= (int) v; b = y; break;
-		case 2: r = y; g= (int) v; b = x; break;
-		case 3: r = y; g = z; b = (int) v; break;
-		case 4: r = x; g = y; b = (int) v; break;
-		case 5: r = (int) v; g = y; b = z; break;
-		default: r = (int) v; g = x; b = y; break;
+	case 0:
+		r = (int)v;
+		g = x;
+		b = y;
+		break;
+	case 1:
+		r = z;
+		g = (int)v;
+		b = y;
+		break;
+	case 2:
+		r = y;
+		g = (int)v;
+		b = x;
+		break;
+	case 3:
+		r = y;
+		g = z;
+		b = (int)v;
+		break;
+	case 4:
+		r = x;
+		g = y;
+		b = (int)v;
+		break;
+	case 5:
+		r = (int)v;
+		g = y;
+		b = z;
+		break;
+	default:
+		r = (int)v;
+		g = x;
+		b = y;
+		break;
 	}
 
 	return 0xFF000000 | (r << 16) | (g << 8) | (b);
 }
 
 ulong AppBase::RGBToHSL(int r, int g, int b)
-{					
+{
 	int maxval = std::max(r, std::max(g, b));
 	int minval = std::min(r, std::min(g, b));
 	int hue = 0;
 	int saturation = 0;
-	int luminosity = (minval+maxval)/2;
+	int luminosity = (minval + maxval) / 2;
 	int delta = maxval - minval;
 
 	if (delta != 0)
-	{			
+	{
 		saturation = (delta * 256) / ((luminosity <= 128) ? (minval + maxval) : (512 - maxval - minval));
-		
+
 		if (r == maxval)
-			hue = (g == minval ? 1280 + (((maxval-b) * 256) / delta) :  256 - (((maxval - g) * 256) / delta));
+			hue = (g == minval ? 1280 + (((maxval - b) * 256) / delta) : 256 - (((maxval - g) * 256) / delta));
 		else if (g == maxval)
-			hue = (b == minval ?  256 + (((maxval-r) * 256) / delta) :  768 - (((maxval - b) * 256) / delta));
+			hue = (b == minval ? 256 + (((maxval - r) * 256) / delta) : 768 - (((maxval - b) * 256) / delta));
 		else
-			hue = (r == minval ?  768 + (((maxval-g) * 256) / delta) : 1280 - (((maxval - r) * 256) / delta));
-		
+			hue = (r == minval ? 768 + (((maxval - g) * 256) / delta) : 1280 - (((maxval - r) * 256) / delta));
+
 		hue /= 6;
 	}
 
-	return 0xFF000000 | (hue) | (saturation << 8) | (luminosity << 16);	 
+	return 0xFF000000 | (hue) | (saturation << 8) | (luminosity << 16);
 }
 
-void AppBase::HSLToRGB(const ulong* theSource, ulong* theDest, int theSize)
+void AppBase::HSLToRGB(const ulong *theSource, ulong *theDest, int theSize)
 {
 	for (int i = 0; i < theSize; i++)
 	{
@@ -4042,50 +4121,49 @@ void AppBase::HSLToRGB(const ulong* theSource, ulong* theDest, int theSize)
 	}
 }
 
-void AppBase::RGBToHSL(const ulong* theSource, ulong* theDest, int theSize)
+void AppBase::RGBToHSL(const ulong *theSource, ulong *theDest, int theSize)
 {
 	for (int i = 0; i < theSize; i++)
 	{
 		ulong src = theSource[i];
-		theDest[i] = (src & 0xFF000000) | (RGBToHSL(((src >> 16) & 0xFF), (src >> 8) & 0xFF, (src & 0xFF)) & 0x00FFFFFF);
+		theDest[i] =
+			(src & 0xFF000000) | (RGBToHSL(((src >> 16) & 0xFF), (src >> 8) & 0xFF, (src & 0xFF)) & 0x00FFFFFF);
 	}
 }
 
-void AppBase::PrecacheAdditive(MemoryImage* theImage)
+void AppBase::PrecacheAdditive(MemoryImage *theImage)
 {
 	theImage->GetRLAdditiveData(mSDLInterface);
 }
 
-void AppBase::PrecacheAlpha(MemoryImage* theImage)
+void AppBase::PrecacheAlpha(MemoryImage *theImage)
 {
 	theImage->GetRLAlphaData();
 }
 
-void AppBase::PrecacheNative(MemoryImage* theImage)
+void AppBase::PrecacheNative(MemoryImage *theImage)
 {
 	theImage->GetNativeAlphaData(mSDLInterface);
 }
-
 
 void AppBase::PlaySample(int theSoundNum)
 {
 	if (!mSoundManager)
 		return;
 
-	SoundInstance* aSoundInstance = mSoundManager->GetSoundInstance(theSoundNum);
+	SoundInstance *aSoundInstance = mSoundManager->GetSoundInstance(theSoundNum);
 	if (aSoundInstance != NULL)
 	{
 		aSoundInstance->Play(false, true);
 	}
 }
 
-
 void AppBase::PlaySample(int theSoundNum, int thePan)
 {
 	if (!mSoundManager)
 		return;
 
-	SoundInstance* aSoundInstance = mSoundManager->GetSoundInstance(theSoundNum);
+	SoundInstance *aSoundInstance = mSoundManager->GetSoundInstance(theSoundNum);
 	if (aSoundInstance != NULL)
 	{
 		aSoundInstance->SetPan(thePan);
@@ -4099,7 +4177,7 @@ bool AppBase::IsMuted()
 }
 
 void AppBase::Mute(bool autoMute)
-{	
+{
 	mMuteCount++;
 	if (autoMute)
 		mAutoMuteCount++;
@@ -4109,7 +4187,7 @@ void AppBase::Mute(bool autoMute)
 }
 
 void AppBase::Unmute(bool autoMute)
-{	
+{
 	if (mMuteCount > 0)
 	{
 		mMuteCount--;
@@ -4120,7 +4198,6 @@ void AppBase::Unmute(bool autoMute)
 	SetMusicVolume(mMusicVolume);
 	SetSfxVolume(mSfxVolume);
 }
-
 
 double AppBase::GetMusicVolume()
 {
@@ -4159,15 +4236,15 @@ void AppBase::SetMasterVolume(double theMasterVolume)
 	mSoundManager->SetMasterVolume(mSfxVolume);
 }
 
-void AppBase::AddMemoryImage(MemoryImage* theMemoryImage)
+void AppBase::AddMemoryImage(MemoryImage *theMemoryImage)
 {
 	AutoCrit anAutoCrit(mSDLInterface->mCritSect);
 	mMemoryImageSet.insert(theMemoryImage);
 }
 
-void AppBase::RemoveMemoryImage(MemoryImage* theMemoryImage)
+void AppBase::RemoveMemoryImage(MemoryImage *theMemoryImage)
 {
-	//AutoCrit anAutoCrit(mSDLInterface->mCritSect);
+	// AutoCrit anAutoCrit(mSDLInterface->mCritSect);
 	MemoryImageSet::iterator anItr = mMemoryImageSet.find(theMemoryImage);
 	if (anItr != mMemoryImageSet.end())
 		mMemoryImageSet.erase(anItr);
@@ -4175,12 +4252,11 @@ void AppBase::RemoveMemoryImage(MemoryImage* theMemoryImage)
 	Remove3DData(theMemoryImage);
 }
 
-void AppBase::Remove3DData(MemoryImage* theMemoryImage)
+void AppBase::Remove3DData(MemoryImage *theMemoryImage)
 {
 	if (mSDLInterface)
 		mSDLInterface->Remove3DData(theMemoryImage);
 }
-
 
 bool AppBase::Is3DAccelerated()
 {
@@ -4189,18 +4265,18 @@ bool AppBase::Is3DAccelerated()
 
 bool AppBase::Is3DAccelerationSupported()
 {
-	//if (mSDLInterface->mD3DTester)
+	// if (mSDLInterface->mD3DTester)
 	//	return mDDInterface->mD3DTester->Is3DSupported();
-	//else
-		return true;
+	// else
+	return true;
 }
 
 bool AppBase::Is3DAccelerationRecommended()
 {
-	//if (mSDLInterface->mD3DTester)
+	// if (mSDLInterface->mD3DTester)
 	//	return mDDInterface->mD3DTester->Is3DRecommended();
-	//else
-		return true;
+	// else
+	return true;
 }
 
 void AppBase::Set3DAcclerated(bool is3D, bool reinit)
@@ -4210,7 +4286,7 @@ void AppBase::Set3DAcclerated(bool is3D, bool reinit)
 
 	mUserChanged3DSetting = true;
 	mSDLInterface->mIs3D = is3D;
-	
+
 	if (reinit)
 	{
 		int aResult = InitSDLInterface();
@@ -4223,7 +4299,8 @@ void AppBase::Set3DAcclerated(bool is3D, bool reinit)
 
 		if (aResult != SDLInterface::RESULT_OK)
 		{
-		//	Popup(GetString("FAILED_INIT_DIRECTDRAW", _S("Failed to initialize DirectDraw: ")) + StringToPopWorkString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
+			//	Popup(GetString("FAILED_INIT_DIRECTDRAW", _S("Failed to initialize DirectDraw: ")) +
+			//StringToPopWorkString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
 			DoExit(1);
 		}
 
@@ -4234,8 +4311,8 @@ void AppBase::Set3DAcclerated(bool is3D, bool reinit)
 	}
 }
 
-SharedImageRef AppBase::GetSharedImage(const std::string& theFileName, const std::string& theVariant, bool* isNew)
-{	
+SharedImageRef AppBase::GetSharedImage(const std::string &theFileName, const std::string &theVariant, bool *isNew)
+{
 	std::string anUpperFileName = StringToUpper(theFileName);
 	std::string anUpperVariant = StringToUpper(theVariant);
 
@@ -4243,8 +4320,9 @@ SharedImageRef AppBase::GetSharedImage(const std::string& theFileName, const std
 	SharedImageRef aSharedImageRef;
 
 	{
-		AutoCrit anAutoCrit(mSDLInterface->mCritSect);	
-		aResultPair = mSharedImageMap.insert(SharedImageMap::value_type(SharedImageMap::key_type(anUpperFileName, anUpperVariant), SharedImage()));
+		AutoCrit anAutoCrit(mSDLInterface->mCritSect);
+		aResultPair = mSharedImageMap.insert(
+			SharedImageMap::value_type(SharedImageMap::key_type(anUpperFileName, anUpperVariant), SharedImage()));
 		aSharedImageRef = &aResultPair.first->second;
 	}
 
@@ -4257,7 +4335,7 @@ SharedImageRef AppBase::GetSharedImage(const std::string& theFileName, const std
 		if ((theFileName.length() > 0) && (theFileName[0] == '!'))
 			aSharedImageRef.mSharedImage->mImage = new SDLImage(mSDLInterface);
 		else
-			aSharedImageRef.mSharedImage->mImage = GetImage(theFileName,false);
+			aSharedImageRef.mSharedImage->mImage = GetImage(theFileName, false);
 	}
 
 	return aSharedImageRef;
@@ -4277,7 +4355,7 @@ void AppBase::CleanSharedImages()
 		SharedImageMap::iterator aSharedImageItr = mSharedImageMap.begin();
 		while (aSharedImageItr != mSharedImageMap.end())
 		{
-			SharedImage* aSharedImage = &aSharedImageItr->second;
+			SharedImage *aSharedImage = &aSharedImageItr->second;
 			if (aSharedImage->mRefCount == 0)
 			{
 				delete aSharedImage->mImage;

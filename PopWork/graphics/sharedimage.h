@@ -15,9 +15,9 @@ class MemoryImage;
 
 class SharedImage
 {
-public:
-	SDLImage*				mImage;
-	int						mRefCount;		
+  public:
+	SDLImage *mImage;
+	int mRefCount;
 
 	SharedImage();
 };
@@ -26,28 +26,28 @@ typedef std::map<std::pair<std::string, std::string>, SharedImage> SharedImageMa
 
 class SharedImageRef
 {
-public:
-	SharedImage*			mSharedImage;
-	MemoryImage*			mUnsharedImage;
-	bool					mOwnsUnshared;
+  public:
+	SharedImage *mSharedImage;
+	MemoryImage *mUnsharedImage;
+	bool mOwnsUnshared;
 
-public:
+  public:
 	SharedImageRef();
-	SharedImageRef(const SharedImageRef& theSharedImageRef);
-	SharedImageRef(SharedImage* theSharedImage);
+	SharedImageRef(const SharedImageRef &theSharedImageRef);
+	SharedImageRef(SharedImage *theSharedImage);
 	~SharedImageRef();
 
-	void					Release();
+	void Release();
 
-	SharedImageRef&			operator=(const SharedImageRef& theSharedImageRef);
-	SharedImageRef&			operator=(SharedImage* theSharedImage);
-	SharedImageRef&			operator=(MemoryImage* theUnsharedImage);
-	MemoryImage*			operator->();
-	operator Image*();
-	operator MemoryImage*();
-	operator SDLImage*();
+	SharedImageRef &operator=(const SharedImageRef &theSharedImageRef);
+	SharedImageRef &operator=(SharedImage *theSharedImage);
+	SharedImageRef &operator=(MemoryImage *theUnsharedImage);
+	MemoryImage *operator->();
+	operator Image *();
+	operator MemoryImage *();
+	operator SDLImage *();
 };
 
-}
+} // namespace PopWork
 
 #endif

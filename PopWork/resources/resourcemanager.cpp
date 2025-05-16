@@ -15,7 +15,7 @@ using namespace PopWork;
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 void ResourceManager::ImageRes::DeleteResource()
-{	
+{
 	mImage.Release();
 }
 
@@ -42,7 +42,7 @@ void ResourceManager::FontRes::DeleteResource()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-ResourceManager::ResourceManager(AppBase *theApp) 
+ResourceManager::ResourceManager(AppBase *theApp)
 {
 	mApp = theApp;
 	mHasFailed = false;
@@ -66,7 +66,7 @@ ResourceManager::~ResourceManager()
 ///////////////////////////////////////////////////////////////////////////////
 bool ResourceManager::IsGroupLoaded(const std::string &theGroup)
 {
-	return mLoadedGroups.find(theGroup)!=mLoadedGroups.end();
+	return mLoadedGroups.find(theGroup) != mLoadedGroups.end();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ void ResourceManager::DeleteResources(ResMap &theMap, const std::string &theGrou
 {
 	for (ResMap::iterator anItr = theMap.begin(); anItr != theMap.end(); ++anItr)
 	{
-		if (theGroup.empty() || anItr->second->mResGroup==theGroup)
+		if (theGroup.empty() || anItr->second->mResGroup == theGroup)
 			anItr->second->DeleteResource();
 	}
 }
@@ -97,9 +97,9 @@ void ResourceManager::DeleteResources(ResMap &theMap, const std::string &theGrou
 ///////////////////////////////////////////////////////////////////////////////
 void ResourceManager::DeleteResources(const std::string &theGroup)
 {
-	DeleteResources(mImageMap,theGroup);
-	DeleteResources(mSoundMap,theGroup);
-	DeleteResources(mFontMap,theGroup);
+	DeleteResources(mImageMap, theGroup);
+	DeleteResources(mSoundMap, theGroup);
+	DeleteResources(mFontMap, theGroup);
 	mLoadedGroups.erase(theGroup);
 }
 
@@ -109,10 +109,10 @@ void ResourceManager::DeleteExtraImageBuffers(const std::string &theGroup)
 {
 	for (ResMap::iterator anItr = mImageMap.begin(); anItr != mImageMap.end(); ++anItr)
 	{
-		if (theGroup.empty() || anItr->second->mResGroup==theGroup)
+		if (theGroup.empty() || anItr->second->mResGroup == theGroup)
 		{
-			ImageRes *aRes = (ImageRes*)anItr->second;
-			MemoryImage *anImage = (MemoryImage*)aRes->mImage;
+			ImageRes *aRes = (ImageRes *)anItr->second;
+			MemoryImage *anImage = (MemoryImage *)aRes->mImage;
 			if (anImage != NULL)
 				anImage->DeleteExtraBuffers();
 		}
@@ -135,12 +135,12 @@ bool ResourceManager::HadError()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::Fail(const std::string& theErrorText)
+bool ResourceManager::Fail(const std::string &theErrorText)
 {
 	if (!mHasFailed)
 	{
 		mHasFailed = true;
-		if (mXMLParser==NULL)
+		if (mXMLParser == NULL)
 		{
 			mError = theErrorText;
 			return false;
@@ -149,7 +149,7 @@ bool ResourceManager::Fail(const std::string& theErrorText)
 		int aLineNum = mXMLParser->GetCurrentLineNum();
 
 		char aLineNumStr[16];
-		sprintf(aLineNumStr, "%d", aLineNum);	
+		sprintf(aLineNumStr, "%d", aLineNum);
 
 		mError = theErrorText;
 
@@ -175,27 +175,26 @@ bool ResourceManager::ParseCommonResource(XMLElement &theElement, BaseRes *theRe
 
 	theRes->mXMLAttributes = theElement.mAttributes;
 	theRes->mFromProgram = false;
-	if (aPath[0]==_S('!'))
+	if (aPath[0] == _S('!'))
 	{
 		theRes->mPath = PopWorkStringToStringFast(aPath);
-		if (aPath==_S("!program"))
+		if (aPath == _S("!program"))
 			theRes->mFromProgram = true;
 	}
 	else
 		theRes->mPath = mDefaultPath + PopWorkStringToStringFast(aPath);
 
-	
 	std::string anId;
 	XMLParamMap::iterator anItr = theElement.mAttributes.find(_S("id"));
 	if (anItr == theElement.mAttributes.end())
-		anId = mDefaultIdPrefix + GetFileName(theRes->mPath,true);
+		anId = mDefaultIdPrefix + GetFileName(theRes->mPath, true);
 	else
 		anId = mDefaultIdPrefix + PopWorkStringToStringFast(anItr->second);
 
 	theRes->mResGroup = mCurResGroup;
 	theRes->mId = anId;
 
-	std::pair<ResMap::iterator,bool> aRet = theMap.insert(ResMap::value_type(anId,theRes));
+	std::pair<ResMap::iterator, bool> aRet = theMap.insert(ResMap::value_type(anId, theRes));
 	if (!aRet.second)
 	{
 		mHadAlreadyDefinedError = true;
@@ -222,27 +221,27 @@ bool ResourceManager::ParseSoundResource(XMLElement &theElement)
 			mError = "";
 			mHasFailed = false;
 			SoundRes *oldRes = aRes;
-			aRes = (SoundRes*)mSoundMap[oldRes->mId];
+			aRes = (SoundRes *)mSoundMap[oldRes->mId];
 			aRes->mPath = oldRes->mPath;
 			aRes->mXMLAttributes = oldRes->mXMLAttributes;
 			delete oldRes;
 		}
-		else			
+		else
 		{
 			delete aRes;
 			return false;
 		}
 	}
-	
+
 	XMLParamMap::iterator anItr;
 
 	anItr = theElement.mAttributes.find(_S("volume"));
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(),_S("%lf"),&aRes->mVolume);
+		popsscanf(anItr->second.c_str(), _S("%lf"), &aRes->mVolume);
 
 	anItr = theElement.mAttributes.find(_S("pan"));
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(),_S("%d"),&aRes->mPanning);
+		popsscanf(anItr->second.c_str(), _S("%d"), &aRes->mPanning);
 
 	return true;
 }
@@ -256,13 +255,13 @@ static void ReadIntVector(const PopWorkString &theVal, std::vector<int> &theVect
 	std::string::size_type aPos = 0;
 	while (true)
 	{
-		theVector.push_back(popatoi(theVal.c_str()+aPos));
-		aPos = theVal.find_first_of(_S(','),aPos);
-		if (aPos==std::string::npos)
+		theVector.push_back(popatoi(theVal.c_str() + aPos));
+		aPos = theVal.find_first_of(_S(','), aPos);
+		if (aPos == std::string::npos)
 			break;
 
 		aPos++;
-	}	
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -277,27 +276,28 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 			mError = "";
 			mHasFailed = false;
 			ImageRes *oldRes = aRes;
-			aRes = (ImageRes*)mImageMap[oldRes->mId];
+			aRes = (ImageRes *)mImageMap[oldRes->mId];
 			aRes->mPath = oldRes->mPath;
 			aRes->mXMLAttributes = oldRes->mXMLAttributes;
 			delete oldRes;
 		}
-		else			
+		else
 		{
 			delete aRes;
 			return false;
 		}
 	}
-	
+
 	aRes->mPalletize = theElement.mAttributes.find(_S("nopal")) == theElement.mAttributes.end();
 	aRes->mA4R4G4B4 = theElement.mAttributes.find(_S("a4r4g4b4")) != theElement.mAttributes.end();
 	aRes->mDDSurface = theElement.mAttributes.find(_S("ddsurface")) != theElement.mAttributes.end();
-	aRes->mPurgeBits = (theElement.mAttributes.find(_S("nobits")) != theElement.mAttributes.end()) ||
+	aRes->mPurgeBits =
+		(theElement.mAttributes.find(_S("nobits")) != theElement.mAttributes.end()) ||
 		((mApp->Is3DAccelerated()) && (theElement.mAttributes.find(_S("nobits3d")) != theElement.mAttributes.end())) ||
 		((!mApp->Is3DAccelerated()) && (theElement.mAttributes.find(_S("nobits2d")) != theElement.mAttributes.end()));
 	aRes->mA8R8G8B8 = theElement.mAttributes.find(_S("a8r8g8b8")) != theElement.mAttributes.end();
 	aRes->mNearestFilter = theElement.mAttributes.find(_S("nearestfilter")) != theElement.mAttributes.end();
-	aRes->mAutoFindAlpha = theElement.mAttributes.find(_S("noalpha")) == theElement.mAttributes.end();	
+	aRes->mAutoFindAlpha = theElement.mAttributes.find(_S("noalpha")) == theElement.mAttributes.end();
 
 	XMLParamMap::iterator anItr;
 	anItr = theElement.mAttributes.find(_S("alphaimage"));
@@ -307,7 +307,7 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	aRes->mAlphaColor = 0xFFFFFF;
 	anItr = theElement.mAttributes.find(_S("alphacolor"));
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(),_S("%x"),&aRes->mAlphaColor);
+		popsscanf(anItr->second.c_str(), _S("%x"), &aRes->mAlphaColor);
 
 	anItr = theElement.mAttributes.find(_S("variant"));
 	if (anItr != theElement.mAttributes.end())
@@ -335,11 +335,15 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	{
 		const PopWorkChar *aType = anItr->second.c_str();
 
-		if (popstricmp(aType,_S("none"))==0) anAnimType = AnimType_None;
-		else if (popstricmp(aType,_S("once"))==0) anAnimType = AnimType_Once;
-		else if (popstricmp(aType,_S("loop"))==0) anAnimType = AnimType_Loop;
-		else if (popstricmp(aType,_S("pingpong"))==0) anAnimType = AnimType_PingPong;
-		else 
+		if (popstricmp(aType, _S("none")) == 0)
+			anAnimType = AnimType_None;
+		else if (popstricmp(aType, _S("once")) == 0)
+			anAnimType = AnimType_Once;
+		else if (popstricmp(aType, _S("loop")) == 0)
+			anAnimType = AnimType_Loop;
+		else if (popstricmp(aType, _S("pingpong")) == 0)
+			anAnimType = AnimType_PingPong;
+		else
 		{
 			Fail("Invalid animation type.");
 			return false;
@@ -348,7 +352,7 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	aRes->mAnimInfo.mAnimType = anAnimType;
 	if (anAnimType != AnimType_None)
 	{
-		int aNumCels = max(aRes->mRows,aRes->mCols);
+		int aNumCels = max(aRes->mRows, aRes->mCols);
 		int aBeginDelay = 0, anEndDelay = 0;
 
 		anItr = theElement.mAttributes.find(_S("framedelay"));
@@ -365,15 +369,14 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 
 		anItr = theElement.mAttributes.find(_S("perframedelay"));
 		if (anItr != theElement.mAttributes.end())
-			ReadIntVector(anItr->second,aRes->mAnimInfo.mPerFrameDelay);
+			ReadIntVector(anItr->second, aRes->mAnimInfo.mPerFrameDelay);
 
 		anItr = theElement.mAttributes.find(_S("framemap"));
 		if (anItr != theElement.mAttributes.end())
-			ReadIntVector(anItr->second,aRes->mAnimInfo.mFrameMap);
+			ReadIntVector(anItr->second, aRes->mAnimInfo.mFrameMap);
 
-		aRes->mAnimInfo.Compute(aNumCels,aBeginDelay,anEndDelay);
+		aRes->mAnimInfo.Compute(aNumCels, aBeginDelay, anEndDelay);
 	}
-
 
 	return true;
 }
@@ -393,18 +396,17 @@ bool ResourceManager::ParseFontResource(XMLElement &theElement)
 			mError = "";
 			mHasFailed = false;
 			FontRes *oldRes = aRes;
-			aRes = (FontRes*)mFontMap[oldRes->mId];
+			aRes = (FontRes *)mFontMap[oldRes->mId];
 			aRes->mPath = oldRes->mPath;
 			aRes->mXMLAttributes = oldRes->mXMLAttributes;
 			delete oldRes;
 		}
-		else			
+		else
 		{
 			delete aRes;
 			return false;
 		}
 	}
-
 
 	XMLParamMap::iterator anItr;
 	anItr = theElement.mAttributes.find(_S("image"));
@@ -415,23 +417,23 @@ bool ResourceManager::ParseFontResource(XMLElement &theElement)
 	if (anItr != theElement.mAttributes.end())
 		aRes->mTags = PopWorkStringToStringFast(anItr->second);
 
-	if (strncmp(aRes->mPath.c_str(),"!sys:",5)==0)
+	if (strncmp(aRes->mPath.c_str(), "!sys:", 5) == 0)
 	{
 		aRes->mSysFont = true;
 		aRes->mPath = aRes->mPath.substr(5);
 
 		anItr = theElement.mAttributes.find(_S("size"));
-		if (anItr==theElement.mAttributes.end())
+		if (anItr == theElement.mAttributes.end())
 			return Fail("SysFont needs point size");
 
 		aRes->mSize = popatoi(anItr->second.c_str());
-		if (aRes->mSize<=0)
+		if (aRes->mSize <= 0)
 			return Fail("SysFont needs point size");
-			
-		aRes->mBold = theElement.mAttributes.find(_S("bold"))!=theElement.mAttributes.end();
-		aRes->mItalic = theElement.mAttributes.find(_S("italic"))!=theElement.mAttributes.end();
-		aRes->mShadow = theElement.mAttributes.find(_S("shadow"))!=theElement.mAttributes.end();
-		aRes->mUnderline = theElement.mAttributes.find(_S("underline"))!=theElement.mAttributes.end();
+
+		aRes->mBold = theElement.mAttributes.find(_S("bold")) != theElement.mAttributes.end();
+		aRes->mItalic = theElement.mAttributes.find(_S("italic")) != theElement.mAttributes.end();
+		aRes->mShadow = theElement.mAttributes.find(_S("shadow")) != theElement.mAttributes.end();
+		aRes->mUnderline = theElement.mAttributes.find(_S("underline")) != theElement.mAttributes.end();
 	}
 	else
 		aRes->mSysFont = false;
@@ -443,18 +445,18 @@ bool ResourceManager::ParseFontResource(XMLElement &theElement)
 ///////////////////////////////////////////////////////////////////////////////
 bool ResourceManager::ParsePopAnimResource(XMLElement &theElement)
 {
-    // TODO: Implement ParsePopAnimResource
+	// TODO: Implement ParsePopAnimResource
 
-    return true;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 bool ResourceManager::ParsePIEffectResource(XMLElement &theElement)
 {
-    // TODO: Implement ParsePIEffectResource
+	// TODO: Implement ParsePIEffectResource
 
-    return true;
+	return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -468,7 +470,7 @@ bool ResourceManager::ParseSetDefaults(XMLElement &theElement)
 
 	anItr = theElement.mAttributes.find(_S("idprefix"));
 	if (anItr != theElement.mAttributes.end())
-		mDefaultIdPrefix = RemoveTrailingSlash(PopWorkStringToStringFast(anItr->second));	
+		mDefaultIdPrefix = RemoveTrailingSlash(PopWorkStringToStringFast(anItr->second));
 
 	return true;
 }
@@ -482,7 +484,7 @@ bool ResourceManager::ParseResources()
 		XMLElement aXMLElement;
 		if (!mXMLParser->NextElement(&aXMLElement))
 			return false;
-		
+
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
 			if (aXMLElement.mValue == _S("Image"))
@@ -518,28 +520,28 @@ bool ResourceManager::ParseResources()
 				if (aXMLElement.mType != XMLElement::TYPE_END)
 					return Fail("Unexpected element found.");
 			}
-            else if (aXMLElement.mValue == _S("PopAnim"))
-            {
-                if (!ParsePopAnimResource(aXMLElement))
-                    return false;
+			else if (aXMLElement.mValue == _S("PopAnim"))
+			{
+				if (!ParsePopAnimResource(aXMLElement))
+					return false;
 
-                if (!mXMLParser->NextElement(&aXMLElement))
-                    return false;
+				if (!mXMLParser->NextElement(&aXMLElement))
+					return false;
 
-                if (aXMLElement.mType != XMLElement::TYPE_END)
-                    return Fail("Unexpected element found.");
-            }
-            else if (aXMLElement.mValue == _S("PIEffect"))
-            {
-                if (!ParsePIEffectResource(aXMLElement))
-                    return false;
+				if (aXMLElement.mType != XMLElement::TYPE_END)
+					return Fail("Unexpected element found.");
+			}
+			else if (aXMLElement.mValue == _S("PIEffect"))
+			{
+				if (!ParsePIEffectResource(aXMLElement))
+					return false;
 
-                if (!mXMLParser->NextElement(&aXMLElement))
-                    return false;
+				if (!mXMLParser->NextElement(&aXMLElement))
+					return false;
 
-                if (aXMLElement.mType != XMLElement::TYPE_END)
-                    return Fail("Unexpected element found.");
-            }
+				if (aXMLElement.mType != XMLElement::TYPE_END)
+					return Fail("Unexpected element found.");
+			}
 			else if (aXMLElement.mValue == _S("SetDefaults"))
 			{
 				if (!ParseSetDefaults(aXMLElement))
@@ -549,7 +551,7 @@ bool ResourceManager::ParseResources()
 					return false;
 
 				if (aXMLElement.mType != XMLElement::TYPE_END)
-					return Fail("Unexpected element found.");		
+					return Fail("Unexpected element found.");
 			}
 			else
 			{
@@ -561,7 +563,7 @@ bool ResourceManager::ParseResources()
 		{
 			Fail("Element Not Expected '" + PopWorkStringToStringFast(aXMLElement.mValue) + "'");
 			return false;
-		}		
+		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
 		{
 			return true;
@@ -597,7 +599,7 @@ bool ResourceManager::DoParseResources()
 					if (!ParseResources())
 						break;
 				}
-				else 
+				else
 				{
 					Fail("Invalid Section '" + PopWorkStringToStringFast(aXMLElement.mValue) + "'");
 					break;
@@ -622,7 +624,7 @@ bool ResourceManager::DoParseResources()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::ParseResourcesFile(const std::string& theFilename)
+bool ResourceManager::ParseResourcesFile(const std::string &theFilename)
 {
 	mXMLParser = new XMLParser();
 	if (!mXMLParser->OpenFile(theFilename))
@@ -642,15 +644,15 @@ bool ResourceManager::ParseResourcesFile(const std::string& theFilename)
 				return DoParseResources();
 		}
 	}
-		
+
 	Fail("Expecting ResourceManifest tag");
 
-	return DoParseResources();	
+	return DoParseResources();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::ReparseResourcesFile(const std::string& theFilename)
+bool ResourceManager::ReparseResourcesFile(const std::string &theFilename)
 {
 	bool oldDefined = mAllowAlreadyDefinedResources;
 	mAllowAlreadyDefinedResources = true;
@@ -664,36 +666,36 @@ bool ResourceManager::ReparseResourcesFile(const std::string& theFilename)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, SDLImage*theImage)
-{	
-	ImageLib::Image* anAlphaImage = ImageLib::GetImage(theRes->mAlphaGridImage,true);	
-	if (anAlphaImage==NULL)
-		return Fail(StrFormat("Failed to load image: %s",theRes->mAlphaGridImage.c_str()));
+bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, SDLImage *theImage)
+{
+	ImageLib::Image *anAlphaImage = ImageLib::GetImage(theRes->mAlphaGridImage, true);
+	if (anAlphaImage == NULL)
+		return Fail(StrFormat("Failed to load image: %s", theRes->mAlphaGridImage.c_str()));
 
 	std::unique_ptr<ImageLib::Image> aDelAlphaImage(anAlphaImage);
 
 	int aNumRows = theRes->mRows;
 	int aNumCols = theRes->mCols;
 
-	int aCelWidth = theImage->mWidth/aNumCols;
-	int aCelHeight = theImage->mHeight/aNumRows;
+	int aCelWidth = theImage->mWidth / aNumCols;
+	int aCelHeight = theImage->mHeight / aNumRows;
 
-
-	if (anAlphaImage->mWidth!=aCelWidth || anAlphaImage->mHeight!=aCelHeight)
-		return Fail(StrFormat("GridAlphaImage size mismatch between %s and %s",theRes->mPath.c_str(),theRes->mAlphaGridImage.c_str()));
+	if (anAlphaImage->mWidth != aCelWidth || anAlphaImage->mHeight != aCelHeight)
+		return Fail(StrFormat("GridAlphaImage size mismatch between %s and %s", theRes->mPath.c_str(),
+							  theRes->mAlphaGridImage.c_str()));
 
 	unsigned long *aMasterRowPtr = theImage->mBits;
-	for (int i=0; i < aNumRows; i++)
+	for (int i = 0; i < aNumRows; i++)
 	{
 		unsigned long *aMasterColPtr = aMasterRowPtr;
-		for (int j=0; j < aNumCols; j++)
+		for (int j = 0; j < aNumCols; j++)
 		{
-			unsigned long* aRowPtr = aMasterColPtr;
-			unsigned long* anAlphaBits = anAlphaImage->mBits;
-			for (int y=0; y<aCelHeight; y++)
+			unsigned long *aRowPtr = aMasterColPtr;
+			unsigned long *anAlphaBits = anAlphaImage->mBits;
+			for (int y = 0; y < aCelHeight; y++)
 			{
 				unsigned long *aDestPtr = aRowPtr;
-				for (int x=0; x<aCelWidth; x++)
+				for (int x = 0; x < aCelWidth; x++)
 				{
 					*aDestPtr = (*aDestPtr & 0x00FFFFFF) | ((*anAlphaBits & 0xFF) << 24);
 					++anAlphaBits;
@@ -704,7 +706,7 @@ bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, SDLImage*theImage)
 
 			aMasterColPtr += aCelWidth;
 		}
-		aMasterRowPtr += aCelHeight*theImage->mWidth;
+		aMasterRowPtr += aCelHeight * theImage->mWidth;
 	}
 
 	theImage->BitsChanged();
@@ -713,24 +715,25 @@ bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, SDLImage*theImage)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::LoadAlphaImage(ImageRes *theRes, SDLImage*theImage)
+bool ResourceManager::LoadAlphaImage(ImageRes *theRes, SDLImage *theImage)
 {
 	POPWORK_PERF_BEGIN("ResourceManager::GetImage");
-	ImageLib::Image* anAlphaImage = ImageLib::GetImage(theRes->mAlphaImage,true);
+	ImageLib::Image *anAlphaImage = ImageLib::GetImage(theRes->mAlphaImage, true);
 	POPWORK_PERF_END("ResourceManager::GetImage");
 
-	if (anAlphaImage==NULL)
-		return Fail(StrFormat("Failed to load image: %s",theRes->mAlphaImage.c_str()));
+	if (anAlphaImage == NULL)
+		return Fail(StrFormat("Failed to load image: %s", theRes->mAlphaImage.c_str()));
 
 	std::unique_ptr<ImageLib::Image> aDelAlphaImage(anAlphaImage);
 
-	if (anAlphaImage->mWidth!=theImage->mWidth || anAlphaImage->mHeight!=theImage->mHeight)
-		return Fail(StrFormat("AlphaImage size mismatch between %s and %s",theRes->mPath.c_str(),theRes->mAlphaImage.c_str()));
+	if (anAlphaImage->mWidth != theImage->mWidth || anAlphaImage->mHeight != theImage->mHeight)
+		return Fail(StrFormat("AlphaImage size mismatch between %s and %s", theRes->mPath.c_str(),
+							  theRes->mAlphaImage.c_str()));
 
-	unsigned long* aBits1 = theImage->mBits;
-	 
-	unsigned long* aBits2 = anAlphaImage->mBits;
-	int aSize = theImage->mWidth*theImage->mHeight;
+	unsigned long *aBits1 = theImage->mBits;
+
+	unsigned long *aBits2 = anAlphaImage->mBits;
+	int aSize = theImage->mWidth * theImage->mHeight;
 
 	for (int i = 0; i < aSize; i++)
 	{
@@ -748,21 +751,21 @@ bool ResourceManager::LoadAlphaImage(ImageRes *theRes, SDLImage*theImage)
 bool ResourceManager::DoLoadImage(ImageRes *theRes)
 {
 	bool lookForAlpha = theRes->mAlphaImage.empty() && theRes->mAlphaGridImage.empty() && theRes->mAutoFindAlpha;
-	
+
 	POPWORK_PERF_BEGIN("ResourceManager:GetImage");
 
-	//ImageLib::Image *anImage = ImageLib::GetImage(theRes->mPath, lookForAlpha);
-	//POPWORK_PERF_END("ResourceManager:GetImage");
+	// ImageLib::Image *anImage = ImageLib::GetImage(theRes->mPath, lookForAlpha);
+	// POPWORK_PERF_END("ResourceManager:GetImage");
 
 	bool isNew;
 	ImageLib::gAlphaComposeColor = theRes->mAlphaColor;
 	SharedImageRef aSharedImageRef = gAppBase->GetSharedImage(theRes->mPath, theRes->mVariant, &isNew);
 	ImageLib::gAlphaComposeColor = 0xFFFFFF;
 
-	SDLImage* aSDLImage = (SDLImage*) aSharedImageRef;
-	
+	SDLImage *aSDLImage = (SDLImage *)aSharedImageRef;
+
 	if (aSDLImage == NULL)
-		return Fail(StrFormat("Failed to load image: %s",theRes->mPath.c_str()));
+		return Fail(StrFormat("Failed to load image: %s", theRes->mPath.c_str()));
 
 	if (isNew)
 	{
@@ -771,14 +774,14 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 			if (!LoadAlphaImage(theRes, aSharedImageRef))
 				return false;
 		}
-		
+
 		if (!theRes->mAlphaGridImage.empty())
 		{
 			if (!LoadAlphaGridImage(theRes, aSharedImageRef))
 				return false;
 		}
 	}
-	
+
 	aSDLImage->CommitBits();
 	theRes->mImage = aSharedImageRef;
 	aSDLImage->mPurgeBits = theRes->mPurgeBits;
@@ -788,24 +791,24 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 		POPWORK_PERF_BEGIN("ResourceManager:DDSurface");
 
 		aSDLImage->CommitBits();
-				
+
 		if (!aSDLImage->mHasAlpha)
 		{
-			//aSDLImage->mWantDDSurface = true;
-			aSDLImage->mPurgeBits = true;			
+			// aSDLImage->mWantDDSurface = true;
+			aSDLImage->mPurgeBits = true;
 		}
 
 		POPWORK_PERF_END("ResourceManager:DDSurface");
-	}	
+	}
 
 	if (theRes->mPalletize)
 	{
-		//POPWORK_PERF_BEGIN("ResourceManager:Palletize");
-		//if (aSDLImage->mSurface==NULL)
+		// POPWORK_PERF_BEGIN("ResourceManager:Palletize");
+		// if (aSDLImage->mSurface==NULL)
 		//	aSDLImage->Palletize();
-		//else
-			//aSDLImage->mWantPal = true;
-		//POPWORK_PERF_END("ResourceManager:Palletize");
+		// else
+		// aSDLImage->mWantPal = true;
+		// POPWORK_PERF_END("ResourceManager:Palletize");
 	}
 
 	if (theRes->mNearestFilter)
@@ -828,7 +831,7 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 ///////////////////////////////////////////////////////////////////////////////
 void ResourceManager::DeleteImage(const std::string &theName)
 {
-	ReplaceImage(theName,NULL);
+	ReplaceImage(theName, NULL);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -839,8 +842,8 @@ SharedImageRef ResourceManager::LoadImage(const std::string &theName)
 	if (anItr == mImageMap.end())
 		return NULL;
 
-	ImageRes *aRes = (ImageRes*)anItr->second;
-	if ((SDLImage*) aRes->mImage != NULL)
+	ImageRes *aRes = (ImageRes *)anItr->second;
+	if ((SDLImage *)aRes->mImage != NULL)
 		return aRes->mImage;
 
 	if (aRes->mFromProgram)
@@ -854,17 +857,17 @@ SharedImageRef ResourceManager::LoadImage(const std::string &theName)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::DoLoadSound(SoundRes* theRes)
+bool ResourceManager::DoLoadSound(SoundRes *theRes)
 {
 	SoundRes *aRes = theRes;
 
 	POPWORK_PERF_BEGIN("ResourceManager:LoadSound");
 	int aSoundId = mApp->mSoundManager->GetFreeSoundId();
-	if (aSoundId<0)
+	if (aSoundId < 0)
 		return Fail("Out of free sound ids");
 
-	if(!mApp->mSoundManager->LoadSound(aSoundId, aRes->mPath))
-		return Fail(StrFormat("Failed to load sound: %s",aRes->mPath.c_str()));
+	if (!mApp->mSoundManager->LoadSound(aSoundId, aRes->mPath))
+		return Fail(StrFormat("Failed to load sound: %s", aRes->mPath.c_str()));
 	POPWORK_PERF_END("ResourceManager:LoadSound");
 
 	if (aRes->mVolume >= 0)
@@ -881,7 +884,7 @@ bool ResourceManager::DoLoadSound(SoundRes* theRes)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-bool ResourceManager::DoLoadFont(FontRes* theRes)
+bool ResourceManager::DoLoadFont(FontRes *theRes)
 {
 	Font *aFont = NULL;
 
@@ -895,18 +898,18 @@ bool ResourceManager::DoLoadFont(FontRes* theRes)
 			simulateBold = bold;
 			bold = false;
 		}
-		aFont = new SysFont(theRes->mPath,theRes->mSize,bold,theRes->mItalic,theRes->mUnderline);
-		SysFont* aSysFont = (SysFont*)aFont;
+		aFont = new SysFont(theRes->mPath, theRes->mSize, bold, theRes->mItalic, theRes->mUnderline);
+		SysFont *aSysFont = (SysFont *)aFont;
 		aSysFont->mDrawShadow = theRes->mShadow;
 		aSysFont->mSimulateBold = simulateBold;
 	}
-	else if (theRes->mImagePath.empty())	
+	else if (theRes->mImagePath.empty())
 	{
-		if (strncmp(theRes->mPath.c_str(),"!ref:",5)==0)
+		if (strncmp(theRes->mPath.c_str(), "!ref:", 5) == 0)
 		{
 			std::string aRefName = theRes->mPath.substr(5);
-			Font *aRefFont = ((FontRes*)GetFontRef(aRefName)->mBaseResP)->mFont;
-			if (aRefFont==NULL)
+			Font *aRefFont = ((FontRes *)GetFontRef(aRefName)->mBaseResP)->mFont;
+			if (aRefFont == NULL)
 				return Fail("Ref font not found: " + aRefName);
 
 			aFont = aRefFont->Duplicate();
@@ -917,31 +920,31 @@ bool ResourceManager::DoLoadFont(FontRes* theRes)
 	else
 	{
 		Image *anImage = mApp->GetImage(theRes->mImagePath);
-		if (anImage==NULL)
-			return Fail(StrFormat("Failed to load image: %s",theRes->mImagePath.c_str()));
+		if (anImage == NULL)
+			return Fail(StrFormat("Failed to load image: %s", theRes->mImagePath.c_str()));
 
 		theRes->mImage = anImage;
 		aFont = new ImageFont(anImage, theRes->mPath);
 	}
 
-	ImageFont *anImageFont = dynamic_cast<ImageFont*>(aFont);
-	if (anImageFont!=NULL)
+	ImageFont *anImageFont = dynamic_cast<ImageFont *>(aFont);
+	if (anImageFont != NULL)
 	{
-		if (anImageFont->mFontData==NULL || !anImageFont->mFontData->mInitialized)
+		if (anImageFont->mFontData == NULL || !anImageFont->mFontData->mInitialized)
 		{
 			delete aFont;
-			return Fail(StrFormat("Failed to load font: %s",theRes->mPath.c_str()));
+			return Fail(StrFormat("Failed to load font: %s", theRes->mPath.c_str()));
 		}
 
 		if (!theRes->mTags.empty())
 		{
 			char aBuf[1024];
-			strcpy(aBuf,theRes->mTags.c_str());
-			const char *aPtr = strtok(aBuf,", \r\n\t");
+			strcpy(aBuf, theRes->mTags.c_str());
+			const char *aPtr = strtok(aBuf, ", \r\n\t");
 			while (aPtr != NULL)
 			{
 				anImageFont->AddTag(aPtr);
-				aPtr = strtok(NULL,", \r\n\t");
+				aPtr = strtok(NULL, ", \r\n\t");
 			}
 			anImageFont->Prepare();
 		}
@@ -955,49 +958,49 @@ bool ResourceManager::DoLoadFont(FontRes* theRes)
 	return true;
 }
 
-bool ResourceManager::DoLoadResource(BaseRes* theRes, bool* fromProgram)
+bool ResourceManager::DoLoadResource(BaseRes *theRes, bool *fromProgram)
 {
-    if (theRes->mFromProgram)
-    {
-        *fromProgram = true;
-        return true;
-    }
+	if (theRes->mFromProgram)
+	{
+		*fromProgram = true;
+		return true;
+	}
 
-    bool result;
+	bool result;
 
-    switch (theRes->mType)
-    {
-        case ResType_Image:
-            POPWORK_PERF_BEGIN("ResourceManager::DoLoadResource(ResType_Image)");
-            result = DoLoadImage((ImageRes*)theRes);
-            POPWORK_PERF_END("ResourceManager::DoLoadResource(ResType_Image)");
-            break;
-        case ResType_Sound:
-            POPWORK_PERF_BEGIN("ResourceManager::DoLoadResource(ResType_Sound)");
-            result = DoLoadSound((SoundRes*)theRes);
-            POPWORK_PERF_END("ResourceManager::DoLoadResource(ResType_Sound)");
-            break;
-        case ResType_Font:
-            POPWORK_PERF_BEGIN("ResourceManager::DoLoadResource(ResType_Font)");
-            result = DoLoadFont((FontRes*)theRes);
-            POPWORK_PERF_END("ResourceManager::DoLoadResource(ResType_Font)");
-            break;
-        default:
-            result = false;
-    }
+	switch (theRes->mType)
+	{
+	case ResType_Image:
+		POPWORK_PERF_BEGIN("ResourceManager::DoLoadResource(ResType_Image)");
+		result = DoLoadImage((ImageRes *)theRes);
+		POPWORK_PERF_END("ResourceManager::DoLoadResource(ResType_Image)");
+		break;
+	case ResType_Sound:
+		POPWORK_PERF_BEGIN("ResourceManager::DoLoadResource(ResType_Sound)");
+		result = DoLoadSound((SoundRes *)theRes);
+		POPWORK_PERF_END("ResourceManager::DoLoadResource(ResType_Sound)");
+		break;
+	case ResType_Font:
+		POPWORK_PERF_BEGIN("ResourceManager::DoLoadResource(ResType_Font)");
+		result = DoLoadFont((FontRes *)theRes);
+		POPWORK_PERF_END("ResourceManager::DoLoadResource(ResType_Font)");
+		break;
+	default:
+		result = false;
+	}
 
-    return result;
+	return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-Font* ResourceManager::LoadFont(const std::string &theName)
+Font *ResourceManager::LoadFont(const std::string &theName)
 {
 	ResMap::iterator anItr = mFontMap.find(theName);
 	if (anItr == mFontMap.end())
 		return NULL;
 
-	FontRes *aRes = (FontRes*)anItr->second;
+	FontRes *aRes = (FontRes *)anItr->second;
 	if (aRes->mFont != NULL)
 		return aRes->mFont;
 
@@ -1014,7 +1017,7 @@ Font* ResourceManager::LoadFont(const std::string &theName)
 ///////////////////////////////////////////////////////////////////////////////
 void ResourceManager::DeleteFont(const std::string &theName)
 {
-	ReplaceFont(theName,NULL);
+	ReplaceFont(theName, NULL);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1024,10 +1027,10 @@ bool ResourceManager::LoadNextResource()
 	if (HadError())
 		return false;
 
-	if (mCurResGroupList==NULL)
+	if (mCurResGroupList == NULL)
 		return false;
 
-	while (mCurResGroupListItr!=mCurResGroupList->end())
+	while (mCurResGroupListItr != mCurResGroupList->end())
 	{
 		BaseRes *aRes = *mCurResGroupListItr++;
 		if (aRes->mFromProgram)
@@ -1035,32 +1038,29 @@ bool ResourceManager::LoadNextResource()
 
 		switch (aRes->mType)
 		{
-			case ResType_Image: 
-			{
-				ImageRes *anImageRes = (ImageRes*)aRes;
-				if ((SDLImage*)anImageRes->mImage!=NULL)
-					continue;
+		case ResType_Image: {
+			ImageRes *anImageRes = (ImageRes *)aRes;
+			if ((SDLImage *)anImageRes->mImage != NULL)
+				continue;
 
-				return DoLoadImage(anImageRes); 
-			}
-			
-			case ResType_Sound: 
-			{
-				SoundRes *aSoundRes = (SoundRes*)aRes;
-				if (aSoundRes->mSoundId!=-1)
-					continue;
+			return DoLoadImage(anImageRes);
+		}
 
-				return DoLoadSound(aSoundRes); 
-			}
-			
-			case ResType_Font: 
-			{
-				FontRes *aFontRes = (FontRes*)aRes;
-				if (aFontRes->mFont!=NULL)
-					continue;
+		case ResType_Sound: {
+			SoundRes *aSoundRes = (SoundRes *)aRes;
+			if (aSoundRes->mSoundId != -1)
+				continue;
 
-				return DoLoadFont(aFontRes);
-			}
+			return DoLoadSound(aSoundRes);
+		}
+
+		case ResType_Font: {
+			FontRes *aFontRes = (FontRes *)aRes;
+			if (aFontRes->mFont != NULL)
+				continue;
+
+			return DoLoadFont(aFontRes);
+		}
 		}
 	}
 
@@ -1087,16 +1087,17 @@ void ResourceManager::StartLoadResources(const std::string &theGroup)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void ResourceManager::DumpCurResGroup(std::string& theDestStr)
+void ResourceManager::DumpCurResGroup(std::string &theDestStr)
 {
-	const ResList* rl = &mResGroupMap.find(mCurResGroup)->second;
+	const ResList *rl = &mResGroupMap.find(mCurResGroup)->second;
 	ResList::const_iterator it = rl->begin();
-	theDestStr = StrFormat("About to dump %d elements from current res group name %s\r\n", rl->size(), mCurResGroup.c_str());
-	
+	theDestStr =
+		StrFormat("About to dump %d elements from current res group name %s\r\n", rl->size(), mCurResGroup.c_str());
+
 	ResList::const_iterator rl_end = rl->end();
 	while (it != rl_end)
 	{
-		BaseRes* br = *it++;
+		BaseRes *br = *it++;
 		std::string prefix = StrFormat("%s: %s\r\n", br->mId.c_str(), br->mPath.c_str());
 		theDestStr += prefix;
 		if (br->mFromProgram)
@@ -1110,7 +1111,6 @@ void ResourceManager::DumpCurResGroup(std::string& theDestStr)
 
 		if (it == mCurResGroupListItr)
 			theDestStr += std::string("iterator has reached mCurResGroupItr\r\n");
-
 	}
 
 	theDestStr += std::string("Done dumping resources\r\n");
@@ -1138,7 +1138,7 @@ bool ResourceManager::LoadResources(const std::string &theGroup)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-int	ResourceManager::GetNumResources(const std::string &theGroup, ResMap &theMap)
+int ResourceManager::GetNumResources(const std::string &theGroup, ResMap &theMap)
 {
 	if (theGroup.empty())
 		return theMap.size();
@@ -1147,7 +1147,7 @@ int	ResourceManager::GetNumResources(const std::string &theGroup, ResMap &theMap
 	for (ResMap::iterator anItr = theMap.begin(); anItr != theMap.end(); ++anItr)
 	{
 		BaseRes *aRes = anItr->second;
-		if (aRes->mResGroup==theGroup && !aRes->mFromProgram)
+		if (aRes->mResGroup == theGroup && !aRes->mFromProgram)
 			++aCount;
 	}
 
@@ -1156,18 +1156,18 @@ int	ResourceManager::GetNumResources(const std::string &theGroup, ResMap &theMap
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-int	ResourceManager::GetNumImages(const std::string &theGroup)
+int ResourceManager::GetNumImages(const std::string &theGroup)
 {
 	return GetNumResources(theGroup, mImageMap);
 }
-	
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-int	ResourceManager::GetNumSounds(const std::string &theGroup)
+int ResourceManager::GetNumSounds(const std::string &theGroup)
 {
-	return GetNumResources(theGroup,mSoundMap);
+	return GetNumResources(theGroup, mSoundMap);
 }
-	
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 int ResourceManager::GetNumFonts(const std::string &theGroup)
@@ -1177,7 +1177,7 @@ int ResourceManager::GetNumFonts(const std::string &theGroup)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-int	ResourceManager::GetNumResources(const std::string &theGroup)
+int ResourceManager::GetNumResources(const std::string &theGroup)
 {
 	return GetNumImages(theGroup) + GetNumSounds(theGroup) + GetNumFonts(theGroup);
 }
@@ -1188,91 +1188,88 @@ SharedImageRef ResourceManager::GetImage(const std::string &theId)
 {
 	ResMap::iterator anItr = mImageMap.find(theId);
 	if (anItr != mImageMap.end())
-		return ((ImageRes*)anItr->second)->mImage;
+		return ((ImageRes *)anItr->second)->mImage;
 	else
 		return NULL;
 }
-	
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-int	ResourceManager::GetSound(const std::string &theId)
+int ResourceManager::GetSound(const std::string &theId)
 {
 	ResMap::iterator anItr = mSoundMap.find(theId);
 	if (anItr != mSoundMap.end())
-		return ((SoundRes*)anItr->second)->mSoundId;
+		return ((SoundRes *)anItr->second)->mSoundId;
 	else
 		return -1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-Font* ResourceManager::GetFont(const std::string &theId)
+Font *ResourceManager::GetFont(const std::string &theId)
 {
 	ResMap::iterator anItr = mFontMap.find(theId);
 	if (anItr != mFontMap.end())
-		return ((FontRes*)anItr->second)->mFont;
+		return ((FontRes *)anItr->second)->mFont;
 	else
 		return NULL;
 }
 
-ResourceManager::BaseRes* ResourceManager::GetBaseRes(int type, const std::string &theId)
+ResourceManager::BaseRes *ResourceManager::GetBaseRes(int type, const std::string &theId)
 {
-    switch (type)
-    {
-        case ResType_Image:
-        {
-            ResMap::iterator anItr = mImageMap.find(theId);
-            if (anItr != mImageMap.end())
-                return (ImageRes*)anItr->second;
-            else
-                return NULL;
-        }
-        case ResType_Sound:
-        {
-            ResMap::iterator anItr = mSoundMap.find(theId);
-            if (anItr != mSoundMap.end())
-                return (SoundRes*)anItr->second;
-            else
-                return NULL;
-        }
-        case ResType_Font:
-        {
-            ResMap::iterator anItr = mFontMap.find(theId);
-            if (anItr != mFontMap.end())
-                return (FontRes*)anItr->second;
-            else
-                return NULL;
-        }
-    }
+	switch (type)
+	{
+	case ResType_Image: {
+		ResMap::iterator anItr = mImageMap.find(theId);
+		if (anItr != mImageMap.end())
+			return (ImageRes *)anItr->second;
+		else
+			return NULL;
+	}
+	case ResType_Sound: {
+		ResMap::iterator anItr = mSoundMap.find(theId);
+		if (anItr != mSoundMap.end())
+			return (SoundRes *)anItr->second;
+		else
+			return NULL;
+	}
+	case ResType_Font: {
+		ResMap::iterator anItr = mFontMap.find(theId);
+		if (anItr != mFontMap.end())
+			return (FontRes *)anItr->second;
+		else
+			return NULL;
+	}
+	}
 
-    return NULL;
+	return NULL;
 }
 
-ResourceManager::ResourceRef* ResourceManager::GetFontRef(const std::string &theId)
+ResourceManager::ResourceRef *ResourceManager::GetFontRef(const std::string &theId)
 {
-    return GetResourceRef(2, theId);
+	return GetResourceRef(2, theId);
 }
 
-ResourceManager::ResourceRef* ResourceManager::GetResourceRef(int type, const std::string &theId)
+ResourceManager::ResourceRef *ResourceManager::GetResourceRef(int type, const std::string &theId)
 {
-    BaseRes* base = GetBaseRes(type, theId);
-    if (!base)
-        return new ResourceRef();
+	BaseRes *base = GetBaseRes(type, theId);
+	if (!base)
+		return new ResourceRef();
 
-    return GetResourceRef(base);
+	return GetResourceRef(base);
 }
 
-ResourceManager::ResourceRef* ResourceManager::GetResourceRef(BaseRes* base)
+ResourceManager::ResourceRef *ResourceManager::GetResourceRef(BaseRes *base)
 {
-    ResourceRef* ref = new ResourceRef();
+	ResourceRef *ref = new ResourceRef();
 
-    bool fromProgram;
-    if (base->mRefCount == 0)
-        DoLoadResource(base, &fromProgram);
+	bool fromProgram;
+	if (base->mRefCount == 0)
+		DoLoadResource(base, &fromProgram);
 
-    ref->mBaseResP = base;
-    base->mRefCount++;
-    return ref;
+	ref->mBaseResP = base;
+	base->mRefCount++;
+	return ref;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1282,55 +1279,53 @@ SharedImageRef ResourceManager::GetImageThrow(const std::string &theId)
 	ResMap::iterator anItr = mImageMap.find(theId);
 	if (anItr != mImageMap.end())
 	{
-		ImageRes *aRes = (ImageRes*)anItr->second;
-		if ((MemoryImage*) aRes->mImage != NULL)
+		ImageRes *aRes = (ImageRes *)anItr->second;
+		if ((MemoryImage *)aRes->mImage != NULL)
 			return aRes->mImage;
 
 		if (mAllowMissingProgramResources && aRes->mFromProgram)
 			return NULL;
 	}
 
-
-	Fail(StrFormat("Image resource not found: %s",theId.c_str()));
+	Fail(StrFormat("Image resource not found: %s", theId.c_str()));
 	throw ResourceManagerException(GetErrorText());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-int	ResourceManager::GetSoundThrow(const std::string &theId)
+int ResourceManager::GetSoundThrow(const std::string &theId)
 {
 	ResMap::iterator anItr = mSoundMap.find(theId);
 	if (anItr != mSoundMap.end())
 	{
-		SoundRes *aRes = (SoundRes*)anItr->second;
-		if (aRes->mSoundId!=-1)
+		SoundRes *aRes = (SoundRes *)anItr->second;
+		if (aRes->mSoundId != -1)
 			return aRes->mSoundId;
 
 		if (mAllowMissingProgramResources && aRes->mFromProgram)
 			return -1;
 	}
 
-
-	Fail(StrFormat("Sound resource not found: %s",theId.c_str()));
-	throw ResourceManagerException(GetErrorText());		
+	Fail(StrFormat("Sound resource not found: %s", theId.c_str()));
+	throw ResourceManagerException(GetErrorText());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-Font* ResourceManager::GetFontThrow(const std::string &theId)
+Font *ResourceManager::GetFontThrow(const std::string &theId)
 {
 	ResMap::iterator anItr = mFontMap.find(theId);
 	if (anItr != mFontMap.end())
 	{
-		FontRes *aRes = (FontRes*)anItr->second;
-		if (aRes->mFont!=NULL)
+		FontRes *aRes = (FontRes *)anItr->second;
+		if (aRes->mFont != NULL)
 			return aRes->mFont;
 
 		if (mAllowMissingProgramResources && aRes->mFromProgram)
 			return NULL;
 	}
 
-	Fail(StrFormat("Font resource not found: %s",theId.c_str()));
+	Fail(StrFormat("Font resource not found: %s", theId.c_str()));
 	throw ResourceManagerException(GetErrorText());
 }
 
@@ -1349,8 +1344,8 @@ bool ResourceManager::ReplaceImage(const std::string &theId, Image *theImage)
 	if (anItr != mImageMap.end())
 	{
 		anItr->second->DeleteResource();
-		((ImageRes*)anItr->second)->mImage = (MemoryImage*) theImage;
-		((ImageRes*)anItr->second)->mImage.mOwnsUnshared = true;
+		((ImageRes *)anItr->second)->mImage = (MemoryImage *)theImage;
+		((ImageRes *)anItr->second)->mImage.mOwnsUnshared = true;
 		return true;
 	}
 	else
@@ -1365,7 +1360,7 @@ bool ResourceManager::ReplaceSound(const std::string &theId, int theSound)
 	if (anItr != mSoundMap.end())
 	{
 		anItr->second->DeleteResource();
-		((SoundRes*)anItr->second)->mSoundId = theSound;
+		((SoundRes *)anItr->second)->mSoundId = theSound;
 		return true;
 	}
 	else
@@ -1380,17 +1375,16 @@ bool ResourceManager::ReplaceFont(const std::string &theId, Font *theFont)
 	if (anItr != mFontMap.end())
 	{
 		anItr->second->DeleteResource();
-		((FontRes*)anItr->second)->mFont = theFont;
+		((FontRes *)anItr->second)->mFont = theFont;
 		return true;
 	}
 	else
 		return false;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-const XMLParamMap& ResourceManager::GetImageAttributes(const std::string &theId)
+const XMLParamMap &ResourceManager::GetImageAttributes(const std::string &theId)
 {
 	static XMLParamMap aStrMap;
 

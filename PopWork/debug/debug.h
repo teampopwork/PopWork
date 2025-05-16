@@ -16,18 +16,28 @@ void PopWorkTrace(const char *theStr);
 #define POPWORK_TRACE(theStr)
 #endif
 
-extern void PopWorkTraceFmt(const PopWorkChar* fmt ...);
-extern void OutputDebug(const PopWorkChar* fmt ...);
+extern void PopWorkTraceFmt(const PopWorkChar *fmt...);
+extern void OutputDebug(const PopWorkChar *fmt...);
 
 #ifdef NDEBUG
 
-#define DBG_ASSERTE(exp)	((void)0)
-#define DBG_ASSERT(exp)		((void)0)
+#define DBG_ASSERTE(exp) ((void)0)
+#define DBG_ASSERT(exp) ((void)0)
 
 #else
 
-#define DBG_ASSERTE(exp)	{ gInAssert = true; assert(exp); gInAssert = false; }
-#define DBG_ASSERT(exp)		{ gInAssert = true; assert(exp); gInAssert = false; }
+#define DBG_ASSERTE(exp)                                                                                               \
+	{                                                                                                                  \
+		gInAssert = true;                                                                                              \
+		assert(exp);                                                                                                   \
+		gInAssert = false;                                                                                             \
+	}
+#define DBG_ASSERT(exp)                                                                                                \
+	{                                                                                                                  \
+		gInAssert = true;                                                                                              \
+		assert(exp);                                                                                                   \
+		gInAssert = false;                                                                                             \
+	}
 
 #endif // NDEBUG
 

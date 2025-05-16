@@ -16,22 +16,22 @@
 //  -------------------------------------------------------------
 //  Copyright (C) James Poag 2008 - All Rights Reserved
 // ***************************************************************
-// 
+//
 // ***************************************************************
 
 #include "profile.h"
-#include "readwrite/xmlwriter.h"		// Write
-#include "readwrite/xmlparser.h"		// Read
+#include "readwrite/xmlwriter.h" // Write
+#include "readwrite/xmlparser.h" // Read
 #include "appbase.h"
 
-#include "common.h"			// PopWork Functions like FileExists()
+#include "common.h" // PopWork Functions like FileExists()
 
 using namespace PopWork;
 
 //************************************
 // Method:      Profile
 // FullName:    PopWork::Profile::Profile
-// Access:      protected 
+// Access:      protected
 //************************************
 Profile::Profile()
 {
@@ -40,12 +40,12 @@ Profile::Profile()
 //************************************
 // Method:    GetProfile
 // FullName:  PopWork::Profile::GetProfile
-// Access:    public 
+// Access:    public
 // Returns:   Profile*
 // Description: Singleton Access!  Only one user loaded at a time, this is so we
 //				can access the Profile variables anywhere in code, quickly!
 //************************************
-Profile* PopWork::Profile::GetProfile()
+Profile *PopWork::Profile::GetProfile()
 {
 	static Profile aProfile;
 	return &aProfile;
@@ -54,7 +54,7 @@ Profile* PopWork::Profile::GetProfile()
 //************************************
 // Method:    GetStateFileName
 // FullName:  PopWork::Profile::GetStateFileName
-// Access:    public 
+// Access:    public
 // Returns:   std::string
 // Description: returns the file name of the save state named 'theStateName'
 //				This is very useful for saving mid-game progress.  Let's say
@@ -64,10 +64,11 @@ Profile* PopWork::Profile::GetProfile()
 //				game state.  So mom and can can both pick up where they left off!
 // Parameter: PopWorkString theStateName
 //************************************
-std::string PopWork::Profile::GetStateFileName( PopWorkString theStateName, PopWorkString theUserName /*= ""*/ )
+std::string PopWork::Profile::GetStateFileName(PopWorkString theStateName, PopWorkString theUserName /*= ""*/)
 {
 	std::string aStateName = PopWorkStringToStringFast(theStateName);
-	std::string aUserName =  (theUserName == _S("")) ? PopWorkStringToStringFast(mUserName) : PopWorkStringToStringFast(theUserName);
+	std::string aUserName =
+		(theUserName == _S("")) ? PopWorkStringToStringFast(mUserName) : PopWorkStringToStringFast(theUserName);
 
 	return StrFormat("%susers\\%s\\%s.sav", GetAppDataFolder().c_str(), aUserName.c_str(), aStateName.c_str());
 }
@@ -75,18 +76,19 @@ std::string PopWork::Profile::GetStateFileName( PopWorkString theStateName, PopW
 //************************************
 // Method:    GetUserFileName
 // FullName:  PopWork::Profile::GetUserFileName
-// Access:    virtual public 
+// Access:    virtual public
 // Returns:   std::string
 // Description: Used internally to locate the XML Profile settings for the User.
 //				This is a separate method (like the one above) in order to change
-//				the location for the entire class.  This way you don't have to 
+//				the location for the entire class.  This way you don't have to
 //				Edit the save and load methods separately.  This GetStateFileName()
 //				method is along the same idea, only it's used externally by you!
 // Parameter: PopWorkString theUserName
 //************************************
-std::string PopWork::Profile::GetUserFileName( PopWorkString theUserName /*= ""*/ )
+std::string PopWork::Profile::GetUserFileName(PopWorkString theUserName /*= ""*/)
 {
-	std::string aUserName = (theUserName == _S("")) ? PopWorkStringToStringFast(mUserName) : PopWorkStringToStringFast(theUserName);
+	std::string aUserName =
+		(theUserName == _S("")) ? PopWorkStringToStringFast(mUserName) : PopWorkStringToStringFast(theUserName);
 
 	return StrFormat("%susers/%s.xml", GetAppDataFolder().c_str(), aUserName.c_str());
 }
@@ -94,33 +96,33 @@ std::string PopWork::Profile::GetUserFileName( PopWorkString theUserName /*= ""*
 //************************************
 // Method:    SetIntegerValue
 // FullName:  PopWork::Profile::SetIntegerValue
-// Access:    public 
+// Access:    public
 // Returns:   void
 // Description: Lets you add values to the Profile based on a text key!
-//				No more hard coding a value every time you want to expand the 
+//				No more hard coding a value every time you want to expand the
 //				Profile!
 // Parameter: PopWorkString theValueName
 // Parameter: int theValue
 //************************************
-void PopWork::Profile::SetIntegerValue( PopWorkString theValueName, int theValue )
+void PopWork::Profile::SetIntegerValue(PopWorkString theValueName, int theValue)
 {
 	if (mIntegerMap.find(theValueName) != mIntegerMap.end())
 		mIntegerMap[theValueName] = theValue;
 	else
-		mIntegerMap.insert(std::pair<PopWorkString,int>(theValueName,theValue));
+		mIntegerMap.insert(std::pair<PopWorkString, int>(theValueName, theValue));
 }
 
 //************************************
 // Method:    GetIntegerValue
 // FullName:  PopWork::Profile::GetIntegerValue
-// Access:    public 
+// Access:    public
 // Returns:   int
 // Description: Gets the value of the integer associated with the Key or returns
 //				'theDefault' value if not loaded!
 // Parameter: PopWorkString theValueName
 // Parameter: int theDefault
 //************************************
-int PopWork::Profile::GetIntegerValue( PopWorkString theValueName, int theDefault )
+int PopWork::Profile::GetIntegerValue(PopWorkString theValueName, int theDefault)
 {
 	// We will not create a value that doesn't exist.  This means that you can
 	// have things like secret values that won't be created in the profile.xml
@@ -139,9 +141,9 @@ bool Profile::Save(PopWorkString theFileName)
 {
 	XMLWriter aWriter;
 
-	if(aWriter.OpenFile(theFileName) && !aWriter.HasFailed())
+	if (aWriter.OpenFile(theFileName) && !aWriter.HasFailed())
 	{
-		// The XML Writer Class works like a Stack.  
+		// The XML Writer Class works like a Stack.
 		// http://en.wikipedia.org/wiki/Stack_%28data_structure%29
 
 		// You Start a Node and Set it's Attributes.  Any Nodes you start
@@ -153,42 +155,41 @@ bool Profile::Save(PopWorkString theFileName)
 
 		aWriter.StartElement(_S("Profile"));
 
-			std::map<PopWorkString,int>::iterator map_itr = mIntegerMap.begin();
-			for ( ; map_itr != mIntegerMap.end(); ++map_itr)
-			{
-				aWriter.StartElement(_S("Integer"));
-				aWriter.WriteAttribute(_S("id"), map_itr->first);
-				aWriter.WriteAttribute(_S("value"), map_itr->second);
-				aWriter.StopElement(/*_S("Integer")*/);
-			}
+		std::map<PopWorkString, int>::iterator map_itr = mIntegerMap.begin();
+		for (; map_itr != mIntegerMap.end(); ++map_itr)
+		{
+			aWriter.StartElement(_S("Integer"));
+			aWriter.WriteAttribute(_S("id"), map_itr->first);
+			aWriter.WriteAttribute(_S("value"), map_itr->second);
+			aWriter.StopElement(/*_S("Integer")*/);
+		}
 
-			std::map<PopWorkString,double>::iterator float_itr = mFloatMap.begin();
-			for ( ; float_itr != mFloatMap.end(); ++float_itr)
-			{
-				aWriter.StartElement(_S("Float"));
-				aWriter.WriteAttribute(_S("id"), float_itr->first);
-				aWriter.WriteAttribute(_S("value"), (float)float_itr->second);
-				aWriter.StopElement(/*_S("Float")*/);
-			}
+		std::map<PopWorkString, double>::iterator float_itr = mFloatMap.begin();
+		for (; float_itr != mFloatMap.end(); ++float_itr)
+		{
+			aWriter.StartElement(_S("Float"));
+			aWriter.WriteAttribute(_S("id"), float_itr->first);
+			aWriter.WriteAttribute(_S("value"), (float)float_itr->second);
+			aWriter.StopElement(/*_S("Float")*/);
+		}
 
-			std::map<PopWorkString,PopWorkString>::iterator str_itr = mStringMap.begin();
-			for ( ; str_itr != mStringMap.end(); ++str_itr)
-			{
-				aWriter.StartElement(_S("String"));
-				aWriter.WriteAttribute(_S("id"), str_itr->first);
-				aWriter.WriteAttribute(_S("value"), str_itr->second);
-				aWriter.StopElement(/*_S("Sting")*/);
-			}
+		std::map<PopWorkString, PopWorkString>::iterator str_itr = mStringMap.begin();
+		for (; str_itr != mStringMap.end(); ++str_itr)
+		{
+			aWriter.StartElement(_S("String"));
+			aWriter.WriteAttribute(_S("id"), str_itr->first);
+			aWriter.WriteAttribute(_S("value"), str_itr->second);
+			aWriter.StopElement(/*_S("Sting")*/);
+		}
 
-			std::map<PopWorkString,bool>::iterator bool_itr = mBoolMap.begin();
-			for ( ; bool_itr != mBoolMap.end(); ++bool_itr)
-			{
-				aWriter.StartElement(_S("Bool"));
-				aWriter.WriteAttribute(_S("id"), bool_itr->first);
-				aWriter.WriteAttribute(_S("value"), bool_itr->second);
-				aWriter.StopElement(/*_S("Bool")*/);
-			}
-
+		std::map<PopWorkString, bool>::iterator bool_itr = mBoolMap.begin();
+		for (; bool_itr != mBoolMap.end(); ++bool_itr)
+		{
+			aWriter.StartElement(_S("Bool"));
+			aWriter.WriteAttribute(_S("id"), bool_itr->first);
+			aWriter.WriteAttribute(_S("value"), bool_itr->second);
+			aWriter.StopElement(/*_S("Bool")*/);
+		}
 
 		aWriter.StopElement(/*Profile*/);
 
@@ -203,12 +204,12 @@ bool Profile::Save(PopWorkString theFileName)
 //************************************
 // Method:      Load
 // FullName:    PopWork::Profile::Load
-// Access:      virtual public 
+// Access:      virtual public
 // Returns:     bool
 // Parameter:   PopWorkString theFileName
 // Description: Loads the '%user_name%.xml' from the '%APP_DATA_FOLDER%/users/' dir
 //************************************
-bool  Profile::Load(PopWorkString theFileName)
+bool Profile::Load(PopWorkString theFileName)
 {
 	mIntegerMap.clear();
 	mBoolMap.clear();
@@ -217,15 +218,15 @@ bool  Profile::Load(PopWorkString theFileName)
 
 	XMLParser aParser;
 
-	if(aParser.OpenFile(PopWorkStringToStringFast(theFileName)) && !aParser.HasFailed())
+	if (aParser.OpenFile(PopWorkStringToStringFast(theFileName)) && !aParser.HasFailed())
 	{
 		XMLElement aNode;
 
 		ParseXML(&aParser);
-		return true;			// SUCCESS
+		return true; // SUCCESS
 	}
 
-	//FAILURE
+	// FAILURE
 	return false;
 }
 
@@ -237,68 +238,70 @@ bool Profile::HasAttribute(PopWork::XMLElement *theNode, PopWorkString theAttrib
 
 // I'm only passing the Parser to this class because the Profile is the only thing
 // we are storing in this class.  See Notes below.
-void Profile::ParseXML(PopWork::XMLParser* theParser)
+void Profile::ParseXML(PopWork::XMLParser *theParser)
 {
-	if(theParser == NULL ) return; //OOPS
+	if (theParser == NULL)
+		return; // OOPS
 
 	XMLElement aNode;
 
-	while(theParser->NextElement(&aNode)) // The Node gets fill with the next node data
+	while (theParser->NextElement(&aNode)) // The Node gets fill with the next node data
 	{
-		switch(aNode.mType)
+		switch (aNode.mType)
 		{
-		case XMLElement::TYPE_START: //the open tag.  eg: <Profile>
+		case XMLElement::TYPE_START: // the open tag.  eg: <Profile>
+		{
+			if (aNode.mValue == _S("Profile")) // Corresponds with the SAVE()
 			{
-				if(aNode.mValue == _S("Profile")) //Corresponds with the SAVE()
-				{
-				}
-				else if(aNode.mValue == _S("Bool")) //Corresponds with the SAVE()
-				{
-					if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
-					{
-						PopWorkString anId = aNode.mAttributes[_S("id")];
-						PopWorkString aValue = aNode.mAttributes[_S("value")];
-						bool aBoolean = (aValue == _S("true") || aValue == _S("TRUE") || aValue == _S("1") || aValue == _S("yes") || aValue == _S("YES"));
-
-						mBoolMap.insert(std::pair<PopWorkString,bool>(anId, aBoolean));
-					}
-				}
-				else if(aNode.mValue == _S("String")) //Corresponds with the SAVE()
-				{
-					if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
-					{
-						PopWorkString anId = aNode.mAttributes[_S("id")];
-						PopWorkString aValue = aNode.mAttributes[_S("value")];
-
-						mStringMap.insert(std::pair<PopWorkString,PopWorkString>(anId, aValue));
-					}
-				}	
-				else if(aNode.mValue == _S("Float")) //Corresponds with the SAVE()
-				{
-					if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
-					{
-						PopWorkString anId = aNode.mAttributes[_S("id")];
-						double aValue = atof(PopWorkStringToStringFast(aNode.mAttributes[_S("value")]).c_str());
-
-						mFloatMap.insert(std::pair<PopWorkString,double>(anId, aValue));
-					}
-				}	
-				else if(aNode.mValue == _S("Integer"))
-				{
-					if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
-					{
-						PopWorkString anId = aNode.mAttributes[_S("id")];
-						int aValue = popatoi(aNode.mAttributes[_S("value")].c_str());
-
-						mIntegerMap.insert(std::pair<PopWorkString,int>(anId, aValue));
-					}
-				}
-				break;
 			}
+			else if (aNode.mValue == _S("Bool")) // Corresponds with the SAVE()
+			{
+				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				{
+					PopWorkString anId = aNode.mAttributes[_S("id")];
+					PopWorkString aValue = aNode.mAttributes[_S("value")];
+					bool aBoolean = (aValue == _S("true") || aValue == _S("TRUE") || aValue == _S("1") ||
+									 aValue == _S("yes") || aValue == _S("YES"));
+
+					mBoolMap.insert(std::pair<PopWorkString, bool>(anId, aBoolean));
+				}
+			}
+			else if (aNode.mValue == _S("String")) // Corresponds with the SAVE()
+			{
+				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				{
+					PopWorkString anId = aNode.mAttributes[_S("id")];
+					PopWorkString aValue = aNode.mAttributes[_S("value")];
+
+					mStringMap.insert(std::pair<PopWorkString, PopWorkString>(anId, aValue));
+				}
+			}
+			else if (aNode.mValue == _S("Float")) // Corresponds with the SAVE()
+			{
+				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				{
+					PopWorkString anId = aNode.mAttributes[_S("id")];
+					double aValue = atof(PopWorkStringToStringFast(aNode.mAttributes[_S("value")]).c_str());
+
+					mFloatMap.insert(std::pair<PopWorkString, double>(anId, aValue));
+				}
+			}
+			else if (aNode.mValue == _S("Integer"))
+			{
+				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				{
+					PopWorkString anId = aNode.mAttributes[_S("id")];
+					int aValue = popatoi(aNode.mAttributes[_S("value")].c_str());
+
+					mIntegerMap.insert(std::pair<PopWorkString, int>(anId, aValue));
+				}
+			}
+			break;
+		}
 		case XMLElement::TYPE_END: // The closing tag. eg: </Profile>
-			{
-				break;
-			}
+		{
+			break;
+		}
 		}
 	}
 }
@@ -306,7 +309,7 @@ void Profile::ParseXML(PopWork::XMLParser* theParser)
 //************************************
 // Method:    LoadUser
 // FullName:  PopWork::Profile::LoadUser
-// Access:    public 
+// Access:    public
 // Returns:   bool
 // Description: Changes the currently loaded user to theUserName.
 //				This is one of the main methods you will be using.
@@ -315,11 +318,11 @@ void Profile::ParseXML(PopWork::XMLParser* theParser)
 bool Profile::LoadUser(PopWorkString theUserName)
 {
 	SetUserName(theUserName);
-	if(mUserName != _S(""))
+	if (mUserName != _S(""))
 	{
 		std::string aFileName = GetUserFileName(mUserName);
 
-		if(PopWork::FileExists(aFileName))
+		if (PopWork::FileExists(aFileName))
 		{
 			return Load(StringToPopWorkStringFast(aFileName));
 		}
@@ -332,14 +335,14 @@ bool Profile::LoadUser(PopWorkString theUserName)
 //************************************
 // Method:    SaveUser
 // FullName:  PopWork::Profile::SaveUser
-// Access:    public 
+// Access:    public
 // Returns:   bool
 // Description: Saves the currently loaded user's profile
 //				This is one of the main methods you will be using.
 //************************************
 bool Profile::SaveUser()
 {
-	if(mUserName != _S(""))
+	if (mUserName != _S(""))
 	{
 		std::string aFileName = GetUserFileName(mUserName);
 		MkDir(GetFileDir(aFileName));
@@ -352,7 +355,7 @@ bool Profile::SaveUser()
 //************************************
 // Method:    NewUser
 // FullName:  PopWork::Profile::NewUser
-// Access:    public 
+// Access:    public
 // Returns:   bool
 // Description: Creates a new user from the specified user name
 //				This is one of the main methods you will be using.
@@ -361,7 +364,7 @@ bool Profile::SaveUser()
 bool Profile::NewUser(PopWorkString theUserName)
 {
 	SetUserName(theUserName);
-	gAppBase->RegistryWriteString("LastProfileName",PopWorkStringToStringFast(mUserName));
+	gAppBase->RegistryWriteString("LastProfileName", PopWorkStringToStringFast(mUserName));
 	ResetProfile();
 	return SaveUser();
 }
@@ -369,7 +372,7 @@ bool Profile::NewUser(PopWorkString theUserName)
 //************************************
 // Method:    RenameUser
 // FullName:  PopWork::Profile::RenameUser
-// Access:    public 
+// Access:    public
 // Returns:   bool
 // Description: Rename the userprofile-file
 //				This is one of the main methods you will be using.
@@ -380,14 +383,14 @@ bool Profile::RenameUser(PopWorkString theNewUserName)
 {
 	if (theNewUserName != _S(""))
 	{
-		PopWorkString OldUserName = mUserName;  // remember old username
+		PopWorkString OldUserName = mUserName; // remember old username
 
-		if (SetUserName(theNewUserName) == true)  // sets mUserName to theNewUserName if successful
+		if (SetUserName(theNewUserName) == true) // sets mUserName to theNewUserName if successful
 		{
 			std::string OldFileName = GetUserFileName(OldUserName);
 			std::string NewFileName = GetUserFileName(mUserName);
 
-			rename(OldFileName.c_str(), NewFileName.c_str()); 
+			rename(OldFileName.c_str(), NewFileName.c_str());
 
 			return true;
 		}
@@ -402,7 +405,7 @@ bool Profile::RenameUser(PopWorkString theNewUserName)
 //************************************
 // Method:    DeleteUser
 // FullName:  PopWork::Profile::DeleteUser
-// Access:    public 
+// Access:    public
 // Returns:   bool
 // Description: Delete the profile-file
 //				This is one of the main methods you will be using.
@@ -425,10 +428,10 @@ bool Profile::DeleteUser(PopWorkString theUserName)
 //************************************
 // Method:    SetUserName
 // FullName:  PopWork::Profile::SetUserName
-// Access:    public 
+// Access:    public
 // Returns:   bool
 // Description: internally used method to validate the user name
-//				this is primarily because Windows has file name 
+//				this is primarily because Windows has file name
 //				restrictions!
 // Parameter: PopWorkString theUserName
 //************************************
@@ -437,10 +440,8 @@ bool Profile::SetUserName(PopWorkString theUserName)
 	// don�t allow the following chars in a username
 	for (unsigned int i = 0; i < theUserName.length(); i++)
 	{
-		if (theUserName[i] == '\\' || theUserName[i] == '/' || 
-		theUserName[i] == ':'  || theUserName[i] == '?' ||
-		theUserName[i] == '"'  || theUserName[i] == '<' ||   
-		theUserName[i] == '>'  || theUserName[i] == '|')
+		if (theUserName[i] == '\\' || theUserName[i] == '/' || theUserName[i] == ':' || theUserName[i] == '?' ||
+			theUserName[i] == '"' || theUserName[i] == '<' || theUserName[i] == '>' || theUserName[i] == '|')
 		{
 			// bad User Name
 			return false;
@@ -456,7 +457,7 @@ bool Profile::SetUserName(PopWorkString theUserName)
 //************************************
 // Method:    ResetProfile
 // FullName:  PopWork::Profile::ResetProfile
-// Access:    public 
+// Access:    public
 // Returns:   void
 // Description: Use this to reset the user to 0!
 //************************************
@@ -471,24 +472,24 @@ void Profile::ResetProfile()
 //************************************
 // Method:    SetBoolValue
 // FullName:  PopWork::Profile::SetBoolValue
-// Access:    public 
+// Access:    public
 // Returns:   void
 // Description: Sets the specified Variable to the Value
 // Parameter: PopWorkString theValueName
 // Parameter: bool theValue
 //************************************
-void PopWork::Profile::SetBoolValue( PopWorkString theValueName, bool theValue )
+void PopWork::Profile::SetBoolValue(PopWorkString theValueName, bool theValue)
 {
 	if (mBoolMap.find(theValueName) != mBoolMap.end())
 		mBoolMap[theValueName] = theValue;
 	else
-		mBoolMap.insert(std::pair<PopWorkString,bool>(theValueName,theValue));
+		mBoolMap.insert(std::pair<PopWorkString, bool>(theValueName, theValue));
 }
 
 //************************************
 // Method:    GetBoolValue
 // FullName:  PopWork::Profile::GetBoolValue
-// Access:    public 
+// Access:    public
 // Returns:   bool
 // Description: Gets the Specified variable, and returns theDefault if not found
 //				Warning: does not add the variable if not present.  This is useful
@@ -496,7 +497,7 @@ void PopWork::Profile::SetBoolValue( PopWorkString theValueName, bool theValue )
 // Parameter: PopWorkString theValueName
 // Parameter: bool theDefault
 //************************************
-bool PopWork::Profile::GetBoolValue( PopWorkString theValueName, bool theDefault )
+bool PopWork::Profile::GetBoolValue(PopWorkString theValueName, bool theDefault)
 {
 	if (mBoolMap.find(theValueName) != mBoolMap.end())
 		return mBoolMap[theValueName];
@@ -507,24 +508,24 @@ bool PopWork::Profile::GetBoolValue( PopWorkString theValueName, bool theDefault
 //************************************
 // Method:    SetFloatValue
 // FullName:  PopWork::Profile::SetFloatValue
-// Access:    public 
+// Access:    public
 // Returns:   void
 // Description:  Sets the specified Variable to the Value
 // Parameter: PopWorkString theValueName
 // Parameter: double theValue
 //************************************
-void PopWork::Profile::SetFloatValue( PopWorkString theValueName, double theValue )
+void PopWork::Profile::SetFloatValue(PopWorkString theValueName, double theValue)
 {
 	if (mFloatMap.find(theValueName) != mFloatMap.end())
 		mFloatMap[theValueName] = theValue;
 	else
-		mFloatMap.insert(std::pair<PopWorkString,double>(theValueName,theValue));
+		mFloatMap.insert(std::pair<PopWorkString, double>(theValueName, theValue));
 }
 
 //************************************
 // Method:    GetFloatValue
 // FullName:  PopWork::Profile::GetFloatValue
-// Access:    public 
+// Access:    public
 // Returns:   double
 // Description: Gets the Specified variable, and returns theDefault if not found
 //				Warning: does not add the variable if not present.  This is useful
@@ -532,7 +533,7 @@ void PopWork::Profile::SetFloatValue( PopWorkString theValueName, double theValu
 // Parameter: PopWorkString theValueName
 // Parameter: double theDefault
 //************************************
-double PopWork::Profile::GetFloatValue( PopWorkString theValueName, double theDefault )
+double PopWork::Profile::GetFloatValue(PopWorkString theValueName, double theDefault)
 {
 	if (mFloatMap.find(theValueName) != mFloatMap.end())
 		return mFloatMap[theValueName];
@@ -543,24 +544,24 @@ double PopWork::Profile::GetFloatValue( PopWorkString theValueName, double theDe
 //************************************
 // Method:    SetStringValue
 // FullName:  PopWork::Profile::SetStringValue
-// Access:    public 
+// Access:    public
 // Returns:   void
 // Description:  Sets the specified Variable to the Value
 // Parameter: PopWorkString theValueName
 // Parameter: PopWorkString theValue
 //************************************
-void PopWork::Profile::SetStringValue( PopWorkString theValueName, PopWorkString theValue )
+void PopWork::Profile::SetStringValue(PopWorkString theValueName, PopWorkString theValue)
 {
 	if (mStringMap.find(theValueName) != mStringMap.end())
 		mStringMap[theValueName] = theValue;
 	else
-		mStringMap.insert(std::pair<PopWorkString,PopWorkString>(theValueName,theValue));
+		mStringMap.insert(std::pair<PopWorkString, PopWorkString>(theValueName, theValue));
 }
 
 //************************************
 // Method:    GetStringValue
 // FullName:  PopWork::Profile::GetStringValue
-// Access:    public 
+// Access:    public
 // Returns:   PopWorkString
 // Description: Gets the Specified variable, and returns theDefault if not found
 //				Warning: does not add the variable if not present.  This is useful
@@ -568,7 +569,7 @@ void PopWork::Profile::SetStringValue( PopWorkString theValueName, PopWorkString
 // Parameter: PopWorkString theValueName
 // Parameter: PopWorkString theDefault
 //************************************
-PopWorkString PopWork::Profile::GetStringValue( PopWorkString theValueName, PopWorkString theDefault )
+PopWorkString PopWork::Profile::GetStringValue(PopWorkString theValueName, PopWorkString theDefault)
 {
 	if (mStringMap.find(theValueName) != mStringMap.end())
 		return mStringMap[theValueName];
@@ -579,7 +580,7 @@ PopWorkString PopWork::Profile::GetStringValue( PopWorkString theValueName, PopW
 //************************************
 // Method:      EraseStateSaves
 // FullName:    PopWork::Profile::EraseStateSaves
-// Access:      virtual public 
+// Access:      virtual public
 // Returns:     void
 // Parameter:   PopWorkString theUserName
 // Description: To help manage game states, states are saved in a user
@@ -587,16 +588,16 @@ PopWorkString PopWork::Profile::GetStringValue( PopWorkString theValueName, PopW
 //************************************
 void PopWork::Profile::EraseStateSaves(PopWorkString theUserName)
 {
-	if(theUserName == _S(""))
+	if (theUserName == _S(""))
 	{
-		std::string aUserName =  PopWorkStringToStringFast(mUserName);
+		std::string aUserName = PopWorkStringToStringFast(mUserName);
 		std::string aStatePath = StrFormat("%susers\\%s\\", GetAppDataFolder().c_str(), aUserName.c_str());
 
 		Deltree(aStatePath);
 	}
 	else
 	{
-		std::string aUserName =  PopWorkStringToStringFast(theUserName);
+		std::string aUserName = PopWorkStringToStringFast(theUserName);
 		std::string aStatePath = StrFormat("%susers\\%s\\", GetAppDataFolder().c_str(), aUserName.c_str());
 
 		Deltree(aStatePath);

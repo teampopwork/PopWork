@@ -12,28 +12,29 @@ namespace ImageLib
 
 class Image
 {
-public:
-	int						mWidth;
-	int						mHeight;
-	unsigned long*			mBits;
-	int						mNumChannels;
+  public:
+	int mWidth;
+	int mHeight;
+	unsigned long *mBits;
+	int mNumChannels;
 
-public:
+  public:
 	Image();
 	virtual ~Image();
 
-	int						GetWidth();
-	int						GetHeight();
-	unsigned long*			GetBits();
+	int GetWidth();
+	int GetHeight();
+	unsigned long *GetBits();
 };
 
-bool WriteImage(const std::string& theFileName, const std::string& theExtension, Image* theImage);
-bool WriteImageRaw(const std::string& theFileName, const std::string& theExtension, unsigned char* theData, int theWidth, int theHeight);
+bool WriteImage(const std::string &theFileName, const std::string &theExtension, Image *theImage);
+bool WriteImageRaw(const std::string &theFileName, const std::string &theExtension, unsigned char *theData,
+				   int theWidth, int theHeight);
 extern int gAlphaComposeColor;
 extern bool gAutoLoadAlpha;
 
-Image* GetImage(const std::string& theFileName, bool lookForAlphaImage = true);
+Image *GetImage(const std::string &theFileName, bool lookForAlphaImage = true);
 
-}
+} // namespace ImageLib
 
 #endif //__IMAGELIB_H__

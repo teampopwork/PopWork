@@ -28,7 +28,7 @@
 // IT IS VERY IMPORTANT THAT THIS DEFINE AND INCLUDE BE DONE AFTER ALL
 // OTHER FILE INCLUDES OR ELSE IT WILL CAUSE LINKER AND COMPILER ERRORS!
 // Memory leaks will automatically be dumped to "mem_leaks.txt" when
-// the app is closed. 
+// the app is closed.
 #define POPWORK_MEMTRACE
 #include "PopWork/Debug/memmgr.h"
 
@@ -39,10 +39,9 @@ using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-Board::Board(GameApp* theApp)
+Board::Board(GameApp *theApp)
 {
 	mApp = theApp;
-
 
 	mButton = NULL;
 
@@ -60,7 +59,7 @@ Board::Board(GameApp* theApp)
 		std::string imageStringID = StrFormat("IMAGE_BG%d", i);
 
 		// what we need to do now is get the integer ID for our resource
-		// that has the same name as imageStringID. 
+		// that has the same name as imageStringID.
 		int id = GetIdByStringId(imageStringID.c_str());
 
 		// Now that we have the integer ID, we can request the actual
@@ -79,8 +78,7 @@ Board::Board(GameApp* theApp)
 	// We will ON PURPOSE leak memory as an example of how to track
 	// such things in your program. Review the comments at the top of this
 	// file about memory leak detection:
-	int* aLeakedInteger = new int;
-	
+	int *aLeakedInteger = new int;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -107,18 +105,13 @@ void Board::Update()
 
 	Widget::Update();
 
-	
 	MarkDirty();
 
 	// And you mark the end of a profiling section with
 	// POPWORK_PER_END, passing in the same string you passed to
 	// POPWORK_PERF_BEGIN.
 	POPWORK_PERF_END("Start_Of_Update");
-
-	
 }
-
-
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -158,10 +151,10 @@ void Board::KeyDown(KeyCode theKey)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::Draw(Graphics* g)
+void Board::Draw(Graphics *g)
 {
 	// As an example of how to profile things, we're going to profile
-	// the update and draw functions. 
+	// the update and draw functions.
 	// You tell the profiler that you want it to begin with the
 	// statement below, passing in a string indicating WHAT you're
 	// profiling. The string can be anything. Enabled debug keys by
@@ -172,12 +165,10 @@ void Board::Draw(Graphics* g)
 	g->SetColor(Color(0, 0, 0));
 	g->FillRect(0, 0, mWidth, mHeight);
 
-
 	for (int i = 0; i < 3; i++)
 	{
 		int imgWidth = mLayer[i].mImage->GetWidth();
 
-		
 		// Let's learn about Graphics translation. Normally, you draw your image
 		// at a given XY by passing the coordinates to DrawImage. As an alternative,
 		// you can "translate" the Graphics object (change its XY drawing offset)
@@ -235,14 +226,11 @@ void Board::Draw(Graphics* g)
 	// POPWORK_PER_END, passing in the same string you passed to
 	// POPWORK_PERF_BEGIN.
 	POPWORK_PERF_END("Start_Of_Draw");
-
 }
 
-
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddedToManager(WidgetManager* theWidgetManager)
+void Board::AddedToManager(WidgetManager *theWidgetManager)
 {
 	// At this point, the Board class has already been added to the
 	// widget manager. We should call our parent class' method
@@ -251,7 +239,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 
 	// You should remember how to create buttons from Demo3. If not,
 	// go back and review.
-	mButton = new ButtonWidget(Board::OPTIONS_BUTTON_ID, this);	
+	mButton = new ButtonWidget(Board::OPTIONS_BUTTON_ID, this);
 	mButton->SetFont(FONT_DEFAULT);
 	mButton->mLabel = _S("Click Me!");
 
@@ -271,13 +259,13 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::RemovedFromManager(WidgetManager* theWidgetManager)
+void Board::RemovedFromManager(WidgetManager *theWidgetManager)
 {
 	// This is called after we've been removed from the widget manager.
 	// Again, we should let our base class do anything it needs to, first.
 	Widget::RemovedFromManager(theWidgetManager);
 
-	// We should now also remove any widgets we are responsible for. 
+	// We should now also remove any widgets we are responsible for.
 	theWidgetManager->RemoveWidget(mButton);
 }
 
@@ -287,8 +275,8 @@ void Board::ButtonDepress(int theId)
 {
 	// As another PURPOSEFUL example of detecting memory leaks, let's
 	// cause a leak here as well so you can see how the leak detection works.
-	// Again, this is on purpose to illustrate a point. 
-	struct ParallaxLayer* aLeakedParallaxLayer = new struct ParallaxLayer;
+	// Again, this is on purpose to illustrate a point.
+	struct ParallaxLayer *aLeakedParallaxLayer = new struct ParallaxLayer;
 
 	if (theId == Board::OPTIONS_BUTTON_ID)
 	{
@@ -299,7 +287,7 @@ void Board::ButtonDepress(int theId)
 		// In this case, we don't need to maintain a pointer to the dialog box
 		// to delete later. It will automatically be cleaned up when the
 		// dialog box is closed via the KillDialog command (see DemoDialog).
-		DemoDialog* dlg = new DemoDialog("Header", "Hello! I am a dialog box.");
+		DemoDialog *dlg = new DemoDialog("Header", "Hello! I am a dialog box.");
 		dlg->Resize(50, 50, 300, 400);
 		mApp->AddDialog(DemoDialog::DIALOG_ID, dlg);
 	}

@@ -10,12 +10,12 @@
 using namespace PopWork;
 using namespace std;
 
-WidgetManager::WidgetManager(AppBase* theApp)
+WidgetManager::WidgetManager(AppBase *theApp)
 {
 	mApp = theApp;
 
 	mMinDeferredOverlayPriority = 0x7FFFFFFF;
-	mWidgetManager = this;	
+	mWidgetManager = this;
 	mMouseIn = false;
 	mDefaultTab = NULL;
 	mImage = NULL;
@@ -25,7 +25,7 @@ WidgetManager::WidgetManager(AppBase* theApp)
 	mLastDownWidget = NULL;
 	mOverWidget = NULL;
 	mBaseModalWidget = NULL;
-	mDefaultBelowModalFlagsMod.mRemoveFlags = WIDGETFLAGS_ALLOW_MOUSE | WIDGETFLAGS_ALLOW_FOCUS;	
+	mDefaultBelowModalFlagsMod.mRemoveFlags = WIDGETFLAGS_ALLOW_MOUSE | WIDGETFLAGS_ALLOW_FOCUS;
 	mWidth = 0;
 	mHeight = 0;
 	mHasFocus = true;
@@ -33,47 +33,46 @@ WidgetManager::WidgetManager(AppBase* theApp)
 	mLastDownButtonId = 0;
 	mDownButtons = 0;
 	mActualDownButtons = 0;
-	mWidgetFlags = WIDGETFLAGS_UPDATE | WIDGETFLAGS_DRAW | WIDGETFLAGS_CLIP |
-		WIDGETFLAGS_ALLOW_MOUSE | WIDGETFLAGS_ALLOW_FOCUS;
+	mWidgetFlags =
+		WIDGETFLAGS_UPDATE | WIDGETFLAGS_DRAW | WIDGETFLAGS_CLIP | WIDGETFLAGS_ALLOW_MOUSE | WIDGETFLAGS_ALLOW_FOCUS;
 
 	for (int i = 0; i < 0xFF; i++)
 		mKeyDown[i] = false;
 }
 
 WidgetManager::~WidgetManager()
-{	
-	FreeResources();	
+{
+	FreeResources();
 }
 
 void WidgetManager::FreeResources()
-{	
-	
+{
 }
 
-void WidgetManager::DisableWidget(Widget* theWidget)
+void WidgetManager::DisableWidget(Widget *theWidget)
 {
 	if (mOverWidget == theWidget)
 	{
-		Widget* aOverWidget = mOverWidget;
+		Widget *aOverWidget = mOverWidget;
 		mOverWidget = NULL;
 		MouseLeave(aOverWidget);
 	}
-	
-	if (mLastDownWidget	== theWidget)
+
+	if (mLastDownWidget == theWidget)
 	{
-		Widget* aLastDownWidget = mLastDownWidget;
+		Widget *aLastDownWidget = mLastDownWidget;
 		mLastDownWidget = NULL;
 		DoMouseUps(aLastDownWidget, mDownButtons);
-		mDownButtons = 0;		
+		mDownButtons = 0;
 	}
-	
+
 	if (mFocusWidget == theWidget)
 	{
-		Widget* aFocusWidget = mFocusWidget;
+		Widget *aFocusWidget = mFocusWidget;
 		mFocusWidget = NULL;
 		aFocusWidget->LostFocus();
 	}
-	
+
 	if (mBaseModalWidget == theWidget)
 		mBaseModalWidget = NULL;
 }
@@ -83,15 +82,15 @@ int WidgetManager::GetWidgetFlags()
 	return mHasFocus ? mWidgetFlags : GetModFlags(mWidgetFlags, mLostFocusFlagsMod);
 }
 
-Widget* WidgetManager::GetAnyWidgetAt(int x, int y, int* theWidgetX, int* theWidgetY)
+Widget *WidgetManager::GetAnyWidgetAt(int x, int y, int *theWidgetX, int *theWidgetY)
 {
 	bool found;
 	return GetWidgetAtHelper(x, y, GetWidgetFlags(), &found, theWidgetX, theWidgetY);
 }
 
-Widget* WidgetManager::GetWidgetAt(int x, int y, int* theWidgetX, int* theWidgetY)
-{	
-	Widget* aWidget = GetAnyWidgetAt(x, y, theWidgetX, theWidgetY);
+Widget *WidgetManager::GetWidgetAt(int x, int y, int *theWidgetX, int *theWidgetY)
+{
+	Widget *aWidget = GetAnyWidgetAt(x, y, theWidgetX, theWidgetY);
 	if ((aWidget != NULL) && (aWidget->mDisabled))
 		aWidget = NULL;
 	return aWidget;
@@ -99,22 +98,22 @@ Widget* WidgetManager::GetWidgetAt(int x, int y, int* theWidgetX, int* theWidget
 
 bool WidgetManager::IsLeftButtonDown()
 {
-	return (mActualDownButtons&1)?true:false;
+	return (mActualDownButtons & 1) ? true : false;
 }
 
 bool WidgetManager::IsMiddleButtonDown()
 {
-	return (mActualDownButtons&4)?true:false;
+	return (mActualDownButtons & 4) ? true : false;
 }
 
 bool WidgetManager::IsRightButtonDown()
 {
-	return (mActualDownButtons&2)?true:false;
+	return (mActualDownButtons & 2) ? true : false;
 }
 
 void WidgetManager::DoMouseUps()
 {
-	if (mLastDownWidget!=NULL && mDownButtons!=0)
+	if (mLastDownWidget != NULL && mDownButtons != 0)
 	{
 		DoMouseUps(mLastDownWidget, mDownButtons);
 		mDownButtons = 0;
@@ -122,9 +121,9 @@ void WidgetManager::DoMouseUps()
 	}
 }
 
-void WidgetManager::DeferOverlay(Widget* theWidget, int thePriority)
+void WidgetManager::DeferOverlay(Widget *theWidget, int thePriority)
 {
-	mDeferredOverlayWidgets.push_back(std::pair<Widget*, int>(theWidget, thePriority));
+	mDeferredOverlayWidgets.push_back(std::pair<Widget *, int>(theWidget, thePriority));
 	if (thePriority < mMinDeferredOverlayPriority)
 		mMinDeferredOverlayPriority = thePriority;
 }
@@ -135,9 +134,9 @@ void WidgetManager::FlushDeferredOverlayWidgets(int theMaxPriority)
 	{
 		int aNextMinPriority = 0x7FFFFFFF;
 
-		for (int i = 0; i < (int) mDeferredOverlayWidgets.size(); i++)
+		for (int i = 0; i < (int)mDeferredOverlayWidgets.size(); i++)
 		{
-			Widget* aWidget = mDeferredOverlayWidgets[i].first;			
+			Widget *aWidget = mDeferredOverlayWidgets[i].first;
 			if (aWidget != NULL)
 			{
 				int aPriority = mDeferredOverlayWidgets[i].second;
@@ -170,16 +169,16 @@ void WidgetManager::FlushDeferredOverlayWidgets(int theMaxPriority)
 			break;
 		}
 
-		// Lowest overlay priority is higher or equal to our current widget, 
+		// Lowest overlay priority is higher or equal to our current widget,
 		//  so continue deferring
 		if (aNextMinPriority >= theMaxPriority)
 			break;
 	}
 }
 
-void WidgetManager::DoMouseUps(Widget* theWidget, ulong theDownCode)
+void WidgetManager::DoMouseUps(Widget *theWidget, ulong theDownCode)
 {
-	int aClickCountTable[3] = { 1,-1, 3 };
+	int aClickCountTable[3] = {1, -1, 3};
 	for (int i = 0; i < 3; i++)
 	{
 		if ((theDownCode & (1 << i)) != 0)
@@ -190,63 +189,63 @@ void WidgetManager::DoMouseUps(Widget* theWidget, ulong theDownCode)
 	}
 }
 
-void WidgetManager::RemapMouse(int& theX, int& theY)
+void WidgetManager::RemapMouse(int &theX, int &theY)
 {
-	theX = ( theX - mMouseSourceRect.mX ) * mMouseDestRect.mWidth / mMouseSourceRect.mWidth + mMouseDestRect.mX;
-	theY = ( theY - mMouseSourceRect.mY ) * mMouseDestRect.mHeight / mMouseSourceRect.mHeight + mMouseDestRect.mY;
+	theX = (theX - mMouseSourceRect.mX) * mMouseDestRect.mWidth / mMouseSourceRect.mWidth + mMouseDestRect.mX;
+	theY = (theY - mMouseSourceRect.mY) * mMouseDestRect.mHeight / mMouseSourceRect.mHeight + mMouseDestRect.mY;
 }
 
-void WidgetManager::MouseEnter(Widget* theWidget)
+void WidgetManager::MouseEnter(Widget *theWidget)
 {
 	theWidget->mIsOver = true;
-	
+
 	theWidget->MouseEnter();
 	if (theWidget->mDoFinger)
-		theWidget->ShowFinger(true);	
+		theWidget->ShowFinger(true);
 }
 
-void WidgetManager::MouseLeave(Widget* theWidget)
+void WidgetManager::MouseLeave(Widget *theWidget)
 {
 	theWidget->mIsOver = false;
-	
+
 	theWidget->MouseLeave();
 	if (theWidget->mDoFinger)
 		theWidget->ShowFinger(false);
 }
 
-void WidgetManager::SetBaseModal(Widget* theWidget, const FlagsMod& theBelowFlagsMod)
+void WidgetManager::SetBaseModal(Widget *theWidget, const FlagsMod &theBelowFlagsMod)
 {
 	mBaseModalWidget = theWidget;
 	mBelowModalFlagsMod = theBelowFlagsMod;
-	
-	if ((mOverWidget != NULL) && (mBelowModalFlagsMod.mRemoveFlags & WIDGETFLAGS_ALLOW_MOUSE) && 
+
+	if ((mOverWidget != NULL) && (mBelowModalFlagsMod.mRemoveFlags & WIDGETFLAGS_ALLOW_MOUSE) &&
 		(IsBelow(mOverWidget, mBaseModalWidget)))
 	{
-		Widget* aWidget = mOverWidget;
+		Widget *aWidget = mOverWidget;
 		mOverWidget = NULL;
-		MouseLeave(aWidget);		
+		MouseLeave(aWidget);
 	}
-	
-	if ((mLastDownWidget != NULL) && (mBelowModalFlagsMod.mRemoveFlags & WIDGETFLAGS_ALLOW_MOUSE) && 
+
+	if ((mLastDownWidget != NULL) && (mBelowModalFlagsMod.mRemoveFlags & WIDGETFLAGS_ALLOW_MOUSE) &&
 		(IsBelow(mLastDownWidget, mBaseModalWidget)))
 	{
-		Widget* aWidget = mLastDownWidget;
+		Widget *aWidget = mLastDownWidget;
 		int aDownButtons = mDownButtons;
-		mDownButtons = 0;		
+		mDownButtons = 0;
 		mLastDownWidget = NULL;
-		DoMouseUps(aWidget, aDownButtons);		
+		DoMouseUps(aWidget, aDownButtons);
 	}
-	
-	if ((mFocusWidget != NULL) && (mBelowModalFlagsMod.mRemoveFlags & WIDGETFLAGS_ALLOW_FOCUS) && 
+
+	if ((mFocusWidget != NULL) && (mBelowModalFlagsMod.mRemoveFlags & WIDGETFLAGS_ALLOW_FOCUS) &&
 		(IsBelow(mFocusWidget, mBaseModalWidget)))
 	{
-		Widget* aWidget = mFocusWidget;
+		Widget *aWidget = mFocusWidget;
 		mFocusWidget = NULL;
-		aWidget->LostFocus();		
+		aWidget->LostFocus();
 	}
 }
 
-void WidgetManager::AddBaseModal(Widget* theWidget, const FlagsMod& theBelowFlagsMod)
+void WidgetManager::AddBaseModal(Widget *theWidget, const FlagsMod &theBelowFlagsMod)
 {
 	PreModalInfo aPreModalInfo;
 	aPreModalInfo.mBaseModalWidget = theWidget;
@@ -258,36 +257,34 @@ void WidgetManager::AddBaseModal(Widget* theWidget, const FlagsMod& theBelowFlag
 	SetBaseModal(theWidget, theBelowFlagsMod);
 }
 
-void WidgetManager::AddBaseModal(Widget* theWidget)
+void WidgetManager::AddBaseModal(Widget *theWidget)
 {
 	AddBaseModal(theWidget, mDefaultBelowModalFlagsMod);
 }
 
-void WidgetManager::RemoveBaseModal(Widget* theWidget)
+void WidgetManager::RemoveBaseModal(Widget *theWidget)
 {
 	DBG_ASSERT(mPreModalInfoList.size() > 0);
-	
+
 	bool first = true;
-	
+
 	while (mPreModalInfoList.size() > 0)
 	{
-		PreModalInfo* aPreModalInfo = &mPreModalInfoList.back();
-		
+		PreModalInfo *aPreModalInfo = &mPreModalInfoList.back();
+
 		if ((first) && (aPreModalInfo->mBaseModalWidget != theWidget))
 		{
 			// We don't remove it yet, because we want to restore
 			//  its keyboard focused widget and crap later
 			return;
 		}
-		
+
 		// If we removed a widget's self from pre-modal info before
 		//  then that means the dialog got removed out-of-order but we
 		//  deferred setting the state back until now
-		bool done = (aPreModalInfo->mPrevBaseModalWidget != NULL) ||
-			(mPreModalInfoList.size() == 1);
+		bool done = (aPreModalInfo->mPrevBaseModalWidget != NULL) || (mPreModalInfoList.size() == 1);
 
-		SetBaseModal(aPreModalInfo->mPrevBaseModalWidget, 
-			aPreModalInfo->mPrevBelowModalFlagsMod);
+		SetBaseModal(aPreModalInfo->mPrevBaseModalWidget, aPreModalInfo->mPrevBelowModalFlagsMod);
 
 		if (mFocusWidget == NULL)
 		{
@@ -296,7 +293,7 @@ void WidgetManager::RemoveBaseModal(Widget* theWidget)
 				mFocusWidget->GotFocus();
 		}
 
-		mPreModalInfoList.pop_back();		
+		mPreModalInfoList.pop_back();
 
 		if (done)
 			break;
@@ -305,17 +302,17 @@ void WidgetManager::RemoveBaseModal(Widget* theWidget)
 	}
 }
 
-void WidgetManager::Resize(const Rect& theMouseDestRect, const Rect& theMouseSourceRect)
-{	
+void WidgetManager::Resize(const Rect &theMouseDestRect, const Rect &theMouseSourceRect)
+{
 	mWidth = theMouseDestRect.mWidth + 2 * theMouseDestRect.mX;
 	mHeight = theMouseDestRect.mHeight + 2 * theMouseDestRect.mY;
 	mMouseDestRect = theMouseDestRect;
 	mMouseSourceRect = theMouseSourceRect;
 }
 
-void WidgetManager::SetFocus(Widget* aWidget)
-{	
-	if (aWidget==mFocusWidget)
+void WidgetManager::SetFocus(Widget *aWidget)
+{
+	if (aWidget == mFocusWidget)
 		return;
 
 	if (mFocusWidget != NULL)
@@ -324,7 +321,7 @@ void WidgetManager::SetFocus(Widget* aWidget)
 	if ((aWidget != NULL) && (aWidget->mWidgetManager == this))
 	{
 		mFocusWidget = aWidget;
-		
+
 		if ((mHasFocus) && (mFocusWidget != NULL))
 			mFocusWidget->GotFocus();
 	}
@@ -337,7 +334,7 @@ void WidgetManager::GotFocus()
 	if (!mHasFocus)
 	{
 		mHasFocus = true;
-	
+
 		if (mFocusWidget != NULL)
 			mFocusWidget->GotFocus();
 	}
@@ -351,24 +348,24 @@ void WidgetManager::LostFocus()
 		for (int aKeyNum = 0; aKeyNum < 0xFF; aKeyNum++)
 		{
 			if (mKeyDown[aKeyNum])
-				KeyUp((KeyCode) aKeyNum);
+				KeyUp((KeyCode)aKeyNum);
 		}
 
 		mHasFocus = false;
-	 
+
 		if (mFocusWidget != NULL)
 			mFocusWidget->LostFocus();
 	}
 }
 
-void WidgetManager::InitModalFlags(ModalFlags* theModalFlags)
+void WidgetManager::InitModalFlags(ModalFlags *theModalFlags)
 {
 	theModalFlags->mIsOver = mBaseModalWidget == NULL;
 	theModalFlags->mOverFlags = GetWidgetFlags();
 	theModalFlags->mUnderFlags = GetModFlags(theModalFlags->mOverFlags, mBelowModalFlagsMod);
 }
 
-void WidgetManager::DrawWidgetsTo(Graphics* g)
+void WidgetManager::DrawWidgetsTo(Graphics *g)
 {
 	mCurG = g;
 
@@ -378,14 +375,14 @@ void WidgetManager::DrawWidgetsTo(Graphics* g)
 	WidgetList::iterator anItr = mWidgets.begin();
 	while (anItr != mWidgets.end())
 	{
-		Widget* aWidget = *anItr;
-		
+		Widget *aWidget = *anItr;
+
 		if (aWidget->mVisible)
 		{
 			Graphics aClipG(*g);
 			aClipG.SetFastStretch(true);
 			aClipG.Translate(aWidget->mX, aWidget->mY);
-			aWidget->DrawAll(&aModalFlags, &aClipG);			
+			aWidget->DrawAll(&aModalFlags, &aClipG);
 		}
 
 		++anItr;
@@ -397,13 +394,13 @@ void WidgetManager::DrawWidgetsTo(Graphics* g)
 bool WidgetManager::DrawScreen()
 {
 	POPWORK_AUTO_PERF("WidgetManager::DrawScreen");
-	//DWORD start = SDL_GetTicks();
+	// DWORD start = SDL_GetTicks();
 
 	ModalFlags aModalFlags;
 	InitModalFlags(&aModalFlags);
 
-	bool drewStuff = false;	
-	
+	bool drewStuff = false;
+
 	int aDirtyCount = 0;
 	bool hasTransients = false;
 	bool hasDirtyTransients = false;
@@ -412,19 +409,19 @@ bool WidgetManager::DrawScreen()
 	WidgetList::iterator anItr = mWidgets.begin();
 	while (anItr != mWidgets.end())
 	{
-		Widget* aWidget = *anItr;
+		Widget *aWidget = *anItr;
 		if (aWidget->mDirty)
 			aDirtyCount++;
 		++anItr;
 	}
-	
+
 	mMinDeferredOverlayPriority = 0x7FFFFFFF;
 	mDeferredOverlayWidgets.resize(0);
 
 	Graphics aScrG(mImage);
 	mCurG = &aScrG;
 
-	SDLImage* aSDLImage = dynamic_cast<SDLImage*>(mImage);
+	SDLImage *aSDLImage = dynamic_cast<SDLImage *>(mImage);
 	bool surfaceLocked = false;
 
 	if (aDirtyCount > 0)
@@ -436,8 +433,8 @@ bool WidgetManager::DrawScreen()
 		WidgetList::iterator anItr = mWidgets.begin();
 		while (anItr != mWidgets.end())
 		{
-			Widget* aWidget = *anItr;
-			
+			Widget *aWidget = *anItr;
+
 			if (aWidget == mWidgetManager->mBaseModalWidget)
 				aModalFlags.mIsOver = true;
 
@@ -446,9 +443,9 @@ bool WidgetManager::DrawScreen()
 				Graphics aClipG(g);
 				aClipG.SetFastStretch(!is3D);
 				aClipG.SetLinearBlend(is3D);
-				aClipG.Translate(aWidget->mX, aWidget->mY);				
+				aClipG.Translate(aWidget->mX, aWidget->mY);
 				aWidget->DrawAll(&aModalFlags, &aClipG);
-				 
+
 				aDirtyCount++;
 				drewStuff = true;
 				aWidget->mDirty = false;
@@ -457,9 +454,8 @@ bool WidgetManager::DrawScreen()
 			++anItr;
 		}
 	}
-	
-	FlushDeferredOverlayWidgets(0x7FFFFFFF);
 
+	FlushDeferredOverlayWidgets(0x7FFFFFFF);
 
 	mCurG = NULL;
 
@@ -475,7 +471,7 @@ bool WidgetManager::UpdateFrame()
 
 	// Keep us from having mLastWMUpdateCount interfere with our own updating
 	mUpdateCnt++;
-	mLastWMUpdateCount = mUpdateCnt;	
+	mLastWMUpdateCount = mUpdateCnt;
 	UpdateAll(&aModalFlags);
 
 	return mDirty;
@@ -492,7 +488,7 @@ bool WidgetManager::UpdateFrameF(float theFrac)
 	return mDirty;
 }
 
-void WidgetManager::SetPopupCommandWidget(Widget* theList)
+void WidgetManager::SetPopupCommandWidget(Widget *theList)
 {
 	mPopupCommandWidget = theList;
 	AddWidget(mPopupCommandWidget);
@@ -503,7 +499,7 @@ void WidgetManager::RemovePopupCommandWidget()
 	if (mPopupCommandWidget != NULL)
 	{
 		Widget *aWidget = mPopupCommandWidget;
-		mPopupCommandWidget = NULL;	
+		mPopupCommandWidget = NULL;
 		RemoveWidget(aWidget);
 	}
 }
@@ -516,19 +512,19 @@ void WidgetManager::MousePosition(int x, int y)
 
 	mLastMouseX = x;
 	mLastMouseY = y;
-	
+
 	int aWidgetX;
 	int aWidgetY;
-	Widget* aWidget = GetWidgetAt(x, y, &aWidgetX, &aWidgetY);
-	
+	Widget *aWidget = GetWidgetAt(x, y, &aWidgetX, &aWidgetY);
+
 	if (aWidget != mOverWidget)
 	{
-		Widget* aLastOverWidget = mOverWidget;
+		Widget *aLastOverWidget = mOverWidget;
 		mOverWidget = NULL;
 
 		if (aLastOverWidget != NULL)
 			MouseLeave(aLastOverWidget);
-		
+
 		mOverWidget = aWidget;
 		if (aWidget != NULL)
 		{
@@ -539,7 +535,7 @@ void WidgetManager::MousePosition(int x, int y)
 	else if ((aLastMouseX != x) || (aLastMouseY != y))
 	{
 		if (aWidget != NULL)
-			aWidget->MouseMove(aWidgetX, aWidgetY);		
+			aWidget->MouseMove(aWidgetX, aWidgetY);
 	}
 }
 
@@ -548,27 +544,27 @@ void WidgetManager::RehupMouse()
 	if (mLastDownWidget != NULL)
 	{
 		if (mOverWidget != NULL)
-		{						
-			Widget* aWidgetOver = GetWidgetAt(mLastMouseX, mLastMouseY, NULL, NULL);
+		{
+			Widget *aWidgetOver = GetWidgetAt(mLastMouseX, mLastMouseY, NULL, NULL);
 
 			if (aWidgetOver != mLastDownWidget)
-			{								
-				Widget* anOverWidget = mOverWidget;
-				mOverWidget = NULL;	
+			{
+				Widget *anOverWidget = mOverWidget;
+				mOverWidget = NULL;
 				MouseLeave(anOverWidget);
 			}
 		}
 	}
-	else if (mMouseIn) 
+	else if (mMouseIn)
 		MousePosition(mLastMouseX, mLastMouseY);
 }
 
 bool WidgetManager::MouseUp(int x, int y, int theClickCount)
-{	
+{
 	mLastInputUpdateCnt = mUpdateCnt;
-	
+
 	int aMask;
-	
+
 	if (theClickCount < 0)
 		aMask = 0x02;
 	else if (theClickCount == 3)
@@ -576,30 +572,30 @@ bool WidgetManager::MouseUp(int x, int y, int theClickCount)
 	else
 		aMask = 0x01;
 
-	// Make sure that we thought this button was down anyway - possibly not, if we 
+	// Make sure that we thought this button was down anyway - possibly not, if we
 	//  disabled the widget already or something
 	mActualDownButtons &= ~aMask;
 	if ((mLastDownWidget != NULL) && ((mDownButtons & aMask) != 0))
 	{
-		Widget* aLastDownWidget = mLastDownWidget;
+		Widget *aLastDownWidget = mLastDownWidget;
 
-		mDownButtons &= ~aMask;		
+		mDownButtons &= ~aMask;
 		if (mDownButtons == 0)
 			mLastDownWidget = NULL;
 
 		aLastDownWidget->mIsDown = false;
 		aLastDownWidget->MouseUp(x - aLastDownWidget->mX, y - aLastDownWidget->mY, theClickCount);
-	}	
+	}
 	else
-		mDownButtons &= ~aMask;		
+		mDownButtons &= ~aMask;
 
 	MousePosition(x, y);
-	
+
 	return true;
 }
 
-bool WidgetManager::MouseDown(int x, int y, int theClickCount) 
-{	
+bool WidgetManager::MouseDown(int x, int y, int theClickCount)
+{
 	mLastInputUpdateCnt = mUpdateCnt;
 
 	if (theClickCount < 0)
@@ -616,21 +612,21 @@ bool WidgetManager::MouseDown(int x, int y, int theClickCount)
 
 	int aWidgetX;
 	int aWidgetY;
-	Widget* aWidget = GetWidgetAt(x, y, &aWidgetX, &aWidgetY);	
+	Widget *aWidget = GetWidgetAt(x, y, &aWidgetX, &aWidgetY);
 
 	// Begin mouse down options
-/*	
-	// Option 1
-	//This code sets a new widget as the mouse drag focus widget and lets the old 
-	//mousedownwidget think the buttons popped up.
-	if ((mLastDownWidget != NULL) && (mLastDownWidget != aWidget))
-	{
-		DoMouseUps(mLastDownWidget, mDownButtons);
-		mDownButtons = 0;
-	}
-*/
+	/*
+		// Option 1
+		//This code sets a new widget as the mouse drag focus widget and lets the old
+		//mousedownwidget think the buttons popped up.
+		if ((mLastDownWidget != NULL) && (mLastDownWidget != aWidget))
+		{
+			DoMouseUps(mLastDownWidget, mDownButtons);
+			mDownButtons = 0;
+		}
+	*/
 	// Option 2
-	// This code passes all button downs to the mLastDownWidget 
+	// This code passes all button downs to the mLastDownWidget
 	if (mLastDownWidget != NULL)
 		aWidget = mLastDownWidget;
 
@@ -651,35 +647,35 @@ bool WidgetManager::MouseDown(int x, int y, int theClickCount)
 		mLastDownButtonId = 1;
 		mDownButtons |= 0x01;
 	}
-	
+
 	mLastDownWidget = aWidget;
 	if (aWidget != NULL)
 	{
 		if (aWidget->WantsFocus())
 			SetFocus(aWidget);
-		
+
 		aWidget->mIsDown = true;
 		aWidget->MouseDown(aWidgetX, aWidgetY, theClickCount);
 	}
-	
+
 	return true;
 }
 
-bool WidgetManager::MouseMove(int x, int y) 
-{	
+bool WidgetManager::MouseMove(int x, int y)
+{
 	mLastInputUpdateCnt = mUpdateCnt;
 
 	if (mDownButtons)
-		return MouseDrag(x,y);
+		return MouseDrag(x, y);
 
 	mMouseIn = true;
-	MousePosition(x, y);	
-			
+	MousePosition(x, y);
+
 	return true;
 }
 
-bool WidgetManager::MouseDrag(int x, int y) 
-{	
+bool WidgetManager::MouseDrag(int x, int y)
+{
 	mLastInputUpdateCnt = mUpdateCnt;
 
 	mMouseIn = true;
@@ -688,9 +684,9 @@ bool WidgetManager::MouseDrag(int x, int y)
 
 	if ((mOverWidget != NULL) && (mOverWidget != mLastDownWidget))
 	{
-		Widget* anOverWidget = mOverWidget;
-		mOverWidget = NULL;	
-		MouseLeave(anOverWidget);		
+		Widget *anOverWidget = mOverWidget;
+		mOverWidget = NULL;
+		MouseLeave(anOverWidget);
 	}
 
 	if (mLastDownWidget != NULL)
@@ -698,10 +694,10 @@ bool WidgetManager::MouseDrag(int x, int y)
 		Point anAbsPos = mLastDownWidget->GetAbsPos();
 
 		int aWidgetX = x - anAbsPos.mX;
-		int aWidgetY = y - anAbsPos.mY;		
-		mLastDownWidget->MouseDrag(aWidgetX, aWidgetY);		
-		
-		Widget* aWidgetOver = GetWidgetAt(x, y, NULL, NULL);
+		int aWidgetY = y - anAbsPos.mY;
+		mLastDownWidget->MouseDrag(aWidgetX, aWidgetY);
+
+		Widget *aWidgetOver = GetWidgetAt(x, y, NULL, NULL);
 
 		if ((aWidgetOver == mLastDownWidget) && (aWidgetOver != NULL))
 		{
@@ -715,18 +711,18 @@ bool WidgetManager::MouseDrag(int x, int y)
 		{
 			if (mOverWidget != NULL)
 			{
-				Widget* anOverWidget = mOverWidget;
-				mOverWidget = NULL;	
-				MouseLeave(anOverWidget);				
+				Widget *anOverWidget = mOverWidget;
+				mOverWidget = NULL;
+				MouseLeave(anOverWidget);
 			}
 		}
 	}
-	
-	return true;	
+
+	return true;
 }
 
 bool WidgetManager::MouseExit(int x, int y)
-{	
+{
 	mLastInputUpdateCnt = mUpdateCnt;
 
 	mMouseIn = false;
@@ -736,7 +732,7 @@ bool WidgetManager::MouseExit(int x, int y)
 		MouseLeave(mOverWidget);
 		mOverWidget = NULL;
 	}
-	
+
 	return true;
 }
 
@@ -754,20 +750,20 @@ bool WidgetManager::KeyChar(PopWorkChar theChar)
 
 	if (theChar == KEYCODE_TAB)
 	{
-		//TODO: Check thing
+		// TODO: Check thing
 
 		if (mKeyDown[KEYCODE_CONTROL])
 		{
 			if (mDefaultTab != NULL)
 				mDefaultTab->KeyChar(theChar);
-			
+
 			return true;
 		}
 	}
 
 	if (mFocusWidget != NULL)
 		mFocusWidget->KeyChar(theChar);
-	
+
 	return true;
 }
 
@@ -780,7 +776,7 @@ bool WidgetManager::KeyDown(KeyCode key)
 
 	if (mFocusWidget != NULL)
 		mFocusWidget->KeyDown(key);
-	
+
 	return true;
 }
 
@@ -792,10 +788,10 @@ bool WidgetManager::KeyUp(KeyCode key)
 		mKeyDown[key] = false;
 
 	if ((key == KEYCODE_TAB) && (mKeyDown[KEYCODE_CONTROL]))
-		return true;	
+		return true;
 
 	if (mFocusWidget != NULL)
 		mFocusWidget->KeyUp(key);
-	
+
 	return true;
 }

@@ -14,16 +14,14 @@ PopWorkMatrix3::PopWorkMatrix3()
 ///////////////////////////////////////////////////////////////////////////////
 void PopWorkMatrix3::ZeroMatrix()
 {
-	m00 = m01 = m02 =
-	m10 = m11 = m12 = 
-	m20 = m21 = m22 = 0;
+	m00 = m01 = m02 = m10 = m11 = m12 = m20 = m21 = m22 = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 void PopWorkMatrix3::LoadIdentity()
 {
-	m01	= m02 = m10 = m12 = m20 = m21 = 0;
+	m01 = m02 = m10 = m12 = m20 = m21 = 0;
 	m00 = m11 = m22 = 1;
 }
 
@@ -33,13 +31,13 @@ PopWorkMatrix3 PopWorkMatrix3::operator*(const PopWorkMatrix3 &theMat) const
 {
 	PopWorkMatrix3 aResult;
 
-	for(int i=0; i<3; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		for(int j=0; j<3; j++)
+		for (int j = 0; j < 3; j++)
 		{
 			float x = 0;
-			for(int k=0; k<3; k++)				
-				x += m[i][k]*theMat.m[k][j];
+			for (int k = 0; k < 3; k++)
+				x += m[i][k] * theMat.m[k][j];
 
 			aResult.m[i][j] = x;
 		}
@@ -52,24 +50,21 @@ PopWorkMatrix3 PopWorkMatrix3::operator*(const PopWorkMatrix3 &theMat) const
 ///////////////////////////////////////////////////////////////////////////////
 PopWorkVector2 PopWorkMatrix3::operator*(const PopWorkVector2 &theVec) const
 {
-	return PopWorkVector2(
-		m00*theVec.x + m01*theVec.y + m02,
-		m10*theVec.x + m11*theVec.y + m12);
-}
-	
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-PopWorkVector3 PopWorkMatrix3::operator*(const PopWorkVector3 &theVec) const
-{
-	return PopWorkVector3(
-		m00*theVec.x + m01*theVec.y + m02*theVec.z,
-		m10*theVec.x + m11*theVec.y + m12*theVec.z,
-		m20*theVec.x + m21*theVec.y + m22*theVec.z);
+	return PopWorkVector2(m00 * theVec.x + m01 * theVec.y + m02, m10 * theVec.x + m11 * theVec.y + m12);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-const PopWorkMatrix3& PopWorkMatrix3::operator*=(const PopWorkMatrix3 &theMat)
+PopWorkVector3 PopWorkMatrix3::operator*(const PopWorkVector3 &theVec) const
+{
+	return PopWorkVector3(m00 * theVec.x + m01 * theVec.y + m02 * theVec.z,
+						  m10 * theVec.x + m11 * theVec.y + m12 * theVec.z,
+						  m20 * theVec.x + m21 * theVec.y + m22 * theVec.z);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+const PopWorkMatrix3 &PopWorkMatrix3::operator*=(const PopWorkMatrix3 &theMat)
 {
 	return operator=(operator*(theMat));
 }
@@ -91,13 +86,13 @@ PopWorkTransform2D::PopWorkTransform2D(bool loadIdentity)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-PopWorkTransform2D::PopWorkTransform2D(const PopWorkMatrix3& theMatrix) : PopWorkMatrix3(theMatrix)
+PopWorkTransform2D::PopWorkTransform2D(const PopWorkMatrix3 &theMatrix) : PopWorkMatrix3(theMatrix)
 {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-const PopWorkTransform2D& PopWorkTransform2D::operator=(const PopWorkMatrix3 &theMat)
+const PopWorkTransform2D &PopWorkTransform2D::operator=(const PopWorkMatrix3 &theMat)
 {
 	PopWorkMatrix3::operator=(theMat);
 	return *this;
@@ -193,7 +188,7 @@ void Transform::Translate(float tx, float ty)
 		}
 	}
 	else
-		mMatrix.Translate(tx,ty);
+		mMatrix.Translate(tx, ty);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,7 +202,7 @@ void Transform::RotateRad(float rot)
 			MakeComplex();
 			mMatrix.RotateRad(rot);
 		}
-		else 
+		else
 		{
 			mNeedCalcMatrix = true;
 			mHaveRot = true;
@@ -231,10 +226,10 @@ void Transform::Scale(float sx, float sy)
 {
 	if (!mComplex)
 	{
-		if (mHaveRot || mTransX1!=0 || mTransY1!=0 || (sx<0 && mScaleX*sx!=-1) || sy<0)
+		if (mHaveRot || mTransX1 != 0 || mTransY1 != 0 || (sx < 0 && mScaleX * sx != -1) || sy < 0)
 		{
 			MakeComplex();
-			mMatrix.Scale(sx,sy);
+			mMatrix.Scale(sx, sy);
 		}
 		else
 		{
@@ -245,7 +240,7 @@ void Transform::Scale(float sx, float sy)
 		}
 	}
 	else
-		mMatrix.Scale(sx,sy);
+		mMatrix.Scale(sx, sy);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -280,37 +275,33 @@ void Transform::CalcMatrix() const
 		else if (mHaveRot)
 			mMatrix.RotateRad(mRot);
 
-		if (mTransX2!=0 || mTransY2!=0)
-			mMatrix.Translate(mTransX2,mTransY2);
+		if (mTransX2 != 0 || mTransY2 != 0)
+			mMatrix.Translate(mTransX2, mTransY2);
 	}
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-const PopWorkTransform2D& Transform::GetMatrix() const
+const PopWorkTransform2D &Transform::GetMatrix() const
 {
 	CalcMatrix();
 	return mMatrix;
 }
 
-
 double PopWork::PopWorkTransform2D::determinantOfMinor(int theRowHeightY, int theColumnWidthX) const
 {
-	int x1 = theColumnWidthX == 0 ? 1 : 0;  /* always either 0 or 1 */
-	int x2 = theColumnWidthX == 2 ? 1 : 2;  /* always either 1 or 2 */
-	int y1 = theRowHeightY == 0 ? 1 : 0;  /* always either 0 or 1 */
-	int y2 = theRowHeightY == 2 ? 1 : 2;  /* always either 1 or 2 */
+	int x1 = theColumnWidthX == 0 ? 1 : 0; /* always either 0 or 1 */
+	int x2 = theColumnWidthX == 2 ? 1 : 2; /* always either 1 or 2 */
+	int y1 = theRowHeightY == 0 ? 1 : 0;   /* always either 0 or 1 */
+	int y2 = theRowHeightY == 2 ? 1 : 2;   /* always either 1 or 2 */
 
-	return (m[y1][x1] * m[y2][x2])
-		- (m[y1][x2] * m[y2][x1]);
+	return (m[y1][x1] * m[y2][x2]) - (m[y1][x2] * m[y2][x1]);
 }
 
 double PopWork::PopWorkTransform2D::GetDeterminant() const
 {
-	return (m[0][0] * determinantOfMinor(0, 0))
-		- (m[0][1] * determinantOfMinor(0, 1))
-		+ (m[0][2] * determinantOfMinor(0, 2));
+	return (m[0][0] * determinantOfMinor(0, 0)) - (m[0][1] * determinantOfMinor(0, 1)) +
+		   (m[0][2] * determinantOfMinor(0, 2));
 }
 
 PopWork::PopWorkTransform2D PopWork::PopWorkTransform2D::Inverse() const
@@ -328,7 +319,7 @@ PopWork::PopWorkTransform2D PopWork::PopWorkTransform2D::Inverse() const
 		for (int x = 0; x < 3; x++)
 		{
 			/* Rule is Inverse = 1/det * minor of the TRANSPOSE matrix.  *
-			* Note (y,x) becomes (x,y) INTENTIONALLY here!              */
+			 * Note (y,x) becomes (x,y) INTENTIONALLY here!              */
 			aRetTrans.m[y][x] = determinantOfMinor(x, y) * oneOverDeterminant;
 
 			/* (y0,x1)  (y1,x0)  (y1,x2)  and (y2,x1)  all need to be negated. */

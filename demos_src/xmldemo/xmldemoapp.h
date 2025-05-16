@@ -20,44 +20,41 @@ class XMLParser;
 // The names correspond to the attributes/sections from the XML file.
 struct s_Section1
 {
-	PopWorkString	mItem1Text;
-	
-	PopWorkString  mBoolParamText;
-	bool		mBoolParamElement;
+	PopWorkString mItem1Text;
+
+	PopWorkString mBoolParamText;
+	bool mBoolParamElement;
 };
 
 struct s_Section2
 {
-	PopWorkString	mSectionAttribText;
+	PopWorkString mSectionAttribText;
 
-	PopWorkString	mIntParamText;
-	int			mIntParamElement;
+	PopWorkString mIntParamText;
+	int mIntParamElement;
 
-	PopWorkString	mMultiAttrib1;
-	PopWorkString	mMultiAttrib2;
-	PopWorkString	mMultiAttrib3;
+	PopWorkString mMultiAttrib1;
+	PopWorkString mMultiAttrib2;
+	PopWorkString mMultiAttrib3;
 
-	PopWorkString		mSubsectionItem2;
+	PopWorkString mSubsectionItem2;
 };
 
 class XMLDemoApp : public AppBase
 {
 
-public:
+  public:
+	Board *mBoard;
+	s_Section1 mSection1;
+	s_Section2 mSection2;
+	PopWorkString mInstructionTag;
+	PopWorkString mInstruction;
 
-	Board*			mBoard;
-	s_Section1		mSection1;
-	s_Section2		mSection2;
-	PopWorkString		mInstructionTag;
-	PopWorkString		mInstruction;
-
-private:
-
+  private:
 	// With this class, we'll read in our sample XML file, properties/demo.xml
-	XMLParser*		mParser;			
+	XMLParser *mParser;
 
-private:
-
+  private:
 	//////////////////////////////////////////////////////////////////////////
 	// Function:	ExtractXMLData
 	// Parameters:	none
@@ -67,20 +64,16 @@ private:
 	// this function then extracts out the data it needs from the sample XML file.
 	// When complete, mSection1 and mSection2 will have their values initialized.
 	//////////////////////////////////////////////////////////////////////////
-	bool	ExtractXMLData();
+	bool ExtractXMLData();
 
-public:
-
+  public:
 	XMLDemoApp();
 
 	virtual ~XMLDemoApp();
 
-	virtual void		ShutdownHook();
-	virtual void		InitHook();
-
-	
-	
+	virtual void ShutdownHook();
+	virtual void InitHook();
 };
 
-}
+} // namespace PopWork
 #endif //__XMLDEMOAPP_H__

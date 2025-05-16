@@ -11,7 +11,7 @@ namespace PopWork
 
 class HTTPTransfer
 {
-public:
+  public:
 	enum
 	{
 		RESULT_DONE,
@@ -26,60 +26,60 @@ public:
 		RESULT_DISCONNECTED
 	};
 
-	int						mTransferId;
-	int						mSocket;
-	std::string				mSendStr;
-	std::string				mSpecifiedBaseURL;
-	std::string				mSpecifiedRelURL;
-	std::string				mURL;
-	std::string				mProto;
-	std::string				mHost;	
-	int						mPort;
-	std::string				mPath;
+	int mTransferId;
+	int mSocket;
+	std::string mSendStr;
+	std::string mSpecifiedBaseURL;
+	std::string mSpecifiedRelURL;
+	std::string mURL;
+	std::string mProto;
+	std::string mHost;
+	int mPort;
+	std::string mPath;
 
-	int						mContentLength;
-	std::string				mContent;
+	int mContentLength;
+	std::string mContent;
 
-	bool					mTransferPending;
-	bool					mThreadRunning;	
-	bool					mExiting;
-	bool					mAborted;
-	int						mResult;
+	bool mTransferPending;
+	bool mThreadRunning;
+	bool mExiting;
+	bool mAborted;
+	int mResult;
 
-protected:
-	void					PrepareTransfer(const std::string& theURL);
-	void					StartTransfer();
-	void					GetHelper(const std::string& theURL);
+  protected:
+	void PrepareTransfer(const std::string &theURL);
+	void StartTransfer();
+	void GetHelper(const std::string &theURL);
 
-	void					PostHelper(const std::string& theURL, const std::string& theParams);
+	void PostHelper(const std::string &theURL, const std::string &theParams);
 
-	void					Fail(int theResult);
-	void					GetThreadProc();
-	static void				GetThreadProcStub(void *theArg);
-	static std::string		GetAbsURL(const std::string& theBaseURL, const std::string& theRelURL);
+	void Fail(int theResult);
+	void GetThreadProc();
+	static void GetThreadProcStub(void *theArg);
+	static std::string GetAbsURL(const std::string &theBaseURL, const std::string &theRelURL);
 
-	void					UpdateStatus();
-	bool					SocketWait(bool checkRead, bool checkWrite);
+	void UpdateStatus();
+	bool SocketWait(bool checkRead, bool checkWrite);
 
-public:
+  public:
 	HTTPTransfer();
 	virtual ~HTTPTransfer();
 
-	void					Get(const std::string& theURL);
-	void					Get(const std::string& theBaseURL, const std::string& theRelURL);
+	void Get(const std::string &theURL);
+	void Get(const std::string &theBaseURL, const std::string &theRelURL);
 
-	void					Post(const std::string& theURL, const std::string& theParams);
-	void					Post(const std::string& theBaseURL, const std::string& theRelURL, const std::string& theParams);
+	void Post(const std::string &theURL, const std::string &theParams);
+	void Post(const std::string &theBaseURL, const std::string &theRelURL, const std::string &theParams);
 
-	void					SendRequestString(const std::string& theHost, const std::string& theSendString);
+	void SendRequestString(const std::string &theHost, const std::string &theSendString);
 
-	void					Reset();
-	void					Abort();
-	void					WaitFor();
-	int						GetResultCode();
-	std::string				GetContent();	
+	void Reset();
+	void Abort();
+	void WaitFor();
+	int GetResultCode();
+	std::string GetContent();
 };
 
-};
+}; // namespace PopWork
 
 #endif

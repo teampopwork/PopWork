@@ -16,7 +16,6 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-
 #include <list>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,70 +27,65 @@ extern void PopWorkDumpUnfreed();
 /************************************************************************/
 /* DO NOT CALL THESE TWO METHODS DIRECTLY								*/
 /************************************************************************/
-void PopWorkMemAddTrack(void* addr,  int asize,  const char *fname, int lnum);
+void PopWorkMemAddTrack(void *addr, int asize, const char *fname, int lnum);
 void PopWorkMemRemoveTrack(void *addr);
 
-
-//Replacement for the standard "new" operator, records size of allocation and 
-//the file/line number it was on
-inline void* __cdecl operator new(size_t size, const char* file, int line)
+// Replacement for the standard "new" operator, records size of allocation and
+// the file/line number it was on
+inline void *__cdecl operator new(size_t size, const char *file, int line)
 {
-	void* ptr = (void*)malloc(size);
+	void *ptr = (void *)malloc(size);
 	PopWorkMemAddTrack(ptr, size, file, line);
-	return(ptr);
+	return (ptr);
 }
 
-//Same as above, but for arrays
-inline void* __cdecl operator new[](size_t size, const char* file, int line)
+// Same as above, but for arrays
+inline void *__cdecl operator new[](size_t size, const char *file, int line)
 {
-	void* ptr = (void*)malloc(size);
+	void *ptr = (void *)malloc(size);
 	PopWorkMemAddTrack(ptr, size, file, line);
-	return(ptr);
+	return (ptr);
 }
-
 
 // These single argument new operators allow vc6 apps to compile without errors
-inline void* __cdecl operator new(size_t size)
+inline void *__cdecl operator new(size_t size)
 {
-	void* ptr = (void*)malloc(size);
-	return(ptr);
+	void *ptr = (void *)malloc(size);
+	return (ptr);
 }
 
-inline void* __cdecl operator new[](size_t size)
+inline void *__cdecl operator new[](size_t size)
 {
-	void* ptr = (void*)malloc(size);
-	return(ptr);
+	void *ptr = (void *)malloc(size);
+	return (ptr);
 }
 
-
-//custom delete operators
-inline void __cdecl operator delete(void* p)
-{
-	PopWorkMemRemoveTrack(p);
-	free(p);
-}
-
-inline void __cdecl operator delete[](void* p)
+// custom delete operators
+inline void __cdecl operator delete(void *p)
 {
 	PopWorkMemRemoveTrack(p);
 	free(p);
 }
 
-//needed in case in the constructor of the class we're newing, it throws an exception
-inline void __cdecl operator delete(void* pMem, const char *file, int line)
+inline void __cdecl operator delete[](void *p)
+{
+	PopWorkMemRemoveTrack(p);
+	free(p);
+}
+
+// needed in case in the constructor of the class we're newing, it throws an exception
+inline void __cdecl operator delete(void *pMem, const char *file, int line)
 {
 	free(pMem);
 }
 
-inline void __cdecl operator delete[](void* pMem, const char *file, int line)
+inline void __cdecl operator delete[](void *pMem, const char *file, int line)
 {
 	free(pMem);
 }
 
-
-#define DEBUG_NEW new(__FILE__, __LINE__)
+#define DEBUG_NEW new (__FILE__, __LINE__)
 #define new DEBUG_NEW
-
 
 #endif // POPWORK_MEMTRACE
 

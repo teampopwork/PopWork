@@ -10,12 +10,12 @@ SharedImage::SharedImage()
 	mRefCount = 0;
 }
 
-SharedImageRef::SharedImageRef(const SharedImageRef& theSharedImageRef)
+SharedImageRef::SharedImageRef(const SharedImageRef &theSharedImageRef)
 {
 	mSharedImage = theSharedImageRef.mSharedImage;
 	if (mSharedImage != NULL)
 		mSharedImage->mRefCount++;
-	mUnsharedImage = theSharedImageRef.mUnsharedImage;	
+	mUnsharedImage = theSharedImageRef.mUnsharedImage;
 	mOwnsUnshared = false;
 }
 
@@ -26,7 +26,7 @@ SharedImageRef::SharedImageRef()
 	mOwnsUnshared = false;
 }
 
-SharedImageRef::SharedImageRef(SharedImage* theSharedImage)
+SharedImageRef::SharedImageRef(SharedImage *theSharedImage)
 {
 	mSharedImage = theSharedImage;
 	if (theSharedImage != NULL)
@@ -42,7 +42,7 @@ SharedImageRef::~SharedImageRef()
 }
 
 void SharedImageRef::Release()
-{	
+{
 	if (mOwnsUnshared)
 		delete mUnsharedImage;
 	mUnsharedImage = NULL;
@@ -54,7 +54,7 @@ void SharedImageRef::Release()
 	mSharedImage = NULL;
 }
 
-SharedImageRef& SharedImageRef::operator=(const SharedImageRef& theSharedImageRef)
+SharedImageRef &SharedImageRef::operator=(const SharedImageRef &theSharedImageRef)
 {
 	Release();
 	mSharedImage = theSharedImageRef.mSharedImage;
@@ -63,7 +63,7 @@ SharedImageRef& SharedImageRef::operator=(const SharedImageRef& theSharedImageRe
 	return *this;
 }
 
-SharedImageRef&	SharedImageRef::operator=(SharedImage* theSharedImage)
+SharedImageRef &SharedImageRef::operator=(SharedImage *theSharedImage)
 {
 	Release();
 	mSharedImage = theSharedImage;
@@ -71,33 +71,32 @@ SharedImageRef&	SharedImageRef::operator=(SharedImage* theSharedImage)
 	return *this;
 }
 
-SharedImageRef& SharedImageRef::operator=(MemoryImage* theUnsharedImage)
+SharedImageRef &SharedImageRef::operator=(MemoryImage *theUnsharedImage)
 {
 	Release();
-	mUnsharedImage = theUnsharedImage;	
+	mUnsharedImage = theUnsharedImage;
 	return *this;
 }
 
-MemoryImage* SharedImageRef::operator->()
+MemoryImage *SharedImageRef::operator->()
 {
-	return (MemoryImage*) *this;
+	return (MemoryImage *)*this;
 }
 
-
-SharedImageRef::operator Image*()
-{	
-	return (MemoryImage*) *this;
+SharedImageRef::operator Image *()
+{
+	return (MemoryImage *)*this;
 }
 
-SharedImageRef::operator MemoryImage*()
+SharedImageRef::operator MemoryImage *()
 {
 	if (mUnsharedImage != NULL)
 		return mUnsharedImage;
 	else
-		return (SDLImage*) *this;
+		return (SDLImage *)*this;
 }
 
-SharedImageRef::operator SDLImage*()
+SharedImageRef::operator SDLImage *()
 {
 	if (mSharedImage != NULL)
 		return mSharedImage->mImage;

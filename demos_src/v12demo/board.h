@@ -18,12 +18,10 @@ class ButtonWidget;
 class Board : public Widget, public ButtonListener
 {
 
-public:
+  public:
+	V12DemoApp *mApp;
 
-	V12DemoApp* mApp;
-
-private:
-
+  private:
 	// We're going to do a curtain open/close effect when the mCurtainButton button is pressed.
 	enum
 	{
@@ -32,28 +30,27 @@ private:
 		CURTAIN_INACTIVE
 	};
 
-	DemoWidget*		mDemoWidget;		
-	ButtonWidget*	mDemoButton;		// Creates our DemoWidget
-	ButtonWidget*	mDialogButton;		// Creates a little dialog box
-	ButtonWidget*	mCurtainButton;		// Initiates the curtain closing/opening transition
-	Rect			mRect;				// A rectangle that gets larger/smaller over time
-	
-	bool			mExpanding;			// Is the above (mRect) rectangle shrinking or growing?
-	bool			mLostFocus;			// If true, the app has lost focus, so we'll draw our overlay
-	
-	int				mCurtainMode;		// One of the above enums
-	int				mCurtainWidth;		// How wide the curtain is. This ranges from 0 to app width / 2.
-	int				mDeferPriority;		// See the .cpp for full info, but we'll be toggling the overlay priority every second
-	int				mMsgX, mMsgY;		// For no valid reason, we'll move the "LOST FOCUS" text every second.
+	DemoWidget *mDemoWidget;
+	ButtonWidget *mDemoButton;	  // Creates our DemoWidget
+	ButtonWidget *mDialogButton;  // Creates a little dialog box
+	ButtonWidget *mCurtainButton; // Initiates the curtain closing/opening transition
+	Rect mRect;					  // A rectangle that gets larger/smaller over time
 
-public:
+	bool mExpanding; // Is the above (mRect) rectangle shrinking or growing?
+	bool mLostFocus; // If true, the app has lost focus, so we'll draw our overlay
 
-	Board(V12DemoApp* theApp);
+	int mCurtainMode;	// One of the above enums
+	int mCurtainWidth;	// How wide the curtain is. This ranges from 0 to app width / 2.
+	int mDeferPriority; // See the .cpp for full info, but we'll be toggling the overlay priority every second
+	int mMsgX, mMsgY;	// For no valid reason, we'll move the "LOST FOCUS" text every second.
+
+  public:
+	Board(V12DemoApp *theApp);
 	virtual ~Board();
 
-	void		Update();
-	void		Draw(Graphics* g);
-	void		ButtonDepress(int id);
+	void Update();
+	void Draw(Graphics *g);
+	void ButtonDepress(int id);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: DrawOverlay
@@ -78,13 +75,16 @@ public:
 	//	easily have an effect that transitions from one level to the next, and
 	//	it could be drawn above all the buttons/widgets on screen, rather than
 	//	using some sort of overlay widget as well.
-	//////////////////////////////////////////////////////////////////////////	
-	void		DrawOverlay(Graphics* g);
-	
+	//////////////////////////////////////////////////////////////////////////
+	void DrawOverlay(Graphics *g);
 
-	void		SetFocusLost(bool f) {mLostFocus = f; mDeferPriority = 2;}
+	void SetFocusLost(bool f)
+	{
+		mLostFocus = f;
+		mDeferPriority = 2;
+	}
 };
 
-}
+} // namespace PopWork
 
 #endif //__BOARD_H__

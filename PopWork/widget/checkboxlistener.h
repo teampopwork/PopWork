@@ -9,10 +9,12 @@ namespace PopWork
 
 class CheckboxListener
 {
-public:
-	virtual void			CheckboxChecked(int theId, bool checked) {}
+  public:
+	virtual void CheckboxChecked(int theId, bool checked)
+	{
+	}
 };
 
-}
+} // namespace PopWork
 
 #endif

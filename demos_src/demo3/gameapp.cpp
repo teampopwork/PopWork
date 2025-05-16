@@ -2,7 +2,7 @@
 #include "board.h"
 #include "PopWork/widget/widgetmanager.h"
 
-// The Image.h file just declares basic functions. All images are either of 
+// The Image.h file just declares basic functions. All images are either of
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
@@ -16,7 +16,6 @@
 // you'll see in all the .cpp files "using namespace PopWork" to avoid
 // having to prefix everything with PopWork::
 using namespace PopWork;
-
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@ GameApp::GameApp()
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
-	// and written to. This is stored under the HKEY_CURRENT_USER tree on 
+	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
 	mRegKey = "PopCap\\PopWork\\Demo3";
 
@@ -49,13 +48,13 @@ GameApp::GameApp()
 	// in a later demo. As a side note, if you want to see if you app is
 	// running with 3D acceleration, first enable debug keys by pressing
 	// CTRL-ALT-D and then press F9. To toggle 3D on/off, press F8. That is just
-	// for testing purposes. 
+	// for testing purposes.
 	//
 	// When 3D mode is on, the standard drawing routines will automatically use
 	// their hardware rendering versions, which in truns makes the game run faster.
 	// You do not need to do anything different when drawing in 2D or 3D mode.
 	// Although if 3D mode is disabled, you will most likely want to do less
-	// drawing intensive operations like additive drawing, colorization, 
+	// drawing intensive operations like additive drawing, colorization,
 	// real-time flipping/mirroring, etc.
 	mAutoEnable3D = true;
 
@@ -102,7 +101,7 @@ void GameApp::Init()
 void GameApp::LoadingThreadProc()
 {
 	// This time, we have things to load. Let's load in our two fonts
-	// and our three images.	
+	// and our three images.
 	// Besides loading data,
 	// this thread can also update the progress indicator for the loading
 	// screen, which you will see in later demos.
@@ -116,7 +115,7 @@ void GameApp::LoadingThreadProc()
 	// In this case, all of the above extensions will be looked for.
 	// A discussion of image formats is beyond the scope of this tutorial.
 	//		There is some important information to know about images.
-	//	You will notice in the "images" directory that for each image, 
+	//	You will notice in the "images" directory that for each image,
 	//	there is a black and white image with the same name but with
 	//	an underscore ("_") at the end of it. By default, when you load
 	//	and image, the code automatically looks for the presence of
@@ -129,7 +128,7 @@ void GameApp::LoadingThreadProc()
 	//	underscore instead of ending with it, it matters not, and again,
 	//	is automatically loaded in by the image loading code.
 	//	You need to clean up the memory allocated by these functions yourself.
-	mTurbotImg = (SDLImage*) GetImage("images/turbot_worry");
+	mTurbotImg = (SDLImage *)GetImage("images/turbot_worry");
 
 	// If the file was not found or couldn't be loaded (i.e. due to an
 	// incompatible file format) the returned value will be NULL.
@@ -148,7 +147,7 @@ void GameApp::LoadingThreadProc()
 		return;
 	}
 
-	mLightningImg = (SDLImage*) GetImage("images/lightning");
+	mLightningImg = (SDLImage *)GetImage("images/lightning");
 	if (mLightningImg == NULL)
 	{
 		mLoadingFailed = true;
@@ -168,7 +167,6 @@ void GameApp::LoadingThreadProc()
 	// You'll see why this is important in the Board class.
 	mLightningImg->mNumRows = 8;
 	mLightningImg->mNumCols = 1;
-
 
 	// So we've loaded the images, that's all there is right? Wrong.
 	// If possible, we should try to palletize the images. An image that
@@ -197,14 +195,13 @@ void GameApp::LoadingThreadProc()
 
 	// We need to check to see if the font was properly initialized.
 	// If it wasn't, then an error occurred and we need to abort.
-	if (!mFont->mFontData->mInitialized)	
+	if (!mFont->mFontData->mInitialized)
 	{
 		delete mFont;
 		mLoadingFailed = true;
 		Popup("There was an error loading fonts/Kiloton9.txt");
 		return;
 	}
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -231,7 +228,7 @@ void GameApp::LoadingThreadCompleted()
 
 	// This is a very important step: Because the Board class is a widget
 	// (see Board.h/.cpp for more details) we need to tell it what
-	// dimensions it has and where to place it. 
+	// dimensions it has and where to place it.
 	// By default a widget is invisible because its
 	// width/height are 0, 0. Since the Board class is our main
 	// drawing area and game logic class, we want to make it the
@@ -245,20 +242,19 @@ void GameApp::LoadingThreadCompleted()
 	// and input processing methods called.
 	mWidgetManager->AddWidget(mBoard);
 
-
 	// As part of a new topic in this demo, we're also going to modify the image
 	// data for mTurbotImg and make a grayscale version of it. I'll explain
 	// each step of the way:
 
 	// 1. Let's make a copy of the image so we don't ruin the original.
 	// We should make sure to delete this when we're done.
-	mAlteredImg = (SDLImage*) CopyImage(mTurbotImg);
+	mAlteredImg = (SDLImage *)CopyImage(mTurbotImg);
 
 	// 2. Now we need to get the pixel data. The pixel data is stored as
 	// an unsigned long array, where each entry represents the RGBA value.
 	// The data is actually stored in ARGB format, where alpha is
 	// the leftmost byte and blue is the rightmost byte.
-	unsigned long* bits = mAlteredImg->GetBits();
+	unsigned long *bits = mAlteredImg->GetBits();
 
 	// 3. Now we will loop over each pixel in the image. The size of the bits array
 	// is simply the width times the height.
@@ -271,16 +267,16 @@ void GameApp::LoadingThreadCompleted()
 		// component to a variable, although we're actually only going to care
 		// about the RGB values, for this particular example. The 4 lines below
 		// extract out the individual ARGB values.
-		unsigned char alpha		= (unsigned char) (c >> 24);
-		unsigned char red		= (unsigned char) ((c >> 16) & 0xFF);
-		unsigned char green		= (unsigned char) ((c >> 8) & 0xFF);
-		unsigned char blue		= (unsigned char) (c & 0xFF);
+		unsigned char alpha = (unsigned char)(c >> 24);
+		unsigned char red = (unsigned char)((c >> 16) & 0xFF);
+		unsigned char green = (unsigned char)((c >> 8) & 0xFF);
+		unsigned char blue = (unsigned char)(c & 0xFF);
 
 		// 6. Just like the Color class, the ARGB values are from 0-255.
 		// Let's alter these to produce a grayscale image using one of many
 		// conversion methods. This method uses 30% of the red value,
 		// 59% of the green value, and 11% of the blue value:
-		unsigned long gray = (unsigned long) ((float)red * 0.30f + (float)green * 0.59f + (float)blue * 0.11f);
+		unsigned long gray = (unsigned long)((float)red * 0.30f + (float)green * 0.59f + (float)blue * 0.11f);
 
 		// 7. Now we need to put the pixel data back into the image's data.
 		// We do the opposite of how we extracted the ARGB values above and
@@ -290,7 +286,7 @@ void GameApp::LoadingThreadCompleted()
 		bits[i] = (alpha << 24) | (gray << 16) | (gray << 8) | gray;
 	}
 
-	// The image won't use this modified data until we inform it that we've 
+	// The image won't use this modified data until we inform it that we've
 	// done some messing around with it. We do that with the BitsChanged()
 	// function call. After that, we're all done! Pretty simple. It just
 	// depends on what you want to actually do with the RGBA data. Extracting

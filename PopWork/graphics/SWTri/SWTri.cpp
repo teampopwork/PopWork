@@ -1,24 +1,22 @@
-#pragma warning(disable:4244 4305 4309)
+#pragma warning(disable : 4244 4305 4309)
 
 #include "SWTri.h"
 #include "debug/debug.h"
 
 using namespace PopWork;
 
-static SWHelper::XYZStruct	vertexReservoir[64];
-static unsigned int			vertexReservoirUsed = 0;
-
+static SWHelper::XYZStruct vertexReservoir[64];
+static unsigned int vertexReservoirUsed = 0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static int FixedFloor(int x)
 {
-	if (x>0)
-		return x&0xFFFF0000;
+	if (x > 0)
+		return x & 0xFFFF0000;
 	else
-		return (x&0xFFFF0000)-0x10000;
+		return (x & 0xFFFF0000) - 0x10000;
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,244 +32,260 @@ static int FixedFloor(int x)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-static inline void lClip(SWHelper::XYZStruct & dst, const SWHelper::XYZStruct & on, const SWHelper::XYZStruct & off, const float edge)
+static inline void lClip(SWHelper::XYZStruct &dst, const SWHelper::XYZStruct &on, const SWHelper::XYZStruct &off,
+						 const float edge)
 {
-   float	delta = (edge - off.mX) / (on.mX - off.mX);
-   dst.mX = off.mX + (on.mX - off.mX) * delta;
-   dst.mY = off.mY + (on.mY - off.mY) * delta;
-   dst.mU = off.mU + (on.mU - off.mU) * delta;
-   dst.mV = off.mV + (on.mV - off.mV) * delta;
-   dst.mDiffuse =	((int) ((((off.mDiffuse >> 24)&0xff) + (((on.mDiffuse >> 24)&0xff) - ((off.mDiffuse >> 24)&0xff)) * delta))<<24) |
-			((int) ((((off.mDiffuse >> 16)&0xff) + (((on.mDiffuse >> 16)&0xff) - ((off.mDiffuse >> 16)&0xff)) * delta))<<16) |
-			((int) ((((off.mDiffuse >>  8)&0xff) + (((on.mDiffuse >>  8)&0xff) - ((off.mDiffuse >>  8)&0xff)) * delta))<<8 ) |
-			((int) ((((off.mDiffuse >>  0)&0xff) + (((on.mDiffuse >>  0)&0xff) - ((off.mDiffuse >>  0)&0xff)) * delta))    );
+	float delta = (edge - off.mX) / (on.mX - off.mX);
+	dst.mX = off.mX + (on.mX - off.mX) * delta;
+	dst.mY = off.mY + (on.mY - off.mY) * delta;
+	dst.mU = off.mU + (on.mU - off.mU) * delta;
+	dst.mV = off.mV + (on.mV - off.mV) * delta;
+	dst.mDiffuse =
+		((int)((((off.mDiffuse >> 24) & 0xff) + (((on.mDiffuse >> 24) & 0xff) - ((off.mDiffuse >> 24) & 0xff)) * delta))
+		 << 24) |
+		((int)((((off.mDiffuse >> 16) & 0xff) + (((on.mDiffuse >> 16) & 0xff) - ((off.mDiffuse >> 16) & 0xff)) * delta))
+		 << 16) |
+		((int)((((off.mDiffuse >> 8) & 0xff) + (((on.mDiffuse >> 8) & 0xff) - ((off.mDiffuse >> 8) & 0xff)) * delta))
+		 << 8) |
+		((int)((((off.mDiffuse >> 0) & 0xff) + (((on.mDiffuse >> 0) & 0xff) - ((off.mDiffuse >> 0) & 0xff)) * delta)));
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline void rClip(SWHelper::XYZStruct & dst, const SWHelper::XYZStruct & on, const SWHelper::XYZStruct & off, const float edge)
+static inline void rClip(SWHelper::XYZStruct &dst, const SWHelper::XYZStruct &on, const SWHelper::XYZStruct &off,
+						 const float edge)
 {
-   float	delta = (edge - off.mX) / (on.mX - off.mX);
-   dst.mX = off.mX + (on.mX - off.mX) * delta;
-   dst.mY = off.mY + (on.mY - off.mY) * delta;
-   dst.mU = off.mU + (on.mU - off.mU) * delta;
-   dst.mV = off.mV + (on.mV - off.mV) * delta;
-   dst.mDiffuse =	((int) ((((off.mDiffuse >> 24)&0xff) + (((on.mDiffuse >> 24)&0xff) - ((off.mDiffuse >> 24)&0xff)) * delta))<<24) |
-			((int) ((((off.mDiffuse >> 16)&0xff) + (((on.mDiffuse >> 16)&0xff) - ((off.mDiffuse >> 16)&0xff)) * delta))<<16) |
-			((int) ((((off.mDiffuse >>  8)&0xff) + (((on.mDiffuse >>  8)&0xff) - ((off.mDiffuse >>  8)&0xff)) * delta))<<8 ) |
-			((int) ((((off.mDiffuse >>  0)&0xff) + (((on.mDiffuse >>  0)&0xff) - ((off.mDiffuse >>  0)&0xff)) * delta))    );
+	float delta = (edge - off.mX) / (on.mX - off.mX);
+	dst.mX = off.mX + (on.mX - off.mX) * delta;
+	dst.mY = off.mY + (on.mY - off.mY) * delta;
+	dst.mU = off.mU + (on.mU - off.mU) * delta;
+	dst.mV = off.mV + (on.mV - off.mV) * delta;
+	dst.mDiffuse =
+		((int)((((off.mDiffuse >> 24) & 0xff) + (((on.mDiffuse >> 24) & 0xff) - ((off.mDiffuse >> 24) & 0xff)) * delta))
+		 << 24) |
+		((int)((((off.mDiffuse >> 16) & 0xff) + (((on.mDiffuse >> 16) & 0xff) - ((off.mDiffuse >> 16) & 0xff)) * delta))
+		 << 16) |
+		((int)((((off.mDiffuse >> 8) & 0xff) + (((on.mDiffuse >> 8) & 0xff) - ((off.mDiffuse >> 8) & 0xff)) * delta))
+		 << 8) |
+		((int)((((off.mDiffuse >> 0) & 0xff) + (((on.mDiffuse >> 0) & 0xff) - ((off.mDiffuse >> 0) & 0xff)) * delta)));
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline void tClip(SWHelper::XYZStruct & dst, const SWHelper::XYZStruct & on, const SWHelper::XYZStruct & off, const float edge)
+static inline void tClip(SWHelper::XYZStruct &dst, const SWHelper::XYZStruct &on, const SWHelper::XYZStruct &off,
+						 const float edge)
 {
-   float	delta = (edge - off.mY) / (on.mY - off.mY);
-   dst.mX = off.mX + (on.mX - off.mX) * delta;
-   dst.mY = off.mY + (on.mY - off.mY) * delta;
-   dst.mU = off.mU + (on.mU - off.mU) * delta;
-   dst.mV = off.mV + (on.mV - off.mV) * delta;
-   dst.mDiffuse =	((int) ((((off.mDiffuse >> 24)&0xff) + (((on.mDiffuse >> 24)&0xff) - ((off.mDiffuse >> 24)&0xff)) * delta))<<24) |
-			((int) ((((off.mDiffuse >> 16)&0xff) + (((on.mDiffuse >> 16)&0xff) - ((off.mDiffuse >> 16)&0xff)) * delta))<<16) |
-			((int) ((((off.mDiffuse >>  8)&0xff) + (((on.mDiffuse >>  8)&0xff) - ((off.mDiffuse >>  8)&0xff)) * delta))<<8 ) |
-			((int) ((((off.mDiffuse >>  0)&0xff) + (((on.mDiffuse >>  0)&0xff) - ((off.mDiffuse >>  0)&0xff)) * delta))    );
+	float delta = (edge - off.mY) / (on.mY - off.mY);
+	dst.mX = off.mX + (on.mX - off.mX) * delta;
+	dst.mY = off.mY + (on.mY - off.mY) * delta;
+	dst.mU = off.mU + (on.mU - off.mU) * delta;
+	dst.mV = off.mV + (on.mV - off.mV) * delta;
+	dst.mDiffuse =
+		((int)((((off.mDiffuse >> 24) & 0xff) + (((on.mDiffuse >> 24) & 0xff) - ((off.mDiffuse >> 24) & 0xff)) * delta))
+		 << 24) |
+		((int)((((off.mDiffuse >> 16) & 0xff) + (((on.mDiffuse >> 16) & 0xff) - ((off.mDiffuse >> 16) & 0xff)) * delta))
+		 << 16) |
+		((int)((((off.mDiffuse >> 8) & 0xff) + (((on.mDiffuse >> 8) & 0xff) - ((off.mDiffuse >> 8) & 0xff)) * delta))
+		 << 8) |
+		((int)((((off.mDiffuse >> 0) & 0xff) + (((on.mDiffuse >> 0) & 0xff) - ((off.mDiffuse >> 0) & 0xff)) * delta)));
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline void bClip(SWHelper::XYZStruct & dst, const SWHelper::XYZStruct & on, const SWHelper::XYZStruct & off, const float edge)
+static inline void bClip(SWHelper::XYZStruct &dst, const SWHelper::XYZStruct &on, const SWHelper::XYZStruct &off,
+						 const float edge)
 {
-   float	delta = (edge - off.mY) / (on.mY - off.mY);
-   dst.mX = off.mX + (on.mX - off.mX) * delta;
-   dst.mY = off.mY + (on.mY - off.mY) * delta;
-   dst.mU = off.mU + (on.mU - off.mU) * delta;
-   dst.mV = off.mV + (on.mV - off.mV) * delta;
-   dst.mDiffuse =	((int) ((((off.mDiffuse >> 24)&0xff) + (((on.mDiffuse >> 24)&0xff) - ((off.mDiffuse >> 24)&0xff)) * delta))<<24) |
-			((int) ((((off.mDiffuse >> 16)&0xff) + (((on.mDiffuse >> 16)&0xff) - ((off.mDiffuse >> 16)&0xff)) * delta))<<16) |
-			((int) ((((off.mDiffuse >>  8)&0xff) + (((on.mDiffuse >>  8)&0xff) - ((off.mDiffuse >>  8)&0xff)) * delta))<<8 ) |
-			((int) ((((off.mDiffuse >>  0)&0xff) + (((on.mDiffuse >>  0)&0xff) - ((off.mDiffuse >>  0)&0xff)) * delta))    );
+	float delta = (edge - off.mY) / (on.mY - off.mY);
+	dst.mX = off.mX + (on.mX - off.mX) * delta;
+	dst.mY = off.mY + (on.mY - off.mY) * delta;
+	dst.mU = off.mU + (on.mU - off.mU) * delta;
+	dst.mV = off.mV + (on.mV - off.mV) * delta;
+	dst.mDiffuse =
+		((int)((((off.mDiffuse >> 24) & 0xff) + (((on.mDiffuse >> 24) & 0xff) - ((off.mDiffuse >> 24) & 0xff)) * delta))
+		 << 24) |
+		((int)((((off.mDiffuse >> 16) & 0xff) + (((on.mDiffuse >> 16) & 0xff) - ((off.mDiffuse >> 16) & 0xff)) * delta))
+		 << 16) |
+		((int)((((off.mDiffuse >> 8) & 0xff) + (((on.mDiffuse >> 8) & 0xff) - ((off.mDiffuse >> 8) & 0xff)) * delta))
+		 << 8) |
+		((int)((((off.mDiffuse >> 0) & 0xff) + (((on.mDiffuse >> 0) & 0xff) - ((off.mDiffuse >> 0) & 0xff)) * delta)));
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline unsigned int leClip(SWHelper::XYZStruct ** src, SWHelper::XYZStruct ** dst, const float edge)
+static inline unsigned int leClip(SWHelper::XYZStruct **src, SWHelper::XYZStruct **dst, const float edge)
 {
-   SWHelper::XYZStruct ** _dst = dst;
+	SWHelper::XYZStruct **_dst = dst;
 
-   for (SWHelper::XYZStruct **  v = src; *v; ++v)
-   {
-      SWHelper::XYZStruct *  cur = *v;
-      SWHelper::XYZStruct *  nex = *(v+1) ? *(v+1):*src;
+	for (SWHelper::XYZStruct **v = src; *v; ++v)
+	{
+		SWHelper::XYZStruct *cur = *v;
+		SWHelper::XYZStruct *nex = *(v + 1) ? *(v + 1) : *src;
 
-      switch((cur->mX < edge ? 1:0)|(nex->mX < edge ? 2:0))
-      {
-         case 0:
-            *dst = *v;
-            ++dst;
-            break;
-         case 1:
-         {
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            lClip(tmp, *nex, *cur, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-         case 2:
-         {
-            *dst = *v;
-            ++dst;
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            lClip(tmp, *cur, *nex, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-      }
-   }
-   *dst = 0;
-   return static_cast<int>(dst - _dst);
+		switch ((cur->mX < edge ? 1 : 0) | (nex->mX < edge ? 2 : 0))
+		{
+		case 0:
+			*dst = *v;
+			++dst;
+			break;
+		case 1: {
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			lClip(tmp, *nex, *cur, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		case 2: {
+			*dst = *v;
+			++dst;
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			lClip(tmp, *cur, *nex, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		}
+	}
+	*dst = 0;
+	return static_cast<int>(dst - _dst);
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline unsigned int reClip(SWHelper::XYZStruct ** src, SWHelper::XYZStruct ** dst, const float edge)
+static inline unsigned int reClip(SWHelper::XYZStruct **src, SWHelper::XYZStruct **dst, const float edge)
 {
-   SWHelper::XYZStruct ** _dst = dst;
+	SWHelper::XYZStruct **_dst = dst;
 
-   for (SWHelper::XYZStruct ** v = src; *v; ++v)
-   {
-      SWHelper::XYZStruct *  cur = *v;
-      SWHelper::XYZStruct *  nex = *(v+1) ? *(v+1):*src;
+	for (SWHelper::XYZStruct **v = src; *v; ++v)
+	{
+		SWHelper::XYZStruct *cur = *v;
+		SWHelper::XYZStruct *nex = *(v + 1) ? *(v + 1) : *src;
 
-      switch((cur->mX > edge ? 1:0)|(nex->mX > edge ? 2:0))
-      {
-         case 0:
-            *dst = *v;
-            ++dst;
-            break;
-         case 1:
-         {
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            rClip(tmp, *nex, *cur, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-         case 2:
-         {
-            *dst = *v;
-            ++dst;
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            rClip(tmp, *cur, *nex, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-      }
-   }
-   *dst = 0;
-   return static_cast<int>(dst - _dst);
+		switch ((cur->mX > edge ? 1 : 0) | (nex->mX > edge ? 2 : 0))
+		{
+		case 0:
+			*dst = *v;
+			++dst;
+			break;
+		case 1: {
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			rClip(tmp, *nex, *cur, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		case 2: {
+			*dst = *v;
+			++dst;
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			rClip(tmp, *cur, *nex, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		}
+	}
+	*dst = 0;
+	return static_cast<int>(dst - _dst);
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline unsigned int teClip(SWHelper::XYZStruct ** src, SWHelper::XYZStruct ** dst, const float edge)
+static inline unsigned int teClip(SWHelper::XYZStruct **src, SWHelper::XYZStruct **dst, const float edge)
 {
-   SWHelper::XYZStruct ** _dst = dst;
+	SWHelper::XYZStruct **_dst = dst;
 
-   for (SWHelper::XYZStruct **  v = src; *v; ++v)
-   {
-      SWHelper::XYZStruct *  cur = *v;
-      SWHelper::XYZStruct *  nex = *(v+1) ? *(v+1):*src;
+	for (SWHelper::XYZStruct **v = src; *v; ++v)
+	{
+		SWHelper::XYZStruct *cur = *v;
+		SWHelper::XYZStruct *nex = *(v + 1) ? *(v + 1) : *src;
 
-      switch((cur->mY < edge ? 1:0)|(nex->mY < edge ? 2:0))
-      {
-         case 0:
-            *dst = *v;
-            ++dst;
-            break;
-         case 1:
-         {
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            tClip(tmp, *nex, *cur, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-         case 2:
-         {
-            *dst = *v;
-            ++dst;
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            tClip(tmp, *cur, *nex, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-      }
-   }
-   *dst = 0;
-   return static_cast<int>(dst - _dst);
+		switch ((cur->mY < edge ? 1 : 0) | (nex->mY < edge ? 2 : 0))
+		{
+		case 0:
+			*dst = *v;
+			++dst;
+			break;
+		case 1: {
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			tClip(tmp, *nex, *cur, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		case 2: {
+			*dst = *v;
+			++dst;
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			tClip(tmp, *cur, *nex, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		}
+	}
+	*dst = 0;
+	return static_cast<int>(dst - _dst);
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline unsigned int beClip(SWHelper::XYZStruct ** src, SWHelper::XYZStruct ** dst, const float edge)
+static inline unsigned int beClip(SWHelper::XYZStruct **src, SWHelper::XYZStruct **dst, const float edge)
 {
-   SWHelper::XYZStruct ** _dst = dst;
+	SWHelper::XYZStruct **_dst = dst;
 
-   for (SWHelper::XYZStruct ** v = src; *v; ++v)
-   {
-      SWHelper::XYZStruct *  cur = *v;
-      SWHelper::XYZStruct *  nex = *(v+1) ? *(v+1):*src;
+	for (SWHelper::XYZStruct **v = src; *v; ++v)
+	{
+		SWHelper::XYZStruct *cur = *v;
+		SWHelper::XYZStruct *nex = *(v + 1) ? *(v + 1) : *src;
 
-      switch((cur->mY > edge ? 1:0)|(nex->mY > edge ? 2:0))
-      {
-         case 0:
-            *dst = *v;
-            ++dst;
-            break;
-         case 1:
-         {
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            bClip(tmp, *nex, *cur, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-         case 2:
-         {
-            *dst = *v;
-            ++dst;
-            SWHelper::XYZStruct &  tmp = vertexReservoir[vertexReservoirUsed++];
-            bClip(tmp, *cur, *nex, edge);
-            *dst = &tmp;
-            ++dst;
-            break;
-         }
-      }
-   }
-   *dst = 0;
-   return static_cast<int>(dst - _dst);
+		switch ((cur->mY > edge ? 1 : 0) | (nex->mY > edge ? 2 : 0))
+		{
+		case 0:
+			*dst = *v;
+			++dst;
+			break;
+		case 1: {
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			bClip(tmp, *nex, *cur, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		case 2: {
+			*dst = *v;
+			++dst;
+			SWHelper::XYZStruct &tmp = vertexReservoir[vertexReservoirUsed++];
+			bClip(tmp, *cur, *nex, edge);
+			*dst = &tmp;
+			++dst;
+			break;
+		}
+		}
+	}
+	*dst = 0;
+	return static_cast<int>(dst - _dst);
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------
 
-static inline int	clipShape(SWHelper::XYZStruct ** dst, SWHelper::XYZStruct ** src, const float left, const float right, const float top, const float bottom)
+static inline int clipShape(SWHelper::XYZStruct **dst, SWHelper::XYZStruct **src, const float left, const float right,
+							const float top, const float bottom)
 {
-   vertexReservoirUsed = 0;
+	vertexReservoirUsed = 0;
 
-   SWHelper::XYZStruct *  buf[64];
-   SWHelper::XYZStruct *  ptr[4];
-   ptr[0] = src[0];
-   ptr[1] = src[1];
-   ptr[2] = src[2];
-   ptr[3] = 0;
-   if (leClip(ptr, buf, left) < 3) return 0;
-   if (reClip(buf, dst, right) < 3) return 0;
-   if (teClip(dst, buf, top) < 3) return 0;
-   return beClip(buf, dst, bottom);
+	SWHelper::XYZStruct *buf[64];
+	SWHelper::XYZStruct *ptr[4];
+	ptr[0] = src[0];
+	ptr[1] = src[1];
+	ptr[2] = src[2];
+	ptr[3] = 0;
+	if (leClip(ptr, buf, left) < 3)
+		return 0;
+	if (reClip(buf, dst, right) < 3)
+		return 0;
+	if (teClip(dst, buf, top) < 3)
+		return 0;
+	return beClip(buf, dst, bottom);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,20 +303,21 @@ static inline int	clipShape(SWHelper::XYZStruct ** dst, SWHelper::XYZStruct ** s
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *theImage, const Color &theColor, int theDrawMode, const Rect &theClipRect, void *theSurface, int thePitch, int thePixelFormat, bool blend, bool vertexColor)
+void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *theImage, const Color &theColor,
+						   int theDrawMode, const Rect &theClipRect, void *theSurface, int thePitch, int thePixelFormat,
+						   bool blend, bool vertexColor)
 {
-	float	tclx0 = theClipRect.mX;
-	float	tcly0 = theClipRect.mY;
-	float	tclx1 = theClipRect.mX + theClipRect.mWidth - 1;
-	float	tcly1 = theClipRect.mY + theClipRect.mHeight - 1;
+	float tclx0 = theClipRect.mX;
+	float tcly0 = theClipRect.mY;
+	float tclx1 = theClipRect.mX + theClipRect.mWidth - 1;
+	float tcly1 = theClipRect.mY + theClipRect.mHeight - 1;
 
 	//
 	// Okay, now we're gonna render.  We have the vertex list.
 	// mSWRenderPtr is a char* pointer to the upper left
 	// bit of the of render array.
 	//
-	struct XYZStruct *aTVertPtr=theVerts;
+	struct XYZStruct *aTVertPtr = theVerts;
 
 	//
 	// Some notes:
@@ -315,7 +330,7 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 	// boils down to: texture pixel alpha * mClippedMaterial.diffuse.a
 	//
 	// The current material is stored in mClippedMaterial.  You only need to ref the
-	// diffuse color: 
+	// diffuse color:
 	//					mClippedMaterial.diffuse.a
 	//					mClippedMaterial.diffuse.r
 	//					mClippedMaterial.diffuse.g
@@ -342,7 +357,7 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 	// format.  Our framework allows us to specify a 'real' resolution to use, and conforms everything
 	// down to whatever the screen is displaying.  So, we usually use 800x600 for absolute resolution in
 	// game.
-	// 
+	//
 	// So, to turn the clip rectangle into the "screen resolution" from "page resolution" (page is what
 	// we work in, screen is what displays), multiply the rectangle member variables by mPageWidthAdjust
 	// and mPageHeightAdjust.
@@ -354,34 +369,35 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 	// int aBottom=(mClipArea.mY+mClipArea.mSWTexture->mTextureInfo.dwHeight)*mPageHeightAdjust;
 	//
 	// Another note: it *is* possible for the clip area to be bigger than the screen (for various
-	// reasons).  So, a final clip to 0,0-mSWTexture->mTextureInfo.dwWidth,mSWTexture->mTextureInfo.dwHeight is necessary when translating vertices.
+	// reasons).  So, a final clip to 0,0-mSWTexture->mTextureInfo.dwWidth,mSWTexture->mTextureInfo.dwHeight is
+	// necessary when translating vertices.
 	//
 
 	//
 	// Render the actual triangle strip.
 	//
-	int aTriCounter=0;
-	bool aOddTriangle=false;
+	int aTriCounter = 0;
+	bool aOddTriangle = false;
 
 	// Our global diffuse value
 
-	SWDiffuse	globalDiffuse;
+	SWDiffuse globalDiffuse;
 	{
-		globalDiffuse.a  = theColor.mAlpha;
-		globalDiffuse.r  = theColor.mRed;
-		globalDiffuse.g  = theColor.mGreen;
-		globalDiffuse.b  = theColor.mBlue;
+		globalDiffuse.a = theColor.mAlpha;
+		globalDiffuse.r = theColor.mRed;
+		globalDiffuse.g = theColor.mGreen;
+		globalDiffuse.b = theColor.mBlue;
 	}
 
 	// rendering flags
 
-	bool	globalargb = theColor!=Color::White;
+	bool globalargb = theColor != Color::White;
 
 	if (theImage)
 		theImage->CommitBits();
 
-	bool	textured = theImage!=NULL;
-	bool	talpha = (textured && (theImage->mHasAlpha || theImage->mHasTrans || blend));
+	bool textured = theImage != NULL;
+	bool talpha = (textured && (theImage->mHasAlpha || theImage->mHasTrans || blend));
 
 	for (;;)
 	{
@@ -390,7 +406,8 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 		// 1-2-3 2-4-3 3-4-5 4-6-5 ... every other triangle
 		// swaps #2 & #3 vertices for draw to maintain clockwise order.
 		//
-		if (aTriCounter+3>theNumVerts) break;
+		if (aTriCounter + 3 > theNumVerts)
+			break;
 
 		//
 		// Picking triangle direction for culling...
@@ -398,57 +415,62 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 		struct XYZStruct *aTriRef[64];
 		if (!aOddTriangle)
 		{
-			aTriRef[0]=aTVertPtr;
-			aTriRef[1]=aTVertPtr+1;
-			aTriRef[2]=aTVertPtr+2;
+			aTriRef[0] = aTVertPtr;
+			aTriRef[1] = aTVertPtr + 1;
+			aTriRef[2] = aTVertPtr + 2;
 		}
 		else
 		{
-			aTriRef[0]=aTVertPtr;
-			aTriRef[1]=aTVertPtr+2;
-			aTriRef[2]=aTVertPtr+1;
+			aTriRef[0] = aTVertPtr;
+			aTriRef[1] = aTVertPtr + 2;
+			aTriRef[2] = aTVertPtr + 1;
 		}
 		aTriRef[3] = 0;
 
 		// Clip
 
-		XYZStruct *	clipped[64];
-		float		clipX0 = tclx0;
-		float		clipY0 = tcly0;
-		float		clipX1 = tclx1;
-		float		clipY1 = tcly1;
+		XYZStruct *clipped[64];
+		float clipX0 = tclx0;
+		float clipY0 = tcly0;
+		float clipX1 = tclx1;
+		float clipY1 = tcly1;
 
-		unsigned int	vCount = clipShape(clipped, aTriRef, clipX0, clipX1, clipY0, clipY1);
+		unsigned int vCount = clipShape(clipped, aTriRef, clipX0, clipX1, clipY0, clipY1);
 
 		if (vCount)
 		{
-			unsigned int *	pFrameBuffer = reinterpret_cast<unsigned int *>(theSurface);
-			SWVertex	pVerts[64];
-			SWTextureInfo	textureInfo;
+			unsigned int *pFrameBuffer = reinterpret_cast<unsigned int *>(theSurface);
+			SWVertex pVerts[64];
+			SWTextureInfo textureInfo;
 
 			for (unsigned int i = 0; i < vCount; ++i)
 			{
 				pVerts[i].x = static_cast<int>(clipped[i]->mX * 65536.0f);
 				pVerts[i].y = static_cast<int>(clipped[i]->mY * 65536.0f);
 			}
-		
+
 			if (textured)
 			{
 				for (unsigned int i = 0; i < vCount; ++i)
 				{
-					pVerts[i].u = static_cast<int>(clipped[i]->mU * (float) theImage->mWidth * 65536.0f);
-					pVerts[i].v = static_cast<int>(clipped[i]->mV * (float) theImage->mHeight * 65536.0f);
+					pVerts[i].u = static_cast<int>(clipped[i]->mU * (float)theImage->mWidth * 65536.0f);
+					pVerts[i].v = static_cast<int>(clipped[i]->mV * (float)theImage->mHeight * 65536.0f);
 				}
 
 				textureInfo.pTexture = reinterpret_cast<unsigned int *>(theImage->GetBits());
 				textureInfo.pitch = theImage->mWidth;
 				textureInfo.height = theImage->mHeight;
-				textureInfo.endpos = theImage->mWidth*theImage->mHeight;
-//				unsigned int	temp = static_cast<unsigned int>(mSWTexture->mTextureInfo.lPitch) / (mSWTexture->mTextureInfo.ddpfPixelFormat.dwRGBBitCount / 8);
-				unsigned int	temp = theImage->mWidth;
+				textureInfo.endpos = theImage->mWidth * theImage->mHeight;
+				//				unsigned int	temp = static_cast<unsigned int>(mSWTexture->mTextureInfo.lPitch) /
+				//(mSWTexture->mTextureInfo.ddpfPixelFormat.dwRGBBitCount / 8);
+				unsigned int temp = theImage->mWidth;
 				temp >>= 1;
 				textureInfo.vShift = 0;
-				while(temp) {textureInfo.vShift += 1; temp >>= 1;}
+				while (temp)
+				{
+					textureInfo.vShift += 1;
+					temp >>= 1;
+				}
 				textureInfo.vShift = 16 - textureInfo.vShift;
 
 				textureInfo.uMask = static_cast<unsigned int>(theImage->mWidth - 1) << 16;
@@ -459,43 +481,53 @@ void SWHelper::SWDrawShape(XYZStruct *theVerts, int theNumVerts, MemoryImage *th
 			{
 				for (unsigned int i = 0; i < vCount; ++i)
 				{
-					pVerts[i].a = (clipped[i]->mDiffuse >>  8) & 0xff0000;
-					pVerts[i].r = (clipped[i]->mDiffuse >>  0) & 0xff0000;
-					pVerts[i].g = (clipped[i]->mDiffuse <<  8) & 0xff0000;
+					pVerts[i].a = (clipped[i]->mDiffuse >> 8) & 0xff0000;
+					pVerts[i].r = (clipped[i]->mDiffuse >> 0) & 0xff0000;
+					pVerts[i].g = (clipped[i]->mDiffuse << 8) & 0xff0000;
 					pVerts[i].b = (clipped[i]->mDiffuse << 16) & 0xff0000;
 				}
 			}
 
-			SWDrawTriangle(textured, talpha, vertexColor, globalargb, pVerts, pFrameBuffer, thePitch, &textureInfo, globalDiffuse, thePixelFormat, blend);
+			SWDrawTriangle(textured, talpha, vertexColor, globalargb, pVerts, pFrameBuffer, thePitch, &textureInfo,
+						   globalDiffuse, thePixelFormat, blend);
 
 			if (vCount > 3)
 			{
-				for (unsigned int extraVert = 2; extraVert < vCount-1; ++extraVert)
+				for (unsigned int extraVert = 2; extraVert < vCount - 1; ++extraVert)
 				{
 					pVerts[1] = pVerts[extraVert];
-					pVerts[2] = pVerts[extraVert+1];
-					SWDrawTriangle(textured, talpha, vertexColor, globalargb, pVerts, pFrameBuffer, thePitch, &textureInfo, globalDiffuse, thePixelFormat, blend);
+					pVerts[2] = pVerts[extraVert + 1];
+					SWDrawTriangle(textured, talpha, vertexColor, globalargb, pVerts, pFrameBuffer, thePitch,
+								   &textureInfo, globalDiffuse, thePixelFormat, blend);
 				}
 			}
 		}
 
 		aTVertPtr++;
 		aTriCounter++;
-		aOddTriangle=!aOddTriangle;
+		aOddTriangle = !aOddTriangle;
 	}
 }
 
-
 static DrawTriFunc gDrawTriFunc[128] = {0};
-void PopWork::SWTri_AddDrawTriFunc(bool textured, bool talpha, bool mod_argb, bool global_argb, int thePixelFormat, bool blend, DrawTriFunc theFunc)
+void PopWork::SWTri_AddDrawTriFunc(bool textured, bool talpha, bool mod_argb, bool global_argb, int thePixelFormat,
+								   bool blend, DrawTriFunc theFunc)
 {
-	int aType = (blend?1:0) | (global_argb?2:0) | (mod_argb?4:0) | (talpha?8:0) | (textured?16:0);
+	int aType = (blend ? 1 : 0) | (global_argb ? 2 : 0) | (mod_argb ? 4 : 0) | (talpha ? 8 : 0) | (textured ? 16 : 0);
 	switch (thePixelFormat)
 	{
-		case 0x8888: aType |= 0<<5; break;
-		case 0x888: aType |= 1<<5; break;
-		case 0x565: aType |= 2<<5; break;
-		case 0x555: aType |= 3<<5; break;
+	case 0x8888:
+		aType |= 0 << 5;
+		break;
+	case 0x888:
+		aType |= 1 << 5;
+		break;
+	case 0x565:
+		aType |= 2 << 5;
+		break;
+	case 0x555:
+		aType |= 3 << 5;
+		break;
 	}
 	gDrawTriFunc[aType] = theFunc;
 }
@@ -634,25 +666,34 @@ void PopWork::SWTri_AddAllDrawTriFuncs()
 
 #include "SWTri_DrawTriangleInc1.cpp"
 
-void	SWHelper::SWDrawTriangle(bool textured, bool talpha, bool mod_argb, bool global_argb, SWVertex * pVerts, unsigned int * pFrameBuffer, const unsigned int bytepitch, const SWTextureInfo * textureInfo, SWDiffuse & globalDiffuse, int thePixelFormat, bool blend)
+void SWHelper::SWDrawTriangle(bool textured, bool talpha, bool mod_argb, bool global_argb, SWVertex *pVerts,
+							  unsigned int *pFrameBuffer, const unsigned int bytepitch,
+							  const SWTextureInfo *textureInfo, SWDiffuse &globalDiffuse, int thePixelFormat,
+							  bool blend)
 {
-	int aType = (blend?1:0) | (global_argb?2:0) | (mod_argb?4:0) | (talpha?8:0) | (textured?16:0);
+	int aType = (blend ? 1 : 0) | (global_argb ? 2 : 0) | (mod_argb ? 4 : 0) | (talpha ? 8 : 0) | (textured ? 16 : 0);
 	switch (thePixelFormat)
 	{
-		case 0x8888: aType |= 0<<5; break;
-		case 0x888: aType |= 1<<5; break;
-		case 0x565: aType |= 2<<5; break;
-		case 0x555: aType |= 3<<5; break;
+	case 0x8888:
+		aType |= 0 << 5;
+		break;
+	case 0x888:
+		aType |= 1 << 5;
+		break;
+	case 0x565:
+		aType |= 2 << 5;
+		break;
+	case 0x555:
+		aType |= 3 << 5;
+		break;
 	}
 	DrawTriFunc aFunc = gDrawTriFunc[aType];
-	if (aFunc==NULL)
+	if (aFunc == NULL)
 	{
-		DBG_ASSERT("You need to call SWTri_AddDrawTriFunc or SWTri_AddAllDrawTriFuncs"==NULL);
+		DBG_ASSERT("You need to call SWTri_AddDrawTriFunc or SWTri_AddAllDrawTriFuncs" == NULL);
 	}
 	else
 		aFunc(pVerts, pFrameBuffer, bytepitch, textureInfo, globalDiffuse);
 
-//	#include "SWTri_DrawTriangleInc2.cpp"
+	//	#include "SWTri_DrawTriangleInc2.cpp"
 }
-
-

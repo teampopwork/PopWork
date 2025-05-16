@@ -9,10 +9,10 @@ namespace PopWork
 
 class SliderListener
 {
-public:
-	virtual void			SliderVal(int theId, double theVal) {};
+  public:
+	virtual void SliderVal(int theId, double theVal){};
 };
 
-}
+} // namespace PopWork
 
 #endif

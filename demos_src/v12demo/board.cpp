@@ -14,10 +14,9 @@
 
 using namespace PopWork;
 
-Board::Board(V12DemoApp* theApp)
+Board::Board(V12DemoApp *theApp)
 {
 	mApp = theApp;
-
 
 	// Remeber the flag explanation in the 1.2 doc and V12Demo.cpp? Sure you do.
 	// This is basically another use of it. All widgets by default have the following
@@ -26,7 +25,7 @@ Board::Board(V12DemoApp* theApp)
 	//	WIDGETFLAGS_DRAW		- The widget is allowed to draw
 	//	WIDGETFLAGS_CLIP		- Set to clip Graphics passed into Draw to the widget's bounds
 	//	WIDGETFLAGS_ALLOW_MOUSE	- Set to allow mouse interaction
-	//	WIDGETFLAGS_ALLOW_FOCUS	- Set to allow focus to be maintained 
+	//	WIDGETFLAGS_ALLOW_FOCUS	- Set to allow focus to be maintained
 	//
 	//	Previously, if you wanted to mark the widget dirty every frame (and thus draw every
 	//	frame), you had to call MarkDirty() all the time. Instead of doing that, we can just
@@ -42,7 +41,7 @@ Board::Board(V12DemoApp* theApp)
 
 	mWidgetFlagsMod.mAddFlags |= WIDGETFLAGS_MARK_DIRTY;
 
-	// Previously, it was annoying trying to place widgets on some sort of parent widget, 
+	// Previously, it was annoying trying to place widgets on some sort of parent widget,
 	// since there was no notion of parent/child relationship. What you had to do was
 	// override the AddedToManager and RemovedFromManager functions, create and add your
 	// widgets or remove and nuke them, and in the case of AddedToManager, you also had
@@ -128,7 +127,7 @@ void Board::Update()
 		}
 	}
 	else
-	{		
+	{
 		// This just makes the rectangle in the middle grow/shrink. Nothing
 		// too crazy.
 		if (mExpanding)
@@ -164,7 +163,6 @@ void Board::Update()
 				mRect.mWidth = 0;
 				mExpanding = true;
 			}
-
 		}
 
 		mRect.mX = mApp->mWidth / 2 - mRect.mWidth / 2;
@@ -172,7 +170,7 @@ void Board::Update()
 	}
 }
 
-void Board::Draw(Graphics* g)
+void Board::Draw(Graphics *g)
 {
 	g->SetColor(Color::Black);
 	g->FillRect(0, 0, mWidth, mHeight);
@@ -189,7 +187,7 @@ void Board::Draw(Graphics* g)
 		// In Board::DrawOverlay, you'll see that we can use PushState and PopState to on-demand
 		// save/restore the graphics state. However, if we're either lazy, or after we draw
 		// our current stuff we don't have a need to reset the state and change it again, we
-		// can use the GraphicsAutoState object. This nifty helper class, upon instantiation on 
+		// can use the GraphicsAutoState object. This nifty helper class, upon instantiation on
 		// the stack, will automatically push the graphics state of the graphics object you pass in.
 		// Note that since stack variables are
 		// removed (and have their con/destructors called automatically, for classes/structs) when they
@@ -214,7 +212,7 @@ void Board::Draw(Graphics* g)
 	// Instead of using an overlay widget to draw our stuff when focus is lost,
 	// we can just use DeferOverlay. You can ONLY call this in a Draw routine. What happens
 	// when you call DeferOverlay is that it schedules with the WidgetManager a call to
-	// this widget's DrawOverlay method at a later time. You can control the order of the 
+	// this widget's DrawOverlay method at a later time. You can control the order of the
 	// overlay layer, and place it above or below other widgets by optionally specifying
 	// a defer priority in the call to DeferOverlay. The higher the priority, the more toplevel
 	// and thus the more widgets above it will be drawn. You'll notice that in DemoWidget's constructor,
@@ -224,10 +222,9 @@ void Board::Draw(Graphics* g)
 	// last time I checked, is less than 2. Note that widgets by default have priority 0 and dialogs have priority 1.
 	if (mLostFocus)
 		DeferOverlay(mDeferPriority);
-
 }
 
-void Board::DrawOverlay(Graphics* g)
+void Board::DrawOverlay(Graphics *g)
 {
 	// Make sure you've read through Board::Draw before this guy, as it explains
 	// how and why we get here.
@@ -236,7 +233,7 @@ void Board::DrawOverlay(Graphics* g)
 
 	g->SetFont(FONT_DEFAULT);
 	g->SetColor(Color::White);
-	g->DrawString(_S("LOST FOCUS"), mMsgX, mMsgY);	
+	g->DrawString(_S("LOST FOCUS"), mMsgX, mMsgY);
 
 	// PushState is a new addition. Previously, any time you changed the
 	// graphic's state, you had to undo it, otherwise it affected anything
@@ -250,7 +247,7 @@ void Board::DrawOverlay(Graphics* g)
 	// will return.
 	g->SetColorizeImages(true);
 	g->SetColor(Color(0, 255, 255));
-	
+
 	// MORE NEW STUFF? Yes. Think back to the previous framework version:
 	// how would you draw in real-time, a rotated and scaled image at a given
 	// location? Well, you could mess around with destination Rects for scaling,
@@ -264,10 +261,10 @@ void Board::DrawOverlay(Graphics* g)
 	// Let's rotate the image between 0 and 360 degrees (note that you could also
 	// use the radian version of the function). So far, not hard, right?
 	t.RotateDeg((float)(mUpdateCnt % 360));
-	
+
 	float sw = 1.0f;
 	float sh = 1.0f;
-	
+
 	// Don't get scared here. This is just a little trickery to expand/contract
 	// the image depending on the update count. All it does is expand the image
 	// to normal size for a second, and then shrink it to almost invisible for
@@ -285,14 +282,14 @@ void Board::DrawOverlay(Graphics* g)
 		sh = (float)mod / 100.0f;
 	}
 
-	// And now we just tell the transform object, t, that we want to scale. 
+	// And now we just tell the transform object, t, that we want to scale.
 	// The value for the x and y direction should be a %, so 1.0 means no change in scale.
 	// Let's also mirror and flip the image at the same time too. To mirror and flip, we'll
 	// just multiply sw and sh by -1. Of course, it'll be hard to tell that it's flipped and mirrored
 	// since it's rotating at the same time, so if you don't believe me you can try commenting
 	// out the t.RotateDeg(...) call above and you'll see that it works.
 	t.Scale(-sw, -sh);
-	
+
 	// And now we just pass in our transform object and it works in both 2D and 3D! Note that we can also
 	// draw the image at a given XY as well. We'll make it move rightward depending on the update count.
 	// ******************IMPORTANT NOTE:*********************
@@ -303,7 +300,7 @@ void Board::DrawOverlay(Graphics* g)
 		g->DrawImageTransformF(IMAGE_HUNGARR_LOGO, t, (float)(mUpdateCnt % (mApp->mWidth + 340)), 200.0f);
 	else
 		g->DrawImageTransform(IMAGE_HUNGARR_LOGO, t, (float)(mUpdateCnt % (mApp->mWidth + 340)), 200.0f);
-	
+
 	g->PopState();
 
 	// You can now draw using matrices. Why the heck would you want to use matrices? Besides doing some
@@ -311,7 +308,6 @@ void Board::DrawOverlay(Graphics* g)
 	// to in real-time flip and mirror an image. While I won't give a tutorial on matrix algebra
 	// (that would take a loooooong time), I'll explain the essential parts:
 	PopWorkTransform2D matrix;
-
 
 	// Multiplying the X coordinate by -1 (which is the 0, 0 element of the matrix) will result in our
 	// image being mirrored, while multiplying the Y coordinate by -1 (1, 1 in the matrix) will result in our
@@ -325,7 +321,7 @@ void Board::DrawOverlay(Graphics* g)
 
 	// And then we just make a call to DrawImageMatrix and give it our specified XY coordinates as well,
 	// and that's it! This works in both 2D and 3D modes.
-	g->DrawImageMatrix(IMAGE_HUNGARR_LOGO, matrix, 300, 400);	
+	g->DrawImageMatrix(IMAGE_HUNGARR_LOGO, matrix, 300, 400);
 
 	// IMPORTANT COMPARISON NOTE:
 	// DrawImageTransform/F will try to use the faster drawing methods if it recognizes certain
@@ -344,9 +340,9 @@ void Board::ButtonDepress(int id)
 		delete mDemoWidget;
 		mDemoWidget = new DemoWidget();
 		mApp->mWidgetManager->AddWidget(mDemoWidget);
-		
+
 		// What, more flags? Yup. Since our little DemoWidget isn't a dialog, when we add it,
-		// it won't change anything about the widgets drawn below it. Which means, unmodified, 
+		// it won't change anything about the widgets drawn below it. Which means, unmodified,
 		// mouse clicks could still be passed down to the board (if the click wasn't in the DemoWidget),
 		// the board still updates, still draws, etc. Let's turn off mouse clicks for all widgets below the
 		// DemoWidget. But, let's still allow all widgets below it to update. Note that if we used the form
@@ -372,11 +368,12 @@ void Board::ButtonDepress(int id)
 		// the single line of code below. No messy functions to write, no images to create, that's a hassel
 		// when you're starting a new app and don't care about the initial appearance of your UI elements and
 		// just want to start testing gameplay immediately.
-		Dialog* d = mApp->DoDialog(100, true, _S("Fun Dialog"), _S("Line 1\nLine 2\nLine 3"), _S("Close!"), Dialog::BUTTONS_FOOTER);
+		Dialog *d = mApp->DoDialog(100, true, _S("Fun Dialog"), _S("Line 1\nLine 2\nLine 3"), _S("Close!"),
+								   Dialog::BUTTONS_FOOTER);
 
 		// Using the default font, which is a system font, can sometimes cause problems on older OS's, like
 		// Windows 95 or 98, in which printing with it appears to produce blank results. Let's set the font
-		// for the button on the dialog box to be FONT_DEFAULT. 
+		// for the button on the dialog box to be FONT_DEFAULT.
 		d->SetButtonFont(FONT_DEFAULT);
 	}
 	else if (id == mCurtainButton->mId)
@@ -386,10 +383,10 @@ void Board::ButtonDepress(int id)
 
 		// Here's some more new stuff. Previously, if you wanted to do something like
 		// a transition after a button is pressed (for example), you had to set a bunch of
-		// variables in your class, check them, and process/draw differently depending on 
+		// variables in your class, check them, and process/draw differently depending on
 		// the transition state. That can be both messy and annoying to do. Why not just
 		// do the logic for the transition right at the site where it has to trigger, in this
-		// case, right when the button is pressed? If you ignore the UpdateApp() call below for 
+		// case, right when the button is pressed? If you ignore the UpdateApp() call below for
 		// a minute, what the loop looks like is just a simple loop that makes a variable expand
 		// to 1/2 the app width, and then contract back to 0. If you removed the call to UpdateApp,
 		// obviously the program would be stuck in the loop until it completed, making it look like the
@@ -433,8 +430,6 @@ void Board::ButtonDepress(int id)
 					mCurtainMode = CURTAIN_INACTIVE;
 				}
 			}
-
 		}
-
 	}
 }

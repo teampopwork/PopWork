@@ -14,9 +14,10 @@ class ButtonListener;
 
 class ButtonWidget : public Widget
 {
-public:
-	enum {
-		BUTTON_LABEL_LEFT	= -1,
+  public:
+	enum
+	{
+		BUTTON_LABEL_LEFT = -1,
 		BUTTON_LABEL_CENTER,
 		BUTTON_LABEL_RIGHT
 	};
@@ -31,51 +32,59 @@ public:
 		NUM_COLORS
 	};
 
-	int						mId;	
-	PopWorkString				mLabel;
-	int						mLabelJustify;
-	Font*					mFont;
-	Image*					mButtonImage;
-	Image*					mOverImage;
-	Image*					mDownImage;	
-	Image*					mDisabledImage;
-	Rect					mNormalRect;
-	Rect					mOverRect;
-	Rect					mDownRect;
-	Rect					mDisabledRect;
+	int mId;
+	PopWorkString mLabel;
+	int mLabelJustify;
+	Font *mFont;
+	Image *mButtonImage;
+	Image *mOverImage;
+	Image *mDownImage;
+	Image *mDisabledImage;
+	Rect mNormalRect;
+	Rect mOverRect;
+	Rect mDownRect;
+	Rect mDisabledRect;
 
-	bool					mInverted;
-	bool					mBtnNoDraw;
-	bool					mFrameNoDraw;
-	ButtonListener*			mButtonListener;
+	bool mInverted;
+	bool mBtnNoDraw;
+	bool mFrameNoDraw;
+	ButtonListener *mButtonListener;
 
-	double					mOverAlpha;
-	double					mOverAlphaSpeed;
-	double					mOverAlphaFadeInSpeed;
+	double mOverAlpha;
+	double mOverAlphaSpeed;
+	double mOverAlphaFadeInSpeed;
 
-	bool					HaveButtonImage(Image *theImage, const Rect &theRect);
-	virtual void			DrawButtonImage(Graphics *g, Image *theImage, const Rect &theRect, int x, int y);
-	
+	bool HaveButtonImage(Image *theImage, const Rect &theRect);
+	virtual void DrawButtonImage(Graphics *g, Image *theImage, const Rect &theRect, int x, int y);
 
-public:
-	ButtonWidget(int theId, ButtonListener* theButtonListener);
+  public:
+	ButtonWidget(int theId, ButtonListener *theButtonListener);
 	virtual ~ButtonWidget();
-	
-	virtual void			SetFont(Font* theFont);
-	virtual bool			IsButtonDown();
-	virtual void			Draw(Graphics* g);
-	virtual void			SetDisabled(bool isDisabled);
-	virtual void			MouseEnter();
-	virtual void			MouseLeave();
-	virtual void			MouseMove(int theX, int theY);
-	virtual void			MouseDown(int theX, int theY, int theClickCount) { Widget::MouseDown(theX, theY, theClickCount); }
-	virtual void			MouseDown(int theX, int theY, int theBtnNum, int theClickCount);
-	virtual void			MouseUp(int theX, int theY) { Widget::MouseUp(theX, theY); }
-	virtual void			MouseUp(int theX, int theY, int theClickCount) { Widget::MouseUp(theX, theY, theClickCount); }
-	virtual void			MouseUp(int theX, int theY, int theBtnNum, int theClickCount);
-	virtual void			Update();
+
+	virtual void SetFont(Font *theFont);
+	virtual bool IsButtonDown();
+	virtual void Draw(Graphics *g);
+	virtual void SetDisabled(bool isDisabled);
+	virtual void MouseEnter();
+	virtual void MouseLeave();
+	virtual void MouseMove(int theX, int theY);
+	virtual void MouseDown(int theX, int theY, int theClickCount)
+	{
+		Widget::MouseDown(theX, theY, theClickCount);
+	}
+	virtual void MouseDown(int theX, int theY, int theBtnNum, int theClickCount);
+	virtual void MouseUp(int theX, int theY)
+	{
+		Widget::MouseUp(theX, theY);
+	}
+	virtual void MouseUp(int theX, int theY, int theClickCount)
+	{
+		Widget::MouseUp(theX, theY, theClickCount);
+	}
+	virtual void MouseUp(int theX, int theY, int theBtnNum, int theClickCount);
+	virtual void Update();
 };
 
-}
+} // namespace PopWork
 
 #endif

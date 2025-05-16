@@ -13,7 +13,6 @@
 
 using namespace PopWork;
 
-
 //////////////////////////////////////////////////////////////////////////
 //	Let's do a little explanation of the parent Dialog class, shall we?
 //	The first parameter we pass it is an image to use for the dialog box.
@@ -23,7 +22,7 @@ using namespace PopWork;
 //	dialog box to be bigger than the actual image. The image can
 //	be thought of as being divided into regions. The 4 corners
 //	are drawn normally, and the remaining chunks (which comprise a third
-//	of the image height or the image width) are tiled to allow for 
+//	of the image height or the image width) are tiled to allow for
 //	the stretching of the dialog box.
 //
 //	The image for the dialog button works the same way and must have
@@ -31,7 +30,7 @@ using namespace PopWork;
 //	the same as a normal button class, except that they support tiling
 //	the image if it is stretched larger than the original image is.
 //
-//	The third parameter is the ID to use for the dialog box. 
+//	The third parameter is the ID to use for the dialog box.
 //
 //	The fourth indicates if the dialog is modal. If it is, then only the
 //	dialog box and any widget above it (like its buttons) will receive
@@ -58,8 +57,9 @@ using namespace PopWork;
 //	The YES/OK/FOOTER buttons have a value of 2000 + the dialog's ID.
 //	The NO/CANCEL buttons have a value of 3000 + the dialog's ID.
 //////////////////////////////////////////////////////////////////////////
-DemoDialog::DemoDialog(std::string theHeader, std::string theBody) :
-Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, StringToPopWorkStringFast(theHeader), StringToPopWorkStringFast(theBody), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
+DemoDialog::DemoDialog(std::string theHeader, std::string theBody)
+	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, StringToPopWorkStringFast(theHeader),
+			 StringToPopWorkStringFast(theBody), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
 {
 	// We can set the rectangular region in which all text/buttons are to go
 	// by changing the mContentInsets variable. The first parameter
@@ -131,7 +131,7 @@ DemoDialog::~DemoDialog()
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void DemoDialog::Draw(Graphics* g)
+void DemoDialog::Draw(Graphics *g)
 {
 	Dialog::Draw(g);
 
@@ -146,13 +146,13 @@ void DemoDialog::Draw(Graphics* g)
 	// widget, the graphics object is already moved (translated) to the widget's
 	// coordinates. Thus, in using the Graphics object, g, (0, 0) is located
 	// at the top left corner of the widget (our dialog box). So we
-	// just take the difference between the widget locations to produce the 
+	// just take the difference between the widget locations to produce the
 	// actual location we want to drawour text at:
-	g->DrawString(_S("Music volume:"), mMusicVolumeSlider->mX - mX, 
-			mMusicVolumeSlider->mY - mY - mMusicVolumeSlider->mHeight);
+	g->DrawString(_S("Music volume:"), mMusicVolumeSlider->mX - mX,
+				  mMusicVolumeSlider->mY - mY - mMusicVolumeSlider->mHeight);
 
-	g->DrawString(_S("Sound volume:"), mSfxVolumeSlider->mX - mX, 
-			mSfxVolumeSlider->mY - mY - mSfxVolumeSlider->mHeight);
+	g->DrawString(_S("Sound volume:"), mSfxVolumeSlider->mX - mX,
+				  mSfxVolumeSlider->mY - mY - mSfxVolumeSlider->mHeight);
 
 	// Do the same for the checkboxes:
 	g->DrawString(_S("3D Mode:"), m3DCheckbox->mX - mX, m3DCheckbox->mY - mY - m3DCheckbox->mHeight + 20);
@@ -164,8 +164,8 @@ void DemoDialog::Draw(Graphics* g)
 	// that anything drawn outside the bounds of the widget is clipped, or
 	// ignored. When mClip is false, no clipping is performed and we
 	// can draw anywhere.
-	
-	g->SetColor(Color(255, 0, 0, 128));	
+
+	g->SetColor(Color(255, 0, 0, 128));
 	// Draw a box in the bottom right
 	g->FillRect(mWidth, mHeight, 100, 100);
 	// Draw one in the top left
@@ -182,10 +182,9 @@ void DemoDialog::Update()
 	Dialog::Update();
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void DemoDialog::AddedToManager(WidgetManager* theWidgetManager)
+void DemoDialog::AddedToManager(WidgetManager *theWidgetManager)
 {
 	Dialog::AddedToManager(theWidgetManager);
 	theWidgetManager->AddWidget(mMusicVolumeSlider);
@@ -199,11 +198,11 @@ void DemoDialog::AddedToManager(WidgetManager* theWidgetManager)
 
 	mFSCheckbox->mUncheckedRect = Rect(0, 0, checkWidth, IMAGE_CHECKBOX->GetHeight());
 	mFSCheckbox->mCheckedRect = Rect(checkWidth, 0, checkWidth, IMAGE_CHECKBOX->GetHeight());
-	
+
 	// Let's set the initial checked state of the 3d checkbox to true if the
 	// user has 3D support enabled. We determine that via a call to Is3DAccelerated
 	m3DCheckbox->mChecked = gAppBase->Is3DAccelerated();
-	
+
 	// We can check if the app is fullscreen by examining the mIsWindowed variable:
 	mFSCheckbox->mChecked = !gAppBase->mIsWindowed;
 
@@ -213,7 +212,7 @@ void DemoDialog::AddedToManager(WidgetManager* theWidgetManager)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void DemoDialog::RemovedFromManager(WidgetManager* theWidgetManager)
+void DemoDialog::RemovedFromManager(WidgetManager *theWidgetManager)
 {
 	Dialog::RemovedFromManager(theWidgetManager);
 	theWidgetManager->RemoveWidget(mMusicVolumeSlider);
@@ -234,45 +233,39 @@ void DemoDialog::Resize(int theX, int theY, int theWidth, int theHeight)
 	// boundary we set for the content insets. We'll make the slider fill the width
 	// of the content region (it'll be stretched if the base image isn't
 	// wide enough) too.
-	mMusicVolumeSlider->Resize(theX + mContentInsets.mLeft, 
-								theY + 140,
-								mWidth - mContentInsets.mLeft - mContentInsets.mRight,
-								IMAGE_SLIDER_THUMB->GetHeight());
+	mMusicVolumeSlider->Resize(theX + mContentInsets.mLeft, theY + 140,
+							   mWidth - mContentInsets.mLeft - mContentInsets.mRight, IMAGE_SLIDER_THUMB->GetHeight());
 
 	// Let's align the sound effect slider in the same way but using a different method.
 	// We know that we want the SFX slider to have the same X, width, and height, and
 	// to be just a few pixels below the music slider. Instead of having to mess around
 	// with the settings like we did above, we can use the layout (LAY_) flags instead.
-	// The first parameter is an ORed list of layout parameters and should be 
+	// The first parameter is an ORed list of layout parameters and should be
 	// pretty self explanatory. You can find more in Widget.h.
-	// The second parameter is the widget to use as the reference. 
+	// The second parameter is the widget to use as the reference.
 	// The rest are any extra padding to use for left/top/width/height related
-	// layout flags. As you can see, we wanted 60 pixels added to the top of 
+	// layout flags. As you can see, we wanted 60 pixels added to the top of
 	// our sound effect slider.
-	mSfxVolumeSlider->Layout(LAY_SameLeft | LAY_Below | LAY_SameWidth | LAY_SameHeight, 
-								mMusicVolumeSlider, 0, 40, 0, 0);
+	mSfxVolumeSlider->Layout(LAY_SameLeft | LAY_Below | LAY_SameWidth | LAY_SameHeight, mMusicVolumeSlider, 0, 40, 0,
+							 0);
 
 	// Place the button that will show off random number generation under the sound effect
 	// slider. But let's only make it take up 1/2 of the width of the slider
 	// and be only as tall as the original button image:
 	mRandomBtn->Layout(LAY_SameLeft | LAY_SameTop, mSfxVolumeSlider, 0, 40, 0, 0);
-	mRandomBtn->Resize(mRandomBtn->mX, mRandomBtn->mY, 
-						mSfxVolumeSlider->mWidth / 2, IMAGE_DIALOG_BUTTON->mHeight);
+	mRandomBtn->Resize(mRandomBtn->mX, mRandomBtn->mY, mSfxVolumeSlider->mWidth / 2, IMAGE_DIALOG_BUTTON->mHeight);
 
 	// And let's place the clipping toggle button to its right
-	mClipBtn->Layout(LAY_Right | LAY_SameTop | LAY_SameWidth | LAY_SameHeight,
-						mRandomBtn, 0, 0, 0, 0);
+	mClipBtn->Layout(LAY_Right | LAY_SameTop | LAY_SameWidth | LAY_SameHeight, mRandomBtn, 0, 0, 0, 0);
 
 	// Place the 3D checkbox under the random button:
 	m3DCheckbox->Layout(LAY_SameLeft | LAY_Below, mRandomBtn, 0, 40, 0, 0);
-	m3DCheckbox->Resize(m3DCheckbox->mX, m3DCheckbox->mY,
-						IMAGE_CHECKBOX->mWidth / 2, IMAGE_CHECKBOX->mHeight);
+	m3DCheckbox->Resize(m3DCheckbox->mX, m3DCheckbox->mY, IMAGE_CHECKBOX->mWidth / 2, IMAGE_CHECKBOX->mHeight);
 
 	// And the fullscreen box to the right of the 3d one. Except, let's use
 	// the mClipBtn's X coordinate to align with:
 	mFSCheckbox->Layout(LAY_SameTop | LAY_SameWidth | LAY_SameHeight, m3DCheckbox);
 	mFSCheckbox->Layout(LAY_SameLeft, mClipBtn);
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -331,7 +324,7 @@ void DemoDialog::ButtonDepress(int theId)
 	// you don't implement your own DialogButton(De)press method (see V12Demo for
 	// more info on this), and instead are trapping button presses within ButtonDepress
 	// inside the dialog itself, then instead of the button ID being 2000 or 3000 + mId,
-	// it's just ID_YES/ID_OK for ok/cancel/1-button dialog, and ID_NO/ID_CANCEL for no/cancel 2nd button. 
+	// it's just ID_YES/ID_OK for ok/cancel/1-button dialog, and ID_NO/ID_CANCEL for no/cancel 2nd button.
 	// Hence we changed our check to look for ID_YES, which is our default single close button at the bottom of this
 	// dialog.
 	else if (theId == ID_YES)
@@ -346,9 +339,8 @@ void DemoDialog::ButtonDepress(int theId)
 		gAppBase->KillDialog(this);
 
 		// Set focus back to the board
-		((GameApp*)gAppBase)->SetFocusToBoard();
+		((GameApp *)gAppBase)->SetFocusToBoard();
 	}
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -374,23 +366,22 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 				// if the user was in full screen mode, they might not see the error message. Using
 				// a game dialog box is the safest way to warn them.
 				m3DCheckbox->SetChecked(false);
-				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Not Supported"), 
-							_S("Hardware acceleration can not be enabled on this computer. \nYour\
+				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Not Supported"),
+								   _S("Hardware acceleration can not be enabled on this computer. \nYour\
 							video card does not meet the minimum requirements for this game."),
-							_S("OK"), Dialog::BUTTONS_FOOTER);
+								   _S("OK"), Dialog::BUTTONS_FOOTER);
 			}
-			else if(!gAppBase->Is3DAccelerationRecommended())
+			else if (!gAppBase->Is3DAccelerationRecommended())
 			{
 				// We can also check if 3D acceleration is not recommended for this computer
 				// with a call to Is3DAccelerationRecommended. This allows the user to override
 				// the default setting, but with a warning that it might not work or might cause
 				// problems. Some cards fail the detection process but wind up being OK to use.
-				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Warning"), 
-					_S("Your video card may not fully support this feature.\n\
+				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Warning"),
+								   _S("Your video card may not fully support this feature.\n\
 					If you experience slower performance, please disable Hardware Acceleration."),
-					_S("OK"), Dialog::BUTTONS_FOOTER);
+								   _S("OK"), Dialog::BUTTONS_FOOTER);
 			}
-			
 		}
 	}
 	else if (theId == mFSCheckbox->mId)
@@ -405,8 +396,9 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 		if (gAppBase->mForceFullscreen && !checked)
 		{
 			gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("No Windowed Mode"),
-			_S("Windowed mode is only available if your desktop is running in\n\
-			either 16 bit or 32 bit color mode, which it is not."), _S("OK"), Dialog::BUTTONS_FOOTER);
+							   _S("Windowed mode is only available if your desktop is running in\n\
+			either 16 bit or 32 bit color mode, which it is not."),
+							   _S("OK"), Dialog::BUTTONS_FOOTER);
 
 			// re-check the box to indicate that fullscreen is still the selected mode:
 			mFSCheckbox->SetChecked(true);

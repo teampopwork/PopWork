@@ -9,11 +9,11 @@ namespace PopWork
 
 class FlagsMod
 {
-public:
-	int						mAddFlags;
-	int						mRemoveFlags;
+  public:
+	int mAddFlags;
+	int mRemoveFlags;
 
-public:
+  public:
 	FlagsMod()
 	{
 		mAddFlags = 0;
@@ -21,31 +21,31 @@ public:
 	}
 };
 
-inline void ModFlags(int& theFlags, const FlagsMod& theFlagMod) 
+inline void ModFlags(int &theFlags, const FlagsMod &theFlagMod)
 {
 	theFlags = (theFlags | theFlagMod.mAddFlags) & ~theFlagMod.mRemoveFlags;
 }
 
-inline int GetModFlags(int theFlags, const FlagsMod& theFlagMod) 
+inline int GetModFlags(int theFlags, const FlagsMod &theFlagMod)
 {
 	return (theFlags | theFlagMod.mAddFlags) & ~theFlagMod.mRemoveFlags;
 }
 
 class ModalFlags
 {
-public:
-	int						mOverFlags;
-	int						mUnderFlags;
-	bool					mIsOver;	
+  public:
+	int mOverFlags;
+	int mUnderFlags;
+	bool mIsOver;
 
-public:
-	void					ModFlags(const FlagsMod& theFlagsMod)
+  public:
+	void ModFlags(const FlagsMod &theFlagsMod)
 	{
 		PopWork::ModFlags(mOverFlags, theFlagsMod);
 		PopWork::ModFlags(mUnderFlags, theFlagsMod);
 	}
 
-	int						GetFlags()
+	int GetFlags()
 	{
 		return mIsOver ? mOverFlags : mUnderFlags;
 	}
@@ -53,27 +53,27 @@ public:
 
 class AutoModalFlags
 {
-public:
-	ModalFlags*				mModalFlags;
-	int						mOldOverFlags;
-	int						mOldUnderFlags;
+  public:
+	ModalFlags *mModalFlags;
+	int mOldOverFlags;
+	int mOldUnderFlags;
 
-public:
-	AutoModalFlags(ModalFlags* theModalFlags, const FlagsMod& theFlagMod)
+  public:
+	AutoModalFlags(ModalFlags *theModalFlags, const FlagsMod &theFlagMod)
 	{
-		mModalFlags = theModalFlags;		
+		mModalFlags = theModalFlags;
 		mOldOverFlags = theModalFlags->mOverFlags;
 		mOldUnderFlags = theModalFlags->mUnderFlags;
-		theModalFlags->ModFlags(theFlagMod);		
+		theModalFlags->ModFlags(theFlagMod);
 	}
 
 	~AutoModalFlags()
-	{		
+	{
 		mModalFlags->mOverFlags = mOldOverFlags;
-		mModalFlags->mUnderFlags = mOldUnderFlags;	
+		mModalFlags->mUnderFlags = mOldUnderFlags;
 	}
 };
 
-}
+} // namespace PopWork
 
 #endif // __FLAGS_H__

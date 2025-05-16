@@ -9,18 +9,18 @@ namespace PopWork
 
 class Insets
 {
-public:
-	int						mLeft;
-	int						mTop;
-	int						mRight;
-	int						mBottom;
+  public:
+	int mLeft;
+	int mTop;
+	int mRight;
+	int mBottom;
 
-public:
+  public:
 	Insets();
 	Insets(int theLeft, int theTop, int theRight, int theBottom);
-	Insets(const Insets& theInsets);			
+	Insets(const Insets &theInsets);
 };
 
-}
+} // namespace PopWork
 
 #endif

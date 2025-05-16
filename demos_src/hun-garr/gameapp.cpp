@@ -10,7 +10,6 @@
 
 using namespace PopWork;
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 GameApp::GameApp()
@@ -50,7 +49,7 @@ GameApp::GameApp()
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 GameApp::~GameApp()
-{	
+{
 	if (mBoard != NULL)
 		mWidgetManager->RemoveWidget(mBoard);
 
@@ -88,7 +87,7 @@ void GameApp::Init()
 
 	// To use custom cursors, you have to specify an image resource
 	// to use. The CURSOR_ defines indicate which cursor type you
-	// want to assign the image to. 
+	// want to assign the image to.
 	// CURSOR_POINTER is the normal Windows pointer.
 	// CURSOR_HAND is used when mousing over widgets (if mDoFinger is true).
 	// CURSOR_DRAGGING is used when a drag operation is happening.
@@ -127,8 +126,7 @@ void GameApp::Init()
 	mMusicInterface->LoadMusic(0, "music/hungarr.ogg");
 	mMusicInterface->FadeIn(0, 0, 0.002, false);
 
-	mNumLoadingThreadTasks = mResourceManager->GetNumResources("Game") + 
-							 mResourceManager->GetNumResources("Hungarr");
+	mNumLoadingThreadTasks = mResourceManager->GetNumResources("Game") + mResourceManager->GetNumResources("Hungarr");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -143,15 +141,15 @@ void GameApp::LoadingThreadProc()
 		mCompletedLoadingThreadTasks++;
 		if (mShutdown)
 			return;
-		
+
 		mTitleScreen->MarkDirty();
 	}
 
 	if (mResourceManager->HadError() || !ExtractGameResources(mResourceManager))
-	{		
+	{
 		ShowResourceError(false);
 		mLoadingFailed = true;
-	
+
 		return;
 	}
 
@@ -167,13 +165,12 @@ void GameApp::LoadingThreadProc()
 	}
 
 	if (mResourceManager->HadError() || !ExtractHungarrResources(mResourceManager))
-	{		
+	{
 		ShowResourceError(false);
 		mLoadingFailed = true;
 
 		return;
 	}
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -200,22 +197,21 @@ void GameApp::TitleScreenIsFinished()
 	mBoard = new Board(this);
 	mResourceManager->DeleteResources("TitleScreen");
 
-
 	mBoard->Resize(0, 0, mWidth, mHeight);
 	mWidgetManager->AddWidget(mBoard);
 	mWidgetManager->SetFocus(mBoard);
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-Dialog* GameApp::NewDialog(int theDialogId, bool isModal, const std::string& theDialogHeader, 
-						   const std::string& theDialogLines, const std::string& theDialogFooter, int theButtonMode)
+Dialog *GameApp::NewDialog(int theDialogId, bool isModal, const std::string &theDialogHeader,
+						   const std::string &theDialogLines, const std::string &theDialogFooter, int theButtonMode)
 {
 	// Rather than dupliate a lengthy explanation, check out the top of DemoDialog.cpp for a complete description
 	// of what all the parameters and functions are, in Demo5.
-	Dialog* d = new Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, theDialogId, isModal,
-		StringToPopWorkStringFast(theDialogHeader), StringToPopWorkStringFast(theDialogLines), StringToPopWorkStringFast(theDialogFooter), theButtonMode);
+	Dialog *d = new Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, theDialogId, isModal,
+						   StringToPopWorkStringFast(theDialogHeader), StringToPopWorkStringFast(theDialogLines),
+						   StringToPopWorkStringFast(theDialogFooter), theButtonMode);
 
 	d->SetButtonFont(FONT_DEFAULT);
 	d->SetLinesFont(FONT_DEFAULT);

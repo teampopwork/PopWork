@@ -4,12 +4,13 @@
 
 using namespace PopWork;
 
-bool PopWork::Quantize8Bit(const ulong* theSrcBits, int theWidth, int theHeight, uchar* theDestColorIndices, ulong* theDestColorTable)
+bool PopWork::Quantize8Bit(const ulong *theSrcBits, int theWidth, int theHeight, uchar *theDestColorIndices,
+						   ulong *theDestColorTable)
 {
-	int aSize = theWidth*theHeight;
+	int aSize = theWidth * theHeight;
 
 	int aColorTableSize = 0;
-		
+
 	ulong aSearchTable[256];
 	uchar aTranslationTable[256]; // From search table to color table
 
@@ -24,20 +25,20 @@ bool PopWork::Quantize8Bit(const ulong* theSrcBits, int theWidth, int theHeight,
 
 	for (int anIdx = 1; anIdx < aSize; anIdx++)
 	{
-		ulong aColor = theSrcBits[anIdx];		
+		ulong aColor = theSrcBits[anIdx];
 
 		int aLeftPos = 0;
-		int aRightPos = aColorTableSize-1;
-		int aMiddlePos = (aLeftPos+aRightPos)/2;
+		int aRightPos = aColorTableSize - 1;
+		int aMiddlePos = (aLeftPos + aRightPos) / 2;
 
 		for (;;)
-		{	
+		{
 			ulong aCheckColor = aSearchTable[aMiddlePos];
-			
+
 			if (aColor < aCheckColor)
 				aRightPos = aMiddlePos - 1;
 			else if (aColor > aCheckColor)
-				aLeftPos = aMiddlePos + 1;			
+				aLeftPos = aMiddlePos + 1;
 			else
 			{
 				theDestColorIndices[anIdx] = aTranslationTable[aMiddlePos];
@@ -54,10 +55,12 @@ bool PopWork::Quantize8Bit(const ulong* theSrcBits, int theWidth, int theHeight,
 					anInsertPos++;
 
 				// Insert color into the table
-				memmove(aSearchTable+anInsertPos+1, aSearchTable+anInsertPos, (aColorTableSize-anInsertPos) * sizeof(ulong));
+				memmove(aSearchTable + anInsertPos + 1, aSearchTable + anInsertPos,
+						(aColorTableSize - anInsertPos) * sizeof(ulong));
 				aSearchTable[anInsertPos] = aColor;
 
-				memmove(aTranslationTable+anInsertPos+1, aTranslationTable+anInsertPos, (aColorTableSize-anInsertPos) * sizeof(uchar));
+				memmove(aTranslationTable + anInsertPos + 1, aTranslationTable + anInsertPos,
+						(aColorTableSize - anInsertPos) * sizeof(uchar));
 				aTranslationTable[anInsertPos] = aColorTableSize;
 
 				theDestColorTable[aColorTableSize] = aColor;
@@ -69,10 +72,9 @@ bool PopWork::Quantize8Bit(const ulong* theSrcBits, int theWidth, int theHeight,
 				break;
 			}
 
-			aMiddlePos = (aLeftPos+aRightPos)/2;
+			aMiddlePos = (aLeftPos + aRightPos) / 2;
 		}
 	}
 
 	return true;
 }
-

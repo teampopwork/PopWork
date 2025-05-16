@@ -6,17 +6,17 @@
 //	it, and begin processing all the game code.
 //
 //	***********************************************************************
-//	NOTE: You should have read and understood demos 1-5 before 
+//	NOTE: You should have read and understood demos 1-5 before
 //	this, as topics that are already covered will be either not commented
 //	or minimally so. In addition, you REALLY REALLY
-//	should have read through the documentation included with the 1.2 release. 
+//	should have read through the documentation included with the 1.2 release.
 //	***********************************************************************
 //
 //	This demo will teach you:
-//	* How to use the new InitHook/ShutdownHook for slightly safer/easier 
+//	* How to use the new InitHook/ShutdownHook for slightly safer/easier
 //		init/shutdown procedures
 //
-//	* How to use the new DialogListener class, to listen to button events 
+//	* How to use the new DialogListener class, to listen to button events
 //		specifically from a dialog (in contrast to using ButtonListener and
 //		checking if the button ID is dialog ID + 2000 or 3000).
 //
@@ -52,9 +52,9 @@
 
 using namespace PopWork;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-	V12DemoApp* anApp = new V12DemoApp();
+	V12DemoApp *anApp = new V12DemoApp();
 	anApp->Init();
 	anApp->Start();
 	delete anApp;

@@ -11,83 +11,86 @@
 #include "widget.h"
 #include "buttonlistener.h"
 
-namespace PopWork 
+namespace PopWork
 {
 
 class ScrollListener;
 class ScrollbuttonWidget;
 
-class ScrollbarWidget : public Widget, public ButtonListener 
+class ScrollbarWidget : public Widget, public ButtonListener
 {
-public:
+  public:
+	enum
+	{
+		UPDATE_MODE_IDLE = 0,
+		UPDATE_MODE_PGUP,
+		UPDATE_MODE_PGDN
+	};
 
-enum 
-{
-	UPDATE_MODE_IDLE		=0,
-	UPDATE_MODE_PGUP,
-	UPDATE_MODE_PGDN
-};		
+  public:
+	ScrollbuttonWidget *mUpButton;
+	ScrollbuttonWidget *mDownButton;
 
-public:
+	bool mInvisIfNoScroll;
 
-	ScrollbuttonWidget		*mUpButton;
-	ScrollbuttonWidget		*mDownButton;
+  public:
+	int mId;
 
-	bool					mInvisIfNoScroll;			
+	double mValue;
+	double mMaxValue;
+	double mPageSize;
+	bool mHorizontal;
 
-public:
+	bool mPressedOnThumb;
+	int mMouseDownThumbPos;
+	int mMouseDownX;
+	int mMouseDownY;
 
-	int						mId;
+	int mUpdateMode;
+	int mUpdateAcc;
+	int mButtonAcc;
+	int mLastMouseX;
+	int mLastMouseY;
+	ScrollListener *mScrollListener;
 
-	double					mValue;
-	double					mMaxValue;
-	double					mPageSize;
-	bool					mHorizontal;
-
-	bool					mPressedOnThumb;
-	int						mMouseDownThumbPos;
-	int						mMouseDownX;
-	int						mMouseDownY;
-
-	int						mUpdateMode;
-	int						mUpdateAcc;
-	int						mButtonAcc;
-	int						mLastMouseX;
-	int						mLastMouseY;
-	ScrollListener*			mScrollListener;
-
-public:
+  public:
 	ScrollbarWidget(int theId, ScrollListener *theScrollListener);
 	virtual ~ScrollbarWidget();
 
-	virtual void			SetInvisIfNoScroll(bool invisIfNoScroll);
-	virtual void			SetMaxValue(double theNewMaxValue);
-	virtual void			SetPageSize(double theNewPageSize);
-	virtual void			SetValue(double theNewValue);
-	virtual void			SetHorizontal(bool isHorizontal);
+	virtual void SetInvisIfNoScroll(bool invisIfNoScroll);
+	virtual void SetMaxValue(double theNewMaxValue);
+	virtual void SetPageSize(double theNewPageSize);
+	virtual void SetValue(double theNewValue);
+	virtual void SetHorizontal(bool isHorizontal);
 
-	virtual void			ResizeScrollbar(int theX, int theY, int theWidth, int theHeight);			
-	virtual bool			AtBottom();
-	virtual void			GoToBottom();
-	virtual void			DrawThumb(Graphics *g, int theX, int theY, int theWidth, int theHeight);
-	virtual int				GetTrackSize();
-	virtual int				GetThumbSize();
-	virtual int				GetThumbPosition();
-	virtual void			Draw(Graphics *g);
-	virtual void			ClampValue();
-	virtual void			SetThumbPosition(int thePosition);
-	virtual void			ButtonPress(int theId);
-	virtual void			ButtonDepress(int theId);
-	virtual void			ButtonDownTick(int theId);
-	virtual void			Update();
-	virtual int				ThumbCompare(int x, int y);
-	virtual void			MouseDown(int x, int y, int theClickCount) { Widget::MouseDown(x, y, theClickCount); }
-	virtual void			MouseDown(int x, int y, int theBtnNum, int theClickCount);
-	virtual void			MouseUp(int x, int y) { Widget::MouseUp(x, y); }
-	virtual void			MouseUp(int x, int y, int theBtnNum, int theClickCount);
-	virtual void			MouseDrag(int x, int y);
+	virtual void ResizeScrollbar(int theX, int theY, int theWidth, int theHeight);
+	virtual bool AtBottom();
+	virtual void GoToBottom();
+	virtual void DrawThumb(Graphics *g, int theX, int theY, int theWidth, int theHeight);
+	virtual int GetTrackSize();
+	virtual int GetThumbSize();
+	virtual int GetThumbPosition();
+	virtual void Draw(Graphics *g);
+	virtual void ClampValue();
+	virtual void SetThumbPosition(int thePosition);
+	virtual void ButtonPress(int theId);
+	virtual void ButtonDepress(int theId);
+	virtual void ButtonDownTick(int theId);
+	virtual void Update();
+	virtual int ThumbCompare(int x, int y);
+	virtual void MouseDown(int x, int y, int theClickCount)
+	{
+		Widget::MouseDown(x, y, theClickCount);
+	}
+	virtual void MouseDown(int x, int y, int theBtnNum, int theClickCount);
+	virtual void MouseUp(int x, int y)
+	{
+		Widget::MouseUp(x, y);
+	}
+	virtual void MouseUp(int x, int y, int theBtnNum, int theClickCount);
+	virtual void MouseDrag(int x, int y);
 };
 
-}
+} // namespace PopWork
 
 #endif

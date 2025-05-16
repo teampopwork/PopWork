@@ -18,7 +18,6 @@
 // having to prefix everything with PopWork::
 using namespace PopWork;
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 GameApp::GameApp()
@@ -33,7 +32,7 @@ GameApp::GameApp()
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
-	// and written to. This is stored under the HKEY_CURRENT_USER tree on 
+	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
 	mRegKey = "PopCap\\PopWork\\Demo4";
 
@@ -83,7 +82,6 @@ GameApp::~GameApp()
 	// have to delete the memory manually.
 	delete mBoard;
 
-
 	// If you shut down the app before closing the loading screen, then
 	// it will need to be removed here. The rational for the next two
 	// steps is the same as for Board:
@@ -97,7 +95,6 @@ GameApp::~GameApp()
 	mResourceManager->DeleteResources("Init");
 	mResourceManager->DeleteResources("TitleScreen");
 	mResourceManager->DeleteResources("Game");
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -121,7 +118,7 @@ void GameApp::Init()
 	// file that we created a group called Init that contains these resources.
 	// You may call it whatever you like. Let's load those resources now.
 	// We do that by calling the LoadResources method of our mResourceManager
-	// variable and specifying in quotes the name of the resource group to 
+	// variable and specifying in quotes the name of the resource group to
 	// load. This string is case sensitive.
 	if (!mResourceManager->LoadResources("Init"))
 	{
@@ -149,7 +146,7 @@ void GameApp::Init()
 		return;
 	}
 
-	// We also need to load our title screen graphics in, since you can't 
+	// We also need to load our title screen graphics in, since you can't
 	// display the title screen without any graphics. For an explanation of why
 	// we placed this in a separate group from Init, see properties/resources.xml.
 	// This code works exactly like the above did for the Init group.
@@ -243,15 +240,15 @@ void GameApp::LoadingThreadProc()
 	// our fonts, sounds, and images. The resource manager is doing
 	// it for us. For each of the groups that we want to load,
 	// we first have to instruct the resource manager to begin the
-	// loading phase and initialize its internal variables. 
-	// We do that with the StartLoadResources method and pass in the 
+	// loading phase and initialize its internal variables.
+	// We do that with the StartLoadResources method and pass in the
 	// exact string name of the group to begin loading:
 	mResourceManager->StartLoadResources("Game");
 
 	// Now we need to load each individual resource. We will loop,
 	// calling LoadNextResource at the start. When it returns false,
 	// there are no more resources to load for the current group.
-	// LoadNextResource knows what group to load from because 
+	// LoadNextResource knows what group to load from because
 	// of the call to StartLoadResources above:
 	while (mResourceManager->LoadNextResource())
 	{
@@ -287,13 +284,12 @@ void GameApp::LoadingThreadProc()
 	// manager if an error occurred in the above loop that we
 	// didn't yet catch. We do that with the HadError method:
 	if (mResourceManager->HadError() || !ExtractGameResources(mResourceManager))
-	{		
+	{
 		ShowResourceError(false);
 		mLoadingFailed = true;
 
 		return;
 	}
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -311,10 +307,9 @@ void GameApp::LoadingThreadCompleted()
 	if (mLoadingFailed)
 		return;
 
-	
 	// We aren't going to make and add the Board class here like we
 	// did in the previous demos. Instead, since we are done loading
-	// everything, we're going to tell the title screen that 
+	// everything, we're going to tell the title screen that
 	// we're done and that it should unhide the continue link and let
 	// the user enter the game.
 	mTitleScreen->LoadingComplete();
@@ -347,7 +342,7 @@ void GameApp::TitleScreenIsFinished()
 
 	// This is a very important step: Because the Board class is a widget
 	// (see Board.h/.cpp for more details) we need to tell it what
-	// dimensions it has and where to place it. 
+	// dimensions it has and where to place it.
 	// By default a widget is invisible because its
 	// width/height are 0, 0. Since the Board class is our main
 	// drawing area and game logic class, we want to make it the
@@ -372,7 +367,7 @@ void GameApp::TitleScreenIsFinished()
 
 	// Let's fade in the main game music. This is the same as in Init.
 	// The only difference is we're using 1 instead of 0 for our song id.
-	// Why? Well, channel/song id 0 is being used to fade out the 
+	// Why? Well, channel/song id 0 is being used to fade out the
 	// previously playing track, we can't use it to also fade in.
 	// That's why we loaded another copy of the song into channel 1.
 	// Again, as explained in Init, I happen to know that offset 9
@@ -384,12 +379,13 @@ void GameApp::TitleScreenIsFinished()
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void GameApp::HandleCmdLineParam(const std::string& theParamName, const std::string& theParamValue)
+void GameApp::HandleCmdLineParam(const std::string &theParamName, const std::string &theParamValue)
 {
 	// If you wanted to, in here you could examine command line parameters and their values.
 	// We actually don't care to, in this. The purpose was to show you how you'd do it,
 	// and this function is the one you use to read those values. We'll just print the
 	// parameters out for now:
-	OutputDebugString(StrFormat("theParamName = \"%s\", theParamValue = \"%s\"", 
-		theParamName.c_str(), theParamValue.c_str()).c_str());
+	OutputDebugString(
+		StrFormat("theParamName = \"%s\", theParamValue = \"%s\"", theParamName.c_str(), theParamValue.c_str())
+			.c_str());
 }

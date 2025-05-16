@@ -18,7 +18,7 @@ Image::Image()
 {
 	mWidth = 0;
 	mHeight = 0;
-	mNumChannels = 4; //Default to have R, G, B and A channels.
+	mNumChannels = 4; // Default to have R, G, B and A channels.
 	mBits = NULL;
 }
 
@@ -27,17 +27,17 @@ Image::~Image()
 	delete mBits;
 }
 
-int	Image::GetWidth()
+int Image::GetWidth()
 {
 	return mWidth;
 }
 
-int	Image::GetHeight()
+int Image::GetHeight()
 {
 	return mHeight;
 }
 
-unsigned long* Image::GetBits()
+unsigned long *Image::GetBits()
 {
 	return mBits;
 }
@@ -45,9 +45,9 @@ unsigned long* Image::GetBits()
 //////////////////////////////////////////////////////////////////////////
 // PNG Pak Support
 
-Image* GetImageSTB(const std::string& theFileName)
+Image *GetImageSTB(const std::string &theFileName)
 {
-	PFILE* fp;
+	PFILE *fp;
 
 	if ((fp = p_fopen(theFileName.c_str(), "rb")) == NULL)
 		return NULL;
@@ -60,12 +60,12 @@ Image* GetImageSTB(const std::string& theFileName)
 	p_fclose(fp);
 
 	int width, height, num_channels;
-	unsigned char* stb_image = stbi_load_from_memory(data.data(), fileSize, &width, &height, &num_channels, NULL);
+	unsigned char *stb_image = stbi_load_from_memory(data.data(), fileSize, &width, &height, &num_channels, NULL);
 
-	unsigned long* aBits = new unsigned long[width * height];
+	unsigned long *aBits = new unsigned long[width * height];
 	for (int i = 0; i < width * height; ++i)
 	{
-		unsigned char* pixel = &stb_image[i * num_channels];
+		unsigned char *pixel = &stb_image[i * num_channels];
 
 		unsigned char r = pixel[0];
 		unsigned char g = pixel[1];
@@ -75,7 +75,7 @@ Image* GetImageSTB(const std::string& theFileName)
 		aBits[i] = (a << 24) | (r << 16) | (g << 8) | b;
 	}
 
-	Image* anImage = new Image();
+	Image *anImage = new Image();
 	anImage->mWidth = width;
 	anImage->mHeight = height;
 	anImage->mBits = aBits;
@@ -86,7 +86,7 @@ Image* GetImageSTB(const std::string& theFileName)
 	return anImage;
 }
 
-int ReadBlobBlock(PFILE* fp, char* data)
+int ReadBlobBlock(PFILE *fp, char *data)
 {
 	unsigned char aCount = 0;
 	p_fread(&aCount, sizeof(char), 1, fp);
@@ -94,39 +94,26 @@ int ReadBlobBlock(PFILE* fp, char* data)
 	return aCount;
 }
 
-Image* GetGIFImage(const std::string& theFileName)
+Image *GetGIFImage(const std::string &theFileName)
 {
-#define BitSet(byte,bit)  (((byte) & (bit)) == (bit))
-#define LSBFirstOrder(x,y)  (((y) << 8) | (x))
+#define BitSet(byte, bit) (((byte) & (bit)) == (bit))
+#define LSBFirstOrder(x, y) (((y) << 8) | (x))
 
-	int
-		opacity,
-		status;
+	int opacity, status;
 
 	int i;
 
-	unsigned char* p;
+	unsigned char *p;
 
-	unsigned char
-		background,
-		c,
-		flag,
-		* global_colormap,
-		header[1664],
-		magick[12];
+	unsigned char background, c, flag, *global_colormap, header[1664], magick[12];
 
-	unsigned int
-		delay,
-		dispose,
-		global_colors,
-		image_count,
-		iterations;
+	unsigned int delay, dispose, global_colors, image_count, iterations;
 
 	/*
 	Open image file.
 	*/
 
-	PFILE* fp;
+	PFILE *fp;
 
 	if ((fp = p_fopen(theFileName.c_str(), "rb")) == NULL)
 		return NULL;
@@ -135,12 +122,11 @@ Image* GetGIFImage(const std::string& theFileName)
 	*/
 	status = p_fread(magick, sizeof(char), 6, fp);
 
-	if (((strncmp((char*)magick, "GIF87", 5) != 0) &&
-		(strncmp((char*)magick, "GIF89", 5) != 0)))
+	if (((strncmp((char *)magick, "GIF87", 5) != 0) && (strncmp((char *)magick, "GIF89", 5) != 0)))
 		return NULL;
 
 	global_colors = 0;
-	global_colormap = (unsigned char*)NULL;
+	global_colormap = (unsigned char *)NULL;
 
 	short pw;
 	short ph;
@@ -158,7 +144,7 @@ Image* GetGIFImage(const std::string& theFileName)
 		*/
 		global_colors = 1 << ((flag & 0x07) + 1);
 		global_colormap = new unsigned char[3 * global_colors];
-		if (global_colormap == (unsigned char*)NULL)
+		if (global_colormap == (unsigned char *)NULL)
 			return NULL;
 
 		p_fread(global_colormap, sizeof(char), 3 * global_colors, fp);
@@ -170,13 +156,13 @@ Image* GetGIFImage(const std::string& theFileName)
 	opacity = (-1);
 	image_count = 0;
 
-	for (; ; )
+	for (;;)
 	{
 		if (p_fread(&c, sizeof(char), 1, fp) == 0)
 			break;
 
 		if (c == ';')
-			break;  /* terminator */
+			break; /* terminator */
 		if (c == '!')
 		{
 			/*
@@ -186,12 +172,12 @@ Image* GetGIFImage(const std::string& theFileName)
 
 			switch (c)
 			{
-			case 0xf9:
-			{
+			case 0xf9: {
 				/*
 				Read Graphics Control extension.
 				*/
-				while (ReadBlobBlock(fp, (char*)header) > 0);
+				while (ReadBlobBlock(fp, (char *)header) > 0)
+					;
 
 				dispose = header[0] >> 2;
 				delay = (header[2] << 8) | header[1];
@@ -199,55 +185,52 @@ Image* GetGIFImage(const std::string& theFileName)
 					opacity = header[3];
 				break;
 			}
-			case 0xfe:
-			{
-				char* comments;
+			case 0xfe: {
+				char *comments;
 				int length;
 
 				/*
 				Read Comment extension.
 				*/
-				comments = (char*)NULL;
-				for (; ; )
+				comments = (char *)NULL;
+				for (;;)
 				{
-					length = ReadBlobBlock(fp, (char*)header);
+					length = ReadBlobBlock(fp, (char *)header);
 					if (length <= 0)
 						break;
 					if (comments == NULL)
 					{
 						comments = new char[length + 1];
-						if (comments != (char*)NULL)
+						if (comments != (char *)NULL)
 							*comments = '\0';
 					}
 
 					header[length] = '\0';
-					strcat(comments, (char*)header);
+					strcat(comments, (char *)header);
 				}
-				if (comments == (char*)NULL)
+				if (comments == (char *)NULL)
 					break;
 
 				delete comments;
 				break;
 			}
-			case 0xff:
-			{
-				int
-					loop;
+			case 0xff: {
+				int loop;
 
 				/*
 				Read Netscape Loop extension.
 				*/
 				loop = false;
-				if (ReadBlobBlock(fp, (char*)header) > 0)
-					loop = !strncmp((char*)header, "NETSCAPE2.0", 11);
-				while (ReadBlobBlock(fp, (char*)header) > 0)
+				if (ReadBlobBlock(fp, (char *)header) > 0)
+					loop = !strncmp((char *)header, "NETSCAPE2.0", 11);
+				while (ReadBlobBlock(fp, (char *)header) > 0)
 					if (loop)
 						iterations = (header[2] << 8) | header[1];
 				break;
 			}
-			default:
-			{
-				while (ReadBlobBlock(fp, (char*)header) > 0);
+			default: {
+				while (ReadBlobBlock(fp, (char *)header) > 0)
+					;
 				break;
 			}
 			}
@@ -287,7 +270,7 @@ Image* GetGIFImage(const std::string& theFileName)
 		p_fread(&flag, sizeof(char), 1, fp);
 
 		colors = !BitSet(flag, 0x80) ? global_colors : 1 << ((flag & 0x07) + 1);
-		unsigned long* colortable = new unsigned long[colors];
+		unsigned long *colortable = new unsigned long[colors];
 
 		interlaced = BitSet(flag, 0x40);
 
@@ -325,13 +308,12 @@ Image* GetGIFImage(const std::string& theFileName)
 				colortable[i] = 0xFF000000 | (r << 16) | (g << 8) | (b);
 			}
 
-			//image->background_color=
-			//image->colormap[Min(background,image->colors-1)];
+			// image->background_color=
+			// image->colormap[Min(background,image->colors-1)];
 		}
 		else
 		{
-			unsigned char
-				* colormap;
+			unsigned char *colormap;
 
 			/*
 			Read local colormap.
@@ -366,53 +348,32 @@ Image* GetGIFImage(const std::string& theFileName)
 		/*
 		Decode image.
 		*/
-		//status=DecodeImage(image,opacity,exception);
+		// status=DecodeImage(image,opacity,exception);
 
-		//if (global_colormap != (unsigned char *) NULL)
-		// LiberateMemory((void **) &global_colormap);
+		// if (global_colormap != (unsigned char *) NULL)
+		//  LiberateMemory((void **) &global_colormap);
 		if (global_colormap != NULL)
 		{
 			delete[] global_colormap;
 			global_colormap = NULL;
 		}
 
-		//while (image->previous != (Image *) NULL)
-		//    image=image->previous;
+		// while (image->previous != (Image *) NULL)
+		//     image=image->previous;
 
-#define MaxStackSize  4096
-#define NullCode  (-1)
+#define MaxStackSize 4096
+#define NullCode (-1)
 
-		int
-			available,
-			bits,
-			code,
-			clear,
-			code_mask,
-			code_size,
-			count,
-			end_of_information,
-			in_code,
-			offset,
-			old_code,
-			pass,
-			y;
+		int available, bits, code, clear, code_mask, code_size, count, end_of_information, in_code, offset, old_code,
+			pass, y;
 
-		int
-			x;
+		int x;
 
-		unsigned int
-			datum;
+		unsigned int datum;
 
-		short
-			* prefix;
+		short *prefix;
 
-		unsigned char
-			data_size,
-			first,
-			* packet,
-			* pixel_stack,
-			* suffix,
-			* top_stack;
+		unsigned char data_size, first, *packet, *pixel_stack, *suffix, *top_stack;
 
 		/*
 		Allocate decoder tables.
@@ -450,22 +411,20 @@ Image* GetGIFImage(const std::string& theFileName)
 		pass = 0;
 		top_stack = pixel_stack;
 
-		unsigned long* aBits = new unsigned long[width * height];
+		unsigned long *aBits = new unsigned long[width * height];
 
-		unsigned char* c = NULL;
+		unsigned char *c = NULL;
 
 		for (y = 0; y < (int)height; y++)
 		{
-			//q=SetImagePixels(image,0,offset,width,1);
-			//if (q == (PixelPacket *) NULL)
-			//break;
-			//indexes=GetIndexes(image);
+			// q=SetImagePixels(image,0,offset,width,1);
+			// if (q == (PixelPacket *) NULL)
+			// break;
+			// indexes=GetIndexes(image);
 
-			unsigned long* q = aBits + offset * width;
+			unsigned long *q = aBits + offset * width;
 
-
-
-			for (x = 0; x < (int)width; )
+			for (x = 0; x < (int)width;)
 			{
 				if (top_stack == pixel_stack)
 				{
@@ -481,7 +440,7 @@ Image* GetGIFImage(const std::string& theFileName)
 							*/
 							int pos = p_ftell(fp);
 
-							count = ReadBlobBlock(fp, (char*)packet);
+							count = ReadBlobBlock(fp, (char *)packet);
 							if (count <= 0)
 								break;
 							c = packet;
@@ -572,8 +531,7 @@ Image* GetGIFImage(const std::string& theFileName)
 				switch (pass)
 				{
 				case 0:
-				default:
-				{
+				default: {
 					offset += 8;
 					if (offset >= height)
 					{
@@ -582,8 +540,7 @@ Image* GetGIFImage(const std::string& theFileName)
 					}
 					break;
 				}
-				case 1:
-				{
+				case 1: {
 					offset += 8;
 					if (offset >= height)
 					{
@@ -592,8 +549,7 @@ Image* GetGIFImage(const std::string& theFileName)
 					}
 					break;
 				}
-				case 2:
-				{
+				case 2: {
 					offset += 4;
 					if (offset >= height)
 					{
@@ -602,8 +558,7 @@ Image* GetGIFImage(const std::string& theFileName)
 					}
 					break;
 				}
-				case 3:
-				{
+				case 3: {
 					offset += 2;
 					break;
 				}
@@ -624,16 +579,16 @@ Image* GetGIFImage(const std::string& theFileName)
 
 		delete colortable;
 
-		//if (y < image->rows)
-		//failed = true;
+		// if (y < image->rows)
+		// failed = true;
 
-		Image* anImage = new Image();
+		Image *anImage = new Image();
 
 		anImage->mWidth = width;
 		anImage->mHeight = height;
 		anImage->mBits = aBits;
 
-		//TODO: Change for animation crap
+		// TODO: Change for animation crap
 		p_fclose(fp);
 		return anImage;
 	}
@@ -643,9 +598,9 @@ Image* GetGIFImage(const std::string& theFileName)
 	return NULL;
 }
 
-bool ImageLib::WriteImage(const std::string& theFileName, const std::string& theExtension, Image* theImage)
+bool ImageLib::WriteImage(const std::string &theFileName, const std::string &theExtension, Image *theImage)
 {
-	uint8_t* data = new unsigned char[theImage->mWidth * theImage->mHeight * theImage->mNumChannels];
+	uint8_t *data = new unsigned char[theImage->mWidth * theImage->mHeight * theImage->mNumChannels];
 
 	int index = 0;
 	for (int j = theImage->mHeight - 1; j >= 0; --j)
@@ -670,11 +625,14 @@ bool ImageLib::WriteImage(const std::string& theFileName, const std::string& the
 	else if (stricmp(theExtension.c_str(), ".jpeg") == 0)
 		stbi_write_jpg((theFileName + ".jpeg").c_str(), theImage->mWidth, theImage->mHeight, 3, data, 100);
 	else if (stricmp(theExtension.c_str(), ".png") == 0)
-		stbi_write_png((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight, theImage->mNumChannels, data, theImage->mWidth * theImage->mNumChannels);
+		stbi_write_png((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight,
+					   theImage->mNumChannels, data, theImage->mWidth * theImage->mNumChannels);
 	else if (stricmp(theExtension.c_str(), ".bmp") == 0)
-		stbi_write_bmp((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight, theImage->mNumChannels, data);
+		stbi_write_bmp((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight,
+					   theImage->mNumChannels, data);
 	else if (stricmp(theExtension.c_str(), ".tga") == 0)
-		stbi_write_tga((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight, theImage->mNumChannels, data);
+		stbi_write_tga((theFileName + theExtension).c_str(), theImage->mWidth, theImage->mHeight,
+					   theImage->mNumChannels, data);
 	else
 	{
 		delete[] data;
@@ -686,7 +644,8 @@ bool ImageLib::WriteImage(const std::string& theFileName, const std::string& the
 	return true;
 }
 
-bool ImageLib::WriteImageRaw(const std::string& theFileName, const std::string& theExtension, unsigned char* theData, int theWidth, int theHeight)
+bool ImageLib::WriteImageRaw(const std::string &theFileName, const std::string &theExtension, unsigned char *theData,
+							 int theWidth, int theHeight)
 {
 
 	if (stricmp(theExtension.c_str(), ".jpg") == 0)
@@ -710,7 +669,7 @@ bool ImageLib::WriteImageRaw(const std::string& theFileName, const std::string& 
 int ImageLib::gAlphaComposeColor = 0xFFFFFF;
 bool ImageLib::gAutoLoadAlpha = true;
 
-Image* ImageLib::GetImage(const std::string& theFilename, bool lookForAlphaImage)
+Image *ImageLib::GetImage(const std::string &theFilename, bool lookForAlphaImage)
 {
 	if (!gAutoLoadAlpha)
 		lookForAlphaImage = false;
@@ -729,7 +688,7 @@ Image* ImageLib::GetImage(const std::string& theFilename, bool lookForAlphaImage
 	else
 		aFilename = theFilename;
 
-	Image* anImage = NULL;
+	Image *anImage = NULL;
 
 	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".tga") == 0) || (anExt.length() == 0)))
 		anImage = GetImageSTB(aFilename + ".tga");
@@ -744,30 +703,28 @@ Image* ImageLib::GetImage(const std::string& theFilename, bool lookForAlphaImage
 		anImage = GetGIFImage(aFilename + ".gif");
 
 	// Check for alpha images
-	Image* anAlphaImage = NULL;
+	Image *anAlphaImage = NULL;
 	if (lookForAlphaImage)
 	{
 		// Check _ImageName
 		anAlphaImage = GetImage(theFilename.substr(0, aLastSlashPos + 1) + "_" +
-			theFilename.substr(aLastSlashPos + 1, theFilename.length() - aLastSlashPos - 1), false);
+									theFilename.substr(aLastSlashPos + 1, theFilename.length() - aLastSlashPos - 1),
+								false);
 
 		// Check ImageName_
 		if (anAlphaImage == NULL)
 			anAlphaImage = GetImage(theFilename + "_", false);
 	}
 
-
-
 	// Compose alpha channel with image
 	if (anAlphaImage != NULL)
 	{
 		if (anImage != NULL)
 		{
-			if ((anImage->mWidth == anAlphaImage->mWidth) &&
-				(anImage->mHeight == anAlphaImage->mHeight))
+			if ((anImage->mWidth == anAlphaImage->mWidth) && (anImage->mHeight == anAlphaImage->mHeight))
 			{
-				unsigned long* aBits1 = anImage->mBits;
-				unsigned long* aBits2 = anAlphaImage->mBits;
+				unsigned long *aBits1 = anImage->mBits;
+				unsigned long *aBits2 = anAlphaImage->mBits;
 				int aSize = anImage->mWidth * anImage->mHeight;
 
 				for (int i = 0; i < aSize; i++)
@@ -784,7 +741,7 @@ Image* ImageLib::GetImage(const std::string& theFilename, bool lookForAlphaImage
 		{
 			anImage = anAlphaImage;
 
-			unsigned long* aBits1 = anImage->mBits;
+			unsigned long *aBits1 = anImage->mBits;
 
 			int aSize = anImage->mWidth * anImage->mHeight;
 			for (int i = 0; i < aSize; i++)
@@ -798,7 +755,7 @@ Image* ImageLib::GetImage(const std::string& theFilename, bool lookForAlphaImage
 			const int aColor = gAlphaComposeColor;
 			anImage = anAlphaImage;
 
-			unsigned long* aBits1 = anImage->mBits;
+			unsigned long *aBits1 = anImage->mBits;
 
 			int aSize = anImage->mWidth * anImage->mHeight;
 			for (int i = 0; i < aSize; i++)

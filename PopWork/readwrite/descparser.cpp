@@ -12,13 +12,13 @@ DescParser::~DescParser()
 {
 }
 
-bool DescParser::Error(const std::string& theError)
+bool DescParser::Error(const std::string &theError)
 {
 	mError = theError;
 	return false;
 }
 
-DataElement* DescParser::Dereference(const std::string& theString)
+DataElement *DescParser::Dereference(const std::string &theString)
 {
 	std::string aDefineName = StringToUpper(theString);
 
@@ -29,27 +29,27 @@ DataElement* DescParser::Dereference(const std::string& theString)
 		return NULL;
 }
 
-bool DescParser::IsImmediate(const std::string& theString)
+bool DescParser::IsImmediate(const std::string &theString)
 {
-	return (((theString[0] >= '0') && (theString[0] <= '9')) || (theString[0] == '-') || 
-		(theString[0] == '+') || (theString[0] == '\'') || (theString[0] == '"'));
+	return (((theString[0] >= '0') && (theString[0] <= '9')) || (theString[0] == '-') || (theString[0] == '+') ||
+			(theString[0] == '\'') || (theString[0] == '"'));
 }
 
-std::string DescParser::Unquote(const std::string& theQuotedString)
+std::string DescParser::Unquote(const std::string &theQuotedString)
 {
 	if ((theQuotedString[0] == '\'') || (theQuotedString[0] == '"'))
 	{
 		char aQuoteChar = theQuotedString[0];
 		std::string aLiteralString;
 		bool lastWasQuote = false;
-					
+
 		for (ulong i = 0; i < theQuotedString.length(); i++)
 		{
 			if (theQuotedString[i] == aQuoteChar)
 			{
 				if (lastWasQuote)
 					aLiteralString += aQuoteChar;
-				
+
 				lastWasQuote = true;
 			}
 			else
@@ -65,30 +65,30 @@ std::string DescParser::Unquote(const std::string& theQuotedString)
 		return theQuotedString;
 }
 
-bool DescParser::GetValues(ListDataElement* theSource, ListDataElement* theValues)
+bool DescParser::GetValues(ListDataElement *theSource, ListDataElement *theValues)
 {
 	theValues->mElementVector.clear();
-	
+
 	for (ulong aSourceNum = 0; aSourceNum < theSource->mElementVector.size(); aSourceNum++)
 	{
 		if (theSource->mElementVector[aSourceNum]->mIsList)
 		{
-			ListDataElement* aChildList = new ListDataElement();
+			ListDataElement *aChildList = new ListDataElement();
 			theValues->mElementVector.push_back(aChildList);
 
-			if (!GetValues((ListDataElement*) theSource->mElementVector[aSourceNum], aChildList))
+			if (!GetValues((ListDataElement *)theSource->mElementVector[aSourceNum], aChildList))
 				return false;
 		}
 		else
 		{
-			std::string aString = ((SingleDataElement*) theSource->mElementVector[aSourceNum])->mString;
+			std::string aString = ((SingleDataElement *)theSource->mElementVector[aSourceNum])->mString;
 
 			if (aString.length() > 0)
-			{				
+			{
 				if ((aString[0] == '\'') || (aString[0] == '"'))
 				{
-					SingleDataElement* aChildData = new SingleDataElement(Unquote(aString));
-					theValues->mElementVector.push_back(aChildData);					
+					SingleDataElement *aChildData = new SingleDataElement(Unquote(aString));
+					theValues->mElementVector.push_back(aChildData);
 				}
 				else if (IsImmediate(aString))
 				{
@@ -105,23 +105,21 @@ bool DescParser::GetValues(ListDataElement* theSource, ListDataElement* theValue
 						Error("Unable to Dereference \"" + aString + "\"");
 						return false;
 					}
-					
+
 					theValues->mElementVector.push_back(anItr->second->Duplicate());
 				}
 			}
-
-			
 		}
 	}
 
 	return true;
 }
 
-std::string DescParser::DataElementToString(DataElement* theDataElement)
+std::string DescParser::DataElementToString(DataElement *theDataElement)
 {
 	if (theDataElement->mIsList)
 	{
-		ListDataElement* aListDataElement = (ListDataElement*) theDataElement;
+		ListDataElement *aListDataElement = (ListDataElement *)theDataElement;
 
 		std::string aString = "(";
 
@@ -139,69 +137,69 @@ std::string DescParser::DataElementToString(DataElement* theDataElement)
 	}
 	else
 	{
-		SingleDataElement* aSingleDataElement = (SingleDataElement*) theDataElement;
+		SingleDataElement *aSingleDataElement = (SingleDataElement *)theDataElement;
 		return aSingleDataElement->mString;
 	}
 }
 
-bool DescParser::DataToString(DataElement* theSource, std::string* theString)
+bool DescParser::DataToString(DataElement *theSource, std::string *theString)
 {
 	*theString = "";
 
 	if (theSource->mIsList)
 		return false;
 
-	std::string aDefName = ((SingleDataElement*) theSource)->mString;
+	std::string aDefName = ((SingleDataElement *)theSource)->mString;
 
-	DataElement* aDataElement = Dereference(aDefName);
-	
+	DataElement *aDataElement = Dereference(aDefName);
+
 	if (aDataElement != NULL)
 	{
 		if (aDataElement->mIsList)
 			return false;
 
-		*theString = Unquote(((SingleDataElement*) aDataElement)->mString);
+		*theString = Unquote(((SingleDataElement *)aDataElement)->mString);
 	}
 	else
-		*theString = Unquote(aDefName);				
+		*theString = Unquote(aDefName);
 
 	return true;
 }
 
-bool DescParser::DataToInt(DataElement* theSource, int* theInt)
+bool DescParser::DataToInt(DataElement *theSource, int *theInt)
 {
 	*theInt = 0;
 
 	std::string aTempString;
 	if (!DataToString(theSource, &aTempString))
 		return false;
-	
+
 	if (!StringToInt(aTempString, theInt))
 		return false;
 
 	return true;
 }
 
-bool DescParser::DataToStringVector(DataElement* theSource, StringVector* theStringVector)
+bool DescParser::DataToStringVector(DataElement *theSource, StringVector *theStringVector)
 {
 	theStringVector->clear();
 
 	ListDataElement aStaticValues;
-	ListDataElement* aValues;
+	ListDataElement *aValues;
 
 	if (theSource->mIsList)
 	{
-		if (!GetValues((ListDataElement*) theSource, &aStaticValues))
+		if (!GetValues((ListDataElement *)theSource, &aStaticValues))
 			return false;
 
 		aValues = &aStaticValues;
 	}
 	else
 	{
-		std::string aDefName = ((SingleDataElement*) theSource)->mString;
+		std::string aDefName = ((SingleDataElement *)theSource)->mString;
 
-		DataElement* aDataElement = Dereference(aDefName);
-		
+		DataElement *aDataElement = Dereference(aDefName);
+
 		if (aDataElement == NULL)
 		{
 			Error("Unable to Dereference \"" + aDefName + "\"");
@@ -211,8 +209,8 @@ bool DescParser::DataToStringVector(DataElement* theSource, StringVector* theStr
 		if (!aDataElement->mIsList)
 			return false;
 
-		aValues = (ListDataElement*) aDataElement;
-	}	
+		aValues = (ListDataElement *)aDataElement;
+	}
 
 	for (ulong i = 0; i < aValues->mElementVector.size(); i++)
 	{
@@ -220,9 +218,9 @@ bool DescParser::DataToStringVector(DataElement* theSource, StringVector* theStr
 		{
 			theStringVector->clear();
 			return false;
-		}		
+		}
 
-		SingleDataElement* aSingleDataElement = (SingleDataElement*) aValues->mElementVector[i];
+		SingleDataElement *aSingleDataElement = (SingleDataElement *)aValues->mElementVector[i];
 
 		theStringVector->push_back(aSingleDataElement->mString);
 	}
@@ -230,35 +228,35 @@ bool DescParser::DataToStringVector(DataElement* theSource, StringVector* theStr
 	return true;
 }
 
-bool DescParser::DataToList(DataElement* theSource, ListDataElement* theValues)
+bool DescParser::DataToList(DataElement *theSource, ListDataElement *theValues)
 {
 	if (theSource->mIsList)
 	{
-		return GetValues((ListDataElement*) theSource, theValues);		
+		return GetValues((ListDataElement *)theSource, theValues);
 	}
 
-	DataElement* aDataElement = Dereference(((SingleDataElement*) theSource)->mString);
-		
+	DataElement *aDataElement = Dereference(((SingleDataElement *)theSource)->mString);
+
 	if ((aDataElement == NULL) || (!aDataElement->mIsList))
 		return false;
 
-	ListDataElement* aListElement = (ListDataElement*) aDataElement;
+	ListDataElement *aListElement = (ListDataElement *)aDataElement;
 
 	*theValues = *aListElement;
 
 	return true;
 }
 
-bool DescParser::DataToIntVector(DataElement* theSource, IntVector* theIntVector)
+bool DescParser::DataToIntVector(DataElement *theSource, IntVector *theIntVector)
 {
 	theIntVector->clear();
-	
+
 	StringVector aStringVector;
 	if (!DataToStringVector(theSource, &aStringVector))
-		return false;	
+		return false;
 
 	for (ulong i = 0; i < aStringVector.size(); i++)
-	{		
+	{
 		int aIntVal;
 		if (!StringToInt(aStringVector[i], &aIntVal))
 			return false;
@@ -269,16 +267,16 @@ bool DescParser::DataToIntVector(DataElement* theSource, IntVector* theIntVector
 	return true;
 }
 
-bool DescParser::DataToDoubleVector(DataElement* theSource, DoubleVector* theDoubleVector)
+bool DescParser::DataToDoubleVector(DataElement *theSource, DoubleVector *theDoubleVector)
 {
 	theDoubleVector->clear();
-	
+
 	StringVector aStringVector;
 	if (!DataToStringVector(theSource, &aStringVector))
-		return false;	
+		return false;
 
 	for (ulong i = 0; i < aStringVector.size(); i++)
-	{		
+	{
 		double aDoubleVal;
 		if (!StringToDouble(aStringVector[i], &aDoubleVal))
 			return false;
@@ -289,26 +287,27 @@ bool DescParser::DataToDoubleVector(DataElement* theSource, DoubleVector* theDou
 	return true;
 }
 
-bool DescParser::ParseToList(const std::string& theString, ListDataElement* theList, bool expectListEnd, int* theStringPos)
+bool DescParser::ParseToList(const std::string &theString, ListDataElement *theList, bool expectListEnd,
+							 int *theStringPos)
 {
 	bool inSingleQuotes = false;
 	bool inDoubleQuotes = false;
-	bool escaped = false;	
+	bool escaped = false;
 
-	SingleDataElement* aCurSingleDataElement = NULL;	
+	SingleDataElement *aCurSingleDataElement = NULL;
 
 	int aStringPos = 0;
-	
+
 	if (theStringPos == NULL)
 		theStringPos = &aStringPos;
 
-	while (*theStringPos < (int) theString.length())
+	while (*theStringPos < (int)theString.length())
 	{
 		bool addSingleChar = false;
 		char aChar = theString[(*theStringPos)++];
 
 		bool isSeperator = (aChar == ' ') || (aChar == '\t') || (aChar == '\n') || (aChar == ',');
-		
+
 		if (escaped)
 		{
 			addSingleChar = true;
@@ -337,7 +336,7 @@ bool DescParser::ParseToList(const std::string& theString, ListDataElement* theL
 						return false;
 					}
 				}
-				else if (aChar == '(') 
+				else if (aChar == '(')
 				{
 					if (aCurSingleDataElement != NULL)
 					{
@@ -346,24 +345,24 @@ bool DescParser::ParseToList(const std::string& theString, ListDataElement* theL
 					}
 					else
 					{
-						ListDataElement* aChildList = new ListDataElement();
+						ListDataElement *aChildList = new ListDataElement();
 
 						if (!ParseToList(theString, aChildList, true, theStringPos))
 							return false;
 
 						theList->mElementVector.push_back(aChildList);
 					}
-				}				
+				}
 				else if (isSeperator)
 				{
 					if (aCurSingleDataElement != NULL)
-						aCurSingleDataElement = NULL;					
+						aCurSingleDataElement = NULL;
 				}
 				else
 					addSingleChar = true;
 			}
 			else
-				addSingleChar = true;						
+				addSingleChar = true;
 		}
 
 		if (addSingleChar)
@@ -399,12 +398,12 @@ bool DescParser::ParseToList(const std::string& theString, ListDataElement* theL
 	return true;
 }
 
-bool DescParser::ParseDescriptorLine(const std::string& theDescriptorLine)
+bool DescParser::ParseDescriptorLine(const std::string &theDescriptorLine)
 {
 	ListDataElement aParams;
 	if (!ParseToList(theDescriptorLine, &aParams, false, NULL))
 		return false;
-	
+
 	if (aParams.mElementVector.size() > 0)
 	{
 		if (aParams.mElementVector[0]->mIsList)
@@ -420,32 +419,32 @@ bool DescParser::ParseDescriptorLine(const std::string& theDescriptorLine)
 	return true;
 }
 
-bool DescParser::LoadDescriptor(const std::string& theFileName)
+bool DescParser::LoadDescriptor(const std::string &theFileName)
 {
 	mCurrentLineNum = 0;
 	int aLineCount = 0;
 	bool hasErrors = false;
 
-	//Apparently VC6 doesn't have a clear() function for basic_strings
-	//mError.clear();
+	// Apparently VC6 doesn't have a clear() function for basic_strings
+	// mError.clear();
 	mError.erase();
 	mError.erase(mError.begin());
 
-	PFILE *aStream = p_fopen(theFileName.c_str(),"r");
-	if (aStream==NULL)
-		return false;	
+	PFILE *aStream = p_fopen(theFileName.c_str(), "r");
+	if (aStream == NULL)
+		return false;
 
 	char aBuffChar = 0;
 
 	while (!p_feof(aStream))
-	{		
+	{
 		int aChar;
-						
+
 		bool skipLine = false;
 		bool atLineStart = true;
 		bool inSingleQuotes = false;
 		bool inDoubleQuotes = false;
-		bool escaped = false; 
+		bool escaped = false;
 		bool isIndented = false;
 
 		for (;;)
@@ -458,10 +457,10 @@ bool DescParser::LoadDescriptor(const std::string& theFileName)
 			else
 			{
 				aChar = p_fgetc(aStream);
-				if (aChar==EOF)
+				if (aChar == EOF)
 					break;
 			}
-			
+
 			if (aChar != '\r')
 			{
 				if (aChar == '\n')
@@ -485,17 +484,17 @@ bool DescParser::LoadDescriptor(const std::string& theFileName)
 							skipLine = true;
 
 						atLineStart = false;
-					}					
+					}
 
-					if (aChar == '\n')		
+					if (aChar == '\n')
 					{
 						isIndented = false;
-						atLineStart = true;				
+						atLineStart = true;
 					}
 
 					if ((aChar == '\n') && (skipLine))
 					{
-						skipLine = false;						
+						skipLine = false;
 					}
 					else if (!skipLine)
 					{
@@ -508,11 +507,12 @@ bool DescParser::LoadDescriptor(const std::string& theFileName)
 
 							if ((aChar == '"') && (!inSingleQuotes) && (!escaped))
 								inDoubleQuotes = !inDoubleQuotes;
-							
-							if ((aChar == ';') && (mCmdSep & CMDSEP_SEMICOLON) && (!inSingleQuotes) && (!inDoubleQuotes))
+
+							if ((aChar == ';') && (mCmdSep & CMDSEP_SEMICOLON) && (!inSingleQuotes) &&
+								(!inDoubleQuotes))
 								break;
-							
-							if(escaped) // stay escaped for when this is actually parsed
+
+							if (escaped) // stay escaped for when this is actually parsed
 							{
 								mCurrentLine += '\\';
 								escaped = false;
@@ -536,15 +536,11 @@ bool DescParser::LoadDescriptor(const std::string& theFileName)
 				break;
 			}
 
-			//Apparently VC6 doesn't have a clear() function for basic_strings
-			//mCurrentLine.clear();
-			mCurrentLine.erase();
+			mCurrentLine.clear();
 		}
 	}
 
-	//Apparently VC6 doesn't have a clear() function for basic_strings
-	//mCurrentLine.clear();
-	mCurrentLine.erase();
+	mCurrentLine.clear();
 	mCurrentLineNum = 0;
 
 	p_fclose(aStream);

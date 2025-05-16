@@ -9,7 +9,8 @@
 namespace PopWork
 {
 
-bool Quantize8Bit(const ulong* theSrcBits, int theWidth, int theHeight, uchar* theDestColorIndices, ulong* theDestColorTable);
+bool Quantize8Bit(const ulong *theSrcBits, int theWidth, int theHeight, uchar *theDestColorIndices,
+				  ulong *theDestColorTable);
 
 }
 

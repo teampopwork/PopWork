@@ -7,12 +7,8 @@
 
 using namespace PopWork;
 
-Slider::Slider(Image* theTrackImage, Image* theThumbImage, int theId, SliderListener* theListener) : 		
-	mTrackImage(theTrackImage),
-	mThumbImage(theThumbImage),
-	mId(theId),
-	mListener(theListener),
-	mVal(0.0)
+Slider::Slider(Image *theTrackImage, Image *theThumbImage, int theId, SliderListener *theListener)
+	: mTrackImage(theTrackImage), mThumbImage(theThumbImage), mId(theId), mListener(theListener), mVal(0.0)
 {
 	mDragging = false;
 	mHorizontal = true;
@@ -20,7 +16,7 @@ Slider::Slider(Image* theTrackImage, Image* theThumbImage, int theId, SliderList
 }
 
 void Slider::SetValue(double theValue)
-{	
+{
 	mVal = theValue;
 	if (mVal < 0.0)
 		mVal = 0.0;
@@ -35,12 +31,12 @@ bool Slider::HasTransparencies()
 	return true;
 }
 
-void Slider::Draw(Graphics* g)
-{	
+void Slider::Draw(Graphics *g)
+{
 	if (mTrackImage != NULL)
 	{
-		int cw = mHorizontal ? mTrackImage->GetWidth()/3 : mTrackImage->GetWidth();
-		int ch = mHorizontal ? mTrackImage->GetHeight() : mTrackImage->GetHeight()/3;
+		int cw = mHorizontal ? mTrackImage->GetWidth() / 3 : mTrackImage->GetWidth();
+		int ch = mHorizontal ? mTrackImage->GetHeight() : mTrackImage->GetHeight() / 3;
 
 		if (mHorizontal)
 		{
@@ -49,38 +45,40 @@ void Slider::Draw(Graphics* g)
 			g->DrawImage(mTrackImage, 0, ty, Rect(0, 0, cw, ch));
 
 			Graphics aClipG(*g);
-			aClipG.ClipRect(cw, ty, mWidth - cw*2, ch);
-			for (int i = 0; i < (mWidth-cw*2+cw-1)/cw; i++)
-				aClipG.DrawImage(mTrackImage, cw + i*cw, ty, Rect(cw, 0, cw, ch));
+			aClipG.ClipRect(cw, ty, mWidth - cw * 2, ch);
+			for (int i = 0; i < (mWidth - cw * 2 + cw - 1) / cw; i++)
+				aClipG.DrawImage(mTrackImage, cw + i * cw, ty, Rect(cw, 0, cw, ch));
 
-			g->DrawImage(mTrackImage, mWidth-cw, ty, Rect(cw*2, 0, cw, ch));
+			g->DrawImage(mTrackImage, mWidth - cw, ty, Rect(cw * 2, 0, cw, ch));
 		}
 		else
 		{
 			g->DrawImage(mTrackImage, 0, 0, Rect(0, 0, cw, ch));
 			Graphics aClipG(*g);
 			aClipG.ClipRect(0, ch, cw, mHeight - ch * 2);
-			for (int i = 0; i < (mHeight-ch*2+ch-1)/ch; i++)
-				aClipG.DrawImage(mTrackImage, 0, ch + i*ch, Rect(0, ch, cw, ch));
+			for (int i = 0; i < (mHeight - ch * 2 + ch - 1) / ch; i++)
+				aClipG.DrawImage(mTrackImage, 0, ch + i * ch, Rect(0, ch, cw, ch));
 
-			g->DrawImage(mTrackImage, 0, mHeight-ch, Rect(0, ch*2, cw, ch));
+			g->DrawImage(mTrackImage, 0, mHeight - ch, Rect(0, ch * 2, cw, ch));
 		}
 	}
 
 	if (mHorizontal && (mThumbImage != NULL))
-		g->DrawImage(mThumbImage, (int) (mVal * (mWidth - mThumbImage->GetWidth())), (mHeight - mThumbImage->GetHeight()) / 2);
+		g->DrawImage(mThumbImage, (int)(mVal * (mWidth - mThumbImage->GetWidth())),
+					 (mHeight - mThumbImage->GetHeight()) / 2);
 	else if (!mHorizontal && (mThumbImage != NULL))
-		g->DrawImage(mThumbImage, (mWidth - mThumbImage->GetWidth()) / 2, (int) (mVal * (mHeight - mThumbImage->GetHeight())));
+		g->DrawImage(mThumbImage, (mWidth - mThumbImage->GetWidth()) / 2,
+					 (int)(mVal * (mHeight - mThumbImage->GetHeight())));
 
-	//g->SetColor(Color(255, 255, 0));
-	//g->FillRect(0, 0, mWidth, mHeight);	
+	// g->SetColor(Color(255, 255, 0));
+	// g->FillRect(0, 0, mWidth, mHeight);
 }
 
 void Slider::MouseDown(int x, int y, int theClickCount)
 {
 	if (mHorizontal)
 	{
-		int aThumbX = (int) (mVal * (mWidth - mThumbImage->GetWidth()));
+		int aThumbX = (int)(mVal * (mWidth - mThumbImage->GetWidth()));
 
 		if ((x >= aThumbX) && (x < aThumbX + mThumbImage->GetWidth()))
 		{
@@ -97,7 +95,7 @@ void Slider::MouseDown(int x, int y, int theClickCount)
 	}
 	else
 	{
-		int aThumbY = (int) (mVal * (mHeight - mThumbImage->GetHeight()));
+		int aThumbY = (int)(mVal * (mHeight - mThumbImage->GetHeight()));
 
 		if ((y >= aThumbY) && (y < aThumbY + mThumbImage->GetHeight()))
 		{
@@ -118,7 +116,7 @@ void Slider::MouseMove(int x, int y)
 {
 	if (mHorizontal)
 	{
-		int aThumbX = (int) (mVal * (mWidth - mThumbImage->GetWidth()));
+		int aThumbX = (int)(mVal * (mWidth - mThumbImage->GetWidth()));
 
 		if ((x >= aThumbX) && (x < aThumbX + mThumbImage->GetWidth()))
 			mWidgetManager->mApp->SetCursor(CURSOR_DRAGGING);
@@ -127,7 +125,7 @@ void Slider::MouseMove(int x, int y)
 	}
 	else
 	{
-		int aThumbY = (int) (mVal * (mHeight - mThumbImage->GetHeight()));
+		int aThumbY = (int)(mVal * (mHeight - mThumbImage->GetHeight()));
 
 		if ((y >= aThumbY) && (y < aThumbY + mThumbImage->GetHeight()))
 			mWidgetManager->mApp->SetCursor(CURSOR_DRAGGING);
@@ -139,13 +137,13 @@ void Slider::MouseMove(int x, int y)
 void Slider::MouseDrag(int x, int y)
 {
 	if (mDragging)
-	{	
+	{
 		double anOldVal = mVal;
 
 		if (mHorizontal)
-			mVal = (x - mRelX) / (double) (mWidth - mThumbImage->GetWidth());
+			mVal = (x - mRelX) / (double)(mWidth - mThumbImage->GetWidth());
 		else
-			mVal = (y - mRelY) / (double) (mHeight - mThumbImage->GetHeight());
+			mVal = (y - mRelY) / (double)(mHeight - mThumbImage->GetHeight());
 
 		if (mVal < 0.0)
 			mVal = 0.0;

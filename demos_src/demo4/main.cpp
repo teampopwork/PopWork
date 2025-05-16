@@ -23,18 +23,17 @@
 // having to prefix everything with PopWork::
 using namespace PopWork;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	// Create and initialize our game application.
-	GameApp* anApp = new GameApp();
+	GameApp *anApp = new GameApp();
 	anApp->Init();
 
-	// Starts the entire application: sets up the resource loading thread and 
+	// Starts the entire application: sets up the resource loading thread and
 	// custom cursor thread, and enters the game loop where the application
 	// will remain until it is shut down. You will most likely not need to
 	// override this function.
 	anApp->Start();
-
 
 	delete anApp;
 

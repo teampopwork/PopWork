@@ -11,31 +11,37 @@
 
 using namespace PopWork;
 
-SysFont::SysFont(const std::string& theFace, int thePointSize, bool bold, bool italics, bool underline)
+SysFont::SysFont(const std::string &theFace, int thePointSize, bool bold, bool italics, bool underline)
 {
-	Init(gAppBase,theFace,thePointSize,ANSI_CHARSET,bold,italics,underline,false);
+	Init(gAppBase, theFace, thePointSize, ANSI_CHARSET, bold, italics, underline, false);
 }
 
-SysFont::SysFont(AppBase* theApp, const std::string& theFace, int thePointSize, int theScript, bool bold, bool italics, bool underline)
+SysFont::SysFont(AppBase *theApp, const std::string &theFace, int thePointSize, int theScript, bool bold, bool italics,
+				 bool underline)
 {
-	Init(theApp,theFace,thePointSize,theScript,bold,italics,underline,true);
+	Init(theApp, theFace, thePointSize, theScript, bold, italics, underline, true);
 }
 
-SysFont::SysFont(AppBase* theApp, const unsigned char aData[], size_t aDataSize, int thePointSize, int theScript, bool bold, bool italics, bool underline)
+SysFont::SysFont(AppBase *theApp, const unsigned char aData[], size_t aDataSize, int thePointSize, int theScript,
+				 bool bold, bool italics, bool underline)
 {
 	mApp = theApp;
-	SDL_IOStream* io = SDL_IOFromConstMem((void*)aData, aDataSize);
-	if (!io) {
-		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to create SDL_IOStream", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+	SDL_IOStream *io = SDL_IOFromConstMem((void *)aData, aDataSize);
+	if (!io)
+	{
+		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to create SDL_IOStream", SDL_GetError(),
+												  SDL_MESSAGEBOX_ERROR);
 		return;
 	}
 
 	mTTFFont = TTF_OpenFontIO(io, false, thePointSize);
-	if (!mTTFFont) {
+	if (!mTTFFont)
+	{
 		mApp->mSDLInterface->MakeSimpleMessageBox("Error", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
 	}
 
-	TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) | (underline ? TTF_STYLE_UNDERLINE : 0));
+	TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) |
+								   (underline ? TTF_STYLE_UNDERLINE : 0));
 
 	mAscent = TTF_GetFontAscent(mTTFFont);
 	mHeight = TTF_GetFontHeight(mTTFFont);
@@ -44,16 +50,19 @@ SysFont::SysFont(AppBase* theApp, const unsigned char aData[], size_t aDataSize,
 	mSimulateBold = false;
 }
 
-void SysFont::Init(AppBase* theApp, const std::string& theFace, int thePointSize, int theScript, bool bold, bool italics, bool underline, bool useDevCaps)
+void SysFont::Init(AppBase *theApp, const std::string &theFace, int thePointSize, int theScript, bool bold,
+				   bool italics, bool underline, bool useDevCaps)
 {
 	mApp = theApp;
 
 	mTTFFont = TTF_OpenFont(theFace.c_str(), thePointSize);
-	if (!mTTFFont) {
+	if (!mTTFFont)
+	{
 		mApp->mSDLInterface->MakeSimpleMessageBox("Error", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
 	}
 
-	TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) | (underline ? TTF_STYLE_UNDERLINE : 0));
+	TTF_SetFontStyle(mTTFFont, (bold ? TTF_STYLE_BOLD : 0) | (italics ? TTF_STYLE_ITALIC : 0) |
+								   (underline ? TTF_STYLE_UNDERLINE : 0));
 
 	mAscent = TTF_GetFontAscent(mTTFFont);
 	mHeight = TTF_GetFontHeight(mTTFFont);
@@ -62,7 +71,7 @@ void SysFont::Init(AppBase* theApp, const std::string& theFace, int thePointSize
 	mSimulateBold = false;
 }
 
-SysFont::SysFont(const SysFont& theSysFont)
+SysFont::SysFont(const SysFont &theSysFont)
 {
 	mTTFFont = theSysFont.mTTFFont;
 	mApp = theSysFont.mApp;
@@ -78,7 +87,7 @@ SysFont::~SysFont()
 	TTF_CloseFont(mTTFFont);
 }
 
-ImageFont* SysFont::CreateImageFont()
+ImageFont *SysFont::CreateImageFont()
 {
 	/*
 	int i;
@@ -86,7 +95,7 @@ ImageFont* SysFont::CreateImageFont()
 	int anImageCharWidth, anImageXOff, anImageYOff;
 
 	////////////////////////////////////////////////////
-	// Step 1: Create image 
+	// Step 1: Create image
 	anImageCharWidth = CharWidth('W')*2;
 	anImageXOff = anImageCharWidth/4;
 	anImageYOff = mHeight/2;
@@ -114,9 +123,9 @@ ImageFont* SysFont::CreateImageFont()
 	HBRUSH anOldBrush = (HBRUSH)SelectObject(aDC,GetStockObject(BLACK_BRUSH));
 	Rectangle(aDC,0,0,aWidth,aHeight);
 
-	SetBkMode(aDC, TRANSPARENT); 	
+	SetBkMode(aDC, TRANSPARENT);
 	SetTextColor(aDC, RGB(255,255,255));
-				
+
 	int xpos = anImageXOff;
 	int ypos = anImageYOff;
 	for (i=0; i<256; i++)
@@ -159,9 +168,9 @@ ImageFont* SysFont::CreateImageFont()
 	{
 		char aChar = i;
 
-		aFontLayer->mCharData[(uchar) aChar].mImageRect = Rect(aChar*anImageCharWidth,0,anImageCharWidth,anImage->mHeight);
-		aFontLayer->mCharData[(uchar) aChar].mWidth = CharWidth(aChar);
-		aFontLayer->mCharData[(uchar) aChar].mOffset = Point(-anImageXOff,-anImageYOff);
+		aFontLayer->mCharData[(uchar) aChar].mImageRect =
+	Rect(aChar*anImageCharWidth,0,anImageCharWidth,anImage->mHeight); aFontLayer->mCharData[(uchar) aChar].mWidth =
+	CharWidth(aChar); aFontLayer->mCharData[(uchar) aChar].mOffset = Point(-anImageXOff,-anImageYOff);
 	}
 
 	aFont->GenerateActiveFontLayers();
@@ -169,10 +178,10 @@ ImageFont* SysFont::CreateImageFont()
 
 	return aFont;
 	*/
-	return nullptr; //TODO: implement
+	return nullptr; // TODO: implement
 }
 
-int	SysFont::StringWidth(const PopWorkString& theString)
+int SysFont::StringWidth(const PopWorkString &theString)
 {
 	int w = 0;
 	TTF_GetStringSize(mTTFFont, PopWorkStringToStringFast(theString).c_str(), NULL, &w, nullptr);
@@ -180,43 +189,34 @@ int	SysFont::StringWidth(const PopWorkString& theString)
 	return w;
 }
 
-void SysFont::DrawString(Graphics* g, int theX, int theY, const PopWorkString& theString, const Color& theColor, const Rect& theClipRect)
+void SysFont::DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+						 const Rect &theClipRect)
 {
-	SDL_Renderer* renderer = mApp->mSDLInterface->mRenderer;
-	SDL_Color aColor = {
-		(Uint8)theColor.mRed,
-		(Uint8)theColor.mGreen,
-		(Uint8)theColor.mBlue,
-		(Uint8)theColor.mAlpha
-	};
-	SDL_Surface* textSurface = TTF_RenderText_Blended(mTTFFont, PopWorkStringToStringFast(theString).c_str(), NULL, aColor);
-	if (!textSurface) {
+	SDL_Renderer *renderer = mApp->mSDLInterface->mRenderer;
+	SDL_Color aColor = {(Uint8)theColor.mRed, (Uint8)theColor.mGreen, (Uint8)theColor.mBlue, (Uint8)theColor.mAlpha};
+	SDL_Surface *textSurface =
+		TTF_RenderText_Blended(mTTFFont, PopWorkStringToStringFast(theString).c_str(), NULL, aColor);
+	if (!textSurface)
+	{
 		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to render text: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
 		return;
 	}
 
-	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-	SDL_FRect dstRect = {
-		(float)theX,
-		(float)theY - (float)mAscent,
-		(float)textSurface->w,
-		(float)textSurface->h
-	};
-	SDL_FRect srcRect = { 0, 0, dstRect.w, dstRect.h };
+	SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+	SDL_FRect dstRect = {(float)theX, (float)theY - (float)mAscent, (float)textSurface->w, (float)textSurface->h};
+	SDL_FRect srcRect = {0, 0, dstRect.w, dstRect.h};
 	SDL_DestroySurface(textSurface);
 
-	if (!textTexture) {
-		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to create texture from surface: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);
+	if (!textTexture)
+	{
+		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to create texture from surface: ", SDL_GetError(),
+												  SDL_MESSAGEBOX_ERROR);
 	}
 
-	if (mDrawShadow) {
-		SDL_FRect shadowRect = {
-			(float)theX + 1.f,
-			(float)theY - (float)mAscent + 1.f,
-			dstRect.w,
-			dstRect.h
-		};
-		mApp->mSDLInterface->BltTexture(textTexture, srcRect, shadowRect, Color(0,0,0), g->GetDrawMode());
+	if (mDrawShadow)
+	{
+		SDL_FRect shadowRect = {(float)theX + 1.f, (float)theY - (float)mAscent + 1.f, dstRect.w, dstRect.h};
+		mApp->mSDLInterface->BltTexture(textTexture, srcRect, shadowRect, Color(0, 0, 0), g->GetDrawMode());
 	}
 
 	mApp->mSDLInterface->BltTexture(textTexture, srcRect, dstRect, theColor, g->GetDrawMode());
@@ -224,7 +224,7 @@ void SysFont::DrawString(Graphics* g, int theX, int theY, const PopWorkString& t
 	SDL_DestroyTexture(textTexture);
 }
 
-Font* SysFont::Duplicate()
+Font *SysFont::Duplicate()
 {
 	return new SysFont(*this);
 }

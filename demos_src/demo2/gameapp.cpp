@@ -9,7 +9,7 @@
 // in this tutorial such as font layers, etc.
 #include "PopWork/graphics/imagefont.h"
 
-// The Image.h file just declares basic functions. All images are either of 
+// The Image.h file just declares basic functions. All images are either of
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
@@ -23,7 +23,6 @@
 // you'll see in all the .cpp files "using namespace PopWork" to avoid
 // having to prefix everything with PopWork::
 using namespace PopWork;
-
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@ GameApp::GameApp()
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
-	// and written to. This is stored under the HKEY_CURRENT_USER tree on 
+	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
 	mRegKey = "PopCap\\PopWork\\Demo2";
 
@@ -102,7 +101,7 @@ void GameApp::Init()
 void GameApp::LoadingThreadProc()
 {
 	// This time, we have things to load. Let's load in our two fonts
-	// and our three images.	
+	// and our three images.
 	// Besides loading data,
 	// this thread can also update the progress indicator for the loading
 	// screen, which you will see in later demos.
@@ -116,7 +115,7 @@ void GameApp::LoadingThreadProc()
 	// In this case, all of the above extensions will be looked for.
 	// A discussion of image formats is beyond the scope of this tutorial.
 	//		There is some important information to know about images.
-	//	You will notice in the "images" directory that for each image, 
+	//	You will notice in the "images" directory that for each image,
 	//	there is a black and white image with the same name but with
 	//	an underscore ("_") at the end of it. By default, when you load
 	//	and image, the code automatically looks for the presence of
@@ -129,7 +128,7 @@ void GameApp::LoadingThreadProc()
 	//	underscore instead of ending with it, it matters not, and again,
 	//	is automatically loaded in by the image loading code.
 	//	You need to clean up the memory allocated by these functions yourself.
-	mOpaqueBeamImg = (SDLImage*) GetImage("images/beam_opaque");
+	mOpaqueBeamImg = (SDLImage *)GetImage("images/beam_opaque");
 
 	// If the file was not found or couldn't be loaded (i.e. due to an
 	// incompatible file format) the returned value will be NULL.
@@ -149,7 +148,7 @@ void GameApp::LoadingThreadProc()
 	}
 
 	// Now load the other two images
-	mMoonImg = (SDLImage*) GetImage("images/moon");
+	mMoonImg = (SDLImage *)GetImage("images/moon");
 	if (mMoonImg == NULL)
 	{
 		Popup("There was an error loading the file: images/moon");
@@ -157,7 +156,7 @@ void GameApp::LoadingThreadProc()
 		return;
 	}
 
-	mTurbotImg = (SDLImage*) GetImage("images/turbot_worry");
+	mTurbotImg = (SDLImage *)GetImage("images/turbot_worry");
 	if (mTurbotImg == NULL)
 	{
 		Popup("There was an error loading the file: images/turbot_worry");
@@ -183,11 +182,11 @@ void GameApp::LoadingThreadProc()
 	// Palletize() method on an image, you potentially can reduce the
 	// amount of RAM it consumes by 4 times. The Palletize method
 	// returns a boolean indicating if it could or couldn't be palletized.
-	((SDLImage*)mOpaqueBeamImg)->Palletize();
-	((SDLImage*)mMoonImg)->Palletize();
-	((SDLImage*)mTurbotImg)->Palletize();
+	((SDLImage *)mOpaqueBeamImg)->Palletize();
+	((SDLImage *)mMoonImg)->Palletize();
+	((SDLImage *)mTurbotImg)->Palletize();
 
-	// Now let's load and create some fonts. A font consists of an 
+	// Now let's load and create some fonts. A font consists of an
 	// image and a text file. The image works on the same principles
 	// as a normal image file (like the ones above) works on. Except
 	// that with fonts, there is only 1 image, the alpha image.
@@ -217,7 +216,7 @@ void GameApp::LoadingThreadProc()
 
 	// We need to check to see if the font was properly initialized.
 	// If it wasn't, then an error occurred and we need to abort.
-	if (!mTextFont->mFontData->mInitialized)	
+	if (!mTextFont->mFontData->mInitialized)
 	{
 		delete mTextFont;
 		Popup("There was an error loading fonts/Kiloton9.txt");
@@ -226,7 +225,7 @@ void GameApp::LoadingThreadProc()
 	}
 
 	mNumberFont = new ImageFont(this, "fonts/supernova20.txt");
-	if (!mNumberFont->mFontData->mInitialized)	
+	if (!mNumberFont->mFontData->mInitialized)
 	{
 		delete mNumberFont;
 		Popup("There was an error loading fonts/supernova20.txt");
@@ -236,7 +235,7 @@ void GameApp::LoadingThreadProc()
 
 	// Let's load some sounds. You assign a unique unsigned integer ID to each
 	// sound. It is with this ID that you indicate which sound you
-	// want to play. Valid types of sounds to load are: 
+	// want to play. Valid types of sounds to load are:
 	// WAV, OGG, AU, and if you have FMod and enable FMod: MP3. Although
 	// you should probably not use MP3 due to patent/copyright issues
 	// unless of course that either doesn't bother you or you happen
@@ -246,7 +245,7 @@ void GameApp::LoadingThreadProc()
 	if (!mSoundManager->LoadSound(1, "sounds/timer"))
 	{
 		Popup("There was an error loading sounds/timer");
-		mLoadingFailed = true;		
+		mLoadingFailed = true;
 		return;
 	}
 
@@ -282,7 +281,7 @@ void GameApp::LoadingThreadCompleted()
 
 	// This is a very important step: Because the Board class is a widget
 	// (see Board.h/.cpp for more details) we need to tell it what
-	// dimensions it has and where to place it. 
+	// dimensions it has and where to place it.
 	// By default a widget is invisible because its
 	// width/height are 0, 0. Since the Board class is our main
 	// drawing area and game logic class, we want to make it the

@@ -23,7 +23,6 @@
 // having to prefix everything with PopWork::
 using namespace PopWork;
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 GameApp::GameApp()
@@ -38,7 +37,7 @@ GameApp::GameApp()
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
-	// and written to. This is stored under the HKEY_CURRENT_USER tree on 
+	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
 	mRegKey = "PopCap\\PopWork\\Demo5";
 
@@ -59,7 +58,6 @@ GameApp::GameApp()
 
 	mBoard = NULL;
 	mTitleScreen = NULL;
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -85,7 +83,6 @@ GameApp::~GameApp()
 	// have to delete the memory manually.
 	delete mBoard;
 
-
 	// If you shut down the app before closing the loading screen, then
 	// it will need to be removed here. The rational for the next two
 	// steps is the same as for Board:
@@ -99,7 +96,6 @@ GameApp::~GameApp()
 	mResourceManager->DeleteResources("Init");
 	mResourceManager->DeleteResources("TitleScreen");
 	mResourceManager->DeleteResources("Game");
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -123,7 +119,7 @@ void GameApp::Init()
 	// file that we created a group called Init that contains these resources.
 	// You may call it whatever you like. Let's load those resources now.
 	// We do that by calling the LoadResources method of our mResourceManager
-	// variable and specifying in quotes the name of the resource group to 
+	// variable and specifying in quotes the name of the resource group to
 	// load. This string is case sensitive.
 	if (!mResourceManager->LoadResources("Init"))
 	{
@@ -151,7 +147,7 @@ void GameApp::Init()
 		return;
 	}
 
-	// We also need to load our title screen graphics in, since you can't 
+	// We also need to load our title screen graphics in, since you can't
 	// display the title screen without any graphics. For an explanation of why
 	// we placed this in a separate group from Init, see properties/resources.xml.
 	// This code works exactly like the above did for the Init group.
@@ -243,15 +239,15 @@ void GameApp::LoadingThreadProc()
 {
 	// For each of the groups that we want to load,
 	// we first have to instruct the resource manager to begin the
-	// loading phase and initialize its internal variables. 
-	// We do that with the StartLoadResources method and pass in the 
+	// loading phase and initialize its internal variables.
+	// We do that with the StartLoadResources method and pass in the
 	// exact string name of the group to begin loading:
 	mResourceManager->StartLoadResources("Game");
 
 	// Now we need to load each individual resource. We will loop,
 	// calling LoadNextResource at the start. When it returns true,
 	// there are no more resources to load for the current group.
-	// LoadNextResource knows what group to load from because 
+	// LoadNextResource knows what group to load from because
 	// of the call to StartLoadResources above:
 	while (mResourceManager->LoadNextResource())
 	{
@@ -287,12 +283,11 @@ void GameApp::LoadingThreadProc()
 	// manager if an error occurred in the above loop that we
 	// didn't yet catch. We do that with the HadError method:
 	if (mResourceManager->HadError() || !ExtractGameResources(mResourceManager))
-	{		
+	{
 		ShowResourceError(false);
 		mLoadingFailed = true;
 		return;
 	}
-	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -310,10 +305,9 @@ void GameApp::LoadingThreadCompleted()
 	if (mLoadingFailed)
 		return;
 
-	
 	// We aren't going to make and add the Board class here like we
 	// did in the previous demos. Instead, since we are done loading
-	// everything, we're going to tell the title screen that 
+	// everything, we're going to tell the title screen that
 	// we're done and that it should unhide the continue link and let
 	// the user enter the game.
 	mTitleScreen->LoadingComplete();
@@ -346,8 +340,6 @@ void GameApp::TitleScreenIsFinished()
 	// the board object. This way, we'll be able to respond to keypresses:
 	mWidgetManager->SetFocus(mBoard);
 
-	
-
 	// Let's fade out the intro song and fade in the main game music.
 	// FadeOut works just like FadeIn did in Init() but with some
 	// slightly different parameters. The first, is like with FadeIn and
@@ -359,7 +351,7 @@ void GameApp::TitleScreenIsFinished()
 
 	// Let's fade in the main game music. This is the same as in Init.
 	// The only difference is we're using 1 instead of 0 for our song id.
-	// Why? Well, channel/song id 0 is being used to fade out the 
+	// Why? Well, channel/song id 0 is being used to fade out the
 	// previously playing track, we can't use it to also fade in.
 	// That's why we loaded another copy of the song into channel 1.
 	// Again, as explained in Init, I happen to know that offset 9
@@ -371,13 +363,14 @@ void GameApp::TitleScreenIsFinished()
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-Dialog* GameApp::NewDialog(int theDialogId, bool isModal, const std::string& theDialogHeader, 
-						   const std::string& theDialogLines, const std::string& theDialogFooter, int theButtonMode)
+Dialog *GameApp::NewDialog(int theDialogId, bool isModal, const std::string &theDialogHeader,
+						   const std::string &theDialogLines, const std::string &theDialogFooter, int theButtonMode)
 {
 	// Rather than dupliate a lengthy explanation, check out the top of DemoDialog.cpp for a complete description
 	// of what all the parameters and functions are.
-	Dialog* d = new Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, theDialogId, isModal,
-							StringToPopWorkStringFast(theDialogHeader), StringToPopWorkStringFast(theDialogLines), StringToPopWorkStringFast(theDialogFooter), theButtonMode);
+	Dialog *d = new Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, theDialogId, isModal,
+						   StringToPopWorkStringFast(theDialogHeader), StringToPopWorkStringFast(theDialogLines),
+						   StringToPopWorkStringFast(theDialogFooter), theButtonMode);
 
 	d->SetButtonFont(FONT_DEFAULT);
 	d->SetLinesFont(FONT_DEFAULT);
@@ -402,12 +395,11 @@ void GameApp::SwitchScreenMode(bool wantWindowed, bool is3d)
 	// We can see if the options dialog is up with a call to
 	// GetDialog. You pass GetDialog the unique ID of the dialog box,
 	// and if it exists it is returned to you, otherwise NULL is returned.
-	DemoDialog* d = (DemoDialog*) GetDialog(DemoDialog::DIALOG_ID);
+	DemoDialog *d = (DemoDialog *)GetDialog(DemoDialog::DIALOG_ID);
 
 	// Set the checkbox state to our windowed state
 	if ((d != NULL) && (d->mFSCheckbox != NULL))
 		d->mFSCheckbox->SetChecked(!wantWindowed);
-
 }
 
 //////////////////////////////////////////////////////////////////////////

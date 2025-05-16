@@ -5,7 +5,7 @@
 // See the Draw method for more information on using the Color class.
 #include "PopWork/graphics/color.h"
 
-// The Image.h file just declares basic functions. All images are either of 
+// The Image.h file just declares basic functions. All images are either of
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
@@ -32,7 +32,7 @@ using namespace PopWork;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-Board::Board(GameApp* theApp)
+Board::Board(GameApp *theApp)
 {
 	mApp = theApp;
 
@@ -40,7 +40,7 @@ Board::Board(GameApp* theApp)
 	mAnimFrame = 0;
 
 	mButton = NULL;
-	
+
 	mMouseX = mMouseY = 0;
 	mLeftDown = mRightDown = mMiddleDown = false;
 }
@@ -57,7 +57,7 @@ Board::~Board()
 void Board::Update()
 {
 	// Let the parent class update as well. This will increment
-	// the variable mUpdateCnt which is an integer that indicates 
+	// the variable mUpdateCnt which is an integer that indicates
 	// how many times the Update() method has been called. Since our
 	// Board class is updated 100 times per second, this variable will
 	// increment 100 times per second. As you will see in later demos,
@@ -79,8 +79,6 @@ void Board::Update()
 			mAnimFrame = 0;
 	}
 
-
-	
 	// For this and most of the other demos, you will see the function
 	// below called every Update() call. MarkDirty() tells the widget
 	// manager that something has changed graphically in the widget and
@@ -95,7 +93,7 @@ void Board::Update()
 	// other things besides play your game. Of course, everyone
 	// will want to play your game at all times, but it's good to be
 	// nice to those rare people that might want to read email or
-	// do other things at the same time. 
+	// do other things at the same time.
 	//		In this particular demo, we
 	// won't be nice, as the purpose is to bring you up to speed as
 	// quickly as possible, and so we'll dispense with optimizations
@@ -111,20 +109,20 @@ void Board::Update()
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::Draw(Graphics* g)
+void Board::Draw(Graphics *g)
 {
-	// The Graphics object, "g", is 
-	// automatically created and passed to this method by the 
-	// WidgetManager and can be thought of as the main screen 
+	// The Graphics object, "g", is
+	// automatically created and passed to this method by the
+	// WidgetManager and can be thought of as the main screen
 	// bitmap/canvas upon which all drawing will be done. This object
 	// is double buffered automatically so you don't need to worry
 	// about those details. All you need to do is instruct the object
 	// that you would like to draw something to it, and when the
 	// WidgetManager gets done letting all widgets draw to the
 	// Graphics object, it will then blit everything to the screen
-	// at once. 
+	// at once.
 
-	// First, let's start by clearing the screen to black. 
+	// First, let's start by clearing the screen to black.
 	// As you'll recall from Demo1, we set the color with SetColor
 	// and pass in a Color object that contains either 3 or 4 parameters,
 	// that represent the r,g,b,a values (alpha is 255 if only 3 specified).
@@ -135,7 +133,7 @@ void Board::Draw(Graphics* g)
 	// stretched to twice its size. Drawing a stretched image is exactly like
 	// drawing a normal image, except that you have two extra parameters:
 	// the stretched width and height. You can use this to draw a shrunk version
-	// of the image as well (which we'll do second)	
+	// of the image as well (which we'll do second)
 	g->DrawImage(mApp->mTurbotImg, 0, 0, mApp->mTurbotImg->GetWidth() * 2, mApp->mTurbotImg->GetHeight() * 2);
 	g->DrawImage(mApp->mTurbotImg, 0, 275, mApp->mTurbotImg->GetWidth() / 2, mApp->mTurbotImg->GetHeight() / 2);
 
@@ -145,7 +143,7 @@ void Board::Draw(Graphics* g)
 	// nicer, it also requires more processing power. Thus, if you either don't need
 	// or don't care about the anti-aliasing, you can instruct the graphics object
 	// to use fast stretching. Just remember: unless you turn fast stretching off when
-	// done, it will remain on. Let's give it a try by drawing the same image 
+	// done, it will remain on. Let's give it a try by drawing the same image
 	// stretched twice as large using fast stretching.
 	g->SetFastStretch(true);
 	g->DrawImage(mApp->mTurbotImg, 275, 0, mApp->mTurbotImg->GetWidth() * 2, mApp->mTurbotImg->GetHeight() * 2);
@@ -179,10 +177,9 @@ void Board::Draw(Graphics* g)
 	// use it's full width/height. Again, just like with DrawImage, you can use the
 	// SetFastStretch call to set whether you want the nice, slow, smooth scaling, or the quick
 	// and efficient exact scaling. In 3D mode, this is just as fast as a normal stretched draw.
-	g->DrawImageMirror(mApp->mTurbotImg, 
-						Rect(200, 275, mApp->mTurbotImg->GetWidth() * 2, mApp->mTurbotImg->GetHeight() * 2),
-						Rect(0, 0, mApp->mTurbotImg->GetWidth(), mApp->mTurbotImg->GetHeight()));
-						
+	g->DrawImageMirror(mApp->mTurbotImg,
+					   Rect(200, 275, mApp->mTurbotImg->GetWidth() * 2, mApp->mTurbotImg->GetHeight() * 2),
+					   Rect(0, 0, mApp->mTurbotImg->GetWidth(), mApp->mTurbotImg->GetHeight()));
 
 	// Remember that black and white image we made in GameApp::LoadingThreadCompleted?
 	// How about we draw it now so you can see what the result looks like:
@@ -201,11 +198,12 @@ void Board::Draw(Graphics* g)
 	// As you may have seen, you can tell DrawImage to draw just a particular
 	// rectangular region of the image. Here is the equivalent function
 	// call that we could have used in place of DrawImageCel above:
-	//g->DrawImage(mApp->mLightningImg, 
-	//Rect(0, 540, mApp->mLightningImg->GetWidth(), mApp->mLightningImg->GetCelHeight()),
-	//Rect(0, mApp->mLightningImg->GetCelHeight() * mAnimFrame, mApp->mLightningImg->GetWidth(), mApp->mLightningImg->GetCelHeight()));
+	// g->DrawImage(mApp->mLightningImg,
+	// Rect(0, 540, mApp->mLightningImg->GetWidth(), mApp->mLightningImg->GetCelHeight()),
+	// Rect(0, mApp->mLightningImg->GetCelHeight() * mAnimFrame, mApp->mLightningImg->GetWidth(),
+	// mApp->mLightningImg->GetCelHeight()));
 	//
-	// As you can see, DrawImageCel is a lot quicker to type. 
+	// As you can see, DrawImageCel is a lot quicker to type.
 
 	// Let's also display the current mouse XY and which button(s) are held down.
 	// You should recall how to set fonts and change their colors from Demo2.
@@ -215,7 +213,7 @@ void Board::Draw(Graphics* g)
 	g->SetFont(mApp->mFont);
 	g->SetColor(Color(255, 255, 255));
 	g->DrawString(StrFormat(_S("X, Y is %d, %d"), mMouseX, mMouseY), 630, 20);
-	
+
 	PopWorkString buttonStr;
 	if (mLeftDown)
 		buttonStr += _S("Left button is down. ");
@@ -225,13 +223,11 @@ void Board::Draw(Graphics* g)
 		buttonStr += _S("Middle button is down. ");
 
 	WriteWordWrapped(g, Rect(630, 40, mWidth - 630, 300), buttonStr, -1, -1);
-
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddedToManager(WidgetManager* theWidgetManager)
+void Board::AddedToManager(WidgetManager *theWidgetManager)
 {
 	// At this point, the Board class has already been added to the
 	// widget manager. We should call our parent class' method
@@ -283,7 +279,7 @@ void Board::AddedToManager(WidgetManager* theWidgetManager)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::RemovedFromManager(WidgetManager* theWidgetManager)
+void Board::RemovedFromManager(WidgetManager *theWidgetManager)
 {
 	// This is called after we've been removed from the widget manager.
 	// Again, we should let our base class do anything it needs to, first.
@@ -301,8 +297,8 @@ void Board::RemovedFromManager(WidgetManager* theWidgetManager)
 //////////////////////////////////////////////////////////////////////////
 void Board::ButtonDepress(int theId)
 {
-	// Because we told our button that we, the Board class, are 
-	// going to listen for its particular events, this method will 
+	// Because we told our button that we, the Board class, are
+	// going to listen for its particular events, this method will
 	// thus be called when our button has any events it wants us
 	// to know about. In our current case, we only want to know when
 	// the button is clicked, but you could also respond to a few others.
@@ -357,7 +353,7 @@ void Board::MouseDown(int x, int y, int theClickCount)
 	// it needs to.
 	Widget::MouseDown(x, y, theClickCount);
 
-	// Let's just keep track of which button is currently held down. 
+	// Let's just keep track of which button is currently held down.
 	if (theClickCount == 3)
 		mMiddleDown = true;
 	else if (theClickCount > 0)
@@ -374,11 +370,11 @@ void Board::MouseUp(int x, int y, int theClickCount)
 	// it needs to.
 	Widget::MouseUp(x, y, theClickCount);
 
-	//You can actually tell if the left, right,
-	// or middle buttons are currently held down by calling one of these
-	// WidgetManager methods: IsLeftButtonDown, IsRightButtonDown, 
-	// IsMiddleButtonDown. However, we're going to keep track of this
-	// manually just to illustrate a point.
+	// You can actually tell if the left, right,
+	//  or middle buttons are currently held down by calling one of these
+	//  WidgetManager methods: IsLeftButtonDown, IsRightButtonDown,
+	//  IsMiddleButtonDown. However, we're going to keep track of this
+	//  manually just to illustrate a point.
 	if (theClickCount == 3)
 		mMiddleDown = false;
 	else if (theClickCount > 0)

@@ -14,19 +14,17 @@ class XMLDemoApp;
 class Board : public Widget
 {
 
-public:
+  public:
+	XMLDemoApp *mApp;
 
-	XMLDemoApp* mApp;
-
-public:
-
-	Board(XMLDemoApp* theApp);
+  public:
+	Board(XMLDemoApp *theApp);
 	virtual ~Board();
 
-	void		Update();
-	void		Draw(Graphics* g);
+	void Update();
+	void Draw(Graphics *g);
 };
 
-}
+} // namespace PopWork
 
 #endif //__BOARD_H__

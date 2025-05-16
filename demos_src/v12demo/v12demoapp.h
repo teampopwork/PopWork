@@ -14,12 +14,10 @@ class Board;
 class V12DemoApp : public AppBase
 {
 
-public:
+  public:
+	Board *mBoard;
 
-	Board*					mBoard;
-
-public:
-
+  public:
 	V12DemoApp();
 	virtual ~V12DemoApp();
 
@@ -32,8 +30,8 @@ public:
 	//	about it occurring multiple times (unless of course for some reason you
 	//	manually call it more than once). Thus, you no longer need a ShutdownHook()
 	//	override.
-	//////////////////////////////////////////////////////////////////////////	
-	virtual void	ShutdownHook();
+	//////////////////////////////////////////////////////////////////////////
+	virtual void ShutdownHook();
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: InitHook
@@ -42,15 +40,15 @@ public:
 	//	and can forget about those previous hassels. This method is guaranteed
 	//	to be called only once, right after AppBase::Init finishes. Thus,
 	//	you no longer need an Init() override.
-	//////////////////////////////////////////////////////////////////////////	
-	virtual void	InitHook();
+	//////////////////////////////////////////////////////////////////////////
+	virtual void InitHook();
 
 	//////////////////////////////////////////////////////////////////////////
 	//	With these 2 functions, we'll pause the board if focus shifts to another
 	//	application.
-	//////////////////////////////////////////////////////////////////////////	
-	virtual void	LostFocus();
-	virtual void	GotFocus();
+	//////////////////////////////////////////////////////////////////////////
+	virtual void LostFocus();
+	virtual void GotFocus();
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: DialogButtonDepress
@@ -69,14 +67,14 @@ public:
 	//	into this alternative method, and the IDs are their simple, original
 	//	IDs that you assigned to the widgets upon initialization. For dialog
 	//	boxes with a single button, the button's ID is 1, and for dialogs with
-	//	2 buttons, it's 1 for yes/ok and 0 for no/cancel. Of course, this is 
+	//	2 buttons, it's 1 for yes/ok and 0 for no/cancel. Of course, this is
 	//	fully backwards compatible, so if you don't want to custom override
-	//	the DialogButton(De)press method(s) you don't have to, and can still 
+	//	the DialogButton(De)press method(s) you don't have to, and can still
 	//	check which button was pressed using the old original method via the
 	//	Button(De)press methods.
-	//////////////////////////////////////////////////////////////////////////	
-	virtual void	DialogButtonDepress(int dialog_id, int button_id);
+	//////////////////////////////////////////////////////////////////////////
+	virtual void DialogButtonDepress(int dialog_id, int button_id);
 };
 
-}
+} // namespace PopWork
 #endif //__V12DEMOAPP_H__

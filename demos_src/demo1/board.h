@@ -13,7 +13,7 @@
 //	all our game drawing, updating, and input processing. Of course, in
 //	a larger application, you would probably do drawing and updating in
 //	multiple files, but you would still most likely use something similar
-//	to a Board class as the master game logic class. 
+//	to a Board class as the master game logic class.
 //
 //	The reason that the Board class is a widget is because when a widget
 //	is added to the GameApp's WidgetManager, it will automatically have its
@@ -38,7 +38,6 @@
 namespace PopWork
 {
 
-
 // Forward declare the graphics class. You will see the graphics class used
 // and explained in Board.cpp: it is the main object used to draw all
 // images, fonts, etc.
@@ -55,55 +54,49 @@ class GameApp;
 class Board : public Widget
 {
 
-	private:
+  private:
+	GameApp *mApp;
 
-		GameApp*	mApp;
-		
+  public:
+	//////////////////////////////////////////////////////////////////////////
+	//	Function: Board
+	//	Parameters:
+	//		theApp	- Pointer to the main application class
+	//
+	//	Returns: none
+	//////////////////////////////////////////////////////////////////////////
+	Board(GameApp *theApp);
 
-	public:
+	virtual ~Board();
 
-		//////////////////////////////////////////////////////////////////////////
-		//	Function: Board
-		//	Parameters:
-		//		theApp	- Pointer to the main application class
-		//	
-		//	Returns: none
-		//////////////////////////////////////////////////////////////////////////
-		Board(GameApp* theApp);
+	//////////////////////////////////////////////////////////////////////////
+	//	Function: Draw
+	//	Parameters:
+	//		g	- Graphics object used to draw all images and fonts to the screen.
+	//
+	//	Returns: none
+	//
+	//	Purpose: Called automatically by GameApp's WidgetManager, this function
+	//	is the main method that is responsible for all graphical and textual
+	//	displaying.
+	//////////////////////////////////////////////////////////////////////////
+	virtual void Draw(Graphics *g);
 
-		virtual ~Board();
-
-
-		//////////////////////////////////////////////////////////////////////////
-		//	Function: Draw
-		//	Parameters:
-		//		g	- Graphics object used to draw all images and fonts to the screen.
-		//	
-		//	Returns: none
-		//
-		//	Purpose: Called automatically by GameApp's WidgetManager, this function
-		//	is the main method that is responsible for all graphical and textual
-		//	displaying.
-		//////////////////////////////////////////////////////////////////////////
-		virtual void Draw(Graphics* g);
-
-		//////////////////////////////////////////////////////////////////////////
-		//	Function: Update
-		//	Parameters: none
-		//	Returns: none
-		//
-		//	Purpose: Called automatically by GameApp's WidgetManager, this method
-		//	is GUARANTEED to be called 100 times per second (100FPS) and is where
-		//	all main game logic is performed. Of course, if you had a larger more
-		//	complex game, you'd most likely divide your logic between several
-		//	other files, but this is commonly the central place where all game
-		//	logic begins and is executed.
-		//////////////////////////////////////////////////////////////////////////
-		virtual void Update();
-
+	//////////////////////////////////////////////////////////////////////////
+	//	Function: Update
+	//	Parameters: none
+	//	Returns: none
+	//
+	//	Purpose: Called automatically by GameApp's WidgetManager, this method
+	//	is GUARANTEED to be called 100 times per second (100FPS) and is where
+	//	all main game logic is performed. Of course, if you had a larger more
+	//	complex game, you'd most likely divide your logic between several
+	//	other files, but this is commonly the central place where all game
+	//	logic begins and is executed.
+	//////////////////////////////////////////////////////////////////////////
+	virtual void Update();
 };
 
-
-}
+} // namespace PopWork
 
 #endif // __BOARD_H__

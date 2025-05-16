@@ -1,6 +1,5 @@
-#pragma warning(disable:4244) 
-#pragma warning(disable:4018)
-
+#pragma warning(disable : 4244)
+#pragma warning(disable : 4018)
 
 #include "levelupeffect.h"
 #include "board.h"
@@ -12,7 +11,7 @@
 
 using namespace PopWork;
 
-const int STRIP_WIDTH	= 20;
+const int STRIP_WIDTH = 20;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -41,7 +40,7 @@ void LevelupEffect::Init()
 	//	to make the letters bounce upward. Gravity is applied each frame, so eventually
 	//	the letters return back to Y of 300, where the speed is again decreased and
 	//	reversed until it drops below the threshhold speed of 0.1 pixels per update.
-	//////////////////////////////////////////////////////////////////////////	
+	//////////////////////////////////////////////////////////////////////////
 
 	float x = (GRID_END_X - GRID_START_X) / 2 - FONT_HUNGARR->StringWidth(_S("LEVEL UP!")) / 2;
 	float y = FONT_HUNGARR->GetHeight();
@@ -67,8 +66,6 @@ void LevelupEffect::Init()
 	y -= ydec;
 	mText.push_back(BouncyChar(_S("L"), x, y, speed));
 
-
-
 	x += FONT_HUNGARR->StringWidth(_S("L "));
 	y -= ydec;
 	mText.push_back(BouncyChar(_S("U"), x, y, speed));
@@ -80,11 +77,11 @@ void LevelupEffect::Init()
 	x += FONT_HUNGARR->StringWidth(_S("P"));
 	y -= ydec;
 	mText.push_back(BouncyChar(_S("!"), x, y, speed));
-	
+
 	mDone = false;
 	mHue = 0;
 	mCurtainX = 0;
-	mState = LevelupEffect::LEVELUP_TEXT;	
+	mState = LevelupEffect::LEVELUP_TEXT;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -106,7 +103,7 @@ void LevelupEffect::Update(float theFrac)
 	// HSL is an alternative to specifying an RGB color format.
 	// Using HSL lets us easily do the hyper blinking crazy weird
 	// flashing effect commonly found in old games, such as Robotron.
-	// Below, we increment the value by 7 per update. The &0xFF is an 
+	// Below, we increment the value by 7 per update. The &0xFF is an
 	// easy way to clamp the value between 0 and 255 instead of having to
 	// do a separate if (mHue > 255) mHue -= 255. This lets the value
 	// rollover and keep cycling.
@@ -123,13 +120,13 @@ void LevelupEffect::Update(float theFrac)
 		bool allDone = true;
 		for (int i = 0; i < mText.size(); i++)
 		{
-			BouncyChar* c = &mText[i];
+			BouncyChar *c = &mText[i];
 
 			if (c->mDone)
 				continue;
 
 			c->mY += c->mBounceSpeed;
-			
+
 			c->mBounceSpeed += 0.15f;
 
 			if (c->mY >= 300)
@@ -189,7 +186,7 @@ void LevelupEffect::Update(float theFrac)
 		// the height of the screen, we update mCoverWidth, which is just simply the width
 		// of the region fully filled in. Again, like with the curtain effects, we only
 		// keep track of the left side, since the right moves the same amount and it's
-		// easy to compute the right's offsets. 
+		// easy to compute the right's offsets.
 		if (mStripSizeChange > 0)
 		{
 			// Left strip is moving downward from Y of 0, right is moving up
@@ -222,11 +219,11 @@ void LevelupEffect::Update(float theFrac)
 					mState = LevelupEffect::FADE_OUT_STATS;
 				}
 			}
-		}				
-	}	
+		}
+	}
 	else if (mState == LevelupEffect::FADE_OUT_STATS)
 	{
-		//Fade the screen out, with the next level appearing below it.
+		// Fade the screen out, with the next level appearing below it.
 		if ((mFadeOutAlpha -= 2) <= 0)
 		{
 			mDone = true;
@@ -237,21 +234,21 @@ void LevelupEffect::Update(float theFrac)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void LevelupEffect::Draw(Graphics* g)
+void LevelupEffect::Draw(Graphics *g)
 {
 	g->SetFont(FONT_HUNGARR);
 	if (mState == LevelupEffect::LEVELUP_TEXT)
-	{		
+	{
 		// This is how we convert an HSL value to an RGB value, which we have to
 		// do to specify the color for the graphics object. The function HSLToRGB
 		// takes as parameters: hue, saturation, luminance. We want to leave the
 		// saturation at max and luminance at half for our particular example.
 		// The returned value is ANDed with 0xFFFFFFFF to clamp the values for
-		// the alpha, red, green, and blue to the valid region of 0 to 255. 
-		g->SetColor( (gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF) );
+		// the alpha, red, green, and blue to the valid region of 0 to 255.
+		g->SetColor((gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF));
 		for (int i = 0; i < mText.size(); i++)
 		{
-			BouncyChar* c = &mText[i];
+			BouncyChar *c = &mText[i];
 			g->DrawString(c->mChar, c->mX, c->mY);
 		}
 	}
@@ -263,8 +260,8 @@ void LevelupEffect::Draw(Graphics* g)
 		g->FillRect(0, 0, mCurtainX, gAppBase->mHeight);
 		g->FillRect(gAppBase->mWidth - mCurtainX, 0, mCurtainX, gAppBase->mHeight);
 	}
-	else if ((mState == LevelupEffect::SHOWING_STATS) || (mState == LevelupEffect::CURTAIN_OUT) || 
-				(mState == LevelupEffect::COVERING_STATS))
+	else if ((mState == LevelupEffect::SHOWING_STATS) || (mState == LevelupEffect::CURTAIN_OUT) ||
+			 (mState == LevelupEffect::COVERING_STATS))
 	{
 		// When just showing the stats normally, fading out the red curtain (to reveal the stats
 		// beneath it), or covering up the stats with the effect triggered when the user clicks
@@ -285,13 +282,13 @@ void LevelupEffect::Draw(Graphics* g)
 		g->DrawString(CommaSeperate(mStats.mPopulationEaten), rightX + 5, y);
 
 		y += FONT_HUNGARR->GetHeight();
-		g->SetColor(Color::White);		
+		g->SetColor(Color::White);
 		s = _S("SYSTEMS SUBJUGATED:");
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(255, 0, 0));
 		g->DrawString(StrFormat(_S("%d%%"), mStats.mPercentComplete), rightX + 5, y);
-		
+
 		y += FONT_HUNGARR->GetHeight();
 		if (mStats.mPercentComplete >= COMPLETION_BONUS_PCT)
 		{
@@ -300,14 +297,13 @@ void LevelupEffect::Draw(Graphics* g)
 			strWidth = FONT_HUNGARR->StringWidth(s);
 			g->DrawString(s, rightX - strWidth, y);
 			g->SetColor(Color(255, 0, 0));
-			g->DrawString(StrFormat(_S("%d"), COMPLETION_BONUS * mStats.mLevelCompleted), 
-							rightX + 5, y);
+			g->DrawString(StrFormat(_S("%d"), COMPLETION_BONUS * mStats.mLevelCompleted), rightX + 5, y);
 		}
 
 		if (mStats.mPlanetsEaten.size() > 0)
 		{
 			y += 50;
-			int third =  gAppBase->mWidth / 3;
+			int third = gAppBase->mWidth / 3;
 			g->SetColor(Color(255, 255, 0));
 
 			s = _S("PLANET EATEN:");
@@ -315,12 +311,12 @@ void LevelupEffect::Draw(Graphics* g)
 			s = _S("EXPORTS:");
 			g->DrawString(s, third + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
 			s = _S("POPULATION:");
-			g->DrawString(s, third*2 + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
-			
+			g->DrawString(s, third * 2 + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
+
 			y += FONT_HUNGARR->GetHeight();
 
 			// If the user ate too many planets to fit on screen, we'll just display "..."
-			// to indicate that they ate a bunch but we just can't fit it all on screen. 
+			// to indicate that they ate a bunch but we just can't fit it all on screen.
 			// In reality, it'd be best to either ensure that all the planets fit on screen,
 			// or that there's some sort of scrolling mechanism to allow the user to view all their
 			// stats.
@@ -332,21 +328,20 @@ void LevelupEffect::Draw(Graphics* g)
 					drawDotDotDot = true;
 					break;
 				}
-				
+
 				g->SetColor(Color(255, 255, 255));
 				s = mStats.mPlanetsEaten[i];
 				g->DrawString(s, third / 2 - FONT_HUNGARR->StringWidth(s) / 2, y);
 
 				g->SetColor(Color(128, 255, 0));
-				s = mStats.mPlanetsEaten[i+1];
+				s = mStats.mPlanetsEaten[i + 1];
 				g->DrawString(s, third + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
 
 				g->SetColor(Color(255, 128, 0));
-				s = mStats.mPlanetsEaten[i+2];
-				g->DrawString(s, third*2 + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
-				
-				y += FONT_HUNGARR->GetHeight();
+				s = mStats.mPlanetsEaten[i + 2];
+				g->DrawString(s, third * 2 + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
 
+				y += FONT_HUNGARR->GetHeight();
 			}
 
 			if (drawDotDotDot)
@@ -358,7 +353,7 @@ void LevelupEffect::Draw(Graphics* g)
 
 		g->SetColor(Color::White);
 		s = _S("CLICK TO CONTINUE");
-		g->DrawString(s, gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, gAppBase->mHeight - 20);		
+		g->DrawString(s, gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, gAppBase->mHeight - 20);
 	}
 
 	if (mState == LevelupEffect::CURTAIN_OUT)
@@ -382,29 +377,26 @@ void LevelupEffect::Draw(Graphics* g)
 		// shifted left 24 bits. This then sticks the alpha value, which changes over time,
 		// into our HSL color. As you may recall from previous demos, the actual color
 		// structure is 32 bit, and looks like this in binary form:
-		//	AAAA RRRR GGGG BBBB  Where A,R,G,B are alpha, red, green, blue. 
+		//	AAAA RRRR GGGG BBBB  Where A,R,G,B are alpha, red, green, blue.
 		//
 		// We draw the totally filled in regions separately, since they're easy.
 		// The strips then are drawn differently depending on if they are moving up or down.
 		// The left and right ones move oppositely.
-		g->SetColor( (gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFF) | (mFadeOutAlpha << 24) );
+		g->SetColor((gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFF) | (mFadeOutAlpha << 24));
 		g->FillRect(0, 0, mCoverWidth, gAppBase->mHeight);
 		g->FillRect(gAppBase->mWidth - mCoverWidth, 0, mCoverWidth, gAppBase->mHeight);
 
 		if (mStripSizeChange > 0)
 		{
 			g->FillRect(mCoverWidth, 0, STRIP_WIDTH, mStripHeight);
-			g->FillRect(gAppBase->mWidth - mCoverWidth - STRIP_WIDTH,
-						gAppBase->mHeight - mStripHeight,
-						STRIP_WIDTH,
+			g->FillRect(gAppBase->mWidth - mCoverWidth - STRIP_WIDTH, gAppBase->mHeight - mStripHeight, STRIP_WIDTH,
 						mStripHeight);
 		}
 		else
-		{			
+		{
 			g->FillRect(mCoverWidth, gAppBase->mHeight - mStripHeight, STRIP_WIDTH, mStripHeight);
 			g->FillRect(gAppBase->mWidth - mCoverWidth - STRIP_WIDTH, 0, STRIP_WIDTH, mStripHeight);
 		}
-
 	}
 }
 

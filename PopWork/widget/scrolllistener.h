@@ -4,15 +4,15 @@
 #pragma once
 #endif
 
-namespace PopWork 
+namespace PopWork
 {
 
-class ScrollListener 
+class ScrollListener
 {
-public:
-	virtual void ScrollPosition(int theId, double thePosition) {};
+  public:
+	virtual void ScrollPosition(int theId, double thePosition){};
 };
 
-}
+} // namespace PopWork
 
 #endif // __SCROLLLISTENER_H__

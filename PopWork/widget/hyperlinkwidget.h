@@ -11,21 +11,21 @@ namespace PopWork
 
 class HyperlinkWidget : public ButtonWidget
 {
-public:
-	Color					mColor;
-	Color					mOverColor;
-	int						mUnderlineSize;
-	int						mUnderlineOffset;
+  public:
+	Color mColor;
+	Color mOverColor;
+	int mUnderlineSize;
+	int mUnderlineOffset;
 
-public:
-	HyperlinkWidget(int theId, ButtonListener* theButtonListener);
-	virtual ~HyperlinkWidget() {};
+  public:
+	HyperlinkWidget(int theId, ButtonListener *theButtonListener);
+	virtual ~HyperlinkWidget(){};
 
-	void					Draw(Graphics* g);
-	void					MouseEnter();
-	void					MouseLeave();	
+	void Draw(Graphics *g);
+	void MouseEnter();
+	void MouseLeave();
 };
 
-}
+} // namespace PopWork
 
 #endif

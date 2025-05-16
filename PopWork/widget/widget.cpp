@@ -12,28 +12,28 @@ bool Widget::mWriteColoredString = true;
 
 Widget::Widget()
 {
-	mWidgetManager = NULL;	
+	mWidgetManager = NULL;
 	mVisible = true;
 	mDisabled = false;
 	mIsDown = false;
 	mIsOver = false;
-	mDoFinger = false;	
-	mMouseVisible = true;		
+	mDoFinger = false;
+	mMouseVisible = true;
 	mHasFocus = false;
-	mHasTransparencies = false;	
+	mHasTransparencies = false;
 	mWantsFocus = false;
 	mTabPrev = NULL;
 	mTabNext = NULL;
 }
 
 Widget::~Widget()
-{	
+{
 	mColors.clear();
 }
 
 void Widget::WidgetRemovedHelper()
 {
-	if (mWidgetManager==NULL)
+	if (mWidgetManager == NULL)
 		return;
 
 	// Call RemovedFromManager on all child widgets and disable them and stuff like that
@@ -41,21 +41,21 @@ void Widget::WidgetRemovedHelper()
 	{
 		Widget *aWidget = *aWidgetItr;
 		aWidget->WidgetRemovedHelper();
-	}	
+	}
 
 	mWidgetManager->DisableWidget(this);
 
 	PreModalInfoList::iterator anItr = mWidgetManager->mPreModalInfoList.begin();
 	while (anItr != mWidgetManager->mPreModalInfoList.end())
 	{
-		PreModalInfo* aPreModalInfo = &(*anItr);
+		PreModalInfo *aPreModalInfo = &(*anItr);
 		if (aPreModalInfo->mPrevBaseModalWidget == this)
 			aPreModalInfo->mPrevBaseModalWidget = NULL;
 		if (aPreModalInfo->mPrevFocusWidget == this)
 			aPreModalInfo->mPrevFocusWidget = NULL;
 		++anItr;
 	}
-	
+
 	RemovedFromManager(mWidgetManager);
 	MarkDirtyFull(this);
 
@@ -75,9 +75,9 @@ void Widget::SetVisible(bool isVisible)
 {
 	if (mVisible == isVisible)
 		return;
-	
+
 	mVisible = isVisible;
-	
+
 	if (mVisible)
 		MarkDirty();
 	else
@@ -87,15 +87,15 @@ void Widget::SetVisible(bool isVisible)
 		mWidgetManager->RehupMouse();
 }
 
-void Widget::Draw(Graphics* g) // Already translated
+void Widget::Draw(Graphics *g) // Already translated
 {
 }
 
-void Widget::DrawOverlay(Graphics* g)
+void Widget::DrawOverlay(Graphics *g)
 {
 }
 
-void Widget::DrawOverlay(Graphics* g, int thePriority)
+void Widget::DrawOverlay(Graphics *g, int thePriority)
 {
 	DrawOverlay(g);
 }
@@ -110,16 +110,16 @@ void Widget::SetColors(int theColors[][3], int theNumColors)
 }
 
 void Widget::SetColors(int theColors[][4], int theNumColors)
-{	
+{
 	mColors.clear();
 
 	for (int i = 0; i < theNumColors; i++)
-		SetColor(i, Color(theColors[i][0], theColors[i][1], theColors[i][2], theColors[i][3]));		
+		SetColor(i, Color(theColors[i][0], theColors[i][1], theColors[i][2], theColors[i][3]));
 
 	MarkDirty();
 }
 
-void Widget::SetColor(int theIdx, const Color& theColor)
+void Widget::SetColor(int theIdx, const Color &theColor)
 {
 	if (theIdx >= (int)mColors.size())
 		mColors.resize(theIdx + 1);
@@ -128,17 +128,17 @@ void Widget::SetColor(int theIdx, const Color& theColor)
 	MarkDirty();
 }
 
-const Color& Widget::GetColor(int theIdx)
+const Color &Widget::GetColor(int theIdx)
 {
 	static Color aColor;
-	if (theIdx < (int) mColors.size())
+	if (theIdx < (int)mColors.size())
 		return mColors[theIdx];
 	return aColor;
 }
 
-Color Widget::GetColor(int theIdx, const Color& theDefaultColor)
+Color Widget::GetColor(int theIdx, const Color &theDefaultColor)
 {
-	if (theIdx < (int) mColors.size())
+	if (theIdx < (int)mColors.size())
 		return mColors[theIdx];
 	return theDefaultColor;
 }
@@ -150,12 +150,12 @@ void Widget::Resize(int theX, int theY, int theWidth, int theHeight)
 
 	// Mark everything dirty that is over or under the old position
 	MarkDirtyFull();
-	
+
 	mX = theX;
 	mY = theY;
 	mWidth = theWidth;
 	mHeight = theHeight;
-		
+
 	// Mark things dirty that are over the new position
 	MarkDirty();
 
@@ -163,7 +163,7 @@ void Widget::Resize(int theX, int theY, int theWidth, int theHeight)
 		mWidgetManager->RehupMouse();
 }
 
-void Widget::Resize(const Rect& theRect)
+void Widget::Resize(const Rect &theRect)
 {
 	Resize(theRect.mX, theRect.mY, theRect.mWidth, theRect.mHeight);
 }
@@ -187,22 +187,23 @@ void Widget::SetDisabled(bool isDisabled)
 
 	if ((isDisabled) && (mWidgetManager != NULL))
 		mWidgetManager->DisableWidget(this);
-		
+
 	MarkDirty();
-	
+
 	// Incase a widget is enabled right under our cursor
-	if ((!isDisabled) && (mWidgetManager != NULL) && (Contains(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY)))
+	if ((!isDisabled) && (mWidgetManager != NULL) &&
+		(Contains(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY)))
 		mWidgetManager->MousePosition(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY);
 }
 
 void Widget::GotFocus()
 {
-	mHasFocus = true;		
+	mHasFocus = true;
 }
 
 void Widget::LostFocus()
 {
-	mHasFocus = false;		
+	mHasFocus = false;
 }
 
 void Widget::Update()
@@ -236,7 +237,7 @@ void Widget::KeyDown(KeyCode theKey)
 }
 
 void Widget::KeyUp(KeyCode theKey)
-{		
+{
 }
 
 void Widget::ShowFinger(bool on)
@@ -257,12 +258,10 @@ void Widget::ShowFinger(bool on)
 
 void Widget::MouseEnter()
 {
-	
 }
 
 void Widget::MouseLeave()
 {
-	
 }
 
 void Widget::MouseMove(int x, int y)
@@ -313,9 +312,9 @@ void Widget::MouseWheel(int theDelta)
 
 //////// Helper functions
 
-Rect Widget::WriteCenteredLine(Graphics* g, int anOffset, const PopWorkString& theLine)
+Rect Widget::WriteCenteredLine(Graphics *g, int anOffset, const PopWorkString &theLine)
 {
-	Font* aFont = g->GetFont();
+	Font *aFont = g->GetFont();
 	int aWidth = aFont->StringWidth(theLine);
 	int aX = (mWidth - aWidth) / 2;
 
@@ -324,66 +323,66 @@ Rect Widget::WriteCenteredLine(Graphics* g, int anOffset, const PopWorkString& t
 	return Rect(aX, anOffset - aFont->GetAscent(), aWidth, aFont->GetHeight());
 }
 
-Rect Widget::WriteCenteredLine(Graphics* g, int anOffset, const PopWorkString& theLine, Color theColor1, Color theColor2, const Point& theShadowOffset)
+Rect Widget::WriteCenteredLine(Graphics *g, int anOffset, const PopWorkString &theLine, Color theColor1,
+							   Color theColor2, const Point &theShadowOffset)
 {
-	Font* aFont = g->GetFont();
+	Font *aFont = g->GetFont();
 	int aWidth = aFont->StringWidth(theLine);
 	int aX = (mWidth - aWidth) / 2;
-	
+
 	g->SetColor(theColor2);
-	g->DrawString(theLine, (mWidth - aWidth)/2 + theShadowOffset.mX, anOffset + theShadowOffset.mY);
-	
+	g->DrawString(theLine, (mWidth - aWidth) / 2 + theShadowOffset.mX, anOffset + theShadowOffset.mY);
+
 	g->SetColor(theColor1);
-	g->DrawString(theLine, (mWidth - aWidth)/2, anOffset);
+	g->DrawString(theLine, (mWidth - aWidth) / 2, anOffset);
 
 	// account for shadow in position and size
 	// TODO: this may not be necessary.
-	return Rect(
-		aX + min(0,theShadowOffset.mX),
-		anOffset - aFont->GetAscent() + min(0,theShadowOffset.mY), 
-		aWidth + abs(theShadowOffset.mX), 
-		aFont->GetHeight() + abs(theShadowOffset.mY));
+	return Rect(aX + min(0, theShadowOffset.mX), anOffset - aFont->GetAscent() + min(0, theShadowOffset.mY),
+				aWidth + abs(theShadowOffset.mX), aFont->GetHeight() + abs(theShadowOffset.mY));
 }
 
-int Widget::WriteString(Graphics* g, const PopWorkString& theString, int theX, int theY, int theWidth, int theJustification, bool drawString, int theOffset, int theLength)
+int Widget::WriteString(Graphics *g, const PopWorkString &theString, int theX, int theY, int theWidth,
+						int theJustification, bool drawString, int theOffset, int theLength)
 {
 	bool oldColored = g->mWriteColoredString;
 	g->mWriteColoredString = mWriteColoredString;
-	int aXOffset = g->WriteString(theString,theX,theY,theWidth,theJustification,drawString,theOffset,theLength);
+	int aXOffset = g->WriteString(theString, theX, theY, theWidth, theJustification, drawString, theOffset, theLength);
 	g->mWriteColoredString = oldColored;
 
 	return aXOffset;
 }
 
-int	Widget::WriteWordWrapped(Graphics* g, const Rect& theRect, const PopWorkString& theLine, int theLineSpacing, int theJustification)
+int Widget::WriteWordWrapped(Graphics *g, const Rect &theRect, const PopWorkString &theLine, int theLineSpacing,
+							 int theJustification)
 {
 	bool oldColored = g->mWriteColoredString;
 	g->mWriteColoredString = mWriteColoredString;
-	int aReturn = g->WriteWordWrapped(theRect,theLine,theLineSpacing,theJustification);
+	int aReturn = g->WriteWordWrapped(theRect, theLine, theLineSpacing, theJustification);
 	g->mWriteColoredString = oldColored;
 
 	return aReturn;
 }
 
-int Widget::GetWordWrappedHeight(Graphics* g, int theWidth, const PopWorkString& theLine, int aLineSpacing)
+int Widget::GetWordWrappedHeight(Graphics *g, int theWidth, const PopWorkString &theLine, int aLineSpacing)
 {
-	return g->GetWordWrappedHeight(theWidth,theLine,aLineSpacing);
+	return g->GetWordWrappedHeight(theWidth, theLine, aLineSpacing);
 }
 
 int Widget::GetNumDigits(int theNumber)
-{		
+{
 	int aDivisor = 10;
 	int aNumDigits = 1;
 	while (theNumber >= aDivisor)
 	{
 		aNumDigits++;
 		aDivisor *= 10;
-	}			
-		
+	}
+
 	return aNumDigits;
 }
 
-void Widget::WriteNumberFromStrip(Graphics* g, int theNumber, int theX, int theY, Image* theNumberStrip, int aSpacing)
+void Widget::WriteNumberFromStrip(Graphics *g, int theNumber, int theX, int theY, Image *theNumberStrip, int aSpacing)
 {
 	int aDivisor = 10;
 	int aNumDigits = 1;
@@ -396,30 +395,28 @@ void Widget::WriteNumberFromStrip(Graphics* g, int theNumber, int theX, int theY
 		aDivisor = 10;
 
 	int aDigitLen = theNumberStrip->GetWidth() / 10;
-	
+
 	for (int aDigitIdx = 0; aDigitIdx < aNumDigits; aDigitIdx++)
-	{				
+	{
 		aDivisor /= 10;
-		int aDigit = (theNumber / aDivisor) % 10;				
-			
-		Graphics* aClipG = g->Create();
-		aClipG->ClipRect(theX + aDigitIdx*(aDigitLen + aSpacing), theY, aDigitLen, theNumberStrip->GetHeight());
-		aClipG->DrawImage(theNumberStrip, theX + aDigitIdx*(aDigitLen + aSpacing) - aDigit*aDigitLen, theY);		
+		int aDigit = (theNumber / aDivisor) % 10;
+
+		Graphics *aClipG = g->Create();
+		aClipG->ClipRect(theX + aDigitIdx * (aDigitLen + aSpacing), theY, aDigitLen, theNumberStrip->GetHeight());
+		aClipG->DrawImage(theNumberStrip, theX + aDigitIdx * (aDigitLen + aSpacing) - aDigit * aDigitLen, theY);
 		delete aClipG;
 	}
-}										 
-								 
+}
+
 bool Widget::Contains(int theX, int theY)
 {
-	return ((theX >= mX) && (theX < mX + mWidth) &&
-			(theY >= mY) && (theY < mY + mHeight));
+	return ((theX >= mX) && (theX < mX + mWidth) && (theY >= mY) && (theY < mY + mHeight));
 }
 
 Rect Widget::GetInsetRect()
 {
-	return Rect(mX + mMouseInsets.mLeft, mY + mMouseInsets.mTop, 
-						 mWidth - mMouseInsets.mLeft - mMouseInsets.mRight,
-						 mHeight - mMouseInsets.mTop - mMouseInsets.mBottom);
+	return Rect(mX + mMouseInsets.mLeft, mY + mMouseInsets.mTop, mWidth - mMouseInsets.mLeft - mMouseInsets.mRight,
+				mHeight - mMouseInsets.mTop - mMouseInsets.mBottom);
 }
 
 void Widget::DeferOverlay(int thePriority)
@@ -427,11 +424,12 @@ void Widget::DeferOverlay(int thePriority)
 	mWidgetManager->DeferOverlay(this, thePriority);
 }
 
-void Widget::Layout(int theLayoutFlags, Widget *theRelativeWidget, int theLeftPad, int theTopPad, int theWidthPad, int theHeightPad)
+void Widget::Layout(int theLayoutFlags, Widget *theRelativeWidget, int theLeftPad, int theTopPad, int theWidthPad,
+					int theHeightPad)
 {
 	int aRelLeft = theRelativeWidget->Left();
 	int aRelTop = theRelativeWidget->Top();
-	if (theRelativeWidget==mParent)
+	if (theRelativeWidget == mParent)
 	{
 		aRelLeft = 0;
 		aRelTop = 0;
@@ -448,42 +446,82 @@ void Widget::Layout(int theLayoutFlags, Widget *theRelativeWidget, int theLeftPa
 	int aHeight = Height();
 
 	int aType = 1;
-	while(aType<LAY_Max)
+	while (aType < LAY_Max)
 	{
-		if(theLayoutFlags&aType)
+		if (theLayoutFlags & aType)
 		{
-			switch(aType)
+			switch (aType)
 			{
-				case LAY_SameWidth: aWidth = aRelWidth+theWidthPad; break;
-				case LAY_SameHeight: aHeight = aRelHeight+theHeightPad; break;
-	
-				case LAY_Above: aTop = aRelTop-aHeight+theTopPad; break;
-				case LAY_Below: aTop = aRelBottom+theTopPad; break;
-				case LAY_Right: aLeft = aRelRight+theLeftPad; break;
-				case LAY_Left:  aLeft = aRelLeft-aWidth+theLeftPad; break;
-			
-				case LAY_SameLeft: aLeft = aRelLeft+theLeftPad; break;
-				case LAY_SameRight: aLeft = aRelRight-aWidth+theLeftPad; break;
-				case LAY_SameTop: aTop = aRelTop+theTopPad; break;
-				case LAY_SameBottom: aTop = aRelBottom-aHeight+theTopPad; break;
+			case LAY_SameWidth:
+				aWidth = aRelWidth + theWidthPad;
+				break;
+			case LAY_SameHeight:
+				aHeight = aRelHeight + theHeightPad;
+				break;
 
-				case LAY_GrowToRight: aWidth = aRelRight-aLeft+theWidthPad; break;
-				case LAY_GrowToLeft: aWidth = aRelLeft-aLeft+theWidthPad; break;
-				case LAY_GrowToTop: aHeight = aRelTop-aTop+theHeightPad; break;
-				case LAY_GrowToBottom: aHeight = aRelBottom-aTop+theHeightPad; break;
+			case LAY_Above:
+				aTop = aRelTop - aHeight + theTopPad;
+				break;
+			case LAY_Below:
+				aTop = aRelBottom + theTopPad;
+				break;
+			case LAY_Right:
+				aLeft = aRelRight + theLeftPad;
+				break;
+			case LAY_Left:
+				aLeft = aRelLeft - aWidth + theLeftPad;
+				break;
 
-				case LAY_SetLeft: aLeft = theLeftPad; break;
-				case LAY_SetTop: aTop = theTopPad; break;
-				case LAY_SetWidth: aWidth = theWidthPad; break;
-				case LAY_SetHeight: aHeight = theHeightPad; break;
+			case LAY_SameLeft:
+				aLeft = aRelLeft + theLeftPad;
+				break;
+			case LAY_SameRight:
+				aLeft = aRelRight - aWidth + theLeftPad;
+				break;
+			case LAY_SameTop:
+				aTop = aRelTop + theTopPad;
+				break;
+			case LAY_SameBottom:
+				aTop = aRelBottom - aHeight + theTopPad;
+				break;
 
-				case LAY_HCenter: aLeft = aRelLeft+(aRelWidth-aWidth)/2 + theLeftPad; break;
-				case LAY_VCenter: aTop = aRelTop+(aRelHeight-aHeight)/2 + theTopPad; break;
+			case LAY_GrowToRight:
+				aWidth = aRelRight - aLeft + theWidthPad;
+				break;
+			case LAY_GrowToLeft:
+				aWidth = aRelLeft - aLeft + theWidthPad;
+				break;
+			case LAY_GrowToTop:
+				aHeight = aRelTop - aTop + theHeightPad;
+				break;
+			case LAY_GrowToBottom:
+				aHeight = aRelBottom - aTop + theHeightPad;
+				break;
+
+			case LAY_SetLeft:
+				aLeft = theLeftPad;
+				break;
+			case LAY_SetTop:
+				aTop = theTopPad;
+				break;
+			case LAY_SetWidth:
+				aWidth = theWidthPad;
+				break;
+			case LAY_SetHeight:
+				aHeight = theHeightPad;
+				break;
+
+			case LAY_HCenter:
+				aLeft = aRelLeft + (aRelWidth - aWidth) / 2 + theLeftPad;
+				break;
+			case LAY_VCenter:
+				aTop = aRelTop + (aRelHeight - aHeight) / 2 + theTopPad;
+				break;
 			}
 		}
 
-		aType<<=1;
+		aType <<= 1;
 	}
 
-	Resize(aLeft,aTop,aWidth,aHeight);
+	Resize(aLeft, aTop, aWidth, aHeight);
 }

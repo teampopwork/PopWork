@@ -4,15 +4,9 @@
 
 using namespace PopWork;
 
-Checkbox::Checkbox(Image* theUncheckedImage, Image* theCheckedImage, int theId, CheckboxListener* theCheckboxListener) :	
-	mUncheckedImage(theUncheckedImage),
-	mCheckedImage(theCheckedImage),
-	mId(theId),
-	mListener(theCheckboxListener),
-	mChecked(false)	,
-	mOutlineColor(Color::White),
-	mBkgColor(Color(80, 80, 80)),
-	mCheckColor(Color(255, 255, 0))
+Checkbox::Checkbox(Image *theUncheckedImage, Image *theCheckedImage, int theId, CheckboxListener *theCheckboxListener)
+	: mUncheckedImage(theUncheckedImage), mCheckedImage(theCheckedImage), mId(theId), mListener(theCheckboxListener),
+	  mChecked(false), mOutlineColor(Color::White), mBkgColor(Color(80, 80, 80)), mCheckColor(Color(255, 255, 0))
 {
 	mDoFinger = true;
 }
@@ -30,7 +24,7 @@ bool Checkbox::IsChecked()
 	return mChecked;
 }
 
-void Checkbox::Draw(Graphics* g)
+void Checkbox::Draw(Graphics *g)
 {
 	Widget::Draw(g);
 
@@ -38,7 +32,7 @@ void Checkbox::Draw(Graphics* g)
 		g->DrawImage(mApp->mImages[IMAGE_CHECKBOX], 0, 0, Rect(0, 0, 31, 32));
 	else
 		g->DrawImage(mApp->mImages[IMAGE_CHECKBOX], 0, 0, Rect(31, 0, 31, 32));*/
-	
+
 	if ((mCheckedRect.mWidth == 0) && (mCheckedImage != NULL) && (mUncheckedImage != NULL))
 	{
 		if (mChecked)

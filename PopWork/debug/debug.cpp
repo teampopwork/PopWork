@@ -22,25 +22,28 @@ using namespace PopWork;
 ///////////////////////////////////////////////////////////////////////////////
 struct POPWORK_ALLOC_INFO
 {
-	int		size;
-	char	file[512];
-	int		line;
+	int size;
+	char file[512];
+	int line;
 };
 static bool gShowLeaks = false;
 static bool gPopWorkAllocMapValid = false;
-class PopWorkAllocMap : public std::map<void*,POPWORK_ALLOC_INFO>
+class PopWorkAllocMap : public std::map<void *, POPWORK_ALLOC_INFO>
 {
-public:
+  public:
 	CritSect mCrit;
 
-public:
-	PopWorkAllocMap() { gPopWorkAllocMapValid = true; }
-	~PopWorkAllocMap() 
-	{ 
-		if (gShowLeaks) 
-			PopWorkDumpUnfreed();		
+  public:
+	PopWorkAllocMap()
+	{
+		gPopWorkAllocMapValid = true;
+	}
+	~PopWorkAllocMap()
+	{
+		if (gShowLeaks)
+			PopWorkDumpUnfreed();
 
-		gPopWorkAllocMapValid = false; 
+		gPopWorkAllocMapValid = false;
 	}
 };
 static PopWorkAllocMap gPopWorkAllocMap;
@@ -49,17 +52,17 @@ static PopWorkAllocMap gPopWorkAllocMap;
 ///////////////////////////////////////////////////////////////////////////////
 void PopWorkTrace(const char *theStr)
 {
-	if (gTraceFile==NULL)
+	if (gTraceFile == NULL)
 	{
-		gTraceFileNum = (gTraceFileNum+1)%2;
+		gTraceFileNum = (gTraceFileNum + 1) % 2;
 		char aBuf[50];
-		sprintf(aBuf,"trace%d.txt",gTraceFileNum+1);
-		gTraceFile = fopen(aBuf,"w");
-		if (gTraceFile==NULL)
+		sprintf(aBuf, "trace%d.txt", gTraceFileNum + 1);
+		gTraceFile = fopen(aBuf, "w");
+		if (gTraceFile == NULL)
 			return;
 	}
 
-	fprintf(gTraceFile,"%s\n",theStr);
+	fprintf(gTraceFile, "%s\n", theStr);
 	fflush(gTraceFile);
 
 	gTraceFileLen += strlen(theStr);
@@ -73,7 +76,7 @@ void PopWorkTrace(const char *theStr)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void PopWorkTraceFmt(const PopWorkChar* fmt ...)
+void PopWorkTraceFmt(const PopWorkChar *fmt...)
 {
 	// Does not append a newline by default, also takes vararg parameters
 
@@ -82,18 +85,17 @@ void PopWorkTraceFmt(const PopWorkChar* fmt ...)
 	std::string result = PopWorkStringToStringFast(vformat(fmt, argList));
 	va_end(argList);
 
-	
-	if (gTraceFile==NULL)
+	if (gTraceFile == NULL)
 	{
-		gTraceFileNum = (gTraceFileNum+1)%2;
+		gTraceFileNum = (gTraceFileNum + 1) % 2;
 		char aBuf[50];
-		sprintf(aBuf,"trace%d.txt",gTraceFileNum+1);
-		gTraceFile = fopen(aBuf,"w");
-		if (gTraceFile==NULL)
+		sprintf(aBuf, "trace%d.txt", gTraceFileNum + 1);
+		gTraceFile = fopen(aBuf, "w");
+		if (gTraceFile == NULL)
 			return;
 	}
 
-	fprintf(gTraceFile,"%s",result.c_str());
+	fprintf(gTraceFile, "%s", result.c_str());
 	fflush(gTraceFile);
 
 	gTraceFileLen += result.length();
@@ -107,7 +109,7 @@ void PopWorkTraceFmt(const PopWorkChar* fmt ...)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void PopWorkMemAddTrack(void *addr,  int asize,  const char* fname, int lnum)
+void PopWorkMemAddTrack(void *addr, int asize, const char *fname, int lnum)
 {
 	if (!gPopWorkAllocMapValid)
 		return;
@@ -116,14 +118,14 @@ void PopWorkMemAddTrack(void *addr,  int asize,  const char* fname, int lnum)
 	gShowLeaks = true;
 
 	POPWORK_ALLOC_INFO &info = gPopWorkAllocMap[addr];
-	strncpy(info.file, fname, sizeof(info.file)-1);
+	strncpy(info.file, fname, sizeof(info.file) - 1);
 	info.line = lnum;
 	info.size = asize;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void PopWorkMemRemoveTrack(void* addr)
+void PopWorkMemRemoveTrack(void *addr)
 {
 	if (!gPopWorkAllocMapValid)
 		return;
@@ -153,32 +155,33 @@ void PopWorkDumpUnfreed()
 	int index = 0;
 #endif
 
-	FILE* f = fopen("mem_leaks.txt", "wt");
+	FILE *f = fopen("mem_leaks.txt", "wt");
 	if (!f)
 		return;
 
 	time_t aTime = time(NULL);
-	sprintf(buf, "Memory Leak Report for %s\n",	asctime(localtime(&aTime)));
+	sprintf(buf, "Memory Leak Report for %s\n", asctime(localtime(&aTime)));
 	fprintf(f, buf);
 	printf("\n%s", buf);
-	for(i = gPopWorkAllocMap.begin(); i != gPopWorkAllocMap.end(); i++) 
+	for (i = gPopWorkAllocMap.begin(); i != gPopWorkAllocMap.end(); i++)
 	{
-		sprintf(buf, "%s(%d) : Leak %d byte%s\n", i->second.file, i->second.line, i->second.size,i->second.size>1?"s":"");
+		sprintf(buf, "%s(%d) : Leak %d byte%s\n", i->second.file, i->second.line, i->second.size,
+				i->second.size > 1 ? "s" : "");
 		printf("%s", buf);
 		fprintf(f, buf);
 
 #ifdef POPWORK_DUMP_LEAKED_MEM
-		unsigned char* data = (unsigned char*)i->first;
+		unsigned char *data = (unsigned char *)i->first;
 
 		for (index = 0; index < i->second.size; index++)
-		{			
+		{
 			unsigned char _c = *data;
-			
+
 			if (count == 0)
 				sprintf(hex_dump, "\t%02X ", _c);
 			else
 				sprintf(hex_dump, "%s%02X ", hex_dump, _c);
-		
+
 			if ((_c < 32) || (_c > 126))
 				_c = '.';
 
@@ -186,7 +189,6 @@ void PopWorkDumpUnfreed()
 				sprintf(ascii_dump, "%s%c ", ascii_dump, _c);
 			else
 				sprintf(ascii_dump, "%s%c", count == 0 ? "\t" : ascii_dump, _c);
-			
 
 			if (++count == 16)
 			{
@@ -194,8 +196,8 @@ void PopWorkDumpUnfreed()
 				sprintf(buf, "%s\t%s\n", hex_dump, ascii_dump);
 				fprintf(f, buf);
 
-				memset((void*)hex_dump, 0, 1024);
-				memset((void*)ascii_dump, 0, 1024);
+				memset((void *)hex_dump, 0, 1024);
+				memset((void *)ascii_dump, 0, 1024);
 			}
 
 			data++;
@@ -215,14 +217,13 @@ void PopWorkDumpUnfreed()
 
 		count = 0;
 		fprintf(f, "\n\n");
-		memset((void*)hex_dump, 0, 1024);	
-		memset((void*)ascii_dump, 0, 1024);
+		memset((void *)hex_dump, 0, 1024);
+		memset((void *)ascii_dump, 0, 1024);
 
 #endif // POPWORK_DUMP_LEAKED_MEM
 
 		totalSize += i->second.size;
 	}
-
 
 	sprintf(buf, "-----------------------------------------------------------\n");
 	fprintf(f, buf);
@@ -234,13 +235,12 @@ void PopWorkDumpUnfreed()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void OutputDebug(const PopWorkChar* fmt ...)
+void OutputDebug(const PopWorkChar *fmt...)
 {
 	va_list argList;
-    va_start(argList, fmt);
-    std::string result = PopWorkStringToStringFast(vformat(fmt, argList));
-    va_end(argList);
+	va_start(argList, fmt);
+	std::string result = PopWorkStringToStringFast(vformat(fmt, argList));
+	va_end(argList);
 
 	printf("%s", result.c_str());
 }
-

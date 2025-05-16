@@ -15,7 +15,7 @@ DemoWidget::DemoWidget()
 	int w = 200, h = 200;
 	Resize(gAppBase->mWidth / 2 - w / 2, gAppBase->mHeight / 2 - h / 2, w, h);
 
-	// Previously, it was annoying trying to place widgets on some sort of parent widget, 
+	// Previously, it was annoying trying to place widgets on some sort of parent widget,
 	// since there was no notion of parent/child relationship. What you had to do was
 	// override the AddedToManager and RemovedFromManager functions, create and add your
 	// widgets or remove and nuke them, and in the case of AddedToManager, you also had
@@ -31,10 +31,10 @@ DemoWidget::DemoWidget()
 	mMoveButton = new ButtonWidget(0, this);
 	mMoveButton->mLabel = _S("MOVE");
 	mMoveButton->SetFont(FONT_DEFAULT);
-	
+
 	mCloseButton = new ButtonWidget(1, this);
 	mCloseButton->mLabel = _S("CLOSE");
-	mCloseButton->SetFont(FONT_DEFAULT);	
+	mCloseButton->SetFont(FONT_DEFAULT);
 
 	// VERY IMPORTANT: Notice that we're calling THIS CLASS' (or really, it's parent, WidgetContainer's)
 	// AddWidget method instead of the WidgetManager's method. In order to designate a widget as a child
@@ -50,13 +50,12 @@ DemoWidget::DemoWidget()
 	// about the overlay stuff if you haven't already, in Board::Draw(...)).
 	// The higher priority widgets get drawn ABOVE (and thus AFTER) widgets
 	// with a lower priority. Thus, by changing the priority of a widget,
-	// you could enforce that it's always drawn above any overlay layer, 
+	// you could enforce that it's always drawn above any overlay layer,
 	// or you could do just the opposite. We'll
-	// set it to 1, since in our Board::Draw method, you'll see that we 
+	// set it to 1, since in our Board::Draw method, you'll see that we
 	// toggle between drawing the overlay above and below this widget.
 	// Note that widgets by default have priority 0 and dialogs have priority 1.
 	mPriority = 1;
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -89,13 +88,10 @@ void DemoWidget::ButtonDepress(int id)
 	}
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void DemoWidget::Draw(Graphics* g)
+void DemoWidget::Draw(Graphics *g)
 {
 	g->SetColor(Color(0, 255, 0, 200));
 	g->FillRect(0, 0, mWidth, mHeight);
-
-
 }

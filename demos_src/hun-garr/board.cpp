@@ -1,5 +1,5 @@
-#pragma warning(disable:4244) 
-#pragma warning(disable:4018)
+#pragma warning(disable : 4244)
+#pragma warning(disable : 4018)
 #include "board.h"
 #include "gameapp.h"
 #include "res.h"
@@ -29,27 +29,51 @@
 using namespace PopWork;
 
 // How much faster the beam gets when you eat a planet
-const float BEAM_INC_SPEED	=	0.05f;
+const float BEAM_INC_SPEED = 0.05f;
 
 // Fastest the beam can go
-const float MAX_BEAM_SPEED	=	2.5f;
+const float MAX_BEAM_SPEED = 2.5f;
 
 // Table of random planet names
-const int NUM_PLANET_NAMES	=	28;
-const PopWorkString PLANET_NAME[] = 
-{_S("Deev-z"), _S("SEN-Hen"), _S("Wallach IX"), _S("Salusa Secundus"), _S("Ridiculous Prime"), _S("Architekt V"),
-_S("Robot Republica"), _S("Ix"), _S("XOLDOG4000"), _S("Kliprok"), _S("TR-909"), _S("TR-808"), _S("TB-303"), 
-_S("DTR011"), _S("dTech"), _S("Rotwang"), _S("Sukhtek"), _S("Romulox"), _S("Dob Reevz"), _S("Skull XII"),
-_S("Beefy Prime"), _S("Haas"), _S("Reifenrath"), _S("Gehner Subulon"), _S("ACE-DOGG"), _S("Charolastra"), _S("Nixd"), _S("BASS")};
+const int NUM_PLANET_NAMES = 28;
+const PopWorkString PLANET_NAME[] = {_S("Deev-z"),
+									 _S("SEN-Hen"),
+									 _S("Wallach IX"),
+									 _S("Salusa Secundus"),
+									 _S("Ridiculous Prime"),
+									 _S("Architekt V"),
+									 _S("Robot Republica"),
+									 _S("Ix"),
+									 _S("XOLDOG4000"),
+									 _S("Kliprok"),
+									 _S("TR-909"),
+									 _S("TR-808"),
+									 _S("TB-303"),
+									 _S("DTR011"),
+									 _S("dTech"),
+									 _S("Rotwang"),
+									 _S("Sukhtek"),
+									 _S("Romulox"),
+									 _S("Dob Reevz"),
+									 _S("Skull XII"),
+									 _S("Beefy Prime"),
+									 _S("Haas"),
+									 _S("Reifenrath"),
+									 _S("Gehner Subulon"),
+									 _S("ACE-DOGG"),
+									 _S("Charolastra"),
+									 _S("Nixd"),
+									 _S("BASS")};
 
 // Table of random planet exports:
-const int NUM_PLANET_EXPORTS =	23;
-const PopWorkString PLANET_EXPORTS[] = 
-{_S("Happiness"), _S("Donkeys"), _S("Rabies"), _S("AstroPop"), _S("Idiocy"), _S("Minimal Techno"),
-_S("Citizens"), _S("Pain-relieving Pants"), _S("The Quad-Laser"), _S("Septic Systems"), _S("Video Games"),
-_S("Robots"), _S("Plaid"), _S("Octagons"), _S("Gingivitis"), _S("Recognizers"), _S("Electro"), _S("Sauce"),
-_S("Kindness"), _S("Bison"), _S("Saline"), _S("Cholera"), _S("TyperShark")};
-
+const int NUM_PLANET_EXPORTS = 23;
+const PopWorkString PLANET_EXPORTS[] = {
+	_S("Happiness"),	  _S("Donkeys"),		_S("Rabies"),	   _S("AstroPop"),
+	_S("Idiocy"),		  _S("Minimal Techno"), _S("Citizens"),	   _S("Pain-relieving Pants"),
+	_S("The Quad-Laser"), _S("Septic Systems"), _S("Video Games"), _S("Robots"),
+	_S("Plaid"),		  _S("Octagons"),		_S("Gingivitis"),  _S("Recognizers"),
+	_S("Electro"),		  _S("Sauce"),			_S("Kindness"),	   _S("Bison"),
+	_S("Saline"),		  _S("Cholera"),		_S("TyperShark")};
 
 //////////////////////////////////////////////////////////////////////////
 //	Inline functions
@@ -58,13 +82,13 @@ _S("Kindness"), _S("Bison"), _S("Saline"), _S("Cholera"), _S("TyperShark")};
 // Given an X coordinate, returns the grid column it maps to
 inline int GetCol(float x)
 {
-	return (int) ((x - GRID_START_X) / GRID_PIX_SIZE);
+	return (int)((x - GRID_START_X) / GRID_PIX_SIZE);
 }
 
 // Given a Y coordinate, returns the grid row it maps to
 inline int GetRow(float y)
 {
-	return (int) ((y - GRID_START_Y) / GRID_PIX_SIZE);
+	return (int)((y - GRID_START_Y) / GRID_PIX_SIZE);
 }
 
 // Given a grid column, returns the X pixel of the left edge of it
@@ -99,8 +123,8 @@ inline bool YCoordInBounds(float y, bool vertical)
 {
 	int h = IMAGE_HUNGARR_HORIZ->GetHeight() / 2;
 
-	if ( (vertical && (y > GRID_START_Y + h) && (y < GRID_END_Y - h)) ||
-		(!vertical && (y > GRID_START_Y + 7) && (y < GRID_END_Y - 4)) )
+	if ((vertical && (y > GRID_START_Y + h) && (y < GRID_END_Y - h)) ||
+		(!vertical && (y > GRID_START_Y + 7) && (y < GRID_END_Y - 4)))
 		return true;
 
 	return false;
@@ -129,10 +153,10 @@ inline bool ValidRow(int row)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-Board::Board(GameApp* theApp)
+Board::Board(GameApp *theApp)
 {
 	mApp = theApp;
-	mHungarrIsVertical = true;	
+	mHungarrIsVertical = true;
 	mLineSpeed = 1.0f;
 
 	mNumPlanetsEaten = 0;
@@ -151,9 +175,9 @@ Board::Board(GameApp* theApp)
 
 	// Create a 2D array to hold the grid fill state that's of size
 	// GRID_WIDTH x GRID_HEIGHT
-	mGridState = new GridTile* [GRID_HEIGHT];
-	
-	//vc6 workaround:
+	mGridState = new GridTile *[GRID_HEIGHT];
+
+	// vc6 workaround:
 	int i;
 	for (i = 0; i < GRID_HEIGHT; i++)
 		mGridState[i] = new GridTile[GRID_WIDTH];
@@ -174,9 +198,18 @@ Board::Board(GameApp* theApp)
 		int r = Rand() % 3;
 		switch (r)
 		{
-			case 0: s.mSpeed = 0.5f; s.mColor = Color(200, 200, 200, 128); break;
-			case 1: s.mSpeed = 0.25f; s.mColor = Color(100, 100, 100, 128); break;
-			case 2: s.mSpeed = 0.1f; s.mColor = Color(50, 50, 50, 128); break;
+		case 0:
+			s.mSpeed = 0.5f;
+			s.mColor = Color(200, 200, 200, 128);
+			break;
+		case 1:
+			s.mSpeed = 0.25f;
+			s.mColor = Color(100, 100, 100, 128);
+			break;
+		case 2:
+			s.mSpeed = 0.1f;
+			s.mColor = Color(50, 50, 50, 128);
+			break;
 		}
 
 		mStarField[i] = s;
@@ -185,7 +218,6 @@ Board::Board(GameApp* theApp)
 	mLevelupEffect = new LevelupEffect();
 	mGameOverEffect = new GameOverEffect();
 	mOptionsBtn = NULL;
-
 
 	// The shorting out, electrical sound of the beams moving. We use a SoundInstance pointer
 	// because we want to loop the sound while the beam is moving, and stop it when done.
@@ -222,16 +254,15 @@ void Board::Update()
 
 	Widget::Update();
 
-
 	// HSL is an alternative to specifying an RGB color format.
 	// Using HSL lets us easily do the hyper blinking crazy weird
 	// flashing effect commonly found in old games, such as Robotron.
-	// Below, we increment the value by 6 per update. The &0xFF is an 
+	// Below, we increment the value by 6 per update. The &0xFF is an
 	// easy way to clamp the value between 0 and 255 instead of having to
 	// do a separate if (mHue > 255) mHue -= 255. This lets the value
 	// rollover and keep cycling.
 	if (--mFlashCount > 0)
-		mBorderHue = (mBorderHue + 6) % 0xFF;	
+		mBorderHue = (mBorderHue + 6) % 0xFF;
 
 	if (mGameOverEffect->IsActive())
 	{
@@ -242,7 +273,7 @@ void Board::Update()
 		// the level will appear underneath it.
 		if (mGameOverEffect->CanInitFirstLevel())
 		{
-			//Reset the critical variables:
+			// Reset the critical variables:
 			mBorderHue = 0;
 			mFlashCount = 0;
 			mLives = 3;
@@ -274,7 +305,7 @@ void Board::Update()
 		mBeamPulseVal = 0;
 		mBeamPulseAmt = -mBeamPulseAmt;
 	}
-	
+
 	MarkDirty();
 }
 
@@ -291,7 +322,7 @@ void Board::UpdateF(float theFrac)
 		float amt = mFillSpeed * theFrac;
 
 		if (mFillDirection == FILL_RIGHT)
-			FillRight(amt);		
+			FillRight(amt);
 		else if (mFillDirection == FILL_LEFT)
 			FillLeft(amt);
 		else if (mFillDirection == FILL_UP)
@@ -302,33 +333,31 @@ void Board::UpdateF(float theFrac)
 		// Check what % full the filled regions are if it's done filling
 		if (!mFilling)
 			UpdatePercentComplete();
-		
 	}
 
 	// Make the bonus text float upwards and fade it out over time.
-	std::vector<BonusText>::iterator it = mBonusText.begin(); 
-	while (it != mBonusText.end()) 
-	{ 
-		BonusText* bt = &*it; 
-		bt->mY -= 1.00f * theFrac; 
-		bt->mHue = (bt->mHue + 5) % 0xFF; 
+	std::vector<BonusText>::iterator it = mBonusText.begin();
+	while (it != mBonusText.end())
+	{
+		BonusText *bt = &*it;
+		bt->mY -= 1.00f * theFrac;
+		bt->mHue = (bt->mHue + 5) % 0xFF;
 
-		if (--bt->mAlpha <= 0) 
-		{ 
-			//Totally faded out, remove it 
-			it = mBonusText.erase(it); 
-		} 
+		if (--bt->mAlpha <= 0)
+		{
+			// Totally faded out, remove it
+			it = mBonusText.erase(it);
+		}
 		else
-			++it; 
-	} 
-
+			++it;
+	}
 
 	// Move the starfield. If a start gets beyond the screen,
 	// randomly place it offscreen again
 	int i;
 	for (i = 0; i < MAX_STARS; i++)
 	{
-		Star* s = &mStarField[i];
+		Star *s = &mStarField[i];
 		s->mX += s->mSpeed;
 		if (s->mX > mWidth)
 		{
@@ -339,7 +368,6 @@ void Board::UpdateF(float theFrac)
 
 	if ((!mMovingLine1.mDone || !mMovingLine2.mDone) && !mGameOverEffect->IsActive())
 		MoveLines(theFrac);
-
 
 	// If we're allowed to show the planets and the game isn't paused and the game
 	// over effect isn't playing, then we can move the planets around
@@ -356,7 +384,7 @@ void Board::UpdateF(float theFrac)
 		bool playSound = false;
 		for (int i = 0; i < mPlanets.size(); i++)
 		{
-			Planet* p = &mPlanets[i];
+			Planet *p = &mPlanets[i];
 
 			// Again, the timer is used solely for incrementing the animation frames
 			++p->mTimer;
@@ -364,7 +392,7 @@ void Board::UpdateF(float theFrac)
 			if (!p->mExploding)
 			{
 				if (MovePlanet(p, theFrac))
-					playSound = true;			// Returns true if the planet is to explode
+					playSound = true; // Returns true if the planet is to explode
 			}
 			else
 			{
@@ -387,7 +415,7 @@ void Board::UpdateF(float theFrac)
 	// their last frame, remove them.
 	for (i = 0; i < mParticles.size(); i++)
 	{
-		Particle* p = &mParticles[i];
+		Particle *p = &mParticles[i];
 		++p->mTimer;
 
 		p->mX += p->mVX * theFrac;
@@ -427,7 +455,7 @@ void Board::FillRight(float amt)
 	// Fill the entire line, moving rightward
 	for (int y = mFillRegion.mTop; y <= mFillRegion.mBottom; y++)
 	{
-		GridTile* gt = &mGridState[y][mFillRegion.mLeft];
+		GridTile *gt = &mGridState[y][mFillRegion.mLeft];
 
 		// We only want to fill those pieces that are in the GRID_FILLING state
 		if (gt->mFillState == GRID_FILLING)
@@ -444,19 +472,19 @@ void Board::FillRight(float amt)
 
 				gt->mFillRect.mWidth = GRID_PIX_SIZE;
 
-				//overflow into next column, if the next column is within our
-				//fill region and if the piece is in the normal tile state.
+				// overflow into next column, if the next column is within our
+				// fill region and if the piece is in the normal tile state.
 				if (mFillRegion.mLeft + 1 <= mFillRegion.mRight)
 					if (mGridState[y][mFillRegion.mLeft + 1].mFillState == GRID_NORMAL)
 						mGridState[y][mFillRegion.mLeft + 1].mFillRect.mWidth += overflow;
 			}
 			else
 				change = false;
-		}		
+		}
 	}
 
-	//if "change" is true, then move one column right and begin filling in that column next
-	//time this function is called. If there are no more columns to fill, we're done.
+	// if "change" is true, then move one column right and begin filling in that column next
+	// time this function is called. If there are no more columns to fill, we're done.
 
 	if (change && (++mFillRegion.mLeft > mFillRegion.mRight))
 		mFilling = false;
@@ -469,13 +497,13 @@ void Board::FillLeft(float amt)
 	float leftX = GetColPix(mFillRegion.mRight);
 	bool change = true;
 
-	//This algorithm works just like FillRight except that it's filling
-	//from the right side of the grid piece instead of the left, so there's
-	//a couple extra calculations.
+	// This algorithm works just like FillRight except that it's filling
+	// from the right side of the grid piece instead of the left, so there's
+	// a couple extra calculations.
 
 	for (int y = mFillRegion.mTop; y <= mFillRegion.mBottom; y++)
 	{
-		GridTile* gt = &mGridState[y][mFillRegion.mRight];
+		GridTile *gt = &mGridState[y][mFillRegion.mRight];
 
 		if (gt->mFillState == GRID_FILLING)
 		{
@@ -490,7 +518,7 @@ void Board::FillLeft(float amt)
 				gt->mFillRect.mWidth = GRID_PIX_SIZE;
 				gt->mFillRect.mX = leftX;
 
-				//overflow into next column
+				// overflow into next column
 				if (mFillRegion.mRight - 1 >= mFillRegion.mLeft)
 				{
 					if (mGridState[y][mFillRegion.mRight - 1].mFillState == GRID_NORMAL)
@@ -516,13 +544,13 @@ void Board::FillUp(float amt)
 	bool change = true;
 	float topY = GetRowPix(mFillRegion.mBottom);
 
-	//This algorithm works just like FillRight except that it's filling
-	//from the bottom side of the grid piece instead of the left, so there's
-	//a couple extra calculations.
+	// This algorithm works just like FillRight except that it's filling
+	// from the bottom side of the grid piece instead of the left, so there's
+	// a couple extra calculations.
 
 	for (int x = mFillRegion.mLeft; x <= mFillRegion.mRight; x++)
 	{
-		GridTile* gt = &mGridState[mFillRegion.mBottom][x];
+		GridTile *gt = &mGridState[mFillRegion.mBottom][x];
 
 		if (gt->mFillState == GRID_FILLING)
 		{
@@ -537,7 +565,7 @@ void Board::FillUp(float amt)
 				gt->mFillRect.mHeight = GRID_PIX_SIZE;
 				gt->mFillRect.mY = topY;
 
-				//overflow into next row
+				// overflow into next row
 				if (mFillRegion.mBottom - 1 > mFillRegion.mTop)
 				{
 					if (mGridState[mFillRegion.mBottom - 1][x].mFillState == GRID_NORMAL)
@@ -562,12 +590,12 @@ void Board::FillDown(float amt)
 {
 	bool change = true;
 
-	//This algorithm works just like FillRight except that it's filling
-	//from the top side of the grid piece instead of the left.
+	// This algorithm works just like FillRight except that it's filling
+	// from the top side of the grid piece instead of the left.
 
 	for (int x = mFillRegion.mLeft; x <= mFillRegion.mRight; x++)
 	{
-		GridTile* gt = &mGridState[mFillRegion.mTop][x];
+		GridTile *gt = &mGridState[mFillRegion.mTop][x];
 
 		if (gt->mFillState == GRID_FILLING)
 		{
@@ -580,7 +608,7 @@ void Board::FillDown(float amt)
 
 				gt->mFillRect.mHeight = GRID_PIX_SIZE;
 
-				//overflow into next row
+				// overflow into next row
 				if (mFillRegion.mTop + 1 <= mFillRegion.mBottom)
 					if (mGridState[mFillRegion.mTop + 1][x].mFillState == GRID_NORMAL)
 						mGridState[mFillRegion.mTop + 1][x].mFillRect.mHeight += overflow;
@@ -661,7 +689,7 @@ void Board::MoveLines(float theFrac)
 				++numDone;
 			}
 		}
-	}	
+	}
 
 	// While at least one of the lines is still moving, make a bunch of sparks shower off
 	// the edge of them. In non-3d mode, we'll only emit half the sparks to reduce the CPU time consumed.
@@ -679,19 +707,18 @@ void Board::MoveLines(float theFrac)
 		mFilling = true;
 
 		CalculateFillRegions();
-	}	
+	}
 
 	// Quit playing the electrical shorting out sound when both lines are broken or
 	// done or any combination of the two.
-	if ((mMovingLine1.mDone && mMovingLine2.mDone) ||
-		(mMovingLine1.mBroken && mMovingLine2.mDone) ||
+	if ((mMovingLine1.mDone && mMovingLine2.mDone) || (mMovingLine1.mBroken && mMovingLine2.mDone) ||
 		(mMovingLine2.mBroken && mMovingLine1.mDone))
 		mShortSound->Stop();
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::Draw(Graphics* g)
+void Board::Draw(Graphics *g)
 {
 	g->SetColor(Color::Black);
 	g->FillRect(0, 0, mWidth, mHeight);
@@ -701,10 +728,10 @@ void Board::Draw(Graphics* g)
 	// Draw less starts if not in 3D mode to reduce CPU usage, since they aren't a critical feature
 	for (int i = 0; i < MAX_STARS; i += incAmt)
 	{
-		Star* s = &mStarField[i];
+		Star *s = &mStarField[i];
 		g->SetColor(s->mColor);
 		g->FillRect(s->mX, s->mY, 1, 1);
-	}	
+	}
 
 	// We don't draw the other game elements under certain conditions, like
 	// if the level up and game over effects are in a few particular states.
@@ -719,10 +746,10 @@ void Board::Draw(Graphics* g)
 			DrawPlanets(g);
 
 		if (!mGameOverEffect->IsActive())
-			DrawMovingBeams(g);		
+			DrawMovingBeams(g);
 
-		DrawHungarr(g);	
-	}	
+		DrawHungarr(g);
+	}
 
 	if (mLevelupEffect->IsActive())
 		mLevelupEffect->Draw(g);
@@ -743,7 +770,7 @@ void Board::Draw(Graphics* g)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::DrawGrid(Graphics* g)
+void Board::DrawGrid(Graphics *g)
 {
 	// Draw an outline around the whole grid region. See LevelUpEffect.cpp or
 	// GameOverEffect.cpp for full details on using HSL instead of RGB for color and
@@ -758,7 +785,6 @@ void Board::DrawGrid(Graphics* g)
 	g->FillRect(0, GRID_START_Y - GRID_PIX_SIZE, mWidth, GRID_PIX_SIZE);
 	g->FillRect(GRID_END_X, GRID_START_Y, mWidth - GRID_END_X, mHeight - GRID_START_Y);
 	g->FillRect(GRID_START_X, GRID_END_Y, GRID_END_X - GRID_START_X, mHeight - GRID_END_Y);
-
 
 	// To make a weird pattern, a few of the grid pieces will be more brightly
 	// colored than the others, if they are in the normal state.
@@ -775,7 +801,7 @@ void Board::DrawGrid(Graphics* g)
 			{
 				// The grid piece is in the process of filling up. Draw a different colored rectangle for the
 				// filled in part, and then draw the rest normally.
-				FRect* fr = &mGridState[y][x].mFillRect;
+				FRect *fr = &mGridState[y][x].mFillRect;
 				Rect normalRect;
 
 				if (mFillDirection == FILL_RIGHT)
@@ -787,9 +813,8 @@ void Board::DrawGrid(Graphics* g)
 				else
 					normalRect = Rect(drawX, fr->mY + fr->mHeight, GRID_PIX_SIZE, GRID_PIX_SIZE - fr->mHeight + 1);
 
-
 				if ((normalRect.mWidth > 0) && (normalRect.mHeight > 0))
-				{					
+				{
 					g->SetColor(Color(255, 255, 0, startBright && (x % 2 == 0) ? 128 : 64));
 					g->FillRect(normalRect);
 					g->SetColor(Color(0, 0, 0));
@@ -802,8 +827,8 @@ void Board::DrawGrid(Graphics* g)
 			else if (state == GRID_NORMAL)
 			{
 				// Just draw the grid piece normally, with a black outline around it.
-				
-				g->SetColor(Color(255, 255, 0, startBright && (x % 3 == 0) ? 64 : 32));	
+
+				g->SetColor(Color(255, 255, 0, startBright && (x % 3 == 0) ? 64 : 32));
 				g->FillRect(drawX, drawY, GRID_PIX_SIZE, GRID_PIX_SIZE);
 				g->SetColor(Color(0, 0, 0));
 				g->DrawRect(drawX, drawY, GRID_PIX_SIZE, GRID_PIX_SIZE);
@@ -822,7 +847,7 @@ void Board::DrawGrid(Graphics* g)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::DrawUI(Graphics* g)
+void Board::DrawUI(Graphics *g)
 {
 	int ascent = FONT_HUNGARR->GetAscent();
 	int height = FONT_HUNGARR->GetHeight();
@@ -830,7 +855,7 @@ void Board::DrawUI(Graphics* g)
 	g->SetFont(FONT_HUNGARR);
 	PopWorkString s;
 	int rightX = FONT_HUNGARR->StringWidth(_S("POPULATION CONSUMED: ")) + 5;
-	
+
 	int strWidth;
 	s = _S("WORLDS DEVOURED: ");
 	strWidth = FONT_HUNGARR->StringWidth(s);
@@ -843,7 +868,7 @@ void Board::DrawUI(Graphics* g)
 	g->SetColor(Color(255, 255, 255, 128));
 	g->DrawString(s, 5, height * 2);
 	g->SetColor(Color(255, 0, 0, 200));
-	g->DrawString(CommaSeperate(mPopulationEaten), rightX - 5, height * 2);	
+	g->DrawString(CommaSeperate(mPopulationEaten), rightX - 5, height * 2);
 
 	s = _S("SCORE: ");
 	strWidth = FONT_HUNGARR->StringWidth(s);
@@ -851,8 +876,6 @@ void Board::DrawUI(Graphics* g)
 	g->DrawString(s, rightX - strWidth, height * 3);
 	g->SetColor(Color(255, 255, 0, 200));
 	g->DrawString(StrFormat(_S("%s"), CommaSeperate(mScore).c_str()), rightX - 5, height * 3);
-
-
 
 	int x = 380;
 	s = _S("SYSTEMS SUBJUGATED: ");
@@ -867,7 +890,7 @@ void Board::DrawUI(Graphics* g)
 	strWidth = FONT_HUNGARR->StringWidth(s);
 	g->DrawImage(IMAGE_HUNGARR_SMALL, strWidth + x, ascent);
 	g->SetColor(Color(255, 0, 0, 200));
-	g->DrawString(StrFormat(_S("x%d"), mLives), x + 10 + strWidth + IMAGE_HUNGARR_SMALL->GetWidth(), height * 2);	
+	g->DrawString(StrFormat(_S("x%d"), mLives), x + 10 + strWidth + IMAGE_HUNGARR_SMALL->GetWidth(), height * 2);
 
 	s = _S("LEVEL: ");
 	g->SetColor(Color(255, 255, 255, 128));
@@ -877,15 +900,15 @@ void Board::DrawUI(Graphics* g)
 
 	for (int i = 0; i < mBonusText.size(); i++)
 	{
-		BonusText* bt = &mBonusText[i];
-		g->SetColor( (mApp->HSLToRGB(bt->mHue, 255, 128) & 0xFFFFFF) | (bt->mAlpha << 24) );
+		BonusText *bt = &mBonusText[i];
+		g->SetColor((mApp->HSLToRGB(bt->mHue, 255, 128) & 0xFFFFFF) | (bt->mAlpha << 24));
 		g->DrawString(bt->mText, bt->mX, bt->mY);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::Beam1DrawHelper(Graphics* g)
+void Board::Beam1DrawHelper(Graphics *g)
 {
 	// In 3D mode we'll use the DrawImageF versions since they look nicer and
 	// perform anti-aliasing, and make floating point movement appear smoother.
@@ -900,13 +923,13 @@ void Board::Beam1DrawHelper(Graphics* g)
 	{
 		if (gAppBase->Is3DAccelerated())
 		{
-			g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mMovingLine1.mX - 8, mMovingLine1.mY, 
-				Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), mMovingLine1.mHeight));
+			g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mMovingLine1.mX - 8, mMovingLine1.mY,
+						  Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), mMovingLine1.mHeight));
 		}
 		else
 		{
-			g->DrawImage(IMAGE_HUNGARR_BEAM_UP, mMovingLine1.mX - 8, mMovingLine1.mY, 
-				Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), mMovingLine1.mHeight));
+			g->DrawImage(IMAGE_HUNGARR_BEAM_UP, mMovingLine1.mX - 8, mMovingLine1.mY,
+						 Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), mMovingLine1.mHeight));
 		}
 	}
 	else
@@ -914,19 +937,19 @@ void Board::Beam1DrawHelper(Graphics* g)
 		if (gAppBase->Is3DAccelerated())
 		{
 			g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mMovingLine1.mX, mMovingLine1.mY - 8,
-				Rect(0, 0, mMovingLine1.mWidth, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
+						  Rect(0, 0, mMovingLine1.mWidth, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
 		}
 		else
 		{
 			g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mMovingLine1.mX, mMovingLine1.mY - 8,
-				Rect(0, 0, mMovingLine1.mWidth, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
+						  Rect(0, 0, mMovingLine1.mWidth, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
 		}
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::Beam2DrawHelper(Graphics* g)
+void Board::Beam2DrawHelper(Graphics *g)
 {
 	// In 3D mode we'll use the DrawImageF versions since they look nicer and
 	// perform anti-aliasing, and make floating point movement appear smoother.
@@ -942,15 +965,15 @@ void Board::Beam2DrawHelper(Graphics* g)
 	{
 		if (gAppBase->Is3DAccelerated())
 		{
-			g->DrawImageF(IMAGE_HUNGARR_BEAM_DOWN, mMovingLine2.mX - 8, mMovingLine2.mY - 1, 
-				Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - mMovingLine2.mHeight, 
-				IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), mMovingLine2.mHeight));
+			g->DrawImageF(IMAGE_HUNGARR_BEAM_DOWN, mMovingLine2.mX - 8, mMovingLine2.mY - 1,
+						  Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - mMovingLine2.mHeight,
+							   IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), mMovingLine2.mHeight));
 		}
 		else
 		{
-			g->DrawImage(IMAGE_HUNGARR_BEAM_DOWN, mMovingLine2.mX - 8, mMovingLine2.mY - 1, 
-				Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - mMovingLine2.mHeight, 
-				IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), mMovingLine2.mHeight));
+			g->DrawImage(IMAGE_HUNGARR_BEAM_DOWN, mMovingLine2.mX - 8, mMovingLine2.mY - 1,
+						 Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - mMovingLine2.mHeight,
+							  IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), mMovingLine2.mHeight));
 		}
 	}
 	else
@@ -958,40 +981,39 @@ void Board::Beam2DrawHelper(Graphics* g)
 		if (gAppBase->Is3DAccelerated())
 		{
 			g->DrawImageF(IMAGE_HUNGARR_BEAM_RIGHT, mMovingLine2.mX - 1, mMovingLine2.mY - 8,
-				Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - mMovingLine2.mWidth, 0, 
-				mMovingLine2.mWidth, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
+						  Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - mMovingLine2.mWidth, 0, mMovingLine2.mWidth,
+							   IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
 		}
 		else
 		{
 			g->DrawImage(IMAGE_HUNGARR_BEAM_RIGHT, mMovingLine2.mX - 1, mMovingLine2.mY - 8,
-				Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - mMovingLine2.mWidth, 0, 
-				mMovingLine2.mWidth, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
+						 Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - mMovingLine2.mWidth, 0, mMovingLine2.mWidth,
+							  IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
 		}
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::DrawMovingBeams(Graphics* g)
-{		
+void Board::DrawMovingBeams(Graphics *g)
+{
 	// If the beams are moving, then draw them. Make them pulse too. You make a
 	// pulsing effect like we did in the previous demos: draw the image a second time on
 	// top of the original additively, and colorize the image, setting the RGB values to
 	// a different intensity. The result is an image that gets brighter and dimmer over time.
 	if (!mMovingLine1.mBroken && (!mMovingLine1.mDone || mFilling || !mMovingLine2.mDone))
-	{		
+	{
 		Beam1DrawHelper(g);
 
 		if (!mMovingLine1.mDone)
 		{
 			g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 			g->SetColorizeImages(true);
-			g->SetColor(Color(mBeamPulseVal, mBeamPulseVal, mBeamPulseVal));			
+			g->SetColor(Color(mBeamPulseVal, mBeamPulseVal, mBeamPulseVal));
 			Beam1DrawHelper(g);
 			g->SetColorizeImages(false);
 			g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 		}
-
 	}
 
 	if (!mMovingLine2.mDone || mFilling || !mMovingLine1.mDone)
@@ -1002,7 +1024,7 @@ void Board::DrawMovingBeams(Graphics* g)
 		{
 			g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 			g->SetColorizeImages(true);
-			g->SetColor(Color(mBeamPulseVal, mBeamPulseVal, mBeamPulseVal));			
+			g->SetColor(Color(mBeamPulseVal, mBeamPulseVal, mBeamPulseVal));
 			Beam2DrawHelper(g);
 			g->SetColorizeImages(false);
 			g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
@@ -1012,15 +1034,15 @@ void Board::DrawMovingBeams(Graphics* g)
 	g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 	for (int i = 0; i < mParticles.size(); i++)
 	{
-		Particle* p = &mParticles[i];		
-		g->DrawImageCel(IMAGE_PARTICLE_LIGHTNING, p->mX, p->mY, p->mFrame);		
+		Particle *p = &mParticles[i];
+		g->DrawImageCel(IMAGE_PARTICLE_LIGHTNING, p->mX, p->mY, p->mFrame);
 	}
 	g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::DrawPlanets(Graphics* g)
+void Board::DrawPlanets(Graphics *g)
 {
 	// If the user has 3d, we'll rotate the planets using the floating point
 	// smooth rotation function. If they don't, we'll avoid rotating at all to
@@ -1029,13 +1051,11 @@ void Board::DrawPlanets(Graphics* g)
 	int h = IMAGE_PLANETS->GetCelHeight();
 	for (int i = 0; i < mPlanets.size(); i++)
 	{
-		Planet* p = &mPlanets[i];		
+		Planet *p = &mPlanets[i];
 		if (p->mExploding)
 		{
-			g->DrawImageCel(IMAGE_BOMB_RADIAL_DEATH, 
-				p->mX - (IMAGE_BOMB_RADIAL_DEATH->GetCelWidth() / 2 + w / 2),
-				p->mY - (IMAGE_BOMB_RADIAL_DEATH->GetCelHeight() / 2 + h / 2),
-				p->mExplodeFrame);
+			g->DrawImageCel(IMAGE_BOMB_RADIAL_DEATH, p->mX - (IMAGE_BOMB_RADIAL_DEATH->GetCelWidth() / 2 + w / 2),
+							p->mY - (IMAGE_BOMB_RADIAL_DEATH->GetCelHeight() / 2 + h / 2), p->mExplodeFrame);
 		}
 		else
 		{
@@ -1051,7 +1071,7 @@ void Board::DrawPlanets(Graphics* g)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::DrawHungarrVertBeamsHelper(Graphics* g)
+void Board::DrawHungarrVertBeamsHelper(Graphics *g)
 {
 	// This draws the two little static beams that are always attached to
 	// Hun-garr's bitmap. If the user has hardware acceleration, we'll
@@ -1063,22 +1083,19 @@ void Board::DrawHungarrVertBeamsHelper(Graphics* g)
 
 	if (gAppBase->Is3DAccelerated())
 	{
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mLine1X, mLine1Y, 
-			Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), h));
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mLine1X, mLine1Y, Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), h));
 
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_DOWN, mLine2X, mLine2Y, 
-			Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - h, IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), h));
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_DOWN, mLine2X, mLine2Y,
+					  Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - h, IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), h));
 
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->SetColorizeImages(true);
 
 		g->SetColor(Color(255, 255, 255, mBeamPulseVal));
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mLine1X, mLine1Y, 
-			Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), h));
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_UP, mLine1X, mLine1Y, Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), h));
 
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_DOWN, mLine2X, mLine2Y, 
-			Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - h, IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), h));
-
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_DOWN, mLine2X, mLine2Y,
+					  Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - h, IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), h));
 
 		g->SetColorizeImages(false);
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
@@ -1086,18 +1103,17 @@ void Board::DrawHungarrVertBeamsHelper(Graphics* g)
 	else
 	{
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
-		g->DrawImage(IMAGE_HUNGARR_BEAM_UP, mLine1X, mLine1Y, 
-			Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), h));
+		g->DrawImage(IMAGE_HUNGARR_BEAM_UP, mLine1X, mLine1Y, Rect(0, 0, IMAGE_HUNGARR_BEAM_UP->GetWidth(), h));
 
-		g->DrawImage(IMAGE_HUNGARR_BEAM_DOWN, mLine2X, mLine2Y, 
-			Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - h, IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), h));
+		g->DrawImage(IMAGE_HUNGARR_BEAM_DOWN, mLine2X, mLine2Y,
+					 Rect(0, IMAGE_HUNGARR_BEAM_DOWN->GetHeight() - h, IMAGE_HUNGARR_BEAM_DOWN->GetWidth(), h));
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::DrawHungarrHorizBeamsHelper(Graphics* g)
+void Board::DrawHungarrHorizBeamsHelper(Graphics *g)
 {
 	// This draws the two little static beams that are always attached to
 	// Hun-garr's bitmap. If the user has hardware acceleration, we'll
@@ -1109,21 +1125,19 @@ void Board::DrawHungarrHorizBeamsHelper(Graphics* g)
 
 	if (gAppBase->Is3DAccelerated())
 	{
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mLine1X, mLine1Y, 
-			Rect(0, 0, w, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mLine1X, mLine1Y, Rect(0, 0, w, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
 
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_RIGHT, mLine2X, mLine2Y, 
-			Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - w, 0, w, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
-	
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_RIGHT, mLine2X, mLine2Y,
+					  Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - w, 0, w, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
+
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->SetColorizeImages(true);
 
 		g->SetColor(Color(255, 255, 255, mBeamPulseVal));
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mLine1X, mLine1Y, 
-			Rect(0, 0, w, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_LEFT, mLine1X, mLine1Y, Rect(0, 0, w, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
 
-		g->DrawImageF(IMAGE_HUNGARR_BEAM_RIGHT, mLine2X, mLine2Y, 
-			Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - w, 0, w, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
+		g->DrawImageF(IMAGE_HUNGARR_BEAM_RIGHT, mLine2X, mLine2Y,
+					  Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - w, 0, w, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
 
 		g->SetColorizeImages(false);
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
@@ -1132,11 +1146,10 @@ void Board::DrawHungarrHorizBeamsHelper(Graphics* g)
 	{
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 
-		g->DrawImage(IMAGE_HUNGARR_BEAM_LEFT, mLine1X, mLine1Y, 
-			Rect(0, 0, w, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
+		g->DrawImage(IMAGE_HUNGARR_BEAM_LEFT, mLine1X, mLine1Y, Rect(0, 0, w, IMAGE_HUNGARR_BEAM_LEFT->GetHeight()));
 
-		g->DrawImage(IMAGE_HUNGARR_BEAM_RIGHT, mLine2X, mLine2Y, 
-			Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - w, 0, w, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
+		g->DrawImage(IMAGE_HUNGARR_BEAM_RIGHT, mLine2X, mLine2Y,
+					 Rect(IMAGE_HUNGARR_BEAM_RIGHT->GetWidth() - w, 0, w, IMAGE_HUNGARR_BEAM_RIGHT->GetHeight()));
 
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 	}
@@ -1144,7 +1157,7 @@ void Board::DrawHungarrHorizBeamsHelper(Graphics* g)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::DrawHungarr(Graphics* g)
+void Board::DrawHungarr(Graphics *g)
 {
 	// again, we use the floating point functions instead of the integer ones
 	// if the user has a 3d card.
@@ -1152,7 +1165,7 @@ void Board::DrawHungarr(Graphics* g)
 	bool is3d = gAppBase->Is3DAccelerated();
 
 	if (mHungarrIsVertical)
-	{					
+	{
 		DrawHungarrVertBeamsHelper(g);
 
 		if (is3d)
@@ -1161,42 +1174,41 @@ void Board::DrawHungarr(Graphics* g)
 			g->DrawImage(IMAGE_HUNGARR_VERT, mHungarrX, mHungarrY);
 	}
 	else
-	{				
+	{
 		DrawHungarrHorizBeamsHelper(g);
 
 		if (is3d)
 			g->DrawImageF(IMAGE_HUNGARR_HORIZ, mHungarrX, mHungarrY);
 		else
 			g->DrawImage(IMAGE_HUNGARR_HORIZ, mHungarrX, mHungarrY);
-	}	
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddedToManager(WidgetManager* theWidgetManager)
-{	
+void Board::AddedToManager(WidgetManager *theWidgetManager)
+{
 	Widget::AddedToManager(theWidgetManager);
 
-
-	mOptionsBtn = new ButtonWidget(1, this);	
+	mOptionsBtn = new ButtonWidget(1, this);
 	mOptionsBtn->SetFont(FONT_DEFAULT);
 	mOptionsBtn->mLabel = _S("Options");
 	mOptionsBtn->SetColor(ButtonWidget::COLOR_LABEL, Color::White);
-	mOptionsBtn->SetColor(ButtonWidget::COLOR_LABEL_HILITE, Color::White);	
+	mOptionsBtn->SetColor(ButtonWidget::COLOR_LABEL_HILITE, Color::White);
 
 	mOptionsBtn->mOverImage = IMAGE_BUTTON_OVER;
 	mOptionsBtn->mDownImage = IMAGE_BUTTON_DOWN;
 	mOptionsBtn->mButtonImage = IMAGE_BUTTON_NORMAL;
 	mOptionsBtn->mDoFinger = true;
-	mOptionsBtn->Resize(gAppBase->mWidth - IMAGE_BUTTON_NORMAL->GetWidth() - 10, FONT_HUNGARR->GetHeight() * 3 - 20, 
-				IMAGE_BUTTON_NORMAL->GetWidth(), IMAGE_BUTTON_NORMAL->GetHeight());
+	mOptionsBtn->Resize(gAppBase->mWidth - IMAGE_BUTTON_NORMAL->GetWidth() - 10, FONT_HUNGARR->GetHeight() * 3 - 20,
+						IMAGE_BUTTON_NORMAL->GetWidth(), IMAGE_BUTTON_NORMAL->GetHeight());
 
 	theWidgetManager->AddWidget(mOptionsBtn);
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::RemovedFromManager(WidgetManager* theWidgetManager)
+void Board::RemovedFromManager(WidgetManager *theWidgetManager)
 {
 	Widget::RemovedFromManager(theWidgetManager);
 
@@ -1215,7 +1227,7 @@ void Board::ButtonDepress(int theId)
 
 		mApp->PlaySample(SOUND_BUTTON);
 		Pause(true);
-		OptionsDialog* od = new OptionsDialog(this);
+		OptionsDialog *od = new OptionsDialog(this);
 		od->Resize(mWidth / 2 - 200, mHeight / 2 - 175, 400, 350);
 		mApp->AddDialog(OptionsDialog::DIALOG_ID, od);
 	}
@@ -1238,7 +1250,7 @@ void Board::MouseDrag(int x, int y)
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 void Board::MouseDown(int x, int y, int theClickCount)
-{		
+{
 	// if the level up effect is displaying stats, or the game over effect is too,
 	// and the user clicked, then start the next phase
 	if (mLevelupEffect->ShowingStats())
@@ -1248,7 +1260,8 @@ void Board::MouseDown(int x, int y, int theClickCount)
 		mGameOverEffect->DoneViewingStats();
 
 	// ignore mouse clicks when paused or an effect is on screen and the user has no reason to click
-	if (mLevelupEffect->IsActive() || (mPauseLevel > 0) || (mGameOverEffect->IsActive() && !mGameOverEffect->CanStartNewGame()))
+	if (mLevelupEffect->IsActive() || (mPauseLevel > 0) ||
+		(mGameOverEffect->IsActive() && !mGameOverEffect->CanStartNewGame()))
 		return;
 
 	// On a right click, if the click was within the grid bounds, switch hungarr's orientation
@@ -1256,13 +1269,13 @@ void Board::MouseDown(int x, int y, int theClickCount)
 		mHungarrIsVertical = !mHungarrIsVertical;
 	else if ((theClickCount > 0) && mMovingLine1.mDone && mMovingLine2.mDone && !mFilling)
 	{
-		//left click, and there's no lines moving: drop two new lines 
+		// left click, and there's no lines moving: drop two new lines
 
 		// Make sure the user didn't click on a planet which would instantly kill them
 		FRect hungarrRect = FRect(mHungarrX, mHungarrY, IMAGE_HUNGARR_HORIZ->mWidth, IMAGE_HUNGARR_HORIZ->mHeight);
 		for (int i = 0; i < mPlanets.size(); i++)
 		{
-			Planet* p = &mPlanets[i];
+			Planet *p = &mPlanets[i];
 			FRect planetRect = FRect(p->mX, p->mY, IMAGE_PLANETS->GetCelWidth(), IMAGE_PLANETS->GetCelHeight());
 			if (planetRect.Intersects(hungarrRect))
 				return;
@@ -1278,11 +1291,11 @@ void Board::MouseDown(int x, int y, int theClickCount)
 		int midX = IMAGE_HUNGARR_HORIZ->GetWidth() / 2;
 		int midY = IMAGE_HUNGARR_HORIZ->GetHeight() / 2;
 
-		//Align the XYs of the lines to the grid, and set the target coordinates to the
-		//closest normal state tile.
+		// Align the XYs of the lines to the grid, and set the target coordinates to the
+		// closest normal state tile.
 		if (mHungarrIsVertical)
 		{
-			mMovingLine1.mIsVertical = mMovingLine2.mIsVertical = true;			
+			mMovingLine1.mIsVertical = mMovingLine2.mIsVertical = true;
 			mMovingLine1.mX = mMovingLine2.mX = GetAlignedX(mHungarrX + midX);
 			mMovingLine1.mY = mMovingLine2.mY = GetAlignedY(mHungarrY + midY);
 			mMovingLine1.mHeight = 1;
@@ -1294,7 +1307,7 @@ void Board::MouseDown(int x, int y, int theClickCount)
 			// Make sure the target coords end at a tile that's normal. If not, keep moving them
 			int row = GetRow(mMovingLine1.mTargetY);
 			int col = GetCol(mMovingLine1.mTargetX);
-			
+
 			// Tile immediately below is not valid
 			if (mGridState[row][col].mFillState != GRID_NORMAL)
 				return;
@@ -1350,24 +1363,21 @@ void Board::MouseDown(int x, int y, int theClickCount)
 			// on an invalid tile
 			mMovingLine1.mTargetX += GRID_PIX_SIZE;
 
-
 			row = GetRow(mMovingLine2.mTargetY);
 			col = GetCol(mMovingLine2.mTargetX);
-			
+
 			while ((col < GRID_WIDTH) && (mGridState[row][col].mFillState == GRID_NORMAL))
 			{
 				mMovingLine2.mTargetX += GRID_PIX_SIZE;
 				++col;
 			}
 
-			
 			if (mMovingLine1.mTargetX > mMovingLine2.mTargetX)
 				mMovingLine1.mDone = mMovingLine2.mDone = true;
 		}
 	}
 
 	UpdateHungarrPosition(x, y);
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1380,9 +1390,9 @@ void Board::UpdateHungarrPosition(int x, int y)
 	int midY = IMAGE_HUNGARR_HORIZ->GetHeight() / 2;
 
 	if (YCoordInBounds(y, mHungarrIsVertical))
-	{		
+	{
 		mHungarrY = y - midY;
-		mLine1Y = mHungarrY + (!mHungarrIsVertical ? 7 : -12);		
+		mLine1Y = mHungarrY + (!mHungarrIsVertical ? 7 : -12);
 		mLine2Y = mHungarrY + (!mHungarrIsVertical ? 7 : 35);
 	}
 
@@ -1391,7 +1401,7 @@ void Board::UpdateHungarrPosition(int x, int y)
 		mHungarrX = x - midX;
 		mLine1X = mHungarrX + (!mHungarrIsVertical ? -13 : 8);
 		mLine2X = mHungarrX + (!mHungarrIsVertical ? 36 : 9);
-	}	
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1409,15 +1419,13 @@ void Board::CalculateFillRegions(void)
 	// 3. If either of the lines were broken, we instead just fill in the single
 	//	line made by the non-broken line (the code won't execute if both are broken)
 
-
 	if (mMovingLine1.mIsVertical)
 	{
 		topRow = GetRow(mMovingLine1.mTargetY);
 		int col1 = GetCol(mMovingLine1.mTargetX);
 		botRow = GetRow(mMovingLine2.mTargetY);
 
-		if ((mMovingLine1.mBroken && !mMovingLine2.mBroken) || 
-			(!mMovingLine1.mBroken && mMovingLine2.mBroken))
+		if ((mMovingLine1.mBroken && !mMovingLine2.mBroken) || (!mMovingLine1.mBroken && mMovingLine2.mBroken))
 		{
 			leftCol = col1;
 			rightCol = col1 + 1;
@@ -1435,7 +1443,7 @@ void Board::CalculateFillRegions(void)
 			{
 				leftCol = col1;
 				rightCol = rightEdge + 1;
-				mFillDirection = FILL_RIGHT;			
+				mFillDirection = FILL_RIGHT;
 			}
 			else
 			{
@@ -1444,7 +1452,6 @@ void Board::CalculateFillRegions(void)
 				mFillDirection = FILL_LEFT;
 			}
 		}
-
 	}
 	else
 	{
@@ -1452,8 +1459,7 @@ void Board::CalculateFillRegions(void)
 		rightCol = GetCol(mMovingLine2.mTargetX);
 		int row1 = GetRow(mMovingLine1.mTargetY);
 
-		if ((mMovingLine1.mBroken && !mMovingLine2.mBroken) || 
-			(!mMovingLine1.mBroken && mMovingLine2.mBroken))
+		if ((mMovingLine1.mBroken && !mMovingLine2.mBroken) || (!mMovingLine1.mBroken && mMovingLine2.mBroken))
 		{
 			leftCol = mMovingLine1.mBroken ? GetCol(mMovingLine2.mX) : leftCol;
 			rightCol = mMovingLine1.mBroken ? rightCol : GetCol(mMovingLine2.mX);
@@ -1480,12 +1486,11 @@ void Board::CalculateFillRegions(void)
 				mFillDirection = FILL_UP;
 			}
 		}
+	}
 
-	}	
-
-	//Make a rectangular fill region: every block in it will eventually be filled.
-	// Then, for all grid pieces in that region, if they are in the normal state,
-	// set them to the filling state and initialize their mFillRect's
+	// Make a rectangular fill region: every block in it will eventually be filled.
+	//  Then, for all grid pieces in that region, if they are in the normal state,
+	//  set them to the filling state and initialize their mFillRect's
 	mFillRegion.mLeft = leftCol;
 	mFillRegion.mRight = rightCol - 1;
 	mFillRegion.mTop = topRow;
@@ -1501,25 +1506,21 @@ void Board::CalculateFillRegions(void)
 
 				switch (mFillDirection)
 				{
-					case FILL_RIGHT: 
-						mGridState[y][x].mFillRect = 
-							FRect(GetColPix(x), GetRowPix(y), 0, GRID_PIX_SIZE); 
-						break;
+				case FILL_RIGHT:
+					mGridState[y][x].mFillRect = FRect(GetColPix(x), GetRowPix(y), 0, GRID_PIX_SIZE);
+					break;
 
-					case FILL_LEFT:
-						mGridState[y][x].mFillRect = 
-							FRect(GetColPix(x + 1), GetRowPix(y), 0, GRID_PIX_SIZE); 
-						break;
+				case FILL_LEFT:
+					mGridState[y][x].mFillRect = FRect(GetColPix(x + 1), GetRowPix(y), 0, GRID_PIX_SIZE);
+					break;
 
-					case FILL_UP:
-						mGridState[y][x].mFillRect = 
-							FRect(GetColPix(x), GetRowPix(y + 1), GRID_PIX_SIZE, 0); 
-						break;
+				case FILL_UP:
+					mGridState[y][x].mFillRect = FRect(GetColPix(x), GetRowPix(y + 1), GRID_PIX_SIZE, 0);
+					break;
 
-					case FILL_DOWN:
-						mGridState[y][x].mFillRect = 
-							FRect(GetColPix(x), GetRowPix(y), GRID_PIX_SIZE, 0); 
-						break;
+				case FILL_DOWN:
+					mGridState[y][x].mFillRect = FRect(GetColPix(x), GetRowPix(y), GRID_PIX_SIZE, 0);
+					break;
 				}
 			}
 		}
@@ -1528,16 +1529,15 @@ void Board::CalculateFillRegions(void)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::FillRectF(Graphics* g, FRect fr)
+void Board::FillRectF(Graphics *g, FRect fr)
 {
 	Rect r = Rect((int)fr.mX, (int)fr.mY, (int)fr.mWidth, (int)fr.mHeight);
 	g->FillRect(r);
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::GetVerticalFillValues(int startCol, int topRow, int botRow, int dir, int* edge)
+void Board::GetVerticalFillValues(int startCol, int topRow, int botRow, int dir, int *edge)
 {
 	// If dir == -1, left, if 1, right
 	// See function header for algorithm description
@@ -1556,11 +1556,10 @@ void Board::GetVerticalFillValues(int startCol, int topRow, int botRow, int dir,
 				break;
 			}
 		}
-		
+
 		if (!found)
-		{			
-			if ( ((dir > 0) && (++col >= GRID_WIDTH)) ||
-				((dir < 0) && (--col < 0)) )
+		{
+			if (((dir > 0) && (++col >= GRID_WIDTH)) || ((dir < 0) && (--col < 0)))
 			{
 				done = true;
 				*edge = col + (dir > 0 ? -1 : 1);
@@ -1571,13 +1570,12 @@ void Board::GetVerticalFillValues(int startCol, int topRow, int botRow, int dir,
 			*edge = col;
 			done = true;
 		}
-
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::GetHorizontalFillValues(int startRow, int leftCol, int rightCol, int dir, int* edge)
+void Board::GetHorizontalFillValues(int startRow, int leftCol, int rightCol, int dir, int *edge)
 {
 	// If dir == -1, up, if 1, down
 	// See function header for algorithm description
@@ -1600,8 +1598,7 @@ void Board::GetHorizontalFillValues(int startRow, int leftCol, int rightCol, int
 
 		if (!found)
 		{
-			if ( ((dir > 0) && (++row >= GRID_HEIGHT)) ||
-				((dir < 0) && (--row < 0)) )
+			if (((dir > 0) && (++row >= GRID_HEIGHT)) || ((dir < 0) && (--row < 0)))
 			{
 				done = true;
 				*edge = row + (dir > 0 ? -1 : 1);
@@ -1679,7 +1676,7 @@ void Board::InitLevel(int level)
 		// All angle manipulation is in radians.
 		p.mRotationAngle = (Rand() % 360) * M_PI / 180.0f;
 		p.mRotateSpeed = (float)(Rand() % 100) / 1000.0f;
-		
+
 		// Choose a random image. There's 11 images, each is just 1 frame.
 		p.mImgCol = Rand() % IMAGE_PLANETS->mNumCols;
 
@@ -1689,7 +1686,7 @@ void Board::InitLevel(int level)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-bool Board::MovePlanet(Planet* p, float theFrac)
+bool Board::MovePlanet(Planet *p, float theFrac)
 {
 	// This is a pretty simple collision detection routine and is good enough for this
 	// game. It's also a lot easier to understand than other more accurate but more
@@ -1710,7 +1707,7 @@ bool Board::MovePlanet(Planet* p, float theFrac)
 
 	// If moving right, we'll check the grid piece right of the
 	// planet to see if we hit it. Otherwise, we'll just use the grid piece that maps to
-	// where the new X coordinate is:	
+	// where the new X coordinate is:
 	float checkx = p->mVX > 0 ? newx + GRID_PIX_SIZE : newx;
 	int col = GetCol(checkx);
 
@@ -1722,14 +1719,14 @@ bool Board::MovePlanet(Planet* p, float theFrac)
 	{
 		int state1 = mGridState[row][col].mFillState;
 		int state2 = mGridState[nextrow][col].mFillState;
-		
+
 		if ((state1 == GRID_NORMAL) && (state2 == GRID_NORMAL) && (newx > GRID_START_X))
-			p->mX = newx;	// valid grid space
+			p->mX = newx; // valid grid space
 		else if (((state1 == GRID_FILLING) || (state2 == GRID_FILLING)) && (newx > GRID_START_X))
 		{
 			// planet entered a grid space that is in the process of being filled, so make it explode
 			p->mExploding = true;
-			GivePlanetBonus(p);			
+			GivePlanetBonus(p);
 			return true;
 		}
 		else
@@ -1746,13 +1743,12 @@ bool Board::MovePlanet(Planet* p, float theFrac)
 		playSample = true;
 		p->mVX = -p->mVX;
 	}
-	
 
 	// Now for the Y direction. The principal is the same as above.
 	int checky = p->mVY > 0 ? newy + GRID_PIX_SIZE : newy;
 	row = GetRow(checky);
 	col = GetCol(p->mX);
-	int nextcol = ValidCol(col + 1) ? col + 1 : col;	
+	int nextcol = ValidCol(col + 1) ? col + 1 : col;
 
 	if (ValidCol(col) && ValidRow(row))
 	{
@@ -1790,7 +1786,7 @@ bool Board::MovePlanet(Planet* p, float theFrac)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::CheckPlanetBeamCollision(Planet* p)
+void Board::CheckPlanetBeamCollision(Planet *p)
 {
 	// We're just going to do a rectangular collision check on each of the beams
 	// and the given planet. Because the visible "beam" part of the image is smaller
@@ -1876,11 +1872,10 @@ void Board::CheckPlanetBeamCollision(Planet* p)
 		}
 	}
 
-	if ((mMovingLine1.mDone && mMovingLine2.mDone) ||
-		(mMovingLine1.mBroken && mMovingLine2.mDone) ||
+	if ((mMovingLine1.mDone && mMovingLine2.mDone) || (mMovingLine1.mBroken && mMovingLine2.mDone) ||
 		(mMovingLine2.mBroken && mMovingLine1.mDone))
 		mShortSound->Stop();
-}	
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -1917,7 +1912,7 @@ void Board::KeyChar(PopWorkChar theChar)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::GivePlanetBonus(Planet* p)
+void Board::GivePlanetBonus(Planet *p)
 {
 	mTotalPopulationEaten += p->mPopulation;
 	mPopulationEaten += p->mPopulation;
@@ -1926,7 +1921,7 @@ void Board::GivePlanetBonus(Planet* p)
 		mLineSpeed = MAX_BEAM_SPEED;
 
 	++mNumPlanetsEaten;
-	
+
 	PopWorkString pName = PLANET_NAME[p->mNameIdx];
 	PopWorkString pExport = PLANET_EXPORTS[p->mExportIdx];
 	int points = mLevel * 1000;
@@ -1965,7 +1960,7 @@ void Board::UpdatePercentComplete(void)
 			if (mGridState[y][x].mFillState == GRID_FILLED)
 				++actual;
 
-	int newAmount = (int) (((float)actual / (float)total) * 100.0f);
+	int newAmount = (int)(((float)actual / (float)total) * 100.0f);
 
 	int pctCleared = newAmount - mPercentComplete;
 
@@ -2008,8 +2003,8 @@ void Board::UpdatePercentComplete(void)
 //////////////////////////////////////////////////////////////////////////
 void Board::AddBonusText(PopWorkString t)
 {
-	AddBonusText(t, mWidth / 2 - FONT_HUNGARR->StringWidth(t) / 2, 
-				    (mHeight - GRID_START_Y) / 2 - FONT_HUNGARR->GetHeight() / 2);
+	AddBonusText(t, mWidth / 2 - FONT_HUNGARR->StringWidth(t) / 2,
+				 (mHeight - GRID_START_Y) / 2 - FONT_HUNGARR->GetHeight() / 2);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -2024,11 +2019,10 @@ void Board::AddBonusText(PopWorkString t, float x, float y)
 	mBonusText.push_back(bt);
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 void Board::LostLife(void)
-{	
+{
 
 	if (--mLives <= 0)
 	{
@@ -2041,7 +2035,7 @@ void Board::LostLife(void)
 		es.mNumPlanetsEaten = mNumPlanetsEaten;
 		es.mPopulationConsumed = mTotalPopulationEaten;
 		es.mScore = mScore;
-		
+
 		// Find which planet and export were consumed the most:
 		int idx = -1;
 		int count = 0;
@@ -2099,8 +2093,8 @@ void Board::EmitSparks(void)
 {
 	// This basically emits sparks between various angles, depending on
 	// the orientation of the line. The angle values I had to play around with
-	// until I found ones that I liked, and there's no magic secret formula for 
-	// coming up with them, unless you just know how to guess well. Again, 
+	// until I found ones that I liked, and there's no magic secret formula for
+	// coming up with them, unless you just know how to guess well. Again,
 	// the Rand() function is easier dealt with using degrees, so we convert them
 	// to radians after choosing an angle. Then, using some basic math, we compute
 	// the separate XY velocities for the projectiles. In some cases, projectiles use
@@ -2112,13 +2106,13 @@ void Board::EmitSparks(void)
 		if (mMovingLine1.mIsVertical)
 		{
 			// between 90 and 180 degrees for left side emission
-			float angle = (90 + (Rand() % 90)) * M_PI / 180.0f;	
+			float angle = (90 + (Rand() % 90)) * M_PI / 180.0f;
 			float vx = cosf(angle) * 2.0f;
 			float vy = -sinf(angle) * 2.0f;
 			mParticles.push_back(Particle(mMovingLine1.mX + 5, mMovingLine1.mY + 8, vx, vy));
 
 			// between 0 and 90 degrees for right side emission
-			angle = (Rand() % 90) * M_PI / 180.0f;	
+			angle = (Rand() % 90) * M_PI / 180.0f;
 			vx = cosf(angle) * 2.0f;
 			vy = -sinf(angle) * 2.0f;
 			mParticles.push_back(Particle(mMovingLine1.mX + 5, mMovingLine1.mY + 8, vx, vy));
@@ -2126,17 +2120,17 @@ void Board::EmitSparks(void)
 		else
 		{
 			// between 280 and 320 degrees for bottom side emission
-			float angle = (280 + (Rand() % 40)) * M_PI / 180.0f;	
+			float angle = (280 + (Rand() % 40)) * M_PI / 180.0f;
 			float vx = cosf(angle) * 4.0f;
 			float vy = -sinf(angle) * 2.0f;
 			mParticles.push_back(Particle(mMovingLine1.mX + 5, mMovingLine1.mY + 8, vx, vy));
 
 			// between 50 and 90 degrees for top side emission
-			angle = (50 + (Rand() % 40)) * M_PI / 180.0f;	
+			angle = (50 + (Rand() % 40)) * M_PI / 180.0f;
 			vx = cosf(angle) * 4.0f;
 			vy = -sinf(angle) * 3.0f;
 			mParticles.push_back(Particle(mMovingLine1.mX + 5, mMovingLine1.mY + 8, vx, vy));
-		}		
+		}
 	}
 
 	if (!mMovingLine2.mDone && !mMovingLine2.mBroken)
@@ -2144,13 +2138,13 @@ void Board::EmitSparks(void)
 		if (mMovingLine2.mIsVertical)
 		{
 			// between 50 and 90 degrees for left side emission
-			float angle = (50 + (Rand() % 40)) * M_PI / 180.0f;	
+			float angle = (50 + (Rand() % 40)) * M_PI / 180.0f;
 			float vx = cosf(angle) * 3.0f;
 			float vy = -sinf(angle) * 4.0f;
 			mParticles.push_back(Particle(mMovingLine2.mX + 1, mMovingLine2.mY + mMovingLine2.mHeight - 17, vx, vy));
 
 			// between 120 and 160 degrees for right side emission
-			angle = (120 + (Rand() % 40)) * M_PI / 180.0f;	
+			angle = (120 + (Rand() % 40)) * M_PI / 180.0f;
 			vx = cosf(angle) * 2.0f;
 			vy = -sinf(angle) * 4.0f;
 			mParticles.push_back(Particle(mMovingLine2.mX + 1, mMovingLine2.mY + mMovingLine2.mHeight - 17, vx, vy));
@@ -2158,17 +2152,17 @@ void Board::EmitSparks(void)
 		else
 		{
 			// between 90 and 140 degrees for top side emission
-			float angle = (90 + (Rand() % 50)) * M_PI / 180.0f;	
+			float angle = (90 + (Rand() % 50)) * M_PI / 180.0f;
 			float vx = cosf(angle) * 4.0f;
 			float vy = -sinf(angle) * 3.0f;
 			mParticles.push_back(Particle(mMovingLine2.mX + mMovingLine2.mWidth - 20, mMovingLine2.mY + 2, vx, vy));
 
 			// between 220 and 260 degrees for bottom side emission
-			angle = (220 + (Rand() % 40)) * M_PI / 180.0f;	
+			angle = (220 + (Rand() % 40)) * M_PI / 180.0f;
 			vx = cosf(angle) * 4.0f;
 			vy = -sinf(angle) * 4.0f;
 			mParticles.push_back(Particle(mMovingLine2.mX + mMovingLine2.mWidth - 20, mMovingLine2.mY + 2, vx, vy));
-		}		
+		}
 	}
 }
 
@@ -2185,4 +2179,3 @@ void Board::OptionsDialogDone()
 	// Give focus back to the board so that it processes keyboard input
 	mApp->mWidgetManager->SetFocus(this);
 }
-							  

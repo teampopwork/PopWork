@@ -8,7 +8,6 @@
 // having to prefix everything with PopWork::
 using namespace PopWork;
 
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 GameApp::GameApp()
@@ -23,7 +22,7 @@ GameApp::GameApp()
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
-	// and written to. This is stored under the HKEY_CURRENT_USER tree on 
+	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
 	mRegKey = "PopCap\\PopWork\\Demo1";
 
@@ -98,7 +97,7 @@ void GameApp::LoadingThreadCompleted()
 
 	// This is a very important step: Because the Board class is a widget
 	// (see Board.h/.cpp for more details) we need to tell it what
-	// dimensions it has and where to place it. 
+	// dimensions it has and where to place it.
 	// By default a widget is invisible because its
 	// width/height are 0, 0. Since the Board class is our main
 	// drawing area and game logic class, we want to make it the

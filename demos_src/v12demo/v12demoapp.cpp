@@ -19,10 +19,10 @@ V12DemoApp::V12DemoApp()
 	mNoSoundNeeded = true;
 	mBoard = NULL;
 
-	// Important: You now need to make this call to enable 
+	// Important: You now need to make this call to enable
 	// DrawImageTransform and DrawImageMatrix to work!
 	// This requirement was added so that people who don't use these functions
-	// can avoid the extra code required to support the functions 
+	// can avoid the extra code required to support the functions
 	// (about 400K in exe size, 150K zipped).
 	SWTri_AddAllDrawTriFuncs();
 }
@@ -107,7 +107,7 @@ void V12DemoApp::GotFocus()
 void V12DemoApp::DialogButtonDepress(int dialog_id, int button_id)
 {
 	// See how easy it is now? We only create a dialog with 1 ID in this
-	// demo: ID of 100. 
+	// demo: ID of 100.
 	// See, all we have to do is check if the dialog id is of the dialog
 	// we're interested in, and if the button id is of the button that
 	// we want to act on.

@@ -15,7 +15,7 @@ using namespace PopWork;
 //////////////////////////////////////////////////////////////////////////
 TitleScreen::TitleScreen(GameApp *pApp)
 {
-	mApp = pApp;		
+	mApp = pApp;
 	mContinueLink = NULL;
 }
 
@@ -42,20 +42,16 @@ void TitleScreen::Init(void)
 //////////////////////////////////////////////////////////////////////////
 void TitleScreen::AddedToManager(WidgetManager *theWidgetManager)
 {
-	Widget::AddedToManager(theWidgetManager);	
+	Widget::AddedToManager(theWidgetManager);
 	mContinueLink->SetVisible(false);
 	mContinueLink->SetDisabled(true);
 
 	int labelWidth = FONT_DEFAULT->StringWidth(mContinueLink->mLabel);
 	int labelHeight = FONT_DEFAULT->GetHeight();
-	mContinueLink->Resize(	mWidth / 2 - labelWidth / 2, 
-							mHeight - labelHeight - 40,
-							labelWidth,
-							labelHeight+4);
+	mContinueLink->Resize(mWidth / 2 - labelWidth / 2, mHeight - labelHeight - 40, labelWidth, labelHeight + 4);
 
 	mContinueLink->mDoFinger = true;
 	theWidgetManager->AddWidget(mContinueLink);
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -72,7 +68,6 @@ void TitleScreen::Draw(Graphics *g)
 {
 	g->SetColor(Color::Black);
 	g->FillRect(0, 0, mWidth, mHeight);
-
 
 	// We want to draw our loader bar to indicate the progress made in
 	// loading all our resources. As you recalll, GameApp::LoadingThreadProc is
@@ -91,16 +86,15 @@ void TitleScreen::Draw(Graphics *g)
 		// the loader bar, but we only want to draw "drawWidth" wide. This will
 		// give the illusion that the progress bar is expanding as the resources
 		// are loaded in.
-		g->DrawImage(IMAGE_LOADER_BAR, mWidth / 2 - loaderBarWidth / 2, 
-					 400, 
-					Rect(0, 0, drawWidth, IMAGE_LOADER_BAR->GetHeight()));
+		g->DrawImage(IMAGE_LOADER_BAR, mWidth / 2 - loaderBarWidth / 2, 400,
+					 Rect(0, 0, drawWidth, IMAGE_LOADER_BAR->GetHeight()));
 	}
 
 	// If our hyperlink widget is false, let's instead draw some
 	// "Loading" text (er, actually in this case it's an image) where
 	// it is located.
 	if (mContinueLink->mVisible == false)
-		g->DrawImage(IMAGE_LOADER_LOADINGTXT, mContinueLink->mX - 10, mContinueLink->mY - 80);	
+		g->DrawImage(IMAGE_LOADER_LOADINGTXT, mContinueLink->mX - 10, mContinueLink->mY - 80);
 
 	g->DrawImage(IMAGE_HUNGARR_LOGO, mWidth / 2 - IMAGE_HUNGARR_LOGO->mWidth / 2, 100);
 	g->SetColor(Color::White);
@@ -128,7 +122,7 @@ void TitleScreen::ButtonDepress(int theId)
 	{
 		// Our hyperlink widget was pressed. We want to remove ourselves
 		// and the hyperlink widget, and tell the app to display the
-		// main board and get the game started. 
+		// main board and get the game started.
 		// You might be thinking, "If I delete the title screen and
 		// hyperlink, won't I crash the program?" Yes, you will. That's
 		// why we aren't going to delete them using "delete". We're going

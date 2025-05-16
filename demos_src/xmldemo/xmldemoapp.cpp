@@ -25,7 +25,6 @@ XMLDemoApp::~XMLDemoApp()
 	delete mBoard;
 	delete mParser;
 	mResourceManager->DeleteResources("");
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -75,8 +74,8 @@ void XMLDemoApp::InitHook()
 
 		// The parser will set an error string in the event that a problem occurred.
 		// You get this string via a call to GetErrorText().
-		MsgBox(StrFormat("Couldn't open properties/demo.xml. Error returned:\n\"%s\"", 
-							mParser->GetErrorText().c_str()), "Error");
+		MsgBox(StrFormat("Couldn't open properties/demo.xml. Error returned:\n\"%s\"", mParser->GetErrorText().c_str()),
+			   "Error");
 		return;
 	}
 
@@ -97,7 +96,7 @@ bool XMLDemoApp::ExtractXMLData()
 	// whether it's a comment, start of a tag, end of a tag, what its
 	// attributes/values are, etc.
 	XMLElement e;
-		
+
 	// We loop until there are no more elements left to process. NextElement
 	// returns false when done.
 	while (mParser->NextElement(&e))
@@ -114,9 +113,9 @@ bool XMLDemoApp::ExtractXMLData()
 		// TYPE_END with a matching mValue. For our current demo, we actually
 		// don't care about the end of a tag.
 		if (e.mType == XMLElement::TYPE_START)
-		{	
+		{
 			// The type stays as TYPE_START until another item type appears, such as the
-			// end of a section/item, TYPE_ELEMENT is found (see a few paragraphs below), 
+			// end of a section/item, TYPE_ELEMENT is found (see a few paragraphs below),
 			// a comment is found, etc.
 			// In the meantime, the mSection field contains the full name of the current
 			// section.
@@ -133,7 +132,7 @@ bool XMLDemoApp::ExtractXMLData()
 					// that is, assuming you didn't change the contents of that file.
 					// As you can see, "Item1" is in the mValue field, and "text" is
 					// the key in our mAttributes map, with "Some text for Section1/Item1" as its value.
-					mSection1.mItem1Text = e.mAttributes[_S("text")];	
+					mSection1.mItem1Text = e.mAttributes[_S("text")];
 				}
 				else if (e.mValue == _S("BoolParam"))
 				{
@@ -156,8 +155,8 @@ bool XMLDemoApp::ExtractXMLData()
 				else if (e.mValue == _S("MultiAttrib"))
 				{
 					// If you check out the demo.xml file, you'll see an entry declared like this:
-					// 
-					// <MultiAttrib 
+					//
+					// <MultiAttrib
 					// 	 attrib1="attrib1"
 					//	 attrib2="2"
 					//	 attrib3="woo! attrib3!"
@@ -170,7 +169,6 @@ bool XMLDemoApp::ExtractXMLData()
 					mSection2.mMultiAttrib2 = e.mAttributes[_S("attrib2")];
 					mSection2.mMultiAttrib3 = e.mAttributes[_S("attrib3")];
 				}
-
 			}
 			else if (e.mValue == _S("Section2"))
 			{
@@ -179,14 +177,13 @@ bool XMLDemoApp::ExtractXMLData()
 				// if it doesn't also end on the same line (which in this case it doesn't, we get
 				// the </Section2> a few lines later) then mSection isn't updated and instead, the
 				// section name is stored in mValue. In this case, you'll see that mSection is "".
-				// That's because whitespace is ignored, so it's possible that this isn't a section 
+				// That's because whitespace is ignored, so it's possible that this isn't a section
 				// and is perhaps just an item like the <MultiAttrib example above, split across several lines.
 				// Since when a line is read in, if it contains any attributes they too are read in,
 				// this is a good time to extract out the "s2attrib" attribute and record it in our mSection2
-				// structure. 
+				// structure.
 				mSection2.mSectionAttribText = e.mAttributes[_S("s2attrib")];
 			}
-
 		}
 		else if (e.mType == XMLElement::TYPE_ELEMENT)
 		{

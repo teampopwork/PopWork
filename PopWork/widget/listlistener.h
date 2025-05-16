@@ -4,17 +4,23 @@
 #pragma once
 #endif
 
-namespace PopWork 
+namespace PopWork
 {
 
-class ListListener 
+class ListListener
 {
-public:
-	virtual void ListClicked(int theId, int theIdx, int theClickCount) {}
-	virtual void ListClosed(int theId) {}
-	virtual void ListHiliteChanged(int theId, int theOldIdx, int theNewIdx) {}
+  public:
+	virtual void ListClicked(int theId, int theIdx, int theClickCount)
+	{
+	}
+	virtual void ListClosed(int theId)
+	{
+	}
+	virtual void ListHiliteChanged(int theId, int theOldIdx, int theNewIdx)
+	{
+	}
 };
 
-}
+} // namespace PopWork
 
 #endif

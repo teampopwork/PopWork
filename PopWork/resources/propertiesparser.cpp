@@ -4,14 +4,14 @@
 
 using namespace PopWork;
 
-PropertiesParser::PropertiesParser(AppBase* theApp)
+PropertiesParser::PropertiesParser(AppBase *theApp)
 {
 	mApp = theApp;
 	mHasFailed = false;
 	mXMLParser = NULL;
 }
 
-void PropertiesParser::Fail(const PopWorkString& theErrorText)
+void PropertiesParser::Fail(const PopWorkString &theErrorText)
 {
 	if (!mHasFailed)
 	{
@@ -19,18 +19,18 @@ void PropertiesParser::Fail(const PopWorkString& theErrorText)
 		int aLineNum = mXMLParser->GetCurrentLineNum();
 
 		mError = theErrorText;
-		if (aLineNum > 0) mError += StrFormat(_S(" on Line %d"), aLineNum);
-		if (!mXMLParser->GetFileName().empty()) mError += StrFormat(_S(" in File '%s'"), mXMLParser->GetFileName().c_str());
+		if (aLineNum > 0)
+			mError += StrFormat(_S(" on Line %d"), aLineNum);
+		if (!mXMLParser->GetFileName().empty())
+			mError += StrFormat(_S(" in File '%s'"), mXMLParser->GetFileName().c_str());
 	}
 }
-
 
 PropertiesParser::~PropertiesParser()
 {
 }
 
-
-bool PropertiesParser::ParseSingleElement(PopWorkString* aString)
+bool PropertiesParser::ParseSingleElement(PopWorkString *aString)
 {
 	*aString = _S("");
 
@@ -39,16 +39,16 @@ bool PropertiesParser::ParseSingleElement(PopWorkString* aString)
 		XMLElement aXMLElement;
 		if (!mXMLParser->NextElement(&aXMLElement))
 			return false;
-		
+
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
 			Fail(_S("Unexpected Section: '") + aXMLElement.mValue + _S("'"));
-			return false;			
+			return false;
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 		{
 			*aString = aXMLElement.mValue;
-		}		
+		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
 		{
 			return true;
@@ -56,7 +56,7 @@ bool PropertiesParser::ParseSingleElement(PopWorkString* aString)
 	}
 }
 
-bool PropertiesParser::ParseStringArray(StringVector* theStringVector)
+bool PropertiesParser::ParseStringArray(StringVector *theStringVector)
 {
 	theStringVector->clear();
 
@@ -65,7 +65,7 @@ bool PropertiesParser::ParseStringArray(StringVector* theStringVector)
 		XMLElement aXMLElement;
 		if (!mXMLParser->NextElement(&aXMLElement))
 			return false;
-		
+
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
 			if (aXMLElement.mValue == _S("String"))
@@ -87,14 +87,13 @@ bool PropertiesParser::ParseStringArray(StringVector* theStringVector)
 		{
 			Fail(_S("Element Not Expected '") + aXMLElement.mValue + _S("'"));
 			return false;
-		}		
+		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
 		{
 			return true;
 		}
 	}
 }
-
 
 bool PropertiesParser::ParseProperties()
 {
@@ -103,11 +102,11 @@ bool PropertiesParser::ParseProperties()
 		XMLElement aXMLElement;
 		if (!mXMLParser->NextElement(&aXMLElement))
 			return false;
-		
+
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
 			if (aXMLElement.mValue == _S("String"))
-			{				
+			{
 				PopWorkString aDef;
 				if (!ParseSingleElement(&aDef))
 					return false;
@@ -196,7 +195,7 @@ bool PropertiesParser::ParseProperties()
 		{
 			Fail(_S("Element Not Expected '") + aXMLElement.mValue + _S("'"));
 			return false;
-		}		
+		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
 		{
 			return true;
@@ -221,7 +220,7 @@ bool PropertiesParser::DoParseProperties()
 					if (!ParseProperties())
 						break;
 				}
-				else 
+				else
 				{
 					Fail(_S("Invalid Section '") + aXMLElement.mValue + _S("'"));
 					break;
@@ -236,7 +235,7 @@ bool PropertiesParser::DoParseProperties()
 	}
 
 	if (mXMLParser->HasFailed())
-		Fail(mXMLParser->GetErrorText());	
+		Fail(mXMLParser->GetErrorText());
 
 	delete mXMLParser;
 	mXMLParser = NULL;
@@ -244,26 +243,27 @@ bool PropertiesParser::DoParseProperties()
 	return !mHasFailed;
 }
 
-bool PropertiesParser::ParsePropertiesBuffer(const Buffer& theBuffer)
+bool PropertiesParser::ParsePropertiesBuffer(const Buffer &theBuffer)
 {
 	mXMLParser = new XMLParser();
 
-	//mXMLParser->SetStringSource(theBuffer.UTF8ToWideString());
+	// mXMLParser->SetStringSource(theBuffer.UTF8ToWideString());
 
 	// HACK: see framework 1.22
 	// here we disable converting from UTF-8, and alway load file as plain ANSI
 	std::string aString;
-	aString.insert(aString.begin(), (char*)theBuffer.GetDataPtr(), (char*)theBuffer.GetDataPtr() + theBuffer.GetDataLen());
+	aString.insert(aString.begin(), (char *)theBuffer.GetDataPtr(),
+				   (char *)theBuffer.GetDataPtr() + theBuffer.GetDataLen());
 	mXMLParser->SetStringSource(aString);
 
 	return DoParseProperties();
 }
 
-bool PropertiesParser::ParsePropertiesFile(const std::string& theFilename)
+bool PropertiesParser::ParsePropertiesFile(const std::string &theFilename)
 {
 	mXMLParser = new XMLParser();
 	mXMLParser->OpenFile(theFilename);
-	return DoParseProperties();	
+	return DoParseProperties();
 }
 
 PopWorkString PropertiesParser::GetErrorText()

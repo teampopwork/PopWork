@@ -11,26 +11,30 @@
 #include <miniaudio.h>
 #include <SDL3/SDL.h>
 
-#define AL_CHECK_ERROR() { \
-if(alGetError() != AL_NO_ERROR) __debugbreak(); \
-}
+#define AL_CHECK_ERROR()                                                                                               \
+	{                                                                                                                  \
+		if (alGetError() != AL_NO_ERROR)                                                                               \
+			__debugbreak();                                                                                            \
+	}
 
 using namespace PopWork;
 
-ALCdevice* mALDevice = nullptr;
-ALCcontext* mALContext = nullptr;
+ALCdevice *mALDevice = nullptr;
+ALCcontext *mALContext = nullptr;
 
 OpenALSoundManager::OpenALSoundManager()
 {
 
 	mALDevice = alcOpenDevice(nullptr); // Default device
-	if (!mALDevice) {
+	if (!mALDevice)
+	{
 		printf("Failed to open OpenAL device!\n");
 		return;
 	}
 
 	mALContext = alcCreateContext(mALDevice, nullptr);
-	if (!mALContext) {
+	if (!mALContext)
+	{
 		printf("Failed to create OpenAL context!\n");
 		alcCloseDevice(mALDevice);
 		return;
@@ -58,8 +62,10 @@ OpenALSoundManager::~OpenALSoundManager()
 	ReleaseChannels();
 	ReleaseSounds();
 	alcMakeContextCurrent(nullptr);
-	if (mALContext) alcDestroyContext(mALContext);
-	if (mALDevice) alcCloseDevice(mALDevice);
+	if (mALContext)
+		alcDestroyContext(mALContext);
+	if (mALDevice)
+		alcCloseDevice(mALDevice);
 }
 
 bool OpenALSoundManager::Initialized()
@@ -111,7 +117,7 @@ void OpenALSoundManager::ReleaseFreeChannels()
 		}
 }
 
-bool OpenALSoundManager::LoadSound(unsigned int theSfxID, const std::string& theFilename)
+bool OpenALSoundManager::LoadSound(unsigned int theSfxID, const std::string &theFilename)
 {
 	if ((theSfxID < 0) || (theSfxID >= MAX_SOURCE_SOUNDS))
 		return false;
@@ -127,14 +133,14 @@ bool OpenALSoundManager::LoadSound(unsigned int theSfxID, const std::string& the
 
 	for (std::string aExt : aFileExtensions)
 	{
-		PFILE* fp = p_fopen((theFilename + aExt).c_str(), "rb");
+		PFILE *fp = p_fopen((theFilename + aExt).c_str(), "rb");
 		if (!fp)
 			continue;
 
 		p_fseek(fp, 0, SEEK_END);
 		size_t fileSize = p_ftell(fp);
 		p_fseek(fp, 0, SEEK_SET);
-		uint8_t* data = new uint8_t[fileSize];
+		uint8_t *data = new uint8_t[fileSize];
 		p_fread(data, 1, fileSize, fp);
 		p_fclose(fp);
 
@@ -142,7 +148,8 @@ bool OpenALSoundManager::LoadSound(unsigned int theSfxID, const std::string& the
 
 		ma_decoder decoder;
 		ma_result result = ma_decoder_init_memory(data, fileSize, NULL, &decoder);
-		if (result != MA_SUCCESS) {
+		if (result != MA_SUCCESS)
+		{
 			delete[] data;
 			continue;
 		}
@@ -151,7 +158,8 @@ bool OpenALSoundManager::LoadSound(unsigned int theSfxID, const std::string& the
 		std::vector<float> pcmData(bufferSize);
 
 		ma_result decoder_result = ma_decoder_read_pcm_frames(&decoder, pcmData.data(), pcmData.size(), NULL);
-		if (decoder_result != MA_SUCCESS) {
+		if (decoder_result != MA_SUCCESS)
+		{
 			delete[] data;
 			ma_decoder_uninit(&decoder);
 			continue;
@@ -170,11 +178,11 @@ bool OpenALSoundManager::LoadSound(unsigned int theSfxID, const std::string& the
 
 	if (LoadAUSound(theSfxID, theFilename + ".au"))
 		return true;
-	
+
 	return false;
 }
 
-int OpenALSoundManager::LoadSound(const std::string& theFilename)
+int OpenALSoundManager::LoadSound(const std::string &theFilename)
 {
 	int i;
 	for (i = 0; i < MAX_SOURCE_SOUNDS; i++)
@@ -195,29 +203,28 @@ int OpenALSoundManager::LoadSound(const std::string& theFilename)
 	return -1;
 }
 
-static int p_fseek64_wrap(PFILE* f, ogg_int64_t off, int whence) {
-	if (f == NULL)return(-1);
+static int p_fseek64_wrap(PFILE *f, ogg_int64_t off, int whence)
+{
+	if (f == NULL)
+		return (-1);
 	return p_fseek(f, (long)off, whence);
 }
 
-int ov_pak_open(PFILE* f, OggVorbis_File* vf, char* initial, long ibytes) {
-	ov_callbacks callbacks = {
-		(size_t(*)(void*, size_t, size_t, void*))  p_fread,
-		(int (*)(void*, ogg_int64_t, int))             p_fseek64_wrap,
-		(int (*)(void*))                             p_fclose,
-		(long (*)(void*))                            p_ftell
-	};
+int ov_pak_open(PFILE *f, OggVorbis_File *vf, char *initial, long ibytes)
+{
+	ov_callbacks callbacks = {(size_t(*)(void *, size_t, size_t, void *))p_fread,
+							  (int (*)(void *, ogg_int64_t, int))p_fseek64_wrap, (int (*)(void *))p_fclose,
+							  (long (*)(void *))p_ftell};
 
-	return ov_open_callbacks((void*)f, vf, initial, ibytes, callbacks);
+	return ov_open_callbacks((void *)f, vf, initial, ibytes, callbacks);
 }
 
-
-bool OpenALSoundManager::LoadOGGSound(unsigned int theSfxID, const std::string& theFilename)
+bool OpenALSoundManager::LoadOGGSound(unsigned int theSfxID, const std::string &theFilename)
 {
 	OggVorbis_File vf;
 	int current_section;
 
-	PFILE* aFile = p_fopen(theFilename.c_str(), "rb");
+	PFILE *aFile = p_fopen(theFilename.c_str(), "rb");
 	if (aFile == NULL)
 		return false;
 
@@ -227,7 +234,7 @@ bool OpenALSoundManager::LoadOGGSound(unsigned int theSfxID, const std::string& 
 		return false;
 	}
 
-	vorbis_info* anInfo = ov_info(&vf, -1);
+	vorbis_info *anInfo = ov_info(&vf, -1);
 
 	ALenum format;
 	if (anInfo->channels == 1)
@@ -240,25 +247,20 @@ bool OpenALSoundManager::LoadOGGSound(unsigned int theSfxID, const std::string& 
 		p_fclose(aFile);
 		return false;
 	}
-	//get total size
+	// get total size
 	int aLenBytes = static_cast<int>(ov_pcm_total(&vf, -1) * anInfo->channels * 2);
 
-	char* aBuf = new char[aLenBytes]; //temp buffer
+	char *aBuf = new char[aLenBytes]; // temp buffer
 
-	char* aPtr = aBuf;
+	char *aPtr = aBuf;
 	int aNumBytes = aLenBytes;
 	while (aNumBytes > 0)
 	{
-		long ret = ov_read(
-			&vf,
-			aPtr,
-			aNumBytes,
-			/* little‑endian: */ 0,
-			/* 2 bytes/sample: */ 2,
-			/* signed PCM:   */ 1,
-			&current_section
-		);
-		
+		long ret = ov_read(&vf, aPtr, aNumBytes,
+						   /* little‑endian: */ 0,
+						   /* 2 bytes/sample: */ 2,
+						   /* signed PCM:   */ 1, &current_section);
+
 		if (ret == 0)
 			break;
 		else if (ret < 0)
@@ -286,16 +288,16 @@ bool OpenALSoundManager::LoadOGGSound(unsigned int theSfxID, const std::string& 
 	return true;
 }
 
-bool OpenALSoundManager::LoadAUSound(unsigned int theSfxID, const std::string& theFilename)
+bool OpenALSoundManager::LoadAUSound(unsigned int theSfxID, const std::string &theFilename)
 {
-	PFILE* fp = p_fopen(theFilename.c_str(), "rb");
+	PFILE *fp = p_fopen(theFilename.c_str(), "rb");
 	if (!fp)
 		return false;
 
 	p_fseek(fp, 0, SEEK_END);
 	size_t fileSize = p_ftell(fp);
 	p_fseek(fp, 0, SEEK_SET);
-	uint8_t* data = new uint8_t[fileSize];
+	uint8_t *data = new uint8_t[fileSize];
 	p_fread(data, 1, fileSize, fp);
 	p_fclose(fp);
 
@@ -312,7 +314,8 @@ bool OpenALSoundManager::LoadAUSound(unsigned int theSfxID, const std::string& t
 
 	ALuint buffer;
 	alGenBuffers(1, &buffer);
-	alBufferData(buffer, format, aAUFile.mSamples.data(), aAUFile.mSamples.size() * sizeof(int16_t), aAUFile.mSampleRate);
+	alBufferData(buffer, format, aAUFile.mSamples.data(), aAUFile.mSamples.size() * sizeof(int16_t),
+				 aAUFile.mSampleRate);
 
 	mSourceSounds[theSfxID] = buffer;
 
@@ -406,7 +409,7 @@ bool OpenALSoundManager::SetBasePan(unsigned int theSfxID, int theBasePan)
 	return true;
 }
 
-SoundInstance* OpenALSoundManager::GetSoundInstance(unsigned int theSfxID)
+SoundInstance *OpenALSoundManager::GetSoundInstance(unsigned int theSfxID)
 {
 	if (theSfxID > MAX_SOURCE_SOUNDS)
 		return NULL;

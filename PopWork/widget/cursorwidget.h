@@ -14,18 +14,17 @@ class Image;
 
 class CursorWidget : public Widget
 {
-public:
-	Image*					mImage;
+  public:
+	Image *mImage;
 
-public:
+  public:
 	CursorWidget();
 
-	virtual void			Draw(Graphics* g);
-	void					SetImage(Image* theImage);
-	Point					GetHotspot();
-	
+	virtual void Draw(Graphics *g);
+	void SetImage(Image *theImage);
+	Point GetHotspot();
 };
 
-}
+} // namespace PopWork
 
 #endif // __CURSORWIDGET_H__
