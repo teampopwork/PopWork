@@ -8,7 +8,7 @@ install(FILES
     $<TARGET_FILE:SDL3::SDL3>
     $<TARGET_FILE:OpenAL::OpenAL>
     ${BASS_LIB_PATH}/bass.dll
-    DESTINATION ${CMAKE_SOURCE_DIR}/demos
+    DESTINATION ${CMAKE_SOURCE_DIR}/examples/bin
 )
 
 install(TARGETS

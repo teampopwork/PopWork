@@ -1052,6 +1052,18 @@ void Board::DrawPlanets(Graphics *g)
 	for (int i = 0; i < mPlanets.size(); i++)
 	{
 		Planet *p = &mPlanets[i];
+		if (!p)
+			return;
+
+		if (!IMAGE_PLANETS)
+			return;
+		
+		if (p->mX < 0 || p->mX > mWidth || p->mY < 0 || p->mY > mHeight)
+		{
+			p->mX = mWidth / 2;
+			p->mY = mHeight / 2;
+		}
+
 		if (p->mExploding)
 		{
 			g->DrawImageCel(IMAGE_BOMB_RADIAL_DEATH, p->mX - (IMAGE_BOMB_RADIAL_DEATH->GetCelWidth() / 2 + w / 2),
@@ -1914,6 +1926,13 @@ void Board::KeyChar(PopWorkChar theChar)
 //////////////////////////////////////////////////////////////////////////
 void Board::GivePlanetBonus(Planet *p)
 {
+	if (!p)
+		return;
+	if (p->mExportIdx < 0 || p->mExportIdx >= PLANET_EXPORTS->size())
+		return;
+	if (p->mNameIdx < 0 || p->mNameIdx >= PLANET_NAME->size())
+		return;
+
 	mTotalPopulationEaten += p->mPopulation;
 	mPopulationEaten += p->mPopulation;
 	mLineSpeed += BEAM_INC_SPEED;

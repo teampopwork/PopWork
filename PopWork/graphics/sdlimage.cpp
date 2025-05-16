@@ -51,19 +51,19 @@ void SDLImage::FillRect(const Rect &theRect, const Color &theColor, int theDrawM
 	mInterface->FillRect(theRect, theColor, theDrawMode);
 }
 
-void PopWork::SDLImage::DrawLine(double theStartX, double theStartY, double theEndX, double theEndY,
+void SDLImage::DrawLine(double theStartX, double theStartY, double theEndX, double theEndY,
 								 const Color &theColor, int theDrawMode)
 {
 	mInterface->DrawLine(theStartX, theStartY, theEndX, theEndY, theColor, theDrawMode);
 }
 
-void PopWork::SDLImage::DrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY,
+void SDLImage::DrawLineAA(double theStartX, double theStartY, double theEndX, double theEndY,
 								   const Color &theColor, int theDrawMode)
 {
 	mInterface->DrawLine(theStartX, theStartY, theEndX, theEndY, theColor, theDrawMode);
 }
 
-void PopWork::SDLImage::Blt(Image *theImage, int theX, int theY, const Rect &theSrcRect, const Color &theColor,
+void SDLImage::Blt(Image *theImage, int theX, int theY, const Rect &theSrcRect, const Color &theColor,
 							int theDrawMode)
 {
 	theImage->mDrawn = true;
@@ -78,7 +78,7 @@ void PopWork::SDLImage::Blt(Image *theImage, int theX, int theY, const Rect &the
 	mInterface->Blt(theImage, theX, theY, theSrcRect, theColor, theDrawMode);
 }
 
-void PopWork::SDLImage::BltF(Image *theImage, float theX, float theY, const Rect &theSrcRect, const Rect &theClipRect,
+void SDLImage::BltF(Image *theImage, float theX, float theY, const Rect &theSrcRect, const Rect &theClipRect,
 							 const Color &theColor, int theDrawMode)
 {
 	theImage->mDrawn = true;
@@ -96,7 +96,7 @@ void PopWork::SDLImage::BltF(Image *theImage, float theX, float theY, const Rect
 		mInterface->Blt(theImage, theX, theY, theSrcRect, theColor, theDrawMode, true);
 }
 
-void PopWork::SDLImage::BltRotated(Image *theImage, float theX, float theY, const Rect &theSrcRect,
+void SDLImage::BltRotated(Image *theImage, float theX, float theY, const Rect &theSrcRect,
 								   const Rect &theClipRect, const Color &theColor, int theDrawMode, double theRot,
 								   float theRotCenterX, float theRotCenterY)
 {
@@ -108,7 +108,7 @@ void PopWork::SDLImage::BltRotated(Image *theImage, float theX, float theY, cons
 						   theRotCenterY, theSrcRect);
 }
 
-void PopWork::SDLImage::StretchBlt(Image *theImage, const Rect &theDestRect, const Rect &theSrcRect,
+void SDLImage::StretchBlt(Image *theImage, const Rect &theDestRect, const Rect &theSrcRect,
 								   const Rect &theClipRect, const Color &theColor, int theDrawMode, bool fastStretch)
 {
 	theImage->mDrawn = true;
@@ -118,7 +118,7 @@ void PopWork::SDLImage::StretchBlt(Image *theImage, const Rect &theDestRect, con
 	mInterface->StretchBlt(theImage, theDestRect, theSrcRect, &theClipRect, theColor, theDrawMode, fastStretch);
 }
 
-void PopWork::SDLImage::BltMatrix(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix,
+void SDLImage::BltMatrix(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix,
 								  const Rect &theClipRect, const Color &theColor, int theDrawMode,
 								  const Rect &theSrcRect, bool blend)
 {
@@ -127,7 +127,7 @@ void PopWork::SDLImage::BltMatrix(Image *theImage, float x, float y, const PopWo
 	mInterface->BltTransformed(theImage, &theClipRect, theColor, theDrawMode, theSrcRect, theMatrix, blend, x, y, true);
 }
 
-void PopWork::SDLImage::BltTrianglesTex(Image *theTexture, const TriVertex theVertices[][3], int theNumTriangles,
+void SDLImage::BltTrianglesTex(Image *theTexture, const TriVertex theVertices[][3], int theNumTriangles,
 										const Rect &theClipRect, const Color &theColor, int theDrawMode, float tx,
 										float ty, bool blend)
 {
@@ -136,9 +136,11 @@ void PopWork::SDLImage::BltTrianglesTex(Image *theTexture, const TriVertex theVe
 	mInterface->DrawTrianglesTex(theVertices, theNumTriangles, theColor, theDrawMode, theTexture, tx, ty, blend);
 }
 
-void PopWork::SDLImage::BltMirror(Image *theImage, int theX, int theY, const Rect &theSrcRect, const Color &theColor,
+void SDLImage::BltMirror(Image *theImage, int theX, int theY, const Rect &theSrcRect, const Color &theColor,
 								  int theDrawMode)
 {
+	theImage->mDrawn = true;
+
 	DBG_ASSERTE((theColor.mRed >= 0) && (theColor.mRed <= 255));
 	DBG_ASSERTE((theColor.mGreen >= 0) && (theColor.mGreen <= 255));
 	DBG_ASSERTE((theColor.mBlue >= 0) && (theColor.mBlue <= 255));
@@ -149,7 +151,7 @@ void PopWork::SDLImage::BltMirror(Image *theImage, int theX, int theY, const Rec
 	mInterface->BltMirror(theImage, theX, theY, theSrcRect, theColor, theDrawMode);
 }
 
-void PopWork::SDLImage::StretchBltMirror(Image *theImage, const Rect &theDestRectOrig, const Rect &theSrcRect,
+void SDLImage::StretchBltMirror(Image *theImage, const Rect &theDestRectOrig, const Rect &theSrcRect,
 										 const Rect &theClipRect, const Color &theColor, int theDrawMode,
 										 bool fastStretch)
 {
@@ -170,24 +172,21 @@ void SDLImage::FillScanLinesWithCoverage(Span *theSpans, int theSpanCount, const
 
 	int l = theSpans[0].mX, t = theSpans[0].mY;
 	int r = l + theSpans[0].mWidth, b = t;
-	for (int i = 1; i < theSpanCount; ++i) // After this loop ends, Rect(l, t, r - l + 1, b - t + 1) is the minimum
-										   // rectangular area containing all spans.
+	for (int i = 1; i < theSpanCount; ++i)
 	{
 		l = min(theSpans[i].mX, l);
 		r = max(theSpans[i].mX + theSpans[i].mWidth - 1, r);
 		t = min(theSpans[i].mY, t);
-		b = max(theSpans[i].mY, b);
+		b = max(theSpans[i].mY + theSpans[i].mWidth - 1, b);
 	}
-	for (int i = 0; i < theSpanCount; ++i) // This loop changes the absolute coordinates of all spans to relative
-										   // coordinates within the above rectangular area
+	for (int i = 0; i < theSpanCount; ++i)
 	{
 		theSpans[i].mX -= l;
 		theSpans[i].mY -= t;
 	}
 
 	MemoryImage aTempImage;
-	aTempImage.Create(r - l + 1, b - t + 1); // Create a rectangle of the same size as the smallest rectangle
-											 // MemoryImage
+	aTempImage.Create(r - l + 1, b - t + 1);
 	aTempImage.FillScanLinesWithCoverage(theSpans, theSpanCount, theColor, theDrawMode, theCoverage, theCoverX - l,
 										 theCoverY - t, theCoverWidth, theCoverHeight);
 	Blt(&aTempImage, l, t, Rect(0, 0, r - l + 1, b - t + 1), Color::White, theDrawMode);
@@ -202,10 +201,10 @@ bool SDLImage::Check3D(SDLImage *theImage)
 bool SDLImage::Check3D(Image *theImage)
 {
 	SDLImage *anImage = dynamic_cast<SDLImage *>(theImage);
-	return anImage != 0;
+	return anImage != nullptr;
 }
 
-void PopWork::SDLImage::PurgeBits()
+void SDLImage::PurgeBits()
 {
 	mPurgeBits = true;
 
