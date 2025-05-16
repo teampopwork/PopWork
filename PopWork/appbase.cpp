@@ -14,12 +14,16 @@
 #include "debug/perftimer.h"
 #include "math/mtrand.h"
 #include "readwrite/modval.h"
-#include <process.h>
+#ifdef _WIN32
 #include <direct.h>
+#define getcwd _getcwd
+#define chdir _chdir
+#define mkdir _mkdir
+#else
+#include <unistd.h>
+#include <sys/stat.h>
+#endif
 #include <fstream>
-#include <time.h>
-#include <math.h>
-#include <regstr.h>
 #include "graphics/sysfont.h"
 #include "resources/resourcemanager.h"
 #include "audio/bassmusicinterface.h"
@@ -27,8 +31,10 @@
 #include "misc/autocrit.h"
 #include "debug/debug.h"
 #include "paklib/pakinterface.h"
+
 #include <string>
-#include <shlobj.h>
+#include <ctime>
+#include <cmath>
 
 #include "debug/memmgr.h"
 
@@ -756,7 +762,6 @@ void AppBase::DumpProgramInfo()
 		SDL_Delay(100);
 	}
 
-
 	std::fstream aDumpStream("_dump\\imagelist.html", std::ios::out);
 
 	time_t aTime;
@@ -984,7 +989,7 @@ double AppBase::GetLoadingThreadProgress()
 		return 0.0;
 	if (mNumLoadingThreadTasks == 0)
 		return 0.0;
-	return min(mCompletedLoadingThreadTasks / (double) mNumLoadingThreadTasks, 1.0);
+	return std::min(mCompletedLoadingThreadTasks / (double) mNumLoadingThreadTasks, 1.0);
 }
 
 bool AppBase::RegistryWrite(const std::string& theValueName, ulong theType, const uchar* theValue, ulong theLength)
@@ -1745,7 +1750,7 @@ bool AppBase::DrawDirtyStuff()
 		{
 			int aTotalTime = aEndTime - aStartTime;
 
-			mNextDrawTick += 35 + max(aTotalTime, 15);
+			mNextDrawTick += 35 + std::max(aTotalTime, 15);
 
 			if ((int) (aEndTime - mNextDrawTick) >= 0)			
 				mNextDrawTick = aEndTime;			
@@ -2719,10 +2724,10 @@ void AppBase::UpdateFTimeAcc()
 	{				
 		int aDeltaTime = aCurTime - mLastTimeCheck;		
 
-		mUpdateFTimeAcc = min(mUpdateFTimeAcc + aDeltaTime, 200.0);
+		mUpdateFTimeAcc = std::min(mUpdateFTimeAcc + aDeltaTime, 200.0);
 
 		if (mRelaxUpdateBacklogCount > 0)				
-			mRelaxUpdateBacklogCount = max(mRelaxUpdateBacklogCount - aDeltaTime, 0);				
+			mRelaxUpdateBacklogCount = std::max(mRelaxUpdateBacklogCount - aDeltaTime, 0);				
 	}
 
 	mLastTimeCheck = aCurTime;
@@ -2863,7 +2868,7 @@ bool AppBase::Process(bool allowSleep)
 			//  too much to keep our timing tending toward occuring right after 
 			//  redraws
 			if (isVSynched)
-				mUpdateFTimeAcc = max(mUpdateFTimeAcc - aFrameFTime - 0.2f, 0.0);
+				mUpdateFTimeAcc = std::max(mUpdateFTimeAcc - aFrameFTime - 0.2f, 0.0);
 			else
 				mUpdateFTimeAcc -= aFrameFTime;
 
@@ -2908,7 +2913,7 @@ bool AppBase::Process(bool allowSleep)
 
 			ulong anEndTime = SDL_GetTicks();
 			int anElapsedTime = (anEndTime - aStartTime) - aCumSleepTime;
-			int aLoadingYieldSleepTime = min(250, (anElapsedTime * 2) - aCumSleepTime);
+			int aLoadingYieldSleepTime = std::min(250, (anElapsedTime * 2) - aCumSleepTime);
 
 			if (aLoadingYieldSleepTime >= 0)
 			{
@@ -3911,8 +3916,8 @@ void AppBase::RotateImageHue(PopWork::MemoryImage *theImage, int theDelta)
 		int g = (aPixel>>8) &0xff;
 		int b = aPixel&0xff;
 
-		int maxval = max(r, max(g, b));
-		int minval = min(r, min(g, b));
+		int maxval = std::max(r, std::max(g, b));
+		int minval = std::min(r, std::min(g, b));
 		int h = 0;
 		int s = 0;
 		int l = (minval+maxval)/2;
@@ -4004,8 +4009,8 @@ ulong AppBase::HSLToRGB(int h, int s, int l)
 
 ulong AppBase::RGBToHSL(int r, int g, int b)
 {					
-	int maxval = max(r, max(g, b));
-	int minval = min(r, min(g, b));
+	int maxval = std::max(r, std::max(g, b));
+	int minval = std::min(r, std::min(g, b));
 	int hue = 0;
 	int saturation = 0;
 	int luminosity = (minval+maxval)/2;

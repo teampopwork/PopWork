@@ -5,6 +5,17 @@
 #endif
 
 #include <string>
+#include <random>
+#include <sstream>
+#include <limits>
+#include <atomic>
+
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
 
 namespace PopWork
 {
@@ -13,32 +24,99 @@ namespace PopWork
 
 class MTRand
 {
-	unsigned long mt[MTRAND_N]; /* the array for the state vector  */
-	int mti;
-
 public:
-	MTRand(const std::string& theSerialData);
-	MTRand(unsigned long seed);
-	MTRand();
+    explicit MTRand(unsigned long seed = 4357UL)
+        : engine(seed),
+          dist_int(0, std::numeric_limits<unsigned long>::max()),
+          dist_real(0.0f, 1.0f)
+    {
+    }
 
-	void SRand(const std::string& theSerialData);
-	void SRand(unsigned long seed);
-	unsigned long NextNoAssert();
-	unsigned long Next();
-	unsigned long NextNoAssert(unsigned long range);
-	unsigned long Next(unsigned long range);
-	float NextNoAssert(float range);
-	float Next( float range );
+    explicit MTRand(const std::string& serialData)
+    {
+        std::seed_seq seq(serialData.begin(), serialData.end());
+        engine.seed(seq);
+    }
 
-	std::string Serialize();
+    void SRand(unsigned long seed)
+    {
+        engine.seed(seed == 0 ? 4357UL : seed);
+    }
 
-	static void SetRandAllowed(bool allowed);
+    void SRand(const std::string& serialData)
+    {
+        std::seed_seq seq(serialData.begin(), serialData.end());
+        engine.seed(seq);
+    }
+
+    unsigned long Next()
+    {
+        return NextNoAssert();
+    }
+
+    unsigned long NextNoAssert()
+    {
+        return dist_int(engine);
+    }
+
+    unsigned long NextNoAssert(unsigned long range)
+    {
+        return NextNoAssert() % range;
+    }
+
+    unsigned long Next(unsigned long range)
+    {
+        return NextNoAssert(range);
+    }
+
+    float NextNoAssert(float range)
+    {
+        return dist_real(engine) * range;
+    }
+
+    float Next(float range)
+    {
+        return NextNoAssert(range);
+    }
+
+    std::string Serialize() const
+    {
+        std::ostringstream ss;
+        ss << engine;
+        return ss.str();
+    }
+
+    void Deserialize(const std::string& state)
+    {
+        std::istringstream ss(state);
+        ss >> engine;
+    }
+
+    static void SetRandAllowed(bool allowed)
+    {
+        if (allowed)
+        {
+            if (gRandAllowed > 0)
+                --gRandAllowed;
+        }
+        else
+        {
+            ++gRandAllowed;
+        }
+    }
+
+private:
+    std::mt19937 engine;
+    std::uniform_int_distribution<unsigned long> dist_int;
+    std::uniform_real_distribution<float> dist_real;
+
+    static inline std::atomic<int> gRandAllowed{0};
 };
 
 struct MTAutoDisallowRand
 {
-	MTAutoDisallowRand() { MTRand::SetRandAllowed(false); }
-	~MTAutoDisallowRand() { MTRand::SetRandAllowed(true); }
+    MTAutoDisallowRand() { MTRand::SetRandAllowed(false); }
+    ~MTAutoDisallowRand() { MTRand::SetRandAllowed(true); }
 };
 
 }

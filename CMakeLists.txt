@@ -1,5 +1,5 @@
 # CMakeLists.txt
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 4.0.2 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,9 +12,12 @@ set(SDL_SHARED ON)
 # temp workaround for me
 set(_Python3_EXECUTABLE_DEBUG "" CACHE FILEPATH "Python debug executable")
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 option(USE_WIDESTRING "Wide Strings" ON)
 option(BUILD_DEMOS "Build Demos" ON)
 option(CONSOLE "Show the console on Windows" ON)
+option(BUILD_TOOLS "Build Tools" ON)
 
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(STATUS "Using x64")
@@ -40,15 +43,6 @@ endif()
 
 # external libraries
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build as DLL" FORCE)
-
-# chatgpt suggested this idk if this works
-set(INSTALL_VORBIS OFF CACHE BOOL "" FORCE)
-set(INSTALL_OGG OFF CACHE BOOL "" FORCE)
-set(SDL_INSTALL OFF CACHE BOOL "" FORCE)
-set(SDLTTF_INSTALL OFF CACHE BOOL "" FORCE)
-set(OPENAL_INSTALL OFF CACHE BOOL "" FORCE)
-set(MINIAUDIO_INSTALL OFF CACHE BOOL "" FORCE)
-
 add_subdirectory(external/ogg EXCLUDE_FROM_ALL)
 add_subdirectory(external/vorbis EXCLUDE_FROM_ALL)
 add_subdirectory(external/SDL EXCLUDE_FROM_ALL)
@@ -58,6 +52,10 @@ add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build as DLL" FORCE)
 
 add_subdirectory(PopWork)
+if(BUILD_TOOLS AND WIN32) # we can't afford linux yet
+add_subdirectory(tools/PopPak)
+add_subdirectory(tools/PopPakPWE)
+endif()
 
 if (BUILD_DEMOS)
 	add_subdirectory(demos_src)

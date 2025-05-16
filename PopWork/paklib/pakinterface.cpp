@@ -487,4 +487,3 @@ BOOL PakInterface::FindClose(HANDLE hFindFile)
 	delete aFindData;
 	return TRUE;
 }
-

@@ -5,7 +5,7 @@
 #endif
 
 #include "widget.h"
-#include "point.h"
+#include "math/point.h"
 
 namespace PopWork
 {

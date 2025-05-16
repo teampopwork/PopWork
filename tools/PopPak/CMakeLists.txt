@@ -1,22 +1,20 @@
 # CMakeLists.txt
-project(Demo1)
+project(PopPak)
 
 set(SOURCES
 	# Sources
-	main.cpp
-	gameapp.cpp
-	board.cpp
-
-	# Headers
-	gameapp.h
-	board.h
+	poppak.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE
-	../
-	../../
-	../../PopWork/ # common.h
+	../../PopWork
+    ../../PopWork/paklib
 )
 
 target_link_libraries(${PROJECT_NAME} PopWork)
+
+install(TARGETS
+    ${PROJECT_NAME}
+    RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/tools
+)

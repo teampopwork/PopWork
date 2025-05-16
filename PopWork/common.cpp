@@ -39,54 +39,12 @@ void PopWork::SRand(ulong theSeed)
 
 bool PopWork::CheckFor98Mill()
 {
-	static bool needOsCheck = true;
-	static bool is98Mill = false;
-
-	if (needOsCheck)
-	{
-		bool invalid = false;
-		OSVERSIONINFOEXA osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEXA));
-
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
-		if( GetVersionExA((LPOSVERSIONINFOA)&osvi) == 0)
-		{
-			osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFOA);
-			if ( GetVersionExA((LPOSVERSIONINFOA)&osvi) == 0)
-				return false;
-		}
-
-		needOsCheck = false;
-		is98Mill = osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS; // let's check Win95, 98, *AND* ME.
-	}
-
-	return is98Mill;
+	return false;
 }
 
 bool PopWork::CheckForVista()
 {
-	static bool needOsCheck = true;
-	static bool isVista = false;
-
-	if (needOsCheck)
-	{
-		bool invalid = false;
-		OSVERSIONINFOEXA osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEXA));
-
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
-		if( GetVersionExA((LPOSVERSIONINFOA)&osvi) == 0)
-		{
-			osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFOA);
-			if ( GetVersionExA((LPOSVERSIONINFOA)&osvi) == 0)
-				return false;
-		}
-
-		needOsCheck = false;
-		isVista = osvi.dwMajorVersion >= 6;
-	}
-
-	return isVista;
+	return false;
 }
 
 std::string PopWork::GetAppDataFolder()
@@ -793,7 +751,7 @@ void PopWork::MkDir(const std::string& theDir)
 
 std::string PopWork::GetFileName(const std::string& thePath, bool noExtension)
 {
-	int aLastSlash = max((int) thePath.rfind('\\'), (int) thePath.rfind('/'));
+	int aLastSlash = std::max((int) thePath.rfind('\\'), (int) thePath.rfind('/'));
 
 	if (noExtension)
 	{
@@ -810,7 +768,7 @@ std::string PopWork::GetFileName(const std::string& thePath, bool noExtension)
 
 std::string PopWork::GetFileDir(const std::string& thePath, bool withSlash)
 {
-	int aLastSlash = max((int) thePath.rfind('\\'), (int) thePath.rfind('/'));
+	int aLastSlash = std::max((int) thePath.rfind('\\'), (int) thePath.rfind('/'));
 
 	if (aLastSlash == -1)
 		return "";

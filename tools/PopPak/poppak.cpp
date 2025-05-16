@@ -1,13 +1,15 @@
-#include <windows.h>
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#include <errno.h>
+#endif
 #include <iostream>
 #include <string>
 #include <list>
-#include <errno.h>
 
-#include "PakInterface.h"
-#include "Common.cpp" // get MkDir and some other helper functions.
+#include "pakinterface.h"
+#include "common.h" // get MkDir and some other helper functions.
 
-using namespace std;
 using namespace PopWork;
 
 typedef unsigned char uchar;
@@ -20,7 +22,7 @@ bool unpackage = false;
 //////////////////////////////////////////////////////////////////////////
 // This is the default password for the PakInterface. 
 // The idea is to be able to change the password  on the command prompt.
-string gEncryptPassword = "PopCapPopWorkFramework";
+std::string gEncryptPassword = "PopCapPopWorkFramework";
 //////////////////////////////////////////////////////////////////////////
 
 FILE* gDestFP = NULL;
@@ -101,22 +103,28 @@ void AddFiles(const std::string& theDir, const std::string& theRelDir)
 {
 	WIN32_FIND_DATA aFindFileData;
 
-	HANDLE aFindHandle = FindFirstFile((theDir + "*.*").c_str(), &aFindFileData);	
+    HANDLE aFindHandle = FindFirstFile((theDir + "*.*").c_str(), &aFindFileData);
 
 	if (aFindHandle != INVALID_HANDLE_VALUE) 
 	{
 		do 
 		{
-			std::string aFileStr = aFindFileData.cFileName;
+            std::string aFileStr = aFindFileData.cFileName;
 			if ((aFindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)			
 			{
-				std::string aFileName = theDir + aFindFileData.cFileName;
+                std::string aFileName = theDir + aFindFileData.cFileName;
 				std::string aRelName = theRelDir + aFindFileData.cFileName;
 
-				FILE* aSrcFP = fopen(aFileName.c_str(), "rb");
+				FILE* aSrcFP;
+                fopen_s(&aSrcFP,
+                    aFileName.c_str(),
+                    "rb");
 				if (aSrcFP == NULL)
 				{
-					cerr << "Unable to open source file '" << (theDir + aFindFileData.cFileName).c_str() << "'" << endl;
+					std::cerr << "Unable to open source file '" <<
+                        (theDir + aFindFileData.cFileName).c_str()
+                        << "'" << std::endl;
+                    
 					exit(4);
 				}
 
@@ -135,14 +143,14 @@ void AddFiles(const std::string& theDir, const std::string& theRelDir)
 				enc_fwrite(&aFindFileData.ftLastWriteTime, sizeof(FILETIME), 1, gDestFP);
 
 				DeferredFile aDeferredFile;
-				aDeferredFile.mFileName = aFileName;
+                aDeferredFile.mFileName = aFileName;
 				aDeferredFile.mFileSize = aSrcSize;
 
 				gDeferredFilesList.push_back(aDeferredFile);
 
 				fclose(aSrcFP);
 			}
-			else if (aFileStr != "." && aFileStr != "..")
+            else if (aFileStr != "." && aFileStr != "..")
 			{				
 				AddFiles(theDir + aFindFileData.cFileName + "\\", theRelDir + aFindFileData.cFileName + "\\");
 			}
@@ -157,10 +165,10 @@ int main(int argc, char* argv[])
 {
 	if (argc <= 1)
 	{
-		cerr << "Usage: PopPak [/U] [/P] [/K \"The Password in Quotes\"] <FileName> <DirPath>" << endl;
-		cerr << "  /U    Unpacks pak file to DirPath" << endl;
-		cerr << "  /P    Creates pak file from files in DirPath" << endl;
-		cerr << "  /K    Changes the Default Encryption Password" << endl;
+		std::cerr << "Usage: PopPak [/U] [/P] [/K \"The Password in Quotes\"] <FileName> <DirPath>" << std::endl;
+		std::cerr << "  /U    Unpacks pak file to DirPath" << std::endl;
+		std::cerr << "  /P    Creates pak file from files in DirPath" << std::endl;
+		std::cerr << "  /K    Changes the Default Encryption Password" << std::endl;
 		return 1;
 	}
 
@@ -181,13 +189,13 @@ int main(int argc, char* argv[])
 
 				if(gEncryptPassword == "")
 				{
-					cerr << "Invalid Password:" << argv[anArgPos] << endl;
+					std::cerr << "Invalid Password:" << argv[anArgPos] << std::endl;
 					return 106;
 				}
 			}
 			else
 			{
-				cerr << "Invalid option" << endl;
+				std::cerr << "Invalid option" << std::endl;
 				return 101;
 			}
 
@@ -200,26 +208,26 @@ int main(int argc, char* argv[])
 	////////////////////////////////////////////////////////////////////////////
 	// PopCapPWE should be an internal tool.  In any event, the default Password
 	// is actually really easy to guess.
-	cout << StrFormat("Password: %s", gEncryptPassword.c_str()).c_str() << endl;
+	std::cout << StrFormat("Password: %s", gEncryptPassword.c_str()).c_str() << std::endl;
 	if (gEncryptPassword == "PopCapPopWorkFramework")
-		cerr << StrFormat("WARNING: %s is the Default Password and is NOT allowed for Distribution!", gEncryptPassword.c_str()).c_str() << endl;
+		std::cerr << StrFormat("WARNING: %s is the Default Password and is NOT allowed for Distribution!", gEncryptPassword.c_str()).c_str() << std::endl;
 
 	if (argc < anArgPos + 2)
 	{
-		cerr << "Usage: PopPak [/U] [/P] [/K \"The Password in Quotes\"] <FileName> <DirPath>" << endl;
-		cerr << "  /U    Unpacks pak file to DirPath" << endl;
-		cerr << "  /P    Creates pak file from files in DirPath" << endl;
-		cerr << "  /K    Changes the Default Encryption Password" << endl;
+		std::cerr << "Usage: PopPak [/U] [/P] [/K \"The Password in Quotes\"] <FileName> <DirPath>" << std::endl;
+		std::cerr << "  /U    Unpacks pak file to DirPath" << std::endl;
+		std::cerr << "  /P    Creates pak file from files in DirPath" << std::endl;
+		std::cerr << "  /K    Changes the Default Encryption Password" << std::endl;
 		return 102;
 	}
 
 	if (package && unpackage)
 	{
-		cerr << "/U and /P may not be specified together." << endl;
-		cerr << "Usage: PopPak [/U] [/P] [/K \"The Password in Quotes\"] <FileName> <DirPath>" << endl;
-		cerr << "  /U    Unpacks pak file to DirPath" << endl;
-		cerr << "  /P    Creates pak file from files in DirPath" << endl;
-		cerr << "  /K    Changes the Default Encryption Password" << endl;
+		std::cerr << "/U and /P may not be specified together." << std::endl;
+		std::cerr << "Usage: PopPak [/U] [/P] [/K \"The Password in Quotes\"] <FileName> <DirPath>" << std::endl;
+		std::cerr << "  /U    Unpacks pak file to DirPath" << std::endl;
+		std::cerr << "  /P    Creates pak file from files in DirPath" << std::endl;
+		std::cerr << "  /K    Changes the Default Encryption Password" << std::endl;
 		return 103;
 	}
 
@@ -234,7 +242,7 @@ int main(int argc, char* argv[])
 		gDestFP = fopen(aPackName.c_str(), "wb");
 		if (gDestFP == NULL)
 		{
-			cerr << "Unable to create '" << aPackName.c_str() << "'" << endl;
+			std::cerr << "Unable to create '" << aPackName.c_str() << "'" << std::endl;
 			return 2;
 		}
 
@@ -250,22 +258,22 @@ int main(int argc, char* argv[])
 		enc_fwrite(&aFileFlags, 1, 1, gDestFP);
 
 		if (gDeferredFilesList.size() == 0)		
-			cout << "Warning: no files!" << endl;		
+			std::cout << "Warning: no files!" << std::endl;		
 
 		int aCount = 0;
 
 		DeferredFileList::iterator anItr = gDeferredFilesList.begin();
 		while (anItr != gDeferredFilesList.end())
 		{
-			cout << "Writing: " << ((aCount * 100) / gDeferredFilesList.size()) << "%\r";
-			cout.flush();
+			std::cout << "Writing: " << ((aCount * 100) / gDeferredFilesList.size()) << "%\r";
+			std::cout.flush();
 
 			DeferredFile* aDeferredFile = &(*anItr);
 
 			FILE* aSrcFP = fopen(aDeferredFile->mFileName.c_str(), "rb");
 			if (aSrcFP == NULL)
 			{
-				cerr << "Unable to open source file '" << aDeferredFile->mFileName.c_str() << "'" << endl;
+				std::cerr << "Unable to open source file '" << aDeferredFile->mFileName.c_str() << "'" << std::endl;
 				exit(4);
 			}
 
@@ -283,7 +291,7 @@ int main(int argc, char* argv[])
 
 			if (aTotalSize != aDeferredFile->mFileSize)
 			{
-				cerr << "Error: File size changed!" << endl;
+				std::cerr << "Error: File size changed!" << std::endl;
 				return 3;
 			}
 
@@ -300,7 +308,7 @@ int main(int argc, char* argv[])
 		anInterface.mDecryptPassword = gEncryptPassword;
 		if (!anInterface.AddPakFile(aPackName))
 		{
-			cerr << "Pak File: " << aPackName << " was unable to be loaded. Was this created with PopPakPWE?" << endl;
+			std::cerr << "Pak File: " << aPackName << " was unable to be loaded. Was this created with PopPakPWE?" << std::endl;
 			return 104;
 		}
 
@@ -308,7 +316,7 @@ int main(int argc, char* argv[])
 		HANDLE aHandle = FindFirstFileA((aDirName + "*.*").c_str(), &wfd);
 		if (aHandle != INVALID_HANDLE_VALUE)
 		{
-			cout << "Warning: Directory " << aDirName << " already exists.  Data will be overwritten." << endl;
+			std::cout << "Warning: Directory " << aDirName << " already exists.  Data will be overwritten." << std::endl;
 			FindClose(aHandle);
 		}
 
@@ -329,7 +337,7 @@ int main(int argc, char* argv[])
 			FILE* fp = fopen(aFileName.c_str(), "wb");
 			if (!fp)
 			{
-				cerr << "Error: Unable to open " << aFileName << " for writing: " << errno << endl;
+				std::cerr << "Error: Unable to open " << aFileName << " for writing: " << errno << std::endl;
 				return errno;
 			}
 
@@ -344,14 +352,14 @@ int main(int argc, char* argv[])
 				if (fwrite(&aByte, 1, 1, fp) != 1)
 				{
 					int err_save = errno; // in case fclose destroys errno
-					cerr << "Error: Writing data to " << aFileName << ": " << err_save << endl;
+					std::cerr << "Error: Writing data to " << aFileName << ": " << err_save << std::endl;
 					fclose(fp);
 					return err_save;
 				}
 			}
 			if (aFile.mPos < aRecord.mSize)
 			{
-				cerr << "Error: Reading data from PAK file for " << aFileName << endl;
+				std::cerr << "Error: Reading data from PAK file for " << aFileName << std::endl;
 				fclose(fp);
 				return 105;
 			}
@@ -359,12 +367,12 @@ int main(int argc, char* argv[])
 			fclose(fp);
 			
 			aDoneFiles++;
-			cout << "Writing: " << ((aDoneFiles * 100) / aNumFiles) << "%\r";
-			cout.flush();
+			std::cout << "Writing: " << ((aDoneFiles * 100) / aNumFiles) << "%\r";
+			std::cout.flush();
 		}
 
-		cout << "Writing: 100%\r";
-		cout.flush();
+		std::cout << "Writing: 100%\r";
+		std::cout.flush();
 	}
 	
 	return 0;

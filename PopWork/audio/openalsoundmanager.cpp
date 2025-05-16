@@ -1,6 +1,6 @@
 ﻿#include "openalsoundmanager.h"
 #include "openalsoundinterface.h"
-#include "PakLib/PakInterface.h"
+#include "paklib/pakinterface.h"
 #include "common.h"
 #include "aureader.h"
 

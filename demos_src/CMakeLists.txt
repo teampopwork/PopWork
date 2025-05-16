@@ -1,7 +1,4 @@
 # CMakeLists.txt
-cmake_minimum_required(VERSION 3.18)
-
-# maybe. maybe not.
 foreach(dir demo1 demo2 demo3 demo4 demo5 hun-garr v12demo v14demo xmldemo)
     add_subdirectory(${dir})
 endforeach()
@@ -10,10 +7,10 @@ endforeach()
 install(FILES
     $<TARGET_FILE:SDL3::SDL3>
     $<TARGET_FILE:OpenAL::OpenAL>
-    $<TARGET_FILE:Vorbis::vorbis>
-    $<TARGET_FILE:Vorbis::vorbisfile>
-    $<TARGET_FILE:ogg>
-    $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
+    #$<TARGET_FILE:Vorbis::vorbis>
+    #$<TARGET_FILE:Vorbis::vorbisfile>
+    #$<TARGET_FILE:ogg>
+    #$<TARGET_FILE:SDL3_ttf::SDL3_ttf>
 #   $<TARGET_FILE:miniaudio>
     ${BASS_LIB_PATH}/bass.dll
     DESTINATION ${CMAKE_SOURCE_DIR}/demos

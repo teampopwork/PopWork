@@ -1,39 +1,111 @@
 # CMakeLists.txt
-cmake_minimum_required(VERSION 3.18)
-
 project(PopWork)
-add_library(PopWork STATIC)
 
-target_sources(PopWork PRIVATE
-	appbase.cpp
-	appbase.h
-	common.cpp
-	common.h
+file(GLOB_RECURSE ALL_FILES CONFIGURE_DEPENDS
+    "*.cpp" "*.c"
+    "*.h" "*.hpp"
 )
 
-# subdirectories
-add_subdirectory(graphics)
-add_subdirectory(audio)
-add_subdirectory(math)
-add_subdirectory(debug)
-add_subdirectory(misc)
-add_subdirectory(readwrite)
-add_subdirectory(resources)
-add_subdirectory(widget)
-add_subdirectory(imagelib)
-add_subdirectory(paklib)
+set(FILTERED_FILES "")
+foreach(FILE_PATH ${ALL_FILES})
+    file(RELATIVE_PATH REL_PATH "${CMAKE_CURRENT_SOURCE_DIR}" "${FILE_PATH}")
+    string(REPLACE "\\" "/" REL_PATH "${REL_PATH}") # normalize for Windows
 
-set(PopWorkAppLibs
-	SDL3::SDL3
-	SDL3_ttf::SDL3_ttf
-	OpenAL::OpenAL
-	miniaudio
-	ogg
-	Vorbis::vorbisfile
-	Vorbis::vorbis
-	winmm
-	ws2_32
-	${BASS_LIB_PATH}/bass.lib
+    if(REL_PATH MATCHES "^graphics/SWTri/SWTri\\.(cpp|h)$")
+        list(APPEND FILTERED_FILES "${FILE_PATH}")
+    elseif(REL_PATH MATCHES "^graphics/SWTri/")
+        continue()
+    else()
+        list(APPEND FILTERED_FILES "${FILE_PATH}")
+    endif()
+endforeach()
+
+set(ALL_FILES ${FILTERED_FILES})
+
+set(SOURCE_FILES "")
+set(HEADER_FILES "")
+
+foreach(FILE_PATH ${ALL_FILES})
+    get_filename_component(EXT "${FILE_PATH}" EXT)
+    string(TOLOWER "${EXT}" EXT)
+
+    if(EXT STREQUAL ".cpp" OR EXT STREQUAL ".c")
+        list(APPEND SOURCE_FILES "${FILE_PATH}")
+    elseif(EXT STREQUAL ".h" OR EXT STREQUAL ".hpp")
+        list(APPEND HEADER_FILES "${FILE_PATH}")
+    endif()
+endforeach()
+
+function(capitalize_path INPUT OUTPUT)
+    set(RESULT "")
+    string(REPLACE "\\" "/" INPUT_PATH "${INPUT}")
+    string(REPLACE "/" ";" PATH_PARTS "${INPUT_PATH}")
+    foreach(PART ${PATH_PARTS})
+        # handle exceptions
+        string(TOLOWER "${PART}" LOWER_PART)
+        if(LOWER_PART STREQUAL "imagelib")
+            set(PART "ImageLib")
+        elseif(LOWER_PART STREQUAL "paklib")
+            set(PART "PakLib")
+        elseif(LOWER_PART STREQUAL "readwrite")
+            set(PART "ReadWrite")
+        else()
+            string(SUBSTRING "${PART}" 0 1 FIRST_CHAR)
+            string(SUBSTRING "${PART}" 1 -1 REST_CHARS)
+            string(TOUPPER "${FIRST_CHAR}" FIRST_CHAR)
+            set(PART "${FIRST_CHAR}${REST_CHARS}")
+        endif()
+        string(APPEND RESULT "${PART}/")
+    endforeach()
+    string(REGEX REPLACE "/$" "" RESULT "${RESULT}")
+    set(${OUTPUT} "${RESULT}" PARENT_SCOPE)
+endfunction()
+
+# group source files
+foreach(FILE_PATH ${SOURCE_FILES})
+    file(RELATIVE_PATH REL_PATH "${CMAKE_CURRENT_SOURCE_DIR}" "${FILE_PATH}")
+    get_filename_component(DIR_PATH "${REL_PATH}" PATH)
+    capitalize_path("${DIR_PATH}" CAPITALIZED_GROUP)
+    source_group("Source Files/${CAPITALIZED_GROUP}" FILES "${FILE_PATH}")
+endforeach()
+
+# group header files
+foreach(FILE_PATH ${HEADER_FILES})
+    file(RELATIVE_PATH REL_PATH "${CMAKE_CURRENT_SOURCE_DIR}" "${FILE_PATH}")
+    get_filename_component(DIR_PATH "${REL_PATH}" PATH)
+    capitalize_path("${DIR_PATH}" CAPITALIZED_GROUP)
+    source_group("Header Files/${CAPITALIZED_GROUP}" FILES "${FILE_PATH}")
+endforeach()
+
+set(ALL_GROUPED_FILES ${SOURCE_FILES} ${HEADER_FILES})
+
+add_library(${PROJECT_NAME} ${ALL_GROUPED_FILES})
+
+# hacks!!
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/external/vorbis/include
+    ${CMAKE_SOURCE_DIR}/external/openal
+    ${CMAKE_SOURCE_DIR}/external/ogg/include
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../lib/stb_image
 )
 
-target_link_libraries(PopWork PUBLIC ${PopWorkAppLibs})
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+	STB_IMAGE_IMPLEMENTATION
+	STBI_MSC_SECURE_CRT
+	STB_IMAGE_WRITE_IMPLEMENTATION
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    SDL3::SDL3
+    SDL3_ttf::SDL3_ttf
+    OpenAL::OpenAL
+    miniaudio
+    ogg
+    Vorbis::vorbisfile
+    Vorbis::vorbis
+    winmm
+    ws2_32
+    ${BASS_LIB_PATH}/bass.lib
+)
