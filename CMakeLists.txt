@@ -65,16 +65,6 @@ if(BUILD_EXAMPLES)
 	add_subdirectory(examples)
 endif()
 
-include_directories(
-  /usr/include/c++/12
-  /usr/include/x86_64-linux-gnu/c++/12
-  /usr/include/c++/12/backward
-  /usr/lib/gcc/x86_64-linux-gnu/12/include
-  /usr/local/include
-  /usr/include/x86_64-linux-gnu
-  /usr/include
-)
-
 # djugjsfgufdgujdfgiujgdijfgifjdgidfjgifdgjfdgufdguifdg electr0gunner told me to add this
 if(BUILD_DEMOS OR BUILD_TOOLS)
     set(demo_deps PopWork)

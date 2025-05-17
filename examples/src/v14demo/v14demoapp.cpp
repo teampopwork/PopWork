@@ -28,7 +28,8 @@ V14DemoApp::V14DemoApp()
 	// (about 400K in exe size, 150K zipped).
 	SWTri_AddAllDrawTriFuncs();
 
-	//SetTaskBarIcon("v14icon");
+	// H521
+	SetTaskBarIcon("v14icon.png");
 }
 
 V14DemoApp::~V14DemoApp()

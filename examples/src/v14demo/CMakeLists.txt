@@ -17,6 +17,10 @@ set(SOURCES
 	../res.cpp
 )
 
+if(WIN32)
+    list(APPEND SOURCES resources.rc)
+endif()
+
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE
 	../

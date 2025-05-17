@@ -27,3 +27,20 @@ install(TARGETS
     XMLDemo
     RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/examples/bin
 )
+
+# pdb files
+if(MSVC)
+    install(FILES
+        $<TARGET_PDB_FILE:Demo1>
+        $<TARGET_PDB_FILE:Demo2>
+        $<TARGET_PDB_FILE:Demo3>
+        $<TARGET_PDB_FILE:Demo4>
+        $<TARGET_PDB_FILE:Demo5>
+        $<TARGET_PDB_FILE:Hun-garr>
+        $<TARGET_PDB_FILE:V12Demo>
+        $<TARGET_PDB_FILE:V14Demo>
+        $<TARGET_PDB_FILE:XMLDemo>
+        DESTINATION ${CMAKE_SOURCE_DIR}/examples/bin
+        OPTIONAL
+    )
+endif()

@@ -38,6 +38,10 @@
 
 #include "debug/memmgr.h"
 
+// H521
+#undef STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 using namespace PopWork;
 
 AppBase *PopWork::gAppBase = NULL;
@@ -3647,14 +3651,29 @@ void AppBase::EnableCustomCursors(bool enabled)
 
 void AppBase::SetTaskBarIcon(const std::string &theFileName)
 {
-	ImageLib::Image *aLoadedImage = ImageLib::GetImage(theFileName, false);
-
-	if (aLoadedImage == NULL)
+	// H521
+	int width, height, channels;
+	unsigned char *data = stbi_load(theFileName.c_str(), &width, &height, &channels, 4);
+	if (!data)
+	{
+		SDL_Log("failed to load image: %s\n", stbi_failure_reason());
 		return;
-	MemoryImage *aConvertedIcon = new MemoryImage();
-	aConvertedIcon->SetBits(aLoadedImage->GetBits(), aLoadedImage->GetWidth(), aLoadedImage->GetHeight(), true);
-	mTitleBarIcon = aConvertedIcon;
-	delete aLoadedImage;
+	}
+
+	SDL_Surface *surface = SDL_CreateSurfaceFrom(width, height, SDL_PIXELFORMAT_RGBA32, data, width*4);
+	if (!surface)
+	{
+		SDL_Log("no surface?\n");
+		stbi_image_free(data);
+		return;
+	}
+
+	SDL_SetWindowIcon(mSDLInterface->mWindow, surface);
+
+	stbi_image_free(surface->pixels);
+	SDL_DestroySurface(surface);
+
+	return;
 }
 
 PopWork::SDLImage *AppBase::GetImage(const std::string &theFileName, bool commitBits)

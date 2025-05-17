@@ -58,13 +58,14 @@ using namespace PopWork;
 
 int main(int argc, char* argv[])
 {
-	printf("test");
 #ifndef _CONSOLE_ON
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
+
 	V14DemoApp* anApp = new V14DemoApp();
 	anApp->Init();
 	anApp->Start();
+
 	delete anApp;
 
 	return 0;
