@@ -76,14 +76,15 @@ jobs:
           fi
         shell: bash
 
-      - name: Create archive
-        run: |
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            Compress-Archive -Path dist\* -DestinationPath PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip
-          else
-            zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip dist
-          fi
+      - name: Create archive (Linux)
+        if: runner.os != 'Windows'
+        run: zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip dist
         shell: bash
+
+      - name: Create archive (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path dist\* -DestinationPath PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip
+        shell: pwsh
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
