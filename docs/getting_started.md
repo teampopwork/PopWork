@@ -15,7 +15,7 @@ Okay, first of all, clone the repository. I'll just assume you installed *Git*, 
 git clone https://github.com/PvZDecompAssociation/PopWork.git --recursive
 ```
 
-I know you're probably asking for explanations, so uhh...Alright. That command clones the repository recursively, which means it also clones all libraries like *Vorbis*, *Ogg*, and et cetera.
+> The --recursive flag is crucial, it ensures all the libraries are also cloned.
 
 After you've cloned the repository, just go into that directory, and then type this, assuming you have CMake and I won't have to explain it again:
 ```
