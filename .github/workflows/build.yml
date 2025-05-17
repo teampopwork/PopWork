@@ -18,7 +18,7 @@ jobs:
       - name: Set up CMake
         uses: lukka/get-cmake@latest
         with:
-            cmakeVersion: "3.25.0"
+            cmakeVersion: latest
 
       - name: Configure CMake project
         run: |
@@ -40,7 +40,7 @@ jobs:
       - name: Set up CMake
         uses: lukka/get-cmake@latest
         with:
-            cmakeVersion: "3.25.0"
+            cmakeVersion: latest
 
       - name: Configure CMake project
         run: |
@@ -63,7 +63,7 @@ jobs:
       - name: Set up CMake
         uses: lukka/get-cmake@latest
         with:
-          cmakeVersion: "3.25.0"
+          cmakeVersion: latest
 
       - name: Install dependencies
         run: |
