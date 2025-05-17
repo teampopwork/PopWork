@@ -3,88 +3,92 @@ name: Build
 on:
   push:
   pull_request:
+  release:
+    types: [created]
 
 jobs:
-  # Windows x64
-  build_win64:
-    runs-on: windows-2025
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
-        with:
-            submodules: 'recursive'
-
-      - name: Set up CMake
-        uses: lukka/get-cmake@latest
-        with:
-            cmakeVersion: latest
-
-      - name: Configure CMake project
-        run: |
-            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A x64
-
-      - name: Build project
-        run: cmake --build build --config Release
-  
-  # Windows x86
-  build_win32:
-    runs-on: windows-2025
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
-        with:
-            submodules: 'recursive'
-
-      - name: Set up CMake
-        uses: lukka/get-cmake@latest
-        with:
-            cmakeVersion: latest
-
-      - name: Configure CMake project
-        run: |
-            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A Win32
-
-      - name: Build project
-        run: cmake --build build --config Release
-  
-  # Linux
-  build-linux:
-    name: Build (Linux)
+  version:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract.outputs.version }}
+    steps:
+      - name: Read VERSION file
+        id: extract
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
 
+  build:
+    needs: version
+    strategy:
+      matrix:
+        os: [windows-2025, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    name: Build on ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
         with:
-          submodules: 'recursive'
+          submodules: recursive
 
       - name: Set up CMake
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: latest
 
-      - name: Install dependencies
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-            sudo apt-get update
-            sudo apt-get install -y \
-             build-essential \
-             libx11-dev \
-             libxcursor-dev \
-             libxi-dev \
-             libxrandr-dev \
-             libxext-dev \
-             libdrm-dev \
-             libgbm-dev \
-             libwayland-dev \
-             libegl1-mesa-dev \
-             libfreetype6-dev \
-             libharfbuzz-dev
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential libx11-dev libxcursor-dev libxi-dev \
+            libxrandr-dev libxext-dev libdrm-dev libgbm-dev \
+            libwayland-dev libegl1-mesa-dev libfreetype6-dev libharfbuzz-dev
 
-      - name: Configure project
+      - name: Configure
         run: |
-          cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A x64
+          else
+            cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+          fi
+        shell: bash
 
-      - name: Build project
+      - name: Build
         run: cmake --build build --config Release
+
+      - name: Organize output
+        run: |
+          mkdir -p dist/examples
+          cp build/examples/bin/* dist/examples/
+          cp VERSION dist/
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            mkdir -p dist/tools
+            cp build/tools/PopPak*.exe dist/tools/ || true
+          fi
+        shell: bash
+
+      - name: Create archive
+        run: |
+          zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}.zip dist
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}
+          path: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}.zip
+
+  release:
+    needs: [version, build]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: artifacts/**.zip
