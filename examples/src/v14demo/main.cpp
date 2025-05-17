@@ -58,6 +58,7 @@ using namespace PopWork;
 
 int main(int argc, char* argv[])
 {
+	printf("test");
 #ifndef _CONSOLE_ON
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif

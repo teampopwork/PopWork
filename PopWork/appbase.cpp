@@ -199,6 +199,7 @@ AppBase::AppBase()
 	mCustomCursorsEnabled = false;
 	mCustomCursorDirty = false;
 	mOverrideCursor = NULL;
+	mTitleBarIcon = NULL;
 	mIsOpeningURL = false;
 	mInitialized = false;
 	mLastShutdownWasGraceful = true;
@@ -229,7 +230,6 @@ AppBase::AppBase()
 	mScreenBltTime = 0;
 	mAlphaDisabled = false;
 	mDebugKeysEnabled = false;
-	mOldWndProc = 0;
 	mNoSoundNeeded = false;
 
 	mSyncRefreshRate = 100;
@@ -3645,6 +3645,18 @@ void AppBase::EnableCustomCursors(bool enabled)
 	EnforceCursor();
 }
 
+void AppBase::SetTaskBarIcon(const std::string &theFileName)
+{
+	ImageLib::Image *aLoadedImage = ImageLib::GetImage(theFileName, false);
+
+	if (aLoadedImage == NULL)
+		return;
+	MemoryImage *aConvertedIcon = new MemoryImage();
+	aConvertedIcon->SetBits(aLoadedImage->GetBits(), aLoadedImage->GetWidth(), aLoadedImage->GetHeight(), true);
+	mTitleBarIcon = aConvertedIcon;
+	delete aLoadedImage;
+}
+
 PopWork::SDLImage *AppBase::GetImage(const std::string &theFileName, bool commitBits)
 {
 	ImageLib::Image *aLoadedImage = ImageLib::GetImage(theFileName, true);
@@ -3655,7 +3667,6 @@ PopWork::SDLImage *AppBase::GetImage(const std::string &theFileName, bool commit
 	SDLImage *anImage = new SDLImage(mSDLInterface);
 	anImage->mFilePath = theFileName;
 	anImage->SetBits(aLoadedImage->GetBits(), aLoadedImage->GetWidth(), aLoadedImage->GetHeight(), commitBits);
-	anImage->mFilePath = theFileName;
 	delete aLoadedImage;
 
 	return anImage;

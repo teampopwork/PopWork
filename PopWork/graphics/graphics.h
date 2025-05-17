@@ -14,7 +14,7 @@ namespace PopWork
 {
 
 class Font;
-class PopWorkMatrix3;
+class Matrix3;
 class Transform;
 
 const int MAX_TEMP_SPANS = 8192;
@@ -144,8 +144,8 @@ class Graphics : public GraphicsState
 	void DrawImageRotatedF(Image *theImage, float theX, float theY, double theRot, float theRotCenterX,
 						   float theRotCenterY, const Rect *theSrcRect = NULL);
 
-	void DrawImageMatrix(Image *theImage, const PopWorkMatrix3 &theMatrix, float x = 0, float y = 0);
-	void DrawImageMatrix(Image *theImage, const PopWorkMatrix3 &theMatrix, const Rect &theSrcRect, float x = 0,
+	void DrawImageMatrix(Image *theImage, const Matrix3 &theMatrix, float x = 0, float y = 0);
+	void DrawImageMatrix(Image *theImage, const Matrix3 &theMatrix, const Rect &theSrcRect, float x = 0,
 						 float y = 0);
 	void DrawImageTransform(Image *theImage, const Transform &theTransform, float x = 0, float y = 0);
 	void DrawImageTransform(Image *theImage, const Transform &theTransform, const Rect &theSrcRect, float x = 0,

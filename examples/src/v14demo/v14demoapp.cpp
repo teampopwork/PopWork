@@ -1,6 +1,8 @@
 #include "v14demoapp.h"
 #include "PopWork/widget/widgetmanager.h"
 #include "PopWork/graphics/sdlimage.h"
+#include "PopWork/graphics/sdlinterface.h"
+#include "PopWork/imagelib/imagelib.h"
 #include "PopWork/resources/resourcemanager.h"
 #include "PopWork/widget/dialog.h"
 #include "PopWork/graphics/SWTri/SWTri.h"
@@ -14,7 +16,7 @@ V14DemoApp::V14DemoApp()
 	mProdName = "V14Demo";
 	mProductVersion = "1.0";
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap\\PopWork\\V12Demo";
+	mRegKey = "PopCap\\PopWork\\V14Demo";
 
 	//mNoSoundNeeded = true;
 	mBoard = NULL;
@@ -25,6 +27,8 @@ V14DemoApp::V14DemoApp()
 	// can avoid the extra code required to support the functions 
 	// (about 400K in exe size, 150K zipped).
 	SWTri_AddAllDrawTriFuncs();
+
+	//SetTaskBarIcon("v14icon");
 }
 
 V14DemoApp::~V14DemoApp()

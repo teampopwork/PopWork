@@ -10,7 +10,7 @@ namespace PopWork
 {
 
 #pragma pack(push, 1)
-struct PopWorkRGBA
+struct RGBA
 {
 	unsigned char b, g, r, a;
 };
@@ -33,7 +33,7 @@ class Color
 	Color(int theColor, int theAlpha);
 	Color(int theRed, int theGreen, int theBlue);
 	Color(int theRed, int theGreen, int theBlue, int theAlpha);
-	Color(const PopWorkRGBA &theColor);
+	Color(const RGBA &theColor);
 	Color(const uchar *theElements);
 	Color(const int *theElements);
 
@@ -42,7 +42,7 @@ class Color
 	int GetBlue() const;
 	int GetAlpha() const;
 	ulong ToInt() const;
-	PopWorkRGBA ToRGBA() const;
+	RGBA ToRGBA() const;
 
 	int &operator[](int theIdx);
 	int operator[](int theIdx) const;

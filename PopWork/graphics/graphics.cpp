@@ -3,7 +3,7 @@
 #include "sdlimage.h"
 #include "memoryimage.h"
 #include "debug/debug.h"
-#include "math/popmatrix.h"
+#include "math/matrix.h"
 #include <math.h>
 
 using namespace PopWork;
@@ -845,14 +845,14 @@ void Graphics::DrawImageRotatedF(Image *theImage, float theX, float theY, double
 							   mDrawMode, theRot, theRotCenterX, theRotCenterY);
 }
 
-void Graphics::DrawImageMatrix(Image *theImage, const PopWorkMatrix3 &theMatrix, float x, float y)
+void Graphics::DrawImageMatrix(Image *theImage, const Matrix3 &theMatrix, float x, float y)
 {
 	Rect aSrcRect(0, 0, theImage->mWidth, theImage->mHeight);
 	mDestImage->BltMatrix(theImage, x + mTransX, y + mTransY, theMatrix, mClipRect,
 						  mColorizeImages ? mColor : Color::White, mDrawMode, aSrcRect, mLinearBlend);
 }
 
-void Graphics::DrawImageMatrix(Image *theImage, const PopWorkMatrix3 &theMatrix, const Rect &theSrcRect, float x,
+void Graphics::DrawImageMatrix(Image *theImage, const Matrix3 &theMatrix, const Rect &theSrcRect, float x,
 							   float y)
 {
 	mDestImage->BltMatrix(theImage, x + mTransX, y + mTransY, theMatrix, mClipRect,

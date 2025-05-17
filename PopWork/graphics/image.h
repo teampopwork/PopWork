@@ -45,7 +45,7 @@ struct AnimInfo
 };
 
 class Graphics;
-class PopWorkMatrix3;
+class Matrix3;
 class SysFont;
 class TriVertex;
 
@@ -106,7 +106,7 @@ class Image
 							float theRotCenterY);
 	virtual void StretchBlt(Image *theImage, const Rect &theDestRect, const Rect &theSrcRect, const Rect &theClipRect,
 							const Color &theColor, int theDrawMode, bool fastStretch);
-	virtual void BltMatrix(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix, const Rect &theClipRect,
+	virtual void BltMatrix(Image *theImage, float x, float y, const Matrix3 &theMatrix, const Rect &theClipRect,
 						   const Color &theColor, int theDrawMode, const Rect &theSrcRect, bool blend);
 	virtual void BltTrianglesTex(Image *theTexture, const TriVertex theVertices[][3], int theNumTriangles,
 								 const Rect &theClipRect, const Color &theColor, int theDrawMode, float tx, float ty,

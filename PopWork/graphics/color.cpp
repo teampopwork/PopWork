@@ -31,7 +31,7 @@ Color::Color(int theRed, int theGreen, int theBlue, int theAlpha)
 {
 }
 
-Color::Color(const PopWorkRGBA &theColor) : mRed(theColor.r), mGreen(theColor.g), mBlue(theColor.b), mAlpha(theColor.a)
+Color::Color(const RGBA &theColor) : mRed(theColor.r), mGreen(theColor.g), mBlue(theColor.b), mAlpha(theColor.a)
 {
 }
 
@@ -105,9 +105,9 @@ ulong Color::ToInt() const
 	return (mAlpha << 24) | (mRed << 16) | (mGreen << 8) | (mBlue);
 }
 
-PopWorkRGBA Color::ToRGBA() const
+RGBA Color::ToRGBA() const
 {
-	PopWorkRGBA anRGBA;
+	RGBA anRGBA;
 	anRGBA.r = mRed;
 	anRGBA.g = mGreen;
 	anRGBA.b = mBlue;

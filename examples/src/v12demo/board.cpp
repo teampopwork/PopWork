@@ -9,7 +9,7 @@
 #include "PopWork/widget/widgetmanager.h"
 #include "PopWork/widget/dialog.h"
 #include "PopWork/misc/flags.h"
-#include "PopWork/math/popmatrix.h"
+#include "PopWork/math/matrix.h"
 #include "PopWork/math/trivertex.h"
 
 using namespace PopWork;
@@ -307,7 +307,7 @@ void Board::DrawOverlay(Graphics *g)
 	// crazy stuff, you can also do some cool little tricks. For example, previously it used be a pain
 	// to in real-time flip and mirror an image. While I won't give a tutorial on matrix algebra
 	// (that would take a loooooong time), I'll explain the essential parts:
-	PopWorkTransform2D matrix;
+	Transform2D matrix;
 
 	// Multiplying the X coordinate by -1 (which is the 0, 0 element of the matrix) will result in our
 	// image being mirrored, while multiplying the Y coordinate by -1 (1, 1 in the matrix) will result in our

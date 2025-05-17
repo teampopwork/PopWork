@@ -118,7 +118,7 @@ void SDLImage::StretchBlt(Image *theImage, const Rect &theDestRect, const Rect &
 	mInterface->StretchBlt(theImage, theDestRect, theSrcRect, &theClipRect, theColor, theDrawMode, fastStretch);
 }
 
-void SDLImage::BltMatrix(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix,
+void SDLImage::BltMatrix(Image *theImage, float x, float y, const Matrix3 &theMatrix,
 								  const Rect &theClipRect, const Color &theColor, int theDrawMode,
 								  const Rect &theSrcRect, bool blend)
 {

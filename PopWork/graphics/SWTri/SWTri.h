@@ -7,8 +7,8 @@
 // dirty hacks but fuck it
 #include "../color.h"
 #include "../memoryimage.h"
-#include "math/rect.h"
-#include "math/popmatrix.h"
+#include "../../math/rect.h"
+#include "../../math/matrix.h"
 
 namespace PopWork
 {

@@ -10,7 +10,7 @@
 #include "nativedisplay.h"
 #include "math/rect.h"
 #include "math/ratio.h"
-#include "math/popmatrix.h"
+#include "math/matrix.h"
 
 #include <SDL3/SDL.h>
 
@@ -19,12 +19,12 @@ namespace PopWork
 
 class AppBase;
 class SDLImage;
-class PopWorkMatrix3;
+class Matrix3;
 class TriVertex;
 
 typedef std::set<SDLImage *> SDLImageSet;
 typedef std::set<MemoryImage *> ImageSet;
-typedef std::list<PopWorkMatrix3> TransformStack;
+typedef std::list<Matrix3> TransformStack;
 
 enum SDLImageFlags
 {
@@ -126,6 +126,7 @@ class SDLInterface : public NativeDisplay
 	void SetCursorPos(int theCursorX, int theCursorY);
 
 	bool SetCursorImage(Image *theImage);
+	bool UpdateWindowIcon(Image *theImage);
 
 	void SetCursor(SDL_SystemCursor theCursorType);
 
@@ -133,7 +134,7 @@ class SDLInterface : public NativeDisplay
 	int MakeResultMessageBox(SDL_MessageBoxData data);
 
   public:
-	void PushTransform(const PopWorkMatrix3 &theTransform, bool concatenate = true);
+	void PushTransform(const Matrix3 &theTransform, bool concatenate = true);
 	void PopTransform();
 
 	bool PreDraw();
@@ -155,7 +156,7 @@ class SDLInterface : public NativeDisplay
 	void BltRotated(Image *theImage, float theX, float theY, const Rect *theClipRect, const Color &theColor,
 					int theDrawMode, double theRot, float theRotCenterX, float theRotCenterY, const Rect &theSrcRect);
 	void BltTransformed(Image *theImage, const Rect *theClipRect, const Color &theColor, int theDrawMode,
-						const Rect &theSrcRect, const PopWorkMatrix3 &theTransform, bool linearFilter, float theX = 0,
+						const Rect &theSrcRect, const Matrix3 &theTransform, bool linearFilter, float theX = 0,
 						float theY = 0, bool center = false);
 	void DrawLine(double theStartX, double theStartY, double theEndX, double theEndY, const Color &theColor,
 				  int theDrawMode);

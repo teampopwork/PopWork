@@ -10,7 +10,7 @@
 
 using namespace PopWork;
 
-SDL_FPoint TransformToPoint(float x, float y, const PopWorkMatrix3 &m, float aTransX = 0, float aTransY = 0)
+SDL_FPoint TransformToPoint(float x, float y, const Matrix3 &m, float aTransX = 0, float aTransY = 0)
 {
 	SDL_FPoint result;
 	result.x = m.m00 * x + m.m01 * y + m.m02 + aTransX;
@@ -139,12 +139,6 @@ int SDLInterface::Init(bool IsWindowed)
 
 bool SDLInterface::InitSDLWindow(bool IsWindowed)
 {
-	if (!SDL_Init(SDL_INIT_VIDEO) || !TTF_Init())
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "SDL Initialization Failed", SDL_GetError(), nullptr);
-		return false;
-	}
-
 	int aWindowFlags = IsWindowed ? 0 : SDL_WINDOW_FULLSCREEN;
 
 	mWindow = SDL_CreateWindow(PopWorkStringToStringFast(mApp->mTitle).c_str(), mWidth, mHeight, aWindowFlags);
@@ -156,6 +150,8 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 
 	if (!IsWindowed)
 		SDL_SetWindowFullscreen(mWindow, true);
+
+	UpdateWindowIcon(mApp->mTitleBarIcon);
 
 	SDL_StartTextInput(mWindow);
 
@@ -250,24 +246,43 @@ void SDLInterface::SetCursorPos(int theCursorX, int theCursorY)
 /// <returns></returns>
 bool SDLInterface::SetCursorImage(Image *theImage)
 {
-	if (theImage == NULL)
+	AutoCrit anAutoCrit(mCritSect);
+
+	if (mCursorImage != theImage)
 	{
-		SDL_SetCursor(nullptr);
+		mCursorImage = theImage;
+		if (theImage == NULL)
+			return true;
+		SDL_Surface *aSurface =
+			SDL_CreateSurfaceFrom(theImage->mWidth, theImage->mHeight, SDL_PIXELFORMAT_ARGB8888,
+								  ((MemoryImage *)mCursorImage)->GetBits(), theImage->mWidth * sizeof(ulong));
+
+		SDL_Cursor *aCursor = SDL_CreateColorCursor(aSurface, mCursorImage->mWidth / 2, mCursorImage->mHeight / 2);
+
+		SDL_SetCursor(aCursor);
+
+		SDL_DestroySurface(aSurface);
+
 		return true;
 	}
-	MemoryImage *aMemoryImage = (MemoryImage *)theImage;
 
-	SDL_Surface *aSurface = SDL_CreateSurfaceFrom(aMemoryImage->mWidth, aMemoryImage->mHeight, SDL_PIXELFORMAT_ARGB8888,
-												  aMemoryImage->GetBits(), aMemoryImage->mWidth * sizeof(ulong));
+	return false;
+}
 
-	SDL_Cursor *aCursor = SDL_CreateColorCursor(aSurface, 0, 0);
+bool SDLInterface::UpdateWindowIcon(Image *theImage)
+{
+	if (theImage != nullptr)
+	{
+		SDL_Surface *aSurface =
+			SDL_CreateSurfaceFrom(theImage->mWidth, theImage->mHeight, SDL_PIXELFORMAT_ARGB8888,
+								  ((MemoryImage *)theImage)->GetBits(), theImage->mWidth * sizeof(ulong));
 
-	SDL_SetCursor(aCursor);
+		SDL_SetWindowIcon(mWindow, aSurface);
 
-	SDL_DestroySurface(aSurface);
-	SDL_DestroyCursor(aCursor);
-
-	return true;
+		SDL_DestroySurface(aSurface);
+		return true;
+	}
+	return false;
 }
 
 void SDLInterface::SetCursor(SDL_SystemCursor theCursorType)
@@ -290,13 +305,13 @@ int SDLInterface::MakeResultMessageBox(SDL_MessageBoxData data)
 	return buttonid;
 }
 
-void SDLInterface::PushTransform(const PopWorkMatrix3 &theTransform, bool concatenate)
+void SDLInterface::PushTransform(const Matrix3 &theTransform, bool concatenate)
 {
 	if (mTransformStack.empty() || !concatenate)
 		mTransformStack.push_back(theTransform);
 	else
 	{
-		PopWorkMatrix3 &aTrans = mTransformStack.back();
+		Matrix3 &aTrans = mTransformStack.back();
 		mTransformStack.push_back(theTransform * aTrans);
 	}
 }
@@ -648,7 +663,7 @@ void SDLInterface::BltRotated(Image *theImage, float theX, float theY, const Rec
 }
 
 void SDLInterface::BltTransformed(Image *theImage, const Rect *theClipRect, const Color &theColor, int theDrawMode,
-								  const Rect &theSrcRect, const PopWorkMatrix3 &theTransform, bool linearFilter,
+								  const Rect &theSrcRect, const Matrix3 &theTransform, bool linearFilter,
 								  float theX, float theY, bool center)
 {
 	MemoryImage *aSrcMemoryImage = static_cast<MemoryImage *>(theImage);

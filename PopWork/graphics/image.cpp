@@ -276,7 +276,7 @@ void Image::StretchBlt(Image *theImage, const Rect &theDestRect, const Rect &the
 {
 }
 
-void Image::BltMatrix(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix, const Rect &theClipRect,
+void Image::BltMatrix(Image *theImage, float x, float y, const Matrix3 &theMatrix, const Rect &theClipRect,
 					  const Color &theColor, int theDrawMode, const Rect &theSrcRect, bool blend)
 {
 }

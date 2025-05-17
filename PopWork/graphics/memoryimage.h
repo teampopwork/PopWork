@@ -81,7 +81,7 @@ class MemoryImage : public Image
 							  FRect &theSrcRectOut, Rect &theDestRectOut);
 	bool StretchBltMirrorClipHelper(const Rect &theSrcRect, const Rect &theClipRect, const Rect &theDestRect,
 									FRect &theSrcRectOut, Rect &theDestRectOut);
-	void BltMatrixHelper(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix, const Rect &theClipRect,
+	void BltMatrixHelper(Image *theImage, float x, float y, const Matrix3 &theMatrix, const Rect &theClipRect,
 						 const Color &theColor, int theDrawMode, const Rect &theSrcRect, void *theSurface,
 						 int theBytePitch, int thePixelFormat, bool blend);
 	void BltTrianglesTexHelper(Image *theTexture, const TriVertex theVertices[][3], int theNumTriangles,
@@ -119,7 +119,7 @@ class MemoryImage : public Image
 							float theRotCenterY);
 	virtual void StretchBlt(Image *theImage, const Rect &theDestRect, const Rect &theSrcRect, const Rect &theClipRect,
 							const Color &theColor, int theDrawMode, bool fastStretch);
-	virtual void BltMatrix(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix, const Rect &theClipRect,
+	virtual void BltMatrix(Image *theImage, float x, float y, const Matrix3 &theMatrix, const Rect &theClipRect,
 						   const Color &theColor, int theDrawMode, const Rect &theSrcRect, bool blend);
 	virtual void BltTrianglesTex(Image *theTexture, const TriVertex theVertices[][3], int theNumTriangles,
 								 const Rect &theClipRect, const Color &theColor, int theDrawMode, float tx, float ty,

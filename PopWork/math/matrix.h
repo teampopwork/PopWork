@@ -4,14 +4,14 @@
 #pragma once
 #endif
 
-#include "popvector.h"
+#include "vector.h"
 
 namespace PopWork
 {
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-class PopWorkMatrix3
+class Matrix3
 {
   public:
 	union {
@@ -25,33 +25,33 @@ class PopWorkMatrix3
 	};
 
   public:
-	PopWorkMatrix3();
+	Matrix3();
 	void ZeroMatrix();
 	void LoadIdentity();
 
-	PopWorkVector2 operator*(const PopWorkVector2 &theVec) const;
-	PopWorkVector3 operator*(const PopWorkVector3 &theVec) const;
-	PopWorkMatrix3 operator*(const PopWorkMatrix3 &theMat) const;
-	const PopWorkMatrix3 &operator*=(const PopWorkMatrix3 &theMat);
+	Vector2 operator*(const Vector2 &theVec) const;
+	Vector3 operator*(const Vector3 &theVec) const;
+	Matrix3 operator*(const Matrix3 &theMat) const;
+	const Matrix3 &operator*=(const Matrix3 &theMat);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-class PopWorkTransform2D : public PopWorkMatrix3
+class Transform2D : public Matrix3
 {
 	// only useful internally
   protected:
 	double determinantOfMinor(int theRowHeightY, int theColumnWidthX) const;
 
   public:
-	PopWorkTransform2D();
-	PopWorkTransform2D(bool loadIdentity);
-	PopWorkTransform2D(const PopWorkMatrix3 &theMatrix);
+	Transform2D();
+	Transform2D(bool loadIdentity);
+	Transform2D(const Matrix3 &theMatrix);
 
-	const PopWorkTransform2D &operator=(const PopWorkMatrix3 &theMat);
+	const Transform2D &operator=(const Matrix3 &theMat);
 
 	double GetDeterminant() const;
-	PopWorkTransform2D Inverse() const;
+	Transform2D Inverse() const;
 
 	void Translate(float tx, float ty);
 
@@ -68,7 +68,7 @@ class PopWorkTransform2D : public PopWorkMatrix3
 class Transform
 {
   protected:
-	mutable PopWorkTransform2D mMatrix;
+	mutable Transform2D mMatrix;
 	mutable bool mNeedCalcMatrix;
 	void MakeComplex();
 	void CalcMatrix() const;
@@ -89,7 +89,7 @@ class Transform
 	void RotateDeg(float rot);
 	void Scale(float sx, float sy);
 
-	const PopWorkTransform2D &GetMatrix() const;
+	const Transform2D &GetMatrix() const;
 };
 
 } // namespace PopWork

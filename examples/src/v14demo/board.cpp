@@ -13,7 +13,7 @@
 #include "PopWork/misc/flags.h"
 #include "PopWork/imagelib/imagelib.h"
 #include "PopWork/graphics/memoryimage.h"
-#include "PopWork/math/popmatrix.h"
+#include "PopWork/math/matrix.h"
 #include "PopWork/math/trivertex.h"
 #include "PopWork/audio/soundmanager.h"
 #include "PopWork/audio/soundinstance.h"

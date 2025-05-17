@@ -1737,7 +1737,7 @@ void MemoryImage::StretchBlt(Image *theImage, const Rect &theDestRect, const Rec
 		SlowStretchBlt(theImage, aDestRect, aSrcRect, theColor, theDrawMode);
 }
 
-void MemoryImage::BltMatrixHelper(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix,
+void MemoryImage::BltMatrixHelper(Image *theImage, float x, float y, const Matrix3 &theMatrix,
 								  const Rect &theClipRect, const Color &theColor, int theDrawMode,
 								  const Rect &theSrcRect, void *theSurface, int theBytePitch, int thePixelFormat,
 								  bool blend)
@@ -1761,7 +1761,7 @@ void MemoryImage::BltMatrixHelper(Image *theImage, float x, float y, const PopWo
 
 	for (int i = 0; i < 4; i++)
 	{
-		PopWorkVector3 v(aVerts[i].mX, aVerts[i].mY, 1);
+		Vector3 v(aVerts[i].mX, aVerts[i].mY, 1);
 		v = theMatrix * v;
 		aVerts[i].mX = v.x + x - 0.5f;
 		aVerts[i].mY = v.y + y - 0.5f;
@@ -1771,7 +1771,7 @@ void MemoryImage::BltMatrixHelper(Image *theImage, float x, float y, const PopWo
 						  thePixelFormat, blend, false);
 }
 
-void MemoryImage::BltMatrix(Image *theImage, float x, float y, const PopWorkMatrix3 &theMatrix, const Rect &theClipRect,
+void MemoryImage::BltMatrix(Image *theImage, float x, float y, const Matrix3 &theMatrix, const Rect &theClipRect,
 							const Color &theColor, int theDrawMode, const Rect &theSrcRect, bool blend)
 {
 	theImage->mDrawn = true;

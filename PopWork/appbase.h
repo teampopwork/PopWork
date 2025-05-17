@@ -165,6 +165,7 @@ class AppBase : public ButtonListener, public DialogListener
 	std::string mRegisterLink;
 	std::string mProductVersion;
 	Image *mCursorImages[NUM_CURSORS];
+	Image *mTitleBarIcon;
 	SDL_Cursor *mOverrideCursor;
 	bool mIsOpeningURL;
 	bool mShutdownOnURLOpen;
@@ -278,8 +279,6 @@ class AppBase : public ButtonListener, public DialogListener
 #ifdef ZYLOM
 	uint mZylomGameId;
 #endif
-
-	LONG mOldWndProc;
 
   protected:
 	void RehupFocus();
@@ -396,6 +395,8 @@ class AppBase : public ButtonListener, public DialogListener
 	virtual SDLImage *GetImage(const std::string &theFileName, bool commitBits = true);
 	virtual SharedImageRef GetSharedImage(const std::string &theFileName, const std::string &theVariant = "",
 										  bool *isNew = NULL);
+
+	void SetTaskBarIcon(const std::string &theFileName);
 
 	void CleanSharedImages();
 	void PrecacheAdditive(MemoryImage *theImage);
