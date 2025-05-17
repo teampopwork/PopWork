@@ -18,13 +18,22 @@ jobs:
 
   build:
     needs: version
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2025, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    name: Build on ${{ matrix.os }}
+        include:
+          - os: windows-2025
+            arch: x64
+            cmake_arch: x64
+          - os: windows-2025
+            arch: x86
+            cmake_arch: Win32
+          - os: ubuntu-latest
+            arch: x64
+            cmake_arch: native
+    name: Build ${{ matrix.arch }} on ${{ matrix.os }}
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
@@ -46,36 +55,36 @@ jobs:
       - name: Configure
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A x64
+            cmake -S . -B build_${{ matrix.arch }} -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A ${{ matrix.cmake_arch }}
           else
-            cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+            cmake -S . -B build_${{ matrix.arch }} -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
           fi
         shell: bash
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build_${{ matrix.arch }} --config Release
 
       - name: Organize output
         run: |
           mkdir -p dist/examples
-          cp build/examples/bin/* dist/examples/
+          cp build_${{ matrix.arch }}/examples/bin/* dist/examples/ || true
           cp VERSION dist/
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             mkdir -p dist/tools
-            cp build/tools/PopPak*.exe dist/tools/ || true
+            cp build_${{ matrix.arch }}/tools/PopPak*.exe dist/tools/ || true
           fi
         shell: bash
 
       - name: Create archive
         run: |
-          zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}.zip dist
+          zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip dist
         shell: bash
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}
-          path: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}.zip
+          name: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}
+          path: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip
 
   release:
     needs: [version, build]
@@ -87,8 +96,8 @@ jobs:
         with:
           path: artifacts
 
-      - name: Release
+      - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          files: artifacts/**.zip
+          files: artifacts/**/*.zip
