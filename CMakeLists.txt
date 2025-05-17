@@ -79,6 +79,8 @@ if(BUILD_DEMOS OR BUILD_TOOLS)
     add_custom_target(alldemos ALL DEPENDS ${demo_deps})
 endif()
 
-add_custom_command(TARGET alldemos POST_BUILD
-    COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR} --config $<CONFIG>
-)
+if(NOT (DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true"))
+    add_custom_command(TARGET alldemos POST_BUILD
+        COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR} --config $<CONFIG>
+    )
+endif()
