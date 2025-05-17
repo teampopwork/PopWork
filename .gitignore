@@ -10,3 +10,4 @@ game/*.dll
 examples/bin/*.exe
 examples/bin/*.dll
 config.cmd
+out/

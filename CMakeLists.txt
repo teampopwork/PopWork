@@ -16,7 +16,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 option(USE_WIDESTRING "Wide Strings" ON)
 option(BUILD_EXAMPLES "Build Examples" ON)
-option(CONSOLE "Show the console on Windows" OFF)
+option(CONSOLE "Show the console on Windows" ON)
 option(BUILD_TOOLS "Build Tools" ON)
 
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -37,11 +37,11 @@ endif()
 
 if (IS_64BIT)
     message (STATUS "Getting the x64 BASS path")
-	set(BASS_LIB_PATH ${CMAKE_SOURCE_DIR}/lib/Bass/x64)
+	set(BASS_LIB_PATH ${CMAKE_SOURCE_DIR}/lib/bass/x64)
 	message (${BASS_LIB_PATH})
 else ()
     message (STATUS "Getting the x86 BASS path")
-	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/lib/Bass/x86)
+	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/lib/bass/x86)
 	message (${BASS_LIB_PATH})
 endif()
 
@@ -64,6 +64,16 @@ endif()
 if(BUILD_EXAMPLES)
 	add_subdirectory(examples)
 endif()
+
+include_directories(
+  /usr/include/c++/12
+  /usr/include/x86_64-linux-gnu/c++/12
+  /usr/include/c++/12/backward
+  /usr/lib/gcc/x86_64-linux-gnu/12/include
+  /usr/local/include
+  /usr/include/x86_64-linux-gnu
+  /usr/include
+)
 
 # djugjsfgufdgujdfgiujgdijfgifjdgidfjgifdgjfdgufdguifdg electr0gunner told me to add this
 if(BUILD_DEMOS OR BUILD_TOOLS)

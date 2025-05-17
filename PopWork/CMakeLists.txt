@@ -97,6 +97,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 	STB_IMAGE_WRITE_IMPLEMENTATION
 )
 
+if (WIN32)
+    set(BASS_PATH "${BASS_LIB_PATH}/bass.lib")
+elseif (UNIX)
+    set(BASS_PATH "${BASS_LIB_PATH}/libbass.so")
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC
     SDL3::SDL3
     SDL3_ttf::SDL3_ttf
@@ -107,5 +113,5 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Vorbis::vorbis
     winmm
     ws2_32
-    ${BASS_LIB_PATH}/bass.lib
+    ${BASS_PATH}
 )
