@@ -1,3 +1,4 @@
+# build.yml
 name: Build
 
 on:
@@ -70,30 +71,20 @@ jobs:
 
       - name: Organize output
         run: |
-          mkdir -p dist/examples
-          cp build_${{ matrix.arch }}/examples/bin/* dist/examples/ || true
+          mkdir -p dist/examples dist/tools
           cp VERSION dist/
+
+          cp build_${{ matrix.arch }}/examples/bin/* dist/examples/
           if [[ "$RUNNER_OS" == "Windows" ]]; then
-            mkdir -p dist/tools
-            cp build_${{ matrix.arch }}/tools/PopPak*.exe dist/tools/ || true
+            cp build_${{ matrix.arch }}/tools/PopPak*.exe dist/tools/
           fi
         shell: bash
 
-      - name: Create archive (Linux)
-        if: runner.os != 'Windows'
-        run: zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip dist
-        shell: bash
-
-      - name: Create archive (Windows)
-        if: runner.os == 'Windows'
-        run: Compress-Archive -Path dist\* -DestinationPath PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip
-        shell: pwsh
-
-      - name: Upload artifact
+      - name: Upload dist folder
         uses: actions/upload-artifact@v4
         with:
           name: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}
-          path: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip
+          path: dist/
 
   release:
     needs: [version, build]
@@ -109,4 +100,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          files: artifacts/**/*.zip
+          files: artifacts/**/*
