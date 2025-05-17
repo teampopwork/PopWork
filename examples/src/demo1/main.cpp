@@ -16,6 +16,10 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "gameapp.h"
+#ifndef _CONSOLE_ON
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid
@@ -24,6 +28,9 @@ using namespace PopWork;
 
 int main(int argc, char *argv[])
 {
+#ifndef _CONSOLE_ON
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+#endif
 	// Create and initialize our game application.
 	GameApp *anApp = new GameApp();
 	anApp->Init();

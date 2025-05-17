@@ -49,11 +49,18 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "V14DemoApp.h"
+#ifndef _CONSOLE_ON
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
 
 using namespace PopWork;
 
 int main(int argc, char* argv[])
 {
+#ifndef _CONSOLE_ON
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+#endif
 	V14DemoApp* anApp = new V14DemoApp();
 	anApp->Init();
 	anApp->Start();

@@ -18,11 +18,18 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "xmldemoapp.h"
+#ifndef _CONSOLE_ON
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
 
 using namespace PopWork;
 
 int main(int argc, char *argv[])
 {
+#ifndef _CONSOLE_ON
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+#endif
 	XMLDemoApp *anApp = new XMLDemoApp();
 	anApp->Init();
 	anApp->Start();

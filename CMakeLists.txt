@@ -16,7 +16,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 option(USE_WIDESTRING "Wide Strings" ON)
 option(BUILD_EXAMPLES "Build Examples" ON)
-option(CONSOLE "Show the console on Windows" ON)
+option(CONSOLE "Show the console on Windows" OFF)
 option(BUILD_TOOLS "Build Tools" ON)
 
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -29,6 +29,10 @@ endif()
 
 if(USE_WIDESTRING)
 	add_compile_definitions(_USE_WIDE_STRING)
+endif()
+
+if(CONSOLE AND WIN32)
+	add_compile_definitions(_CONSOLE_ON)
 endif()
 
 if (IS_64BIT)
