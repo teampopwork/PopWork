@@ -7,7 +7,7 @@ on:
 jobs:
   # Windows x64
   build_win64:
-    runs-on: windows-latest
+    runs-on: windows-2025
 
     steps:
       - name: Checkout code
@@ -29,7 +29,7 @@ jobs:
   
   # Windows x86
   build_win32:
-    runs-on: windows-latest
+    runs-on: windows-2025
 
     steps:
       - name: Checkout code
