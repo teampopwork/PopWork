@@ -10,6 +10,7 @@ install(FILES
     $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
     $<TARGET_FILE:Vorbis::vorbisfile>
     $<TARGET_FILE:Vorbis::vorbis>
+    $<TARGET_FILE:ogg>
     ${BASS_LIB_PATH}/bass.dll
     DESTINATION ${CMAKE_SOURCE_DIR}/examples/bin
 )
