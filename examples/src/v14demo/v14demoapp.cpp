@@ -27,9 +27,6 @@ V14DemoApp::V14DemoApp()
 	// can avoid the extra code required to support the functions 
 	// (about 400K in exe size, 150K zipped).
 	SWTri_AddAllDrawTriFuncs();
-
-	// H521
-	SetTaskBarIcon("v14icon.png");
 }
 
 V14DemoApp::~V14DemoApp()
@@ -96,6 +93,9 @@ void V14DemoApp::InitHook()
 	mBoard->Resize(0, 0, mWidth, mHeight);
 	mWidgetManager->AddWidget(mBoard);
 	mWidgetManager->SetFocus(mBoard);
+
+	// H521
+	SetTaskBarIcon("v14icon.png");
 }
 
 void V14DemoApp::LostFocus()
