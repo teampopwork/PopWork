@@ -69,18 +69,26 @@ jobs:
       - name: Build
         run: cmake --build build_${{ matrix.arch }} --config Release
 
+      - name: Install
+        run: cmake --install build_${{ matrix.arch }} --config Release
+
       - name: Organize output
+        shell: bash
         run: |
           mkdir -p dist/examples dist/tools
           cp VERSION dist/
 
-          cp build_${{ matrix.arch }}/examples/bin/* dist/examples/
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            cp build_${{ matrix.arch }}/tools/PopPak*.exe dist/tools/
+          if [[ -d examples/bin ]]; then
+            cp examples/bin/* dist/examples/
+          else
+            echo "Warning: examples/bin does not exist."
           fi
-        shell: bash
 
-      - name: Upload dist folder
+          if [[ "$RUNNER_OS" == "Windows" && -d tools ]]; then
+            cp tools/PopPak*.exe dist/tools/ || echo "PopPak tools not found."
+          fi
+
+      - name: Upload dist directory
         uses: actions/upload-artifact@v4
         with:
           name: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}
@@ -91,12 +99,12 @@ jobs:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
-      - name: Download all artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
-      - name: Publish Release
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
