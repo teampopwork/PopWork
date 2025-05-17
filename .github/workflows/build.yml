@@ -79,13 +79,13 @@ jobs:
           cp VERSION dist/
 
           if [[ -d examples/bin ]]; then
-            cp examples/bin/* dist/examples/
+           cp -r examples/bin/. dist/examples/
           else
-            echo "Warning: examples/bin does not exist."
+           echo "warning: examples/bin does not exist."
           fi
 
           if [[ "$RUNNER_OS" == "Windows" && -d tools ]]; then
-            cp tools/PopPak*.exe dist/tools/ || echo "PopPak tools not found."
+            cp -r tools/*.exe dist/tools/ || echo "tools not found"
           fi
 
       - name: Upload dist directory
