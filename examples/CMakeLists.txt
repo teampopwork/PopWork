@@ -7,6 +7,9 @@ endforeach()
 install(FILES
     $<TARGET_FILE:SDL3::SDL3>
     $<TARGET_FILE:OpenAL::OpenAL>
+    $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
+    $<TARGET_FILE:Vorbis::vorbisfile>
+    $<TARGET_FILE:Vorbis::vorbis>
     ${BASS_LIB_PATH}/bass.dll
     DESTINATION ${CMAKE_SOURCE_DIR}/examples/bin
 )
