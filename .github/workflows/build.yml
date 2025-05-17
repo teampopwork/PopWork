@@ -78,7 +78,11 @@ jobs:
 
       - name: Create archive
         run: |
-          zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip dist
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            Compress-Archive -Path dist\* -DestinationPath PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip
+          else
+            zip -r PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.zip dist
+          fi
         shell: bash
 
       - name: Upload artifact
