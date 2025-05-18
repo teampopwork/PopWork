@@ -10,7 +10,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug Demo2 (MSVC)",
@@ -21,7 +21,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug Demo3 (MSVC)",
@@ -32,7 +32,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug Demo4 (MSVC)",
@@ -43,7 +43,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug Demo5 (MSVC)",
@@ -54,7 +54,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug V12Demo (MSVC)",
@@ -65,7 +65,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug V14Demo (MSVC)",
@@ -76,7 +76,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug Hun-garr (MSVC)",
@@ -87,7 +87,7 @@
       "cwd": "${workspaceFolder}/examples/bin/",
       "stopAtEntry": false,
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug XMLDemo (MSVC)",
@@ -98,7 +98,7 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/examples/bin/",
       "environment": [],
-      "console": "integratedTerminal"
+      "console": "internalConsole"
     },
     {
       "name": "Debug Demo1 (GDB)",
