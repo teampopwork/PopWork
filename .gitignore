@@ -1,13 +1,18 @@
 # .gitignore
 *.pdb
 *.ilk
+
 .vs/
-.vscode/
 .idea/
+
+.vscode/*
+!.vscode/launch.json
+
 build/
+out/
+config.cmd
+
 game/*.exe
 game/*.dll
 examples/bin/*.exe
 examples/bin/*.dll
-config.cmd
-out/
