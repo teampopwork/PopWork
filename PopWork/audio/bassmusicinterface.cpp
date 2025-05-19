@@ -84,21 +84,21 @@ bool BassMusicInterface::LoadMusic(int theSongId, const std::string &theFileName
 		aStream = BASS_StreamCreateFile(FALSE, (void *)theFileName.c_str(), 0, 0, 0);
 	else
 	{
-		FILE *aFP = fopen(theFileName.c_str(), "rb");
-		if (aFP == nullptr)
+		PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
+		if (!aFP)
 			return false;
 
-		fseek(aFP, 0, SEEK_END);
-		int aSize = ftell(aFP);
-		fseek(aFP, 0, SEEK_SET);
+		p_fseek(aFP, 0, SEEK_END);
+		int aSize = p_ftell(aFP);
+		p_fseek(aFP, 0, SEEK_SET);
 
 		uchar *aData = new uchar[aSize];
-		fread(aData, 1, aSize, aFP);
-		fclose(aFP);
+		p_fread(aData, 1, aSize, aFP);
+		p_fclose(aFP);
 
 		aHMusic = BASS_MusicLoad(FALSE, (void *)theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP | BASS_MUSIC_RAMP, 0);
 
-		delete aData;
+		delete[] aData;
 	}
 
 	if (!aHMusic && !aStream)
