@@ -45,7 +45,11 @@
 #undef STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+// H522
+#include <json.hpp>
+
 using namespace PopWork;
+
 namespace fs = std::filesystem;
 
 AppBase *PopWork::gAppBase = nullptr;
@@ -698,7 +702,7 @@ void AppBase::DumpProgramInfo()
 		SDL_Delay(100);
 	}
 
-	std::fstream aDumpStream("_dump\\imagelist.html", std::ios::out);
+	std::fstream aDumpStream("_dump/imagelist.html", std::ios::out);
 
 	time_t aTime;
 	time(&aTime);
@@ -962,30 +966,74 @@ double AppBase::GetLoadingThreadProgress()
 	return std::min(mCompletedLoadingThreadTasks / (double)mNumLoadingThreadTasks, 1.0);
 }
 
-bool AppBase::RegistryWrite(const std::string &theValueName, ulong theType, const uchar *theValue, ulong theLength)
+bool AppBase::RegistryWrite(const std::string &theValueName, JSON_RTYPE theType, const uchar *theValue, ulong theLength)
 {
+	// H522
+	std::filesystem::path config = GetAppDataFolder() + mRegKey + "/registry.json"; // always registry.json
+	std::filesystem::create_directories(config.parent_path());
+	//SDL_Log("%s", config.string().c_str());
+
+	nlohmann::json j;
+	std::ifstream inFile(config);
+	if (inFile)
+	{
+		try
+		{
+			inFile >> j;
+		}
+		catch (...)
+		{
+		}
+	}
+
+	switch (theType)
+	{
+	case JSON_STRING:
+		j[theValueName] = std::string(reinterpret_cast<const char *>(theValue), theLength);
+		break;
+	case JSON_INTEGER:
+		if (theLength == sizeof(int))
+			j[theValueName] = *reinterpret_cast<const int *>(theValue);
+		break;
+	case JSON_BOOLEAN:
+		if (theLength == sizeof(int))
+			j[theValueName] = (*reinterpret_cast<const int *>(theValue)) != 0;
+		break;
+	case JSON_DATA: {
+		std::vector<uchar> bin(theValue, theValue + theLength);
+		j[theValueName] = bin;
+		break;
+	}
+	default:
+		return false;
+	}
+
+	std::ofstream outFile(config);
+	if (outFile)
+		outFile << j.dump(4);
+
 	return true;
 }
 
 bool AppBase::RegistryWriteString(const std::string &theValueName, const std::string &theString)
 {
-	return RegistryWrite(theValueName, 0, (uchar *)theString.c_str(), theString.length());
+	return RegistryWrite(theValueName, JSON_STRING, (uchar *)theString.c_str(), theString.length());
 }
 
 bool AppBase::RegistryWriteInteger(const std::string &theValueName, int theValue)
 {
-	return RegistryWrite(theValueName, 0, (uchar *)&theValue, sizeof(int));
+	return RegistryWrite(theValueName, JSON_INTEGER, (uchar *)&theValue, sizeof(int));
 }
 
 bool AppBase::RegistryWriteBoolean(const std::string &theValueName, bool theValue)
 {
 	int aValue = theValue ? 1 : 0;
-	return RegistryWrite(theValueName, 0, (uchar *)&aValue, sizeof(int));
+	return RegistryWrite(theValueName, JSON_BOOLEAN, (uchar *)&aValue, sizeof(int));
 }
 
 bool AppBase::RegistryWriteData(const std::string &theValueName, const uchar *theValue, ulong theLength)
 {
-	return RegistryWrite(theValueName, 0, (uchar *)theValue, theLength);
+	return RegistryWrite(theValueName, JSON_DATA, (uchar *)theValue, theLength);
 }
 
 void AppBase::WriteToRegistry()
@@ -1003,20 +1051,50 @@ void AppBase::WriteToRegistry()
 
 bool AppBase::RegistryEraseKey(const PopWorkString &_theKeyName)
 {
-	std::string theKeyName = PopWorkStringToStringFast(_theKeyName);
-	if (mRegKey.length() == 0)
-		return false;
+	std::filesystem::path basePath = GetAppDataFolder();
+	std::filesystem::path keyPath = basePath / PopWorkStringToString(_theKeyName) / "registry.json";
 
-	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey) + "\\" + theKeyName;
+	if (std::filesystem::exists(keyPath))
+	{
+		std::error_code ec;
+		std::filesystem::remove(keyPath, ec);
+		return !ec;
+	}
 
 	return true;
 }
 
 void AppBase::RegistryEraseValue(const PopWorkString &_theValueName)
 {
-	std::string theValueName = PopWorkStringToStringFast(_theValueName);
-	if (mRegKey.length() == 0)
+	// H522
+	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::string keyName = PopWorkStringToString(_theValueName);
+
+	if (!std::filesystem::exists(configPath))
 		return;
+
+	nlohmann::json j;
+	std::ifstream inFile(configPath);
+	if (inFile)
+	{
+		try
+		{
+			inFile >> j;
+		}
+		catch (...)
+		{
+			return;
+		}
+	}
+
+	if (j.contains(keyName))
+	{
+		j.erase(keyName);
+
+		std::ofstream outFile(configPath);
+		if (outFile)
+			outFile << j.dump(4);
+	}
 
 	return;
 }
@@ -1026,29 +1104,80 @@ bool AppBase::RegistryGetSubKeys(const std::string &theKeyName, StringVector *th
 	return false;
 }
 
-bool AppBase::RegistryRead(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength)
+bool AppBase::RegistryRead(const std::string &theValueName, JSON_RTYPE *theType, uchar *theValue, ulong *theLength)
 {
 	return RegistryReadKey(theValueName, theType, theValue, theLength, 0);
 }
 
-bool AppBase::RegistryReadKey(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength,
+bool AppBase::RegistryReadKey(const std::string &theValueName, JSON_RTYPE *theType, uchar *theValue, ulong *theLength,
 							  ulong theKey)
 {
-	if (mRegKey.length() == 0)
+	// H522
+	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	if (!std::filesystem::exists(configPath) || !theType || !theValue || !theLength)
 		return false;
 
-	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
-	std::string aValueName;
-
-	int aSlashPos = (int)theValueName.rfind('\\');
-	if (aSlashPos != -1)
+	nlohmann::json j;
+	std::ifstream inFile(configPath);
+	if (!inFile)
+		return false;
+	try
 	{
-		aKeyName += "\\" + theValueName.substr(0, aSlashPos);
-		aValueName = theValueName.substr(aSlashPos + 1);
+		inFile >> j;
 	}
-	else
+	catch (...)
 	{
-		aValueName = theValueName;
+		return false;
+	}
+
+	if (!j.contains(theValueName))
+		return false;
+
+	auto &entry = j[theValueName];
+	// JSON_STRING
+	if (entry.is_string())
+	{
+		std::string s = entry.get<std::string>();
+		if (s.size() > *theLength)
+			return false;
+		std::memcpy(theValue, s.data(), s.size());
+		*theLength = static_cast<ulong>(s.size());
+		*theType = JSON_STRING;
+		return true;
+	}
+	// JSON_INTEGER
+	else if (entry.is_number_integer())
+	{
+		if (*theLength < sizeof(int))
+			return false;
+		int v = entry.get<int>();
+		std::memcpy(theValue, &v, sizeof(int));
+		*theLength = sizeof(int);
+		*theType = JSON_INTEGER;
+		return true;
+	}
+	// JSON_BOOLEAN
+	else if (entry.is_boolean())
+	{
+		if (*theLength < sizeof(int))
+			return false;
+		int b = entry.get<bool>() ? 1 : 0;
+		std::memcpy(theValue, &b, sizeof(int));
+		*theLength = sizeof(int);
+		*theType = JSON_BOOLEAN;
+		return true;
+	}
+	// JSON_DATA
+	else if (entry.is_array())
+	{
+		size_t size = entry.size();
+		if (size > *theLength)
+			return false;
+		for (size_t i = 0; i < size; ++i)
+			theValue[i] = static_cast<uchar>(entry[i].get<int>());
+		*theLength = static_cast<ulong>(size);
+		*theType = JSON_DATA;
+		return true;
 	}
 
 	return false;
@@ -1056,49 +1185,121 @@ bool AppBase::RegistryReadKey(const std::string &theValueName, ulong *theType, u
 
 bool AppBase::RegistryReadString(const std::string &theKey, std::string *theString)
 {
-	char aStr[1024];
-
-	ulong aType;
-	ulong aLen = sizeof(aStr) - 1;
-	if (!RegistryRead(theKey, &aType, (uchar *)aStr, &aLen))
+	// H522
+	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	if (!std::filesystem::exists(configPath) || !theString)
 		return false;
 
-	aStr[aLen] = 0;
+	nlohmann::json j;
+	std::ifstream inFile(configPath);
+	if (!inFile)
+		return false;
+	try
+	{
+		inFile >> j;
+	}
+	catch (...)
+	{
+		return false;
+	}
 
-	*theString = aStr;
-	return true;
+	if (j.contains(theKey) && j[theKey].is_string())
+	{
+		*theString = j[theKey].get<std::string>();
+		return true;
+	}
+	return false;
 }
 
 bool AppBase::RegistryReadInteger(const std::string &theKey, int *theValue)
 {
-	ulong aType;
-	ulong aLong;
-	ulong aLen = 4;
-	if (!RegistryRead(theKey, &aType, (uchar *)&aLong, &aLen))
+	// H522
+	if (!theValue)
 		return false;
 
-	*theValue = aLong;
-	return true;
+	std::string s;
+
+	nlohmann::json j;
+	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::ifstream inFile(configPath);
+	if (!inFile)
+		return false;
+	try
+	{
+		inFile >> j;
+	}
+	catch (...)
+	{
+		return false;
+	}
+
+	if (j.contains(theKey) && j[theKey].is_number_integer())
+	{
+		*theValue = j[theKey].get<int>();
+		return true;
+	}
+	return false;
 }
 
 bool AppBase::RegistryReadBoolean(const std::string &theKey, bool *theValue)
 {
-	int aValue;
-	if (!RegistryReadInteger(theKey, &aValue))
+	// H522
+	if (!theValue)
 		return false;
 
-	*theValue = aValue != 0;
-	return true;
+	nlohmann::json j;
+	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::ifstream inFile(configPath);
+	if (!inFile)
+		return false;
+	try
+	{
+		inFile >> j;
+	}
+	catch (...)
+	{
+		return false;
+	}
+
+	if (j.contains(theKey) && j[theKey].is_boolean())
+	{
+		*theValue = j[theKey].get<bool>();
+		return true;
+	}
+	return false;
 }
 
 bool AppBase::RegistryReadData(const std::string &theKey, uchar *theValue, ulong *theLength)
 {
-	ulong aType;
-	ulong aLen = *theLength;
-	if (!RegistryRead(theKey, &aType, (uchar *)theValue, theLength))
+	// H522
+	if (!theValue || !theLength)
 		return false;
 
-	return true;
+	nlohmann::json j;
+	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::ifstream inFile(configPath);
+	if (!inFile)
+		return false;
+	try
+	{
+		inFile >> j;
+	}
+	catch (...)
+	{
+		return false;
+	}
+
+	if (j.contains(theKey) && j[theKey].is_array())
+	{
+		size_t size = j[theKey].size();
+		if (size > *theLength)
+			return false;
+		for (size_t i = 0; i < size; ++i)
+			theValue[i] = static_cast<uchar>(j[theKey][i].get<int>());
+		*theLength = static_cast<ulong>(size);
+		return true;
+	}
+	return false;
 }
 
 void AppBase::ReadFromRegistry()
@@ -3190,52 +3391,6 @@ static int GetMaxDemoFileNum(const std::string &theDemoPrefix, int theMaxToKeep,
 
 void AppBase::HandleCmdLineParam(const std::string &theParamName, const std::string &theParamValue)
 {
-	/*
-	if (theParamName == "-play")
-	{
-		mPlayingDemoBuffer = true;
-		mRecordingDemoBuffer = false;
-	}
-	else if (theParamName == "-recnum")
-	{
-		int aNum = atoi(theParamValue.c_str());
-		if (aNum<=0)
-			aNum=5;
-
-		int aDemoFileNum = GetMaxDemoFileNum(mDemoPrefix, aNum, true) + 1;
-		mDemoFileName = PopWorkStringToString(StrFormat(StringToPopWorkString(mDemoPrefix +
-	"%d.dmo").c_str(),aDemoFileNum)); if (mDemoFileName.length() < 2 || (mDemoFileName[1] != ':' && mDemoFileName[2] !=
-	'\\'))
-		{
-			mDemoFileName = GetAppDataFolder() + mDemoFileName;
-		}
-		mRecordingDemoBuffer = true;
-		mPlayingDemoBuffer = false;
-	}
-	else if (theParamName == "-playnum")
-	{
-		int aNum = atoi(theParamValue.c_str())-1;
-		if (aNum<0)
-			aNum=0;
-
-		int aDemoFileNum = GetMaxDemoFileNum(mDemoPrefix, aNum, false)-aNum;
-		mDemoFileName = PopWorkStringToString(StrFormat(StringToPopWorkString(mDemoPrefix +
-	"%d.dmo").c_str(),aDemoFileNum)); mRecordingDemoBuffer = false; mPlayingDemoBuffer = true;
-	}
-	else if (theParamName == "-record")
-	{
-		mRecordingDemoBuffer = true;
-		mPlayingDemoBuffer = false;
-	}
-	else if (theParamName == "-demofile")
-	{
-		mDemoFileName = theParamValue;
-		if (mDemoFileName.length() < 2 || (mDemoFileName[1] != ':' && mDemoFileName[2] != '\\'))
-		{
-			mDemoFileName = GetAppDataFolder() + mDemoFileName;
-		}
-	}
-	else */
 	if (theParamName == "-crash")
 	{
 		// Try to access nullptr

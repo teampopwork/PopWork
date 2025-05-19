@@ -70,7 +70,7 @@ std::string PopWork::Profile::GetStateFileName(PopWorkString theStateName, PopWo
 	std::string aUserName =
 		(theUserName == _S("")) ? PopWorkStringToStringFast(mUserName) : PopWorkStringToStringFast(theUserName);
 
-	return StrFormat("%susers\\%s\\%s.sav", GetAppDataFolder().c_str(), aUserName.c_str(), aStateName.c_str());
+	return StrFormat("%susers/%s/%s.sav", GetAppDataFolder().c_str(), aUserName.c_str(), aStateName.c_str());
 }
 
 //************************************
@@ -591,14 +591,14 @@ void PopWork::Profile::EraseStateSaves(PopWorkString theUserName)
 	if (theUserName == _S(""))
 	{
 		std::string aUserName = PopWorkStringToStringFast(mUserName);
-		std::string aStatePath = StrFormat("%susers\\%s\\", GetAppDataFolder().c_str(), aUserName.c_str());
+		std::string aStatePath = StrFormat("%susers/%s/", GetAppDataFolder().c_str(), aUserName.c_str());
 
 		Deltree(aStatePath);
 	}
 	else
 	{
 		std::string aUserName = PopWorkStringToStringFast(theUserName);
-		std::string aStatePath = StrFormat("%susers\\%s\\", GetAppDataFolder().c_str(), aUserName.c_str());
+		std::string aStatePath = StrFormat("%susers/%s/", GetAppDataFolder().c_str(), aUserName.c_str());
 
 		Deltree(aStatePath);
 	}

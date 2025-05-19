@@ -20,7 +20,7 @@
 //	either in this demo, or in previous ones if they've already been covered.
 //////////////////////////////////////////////////////////////////////////
 
-#include "GameApp.h"
+#include "gameapp.h"
 #ifndef _CONSOLE_ON
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN

@@ -17,7 +17,7 @@ GameApp::GameApp()
 	mProdName = "Hun-garr Needs Planets!";
 	mProductVersion = "1.0";
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap\\PopWork\\Hungarr";
+	mRegKey = "PopCap/PopWork/Hungarr";
 
 	mWidth = 640;
 	mHeight = 480;

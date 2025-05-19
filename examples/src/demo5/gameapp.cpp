@@ -39,7 +39,7 @@ GameApp::GameApp()
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
-	mRegKey = "PopCap\\PopWork\\Demo5";
+	mRegKey = "PopCap/PopWork/Demo5";
 
 	// Set the application width/height in terms of pixels here.
 	mWidth = 640;

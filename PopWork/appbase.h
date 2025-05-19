@@ -18,6 +18,17 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
+// H522
+enum JSON_RTYPE
+{
+	JSON_NONE = 0,
+	JSON_STRING,
+	JSON_INTEGER,
+	JSON_BOOLEAN,
+	JSON_DATA,
+	JSON_LAST
+};
+
 namespace ImageLib
 {
 class Image;
@@ -311,10 +322,10 @@ class AppBase : public ButtonListener, public DialogListener
 	void ShowMemoryUsage();
 
 	// Registry helpers
-	bool RegistryRead(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength);
-	bool RegistryReadKey(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength,
+	bool RegistryRead(const std::string &theValueName, JSON_RTYPE *theType, uchar *theValue, ulong *theLength);
+	bool RegistryReadKey(const std::string &theValueName, JSON_RTYPE *theType, uchar *theValue, ulong *theLength,
 						 ulong theMainKey = 0);
-	bool RegistryWrite(const std::string &theValueName, ulong theType, const uchar *theValue, ulong theLength);
+	bool RegistryWrite(const std::string &theValueName, JSON_RTYPE theType, const uchar *theValue, ulong theLength);
 
   public:
 	AppBase();

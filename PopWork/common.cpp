@@ -14,7 +14,11 @@ bool PopWork::gDebug = false;
 static PopWork::MTRand gMTRand;
 namespace PopWork
 {
-std::string gAppDataFolder = "";
+#ifdef _WIN32
+std::string gAppDataFolder = std::filesystem::path(std::getenv("LOCALAPPDATA")).string() + "/";
+#else
+std::string gAppDataFolder = std::filesystem::path(std::getenv("HOME")).string() + ".config/";
+#endif
 }
 
 int PopWork::Rand()
@@ -54,6 +58,7 @@ std::string PopWork::GetAppDataFolder()
 
 void PopWork::SetAppDataFolder(const std::string &thePath)
 {
+	/*
 	std::string aPath = thePath;
 	if (!aPath.empty())
 	{
@@ -62,6 +67,7 @@ void PopWork::SetAppDataFolder(const std::string &thePath)
 	}
 
 	PopWork::gAppDataFolder = aPath;
+	*/
 }
 
 std::string PopWork::URLEncode(const std::string &theString)

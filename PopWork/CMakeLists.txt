@@ -29,7 +29,7 @@ foreach(FILE_PATH ${ALL_FILES})
     get_filename_component(EXT "${FILE_PATH}" EXT)
     string(TOLOWER "${EXT}" EXT)
 
-    if(EXT STREQUAL ".cpp" OR EXT STREQUAL ".c")
+    if(EXT STREQUAL ".cpp" OR EXT STREQUAL ".c" OR EXT STREQUAL ".cxx")
         list(APPEND SOURCE_FILES "${FILE_PATH}")
     elseif(EXT STREQUAL ".h" OR EXT STREQUAL ".hpp")
         list(APPEND HEADER_FILES "${FILE_PATH}")

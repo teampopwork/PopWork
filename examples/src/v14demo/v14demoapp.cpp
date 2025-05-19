@@ -16,7 +16,7 @@ V14DemoApp::V14DemoApp()
 	mProdName = "V14Demo";
 	mProductVersion = "1.0";
 	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap\\PopWork\\V14Demo";
+	mRegKey = "PopCap/PopWork/V14Demo";
 
 	//mNoSoundNeeded = true;
 	mBoard = NULL;
