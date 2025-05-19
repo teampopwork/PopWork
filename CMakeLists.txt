@@ -49,6 +49,7 @@ endif()
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build as DLL" FORCE)
 set(SDL_STATIC ON CACHE BOOL "" FORCE)
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(LIBTYPE "STATIC" CACHE BOOL "" FORCE) # OpenAL
 add_subdirectory(external/ogg EXCLUDE_FROM_ALL)
 add_subdirectory(external/vorbis EXCLUDE_FROM_ALL)
 add_subdirectory(external/SDL EXCLUDE_FROM_ALL)
