@@ -7,7 +7,7 @@
 #include "PopWork/graphics/font.h"
 #include "PopWork/graphics/graphics.h"
 #include "PopWork/widget/buttonwidget.h"
-#include "PopWork/graphics/headerfont/liberationsansregular.h"
+#include "PopWork/graphics/HeaderFont/LiberationSansRegular.h"
 #include "PopWork/widget/widgetmanager.h"
 #include "PopWork/widget/dialog.h"
 #include "PopWork/misc/flags.h"
