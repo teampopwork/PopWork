@@ -5,7 +5,7 @@
 #include "PopWork/graphics/color.h"
 
 // A generic X, Y point template. See Draw() below for usage info.
-#include "PopWork/Math/Point.h"
+#include "PopWork/math/point.h"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

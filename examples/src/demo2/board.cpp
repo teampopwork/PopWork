@@ -1,6 +1,6 @@
 #include "board.h"
 #include "gameapp.h"
-#include "PopWork/Graphics/Graphics.h"
+#include "PopWork/graphics/graphics.h"
 
 // See the Draw method for more information on using the Color class.
 #include "PopWork/graphics/color.h"

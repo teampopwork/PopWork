@@ -112,14 +112,20 @@ int OpenALSoundManager::FindFreeChannel()
 	return -1;
 }
 
+#ifndef _WIN32
 double log10(double x)
 {
 	return std::log(x) / std::log(10.0);
 }
+#endif
 
 int OpenALSoundManager::VolumeToDB(double theVolume)
 {
+#ifdef _WIN32
+	int aVol = (int)((std::log10(1 + theVolume * 9) - 1.0) * 2333);
+#else
 	int aVol = (int)((log10(1 + theVolume * 9) - 1.0) * 2333);
+#endif
 	if (aVol < -2000)
 		aVol = -10000;
 
