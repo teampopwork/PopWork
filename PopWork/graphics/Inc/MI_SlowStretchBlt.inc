@@ -23,7 +23,7 @@
 
 	ulong* aNewHorzPixelsEnd = aNewHorzPixels + (aTempDestWidth*aSrcHeightI*4);
 
-	ZeroMemory(aNewHorzPixels, aTempDestWidth*aSrcHeightI*4*4);
+	memset(aNewHorzPixels, 0, aTempDestWidth * aSrcHeightI * 4 * 4);
 
 	int aSrcImageWidth = theImage->GetWidth();
 
@@ -135,7 +135,7 @@
 
 	ulong* aNewPixelsEnd = aNewPixels + (aTempDestWidth*aTempDestHeight*4);
 
-	ZeroMemory(aNewPixels, aTempDestWidth*aTempDestHeight*4*4);
+	memset(aNewPixels, 0, aTempDestWidth * aTempDestHeight * 16);
 
 	// Now resize vertically
 	if (theSrcRect.mHeight >= theDestRect.mHeight)

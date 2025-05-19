@@ -4,7 +4,7 @@
 
 using namespace PopWork;
 
-static __int64 gCPUSpeed = 0;
+static int64_t gCPUSpeed = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ double PerfTimer::GetDuration()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-__int64 PerfTimer::GetCPUSpeed()
+int64_t PerfTimer::GetCPUSpeed()
 {
 
 	if (gCPUSpeed <= 0)
@@ -80,8 +80,8 @@ int PerfTimer::GetCPUSpeedMHz()
 struct PerfInfo
 {
 	const char *mPerfName;
-	mutable __int64 mStartTime;
-	mutable __int64 mDuration;
+	mutable int64_t mStartTime;
+	mutable int64_t mDuration;
 	mutable double mMillisecondDuration;
 	mutable double mLongestCall;
 	mutable int mStartCount;
@@ -94,7 +94,11 @@ struct PerfInfo
 
 	bool operator<(const PerfInfo &theInfo) const
 	{
+#ifdef _WIN32
 		return stricmp(mPerfName, theInfo.mPerfName) < 0;
+#else
+		return strcasecmp(mPerfName, theInfo.mPerfName) < 0;
+#endif
 	}
 };
 
@@ -103,8 +107,8 @@ struct PerfInfo
 typedef std::set<PerfInfo> PerfInfoSet;
 static PerfInfoSet gPerfInfoSet;
 static bool gPerfOn = false;
-static __int64 gStartTime;
-static __int64 gCollateTime;
+static int64_t gStartTime;
+static int64_t gCollateTime;
 double gDuration = 0;
 int gStartCount = 0;
 int gPerfRecordTop = 0;
@@ -114,7 +118,7 @@ int gPerfRecordTop = 0;
 struct PerfRecord
 {
 	const char *mName;
-	__int64 mTime;
+	int64_t mTime;
 	bool mStart;
 
 	PerfRecord()
@@ -144,7 +148,7 @@ static inline void InsertPerfRecord(PerfRecord &theRecord)
 		{
 			if (--anItr->mStartCount == 0)
 			{
-				__int64 aDuration = theRecord.mTime - anItr->mStartTime;
+				int64_t aDuration = theRecord.mTime - anItr->mStartTime;
 				anItr->mDuration += aDuration;
 
 				if (aDuration > anItr->mLongestCall)
@@ -158,7 +162,7 @@ static inline void InsertPerfRecord(PerfRecord &theRecord)
 ///////////////////////////////////////////////////////////////////////////////
 static inline void CollatePerfRecords()
 {
-	__int64 aTime1, aTime2;
+	int64_t aTime1, aTime2;
 	aTime1 = SDL_GetPerformanceCounter();
 
 	for (int i = 0; i < gPerfRecordTop; i++)
@@ -207,13 +211,13 @@ void PopWorkPerf::BeginPerf(bool measurePerfOverhead)
 ///////////////////////////////////////////////////////////////////////////////
 void PopWorkPerf::EndPerf()
 {
-	__int64 anEndTime = SDL_GetPerformanceCounter();
+	int64_t anEndTime = SDL_GetPerformanceCounter();
 
 	CollatePerfRecords();
 
 	gPerfOn = false;
 
-	__int64 aFreq = SDL_GetPerformanceFrequency();
+	int64_t aFreq = SDL_GetPerformanceFrequency();
 
 	gDuration = ((double)(anEndTime - gStartTime - gCollateTime)) * 1000 / aFreq;
 
@@ -232,7 +236,8 @@ void PopWorkPerf::StartTiming(const char *theName)
 	if (gPerfOn)
 	{
 		++gStartCount;
-		PushPerfRecord(PerfRecord(theName, true));
+		PerfRecord rec(theName, true);
+		PushPerfRecord(rec);
 	}
 }
 
@@ -242,7 +247,8 @@ void PopWorkPerf::StopTiming(const char *theName)
 {
 	if (gPerfOn)
 	{
-		PushPerfRecord(PerfRecord(theName, false));
+		PerfRecord rec(theName, false);
+		PushPerfRecord(rec);
 		if (--gStartCount == 0)
 			CollatePerfRecords();
 	}

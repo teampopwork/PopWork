@@ -14,7 +14,9 @@
 #include "graphics/sharedimage.h"
 #include "math/ratio.h"
 #include <mutex>
+
 #include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 namespace ImageLib
 {
@@ -48,7 +50,6 @@ typedef std::list<WidgetSafeDeleteInfo> WidgetSafeDeleteList;
 typedef std::set<MemoryImage *> MemoryImageSet;
 typedef std::map<int, Dialog *> DialogMap;
 typedef std::list<Dialog *> DialogList;
-typedef std::list<MSG> WindowsMessageList;
 typedef std::vector<std::string> StringVector;
 // typedef std::basic_string<TCHAR> tstring; // string of TCHARs
 
@@ -103,8 +104,6 @@ enum MsgBoxFlags
 	MsgBox_RETRYCANCEL = 5,
 };
 
-typedef std::map<HANDLE, int> HandleToIntMap;
-
 class AppBase : public ButtonListener, public DialogListener
 {
   public:
@@ -133,7 +132,6 @@ class AppBase : public ButtonListener, public DialogListener
 
 	std::mutex *mMutex;
 	bool mOnlyAllowOneCopyToRun;
-	UINT mNotifyGameMessage;
 	CritSect mCritSect;
 	bool mBetaValidate;
 	uchar mAdd8BitMaxTable[512];
@@ -154,7 +152,6 @@ class AppBase : public ButtonListener, public DialogListener
 	uint32_t mTimeLoaded;
 	bool mIsScreenSaver;
 	bool mAllowMonitorPowersave;
-	WindowsMessageList mDeferredMessages;
 	bool mNoDefer;
 	bool mFullScreenPageFlip;
 	bool mTabletPC;
@@ -316,7 +313,7 @@ class AppBase : public ButtonListener, public DialogListener
 	// Registry helpers
 	bool RegistryRead(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength);
 	bool RegistryReadKey(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength,
-						 HKEY theMainKey = HKEY_CURRENT_USER);
+						 ulong theMainKey = 0);
 	bool RegistryWrite(const std::string &theValueName, ulong theType, const uchar *theValue, ulong theLength);
 
   public:
@@ -339,8 +336,8 @@ class AppBase : public ButtonListener, public DialogListener
 	// Public methods
 	virtual void BeginPopup();
 	virtual void EndPopup();
-	virtual int MsgBox(const std::string &theText, const std::string &theTitle = "Message", int theFlags = MB_OK);
-	virtual int MsgBox(const std::wstring &theText, const std::wstring &theTitle = L"Message", int theFlags = MB_OK);
+	virtual int MsgBox(const std::string &theText, const std::string &theTitle = "Message", int theFlags = 0);
+	virtual int MsgBox(const std::wstring &theText, const std::wstring &theTitle = L"Message", int theFlags = 0);
 	virtual void Popup(const std::string &theString);
 	virtual void Popup(const std::wstring &theString);
 	virtual void LogScreenSaverError(const std::string &theError);
@@ -443,7 +440,7 @@ class AppBase : public ButtonListener, public DialogListener
 
 	virtual void GotFocus();
 	virtual void LostFocus();
-	virtual bool IsAltKeyUsed(WPARAM wParam);
+	virtual bool IsAltKeyUsed(long wParam);
 	virtual bool DebugKeyDown(int theKey);
 	virtual bool DebugKeyDownAsync(int theKey, bool ctrlDown, bool altDown);
 	virtual void CloseRequestAsync();

@@ -18,8 +18,10 @@
 
 #include "gameapp.h"
 #ifndef _CONSOLE_ON
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
+#endif
 #endif
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
@@ -30,7 +32,9 @@ using namespace PopWork;
 int main(int argc, char *argv[])
 {
 #ifndef _CONSOLE_ON
+#ifdef _WIN32
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
+#endif
 #endif
 	// Create and initialize our game application.
 	GameApp *anApp = new GameApp();

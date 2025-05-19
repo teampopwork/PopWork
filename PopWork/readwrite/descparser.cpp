@@ -26,7 +26,7 @@ DataElement *DescParser::Dereference(const std::string &theString)
 	if (anItr != mDefineMap.end())
 		return anItr->second;
 	else
-		return NULL;
+		return nullptr;
 }
 
 bool DescParser::IsImmediate(const std::string &theString)
@@ -153,7 +153,7 @@ bool DescParser::DataToString(DataElement *theSource, std::string *theString)
 
 	DataElement *aDataElement = Dereference(aDefName);
 
-	if (aDataElement != NULL)
+	if (aDataElement != nullptr)
 	{
 		if (aDataElement->mIsList)
 			return false;
@@ -200,7 +200,7 @@ bool DescParser::DataToStringVector(DataElement *theSource, StringVector *theStr
 
 		DataElement *aDataElement = Dereference(aDefName);
 
-		if (aDataElement == NULL)
+		if (aDataElement == nullptr)
 		{
 			Error("Unable to Dereference \"" + aDefName + "\"");
 			return false;
@@ -237,7 +237,7 @@ bool DescParser::DataToList(DataElement *theSource, ListDataElement *theValues)
 
 	DataElement *aDataElement = Dereference(((SingleDataElement *)theSource)->mString);
 
-	if ((aDataElement == NULL) || (!aDataElement->mIsList))
+	if ((aDataElement == nullptr) || (!aDataElement->mIsList))
 		return false;
 
 	ListDataElement *aListElement = (ListDataElement *)aDataElement;
@@ -294,11 +294,11 @@ bool DescParser::ParseToList(const std::string &theString, ListDataElement *theL
 	bool inDoubleQuotes = false;
 	bool escaped = false;
 
-	SingleDataElement *aCurSingleDataElement = NULL;
+	SingleDataElement *aCurSingleDataElement = nullptr;
 
 	int aStringPos = 0;
 
-	if (theStringPos == NULL)
+	if (theStringPos == nullptr)
 		theStringPos = &aStringPos;
 
 	while (*theStringPos < (int)theString.length())
@@ -338,7 +338,7 @@ bool DescParser::ParseToList(const std::string &theString, ListDataElement *theL
 				}
 				else if (aChar == '(')
 				{
-					if (aCurSingleDataElement != NULL)
+					if (aCurSingleDataElement != nullptr)
 					{
 						Error("Unexpected List Start");
 						return false;
@@ -355,8 +355,8 @@ bool DescParser::ParseToList(const std::string &theString, ListDataElement *theL
 				}
 				else if (isSeperator)
 				{
-					if (aCurSingleDataElement != NULL)
-						aCurSingleDataElement = NULL;
+					if (aCurSingleDataElement != nullptr)
+						aCurSingleDataElement = nullptr;
 				}
 				else
 					addSingleChar = true;
@@ -367,7 +367,7 @@ bool DescParser::ParseToList(const std::string &theString, ListDataElement *theL
 
 		if (addSingleChar)
 		{
-			if (aCurSingleDataElement == NULL)
+			if (aCurSingleDataElement == nullptr)
 			{
 				aCurSingleDataElement = new SingleDataElement();
 				theList->mElementVector.push_back(aCurSingleDataElement);
@@ -401,7 +401,7 @@ bool DescParser::ParseToList(const std::string &theString, ListDataElement *theL
 bool DescParser::ParseDescriptorLine(const std::string &theDescriptorLine)
 {
 	ListDataElement aParams;
-	if (!ParseToList(theDescriptorLine, &aParams, false, NULL))
+	if (!ParseToList(theDescriptorLine, &aParams, false, nullptr))
 		return false;
 
 	if (aParams.mElementVector.size() > 0)
@@ -425,13 +425,10 @@ bool DescParser::LoadDescriptor(const std::string &theFileName)
 	int aLineCount = 0;
 	bool hasErrors = false;
 
-	// Apparently VC6 doesn't have a clear() function for basic_strings
-	// mError.clear();
-	mError.erase();
-	mError.erase(mError.begin());
+	mError.clear();
 
 	PFILE *aStream = p_fopen(theFileName.c_str(), "r");
-	if (aStream == NULL)
+	if (!aStream)
 		return false;
 
 	char aBuffChar = 0;

@@ -111,6 +111,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -130,6 +136,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -149,6 +161,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -168,6 +186,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -187,6 +211,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -206,6 +236,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -225,6 +261,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -244,6 +286,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",
@@ -263,6 +311,12 @@
       "externalConsole": false,
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
+      "environment": [
+        {
+          "name": "LD_LIBRARY_PATH",
+          "value": "${workspaceFolder}/examples/bin:${env:LD_LIBRARY_PATH}"
+        }
+      ],
       "setupCommands": [
         {
           "description": "Enable pretty-printing for GDB",

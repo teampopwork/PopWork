@@ -1,6 +1,6 @@
 #include "sdlimage.h"
 #include "misc/critsect.h"
-#include "debug/debug.h"
+#include "debug/debug.hpp"
 #include "sdlinterface.h"
 #include "appbase.h"
 #include "image.h"
@@ -28,7 +28,7 @@ void SDLImage::Create(int theWidth, int theHeight)
 {
 	delete[] mBits;
 
-	mBits = NULL;
+	mBits = nullptr;
 
 	mWidth = theWidth;
 	mHeight = theHeight;
@@ -67,11 +67,6 @@ void SDLImage::Blt(Image *theImage, int theX, int theY, const Rect &theSrcRect, 
 							int theDrawMode)
 {
 	theImage->mDrawn = true;
-
-	DBG_ASSERTE((theColor.mRed >= 0) && (theColor.mRed <= 255));
-	DBG_ASSERTE((theColor.mGreen >= 0) && (theColor.mGreen <= 255));
-	DBG_ASSERTE((theColor.mBlue >= 0) && (theColor.mBlue <= 255));
-	DBG_ASSERTE((theColor.mAlpha >= 0) && (theColor.mAlpha <= 255));
 
 	CommitBits();
 
@@ -141,11 +136,6 @@ void SDLImage::BltMirror(Image *theImage, int theX, int theY, const Rect &theSrc
 {
 	theImage->mDrawn = true;
 
-	DBG_ASSERTE((theColor.mRed >= 0) && (theColor.mRed <= 255));
-	DBG_ASSERTE((theColor.mGreen >= 0) && (theColor.mGreen <= 255));
-	DBG_ASSERTE((theColor.mBlue >= 0) && (theColor.mBlue <= 255));
-	DBG_ASSERTE((theColor.mAlpha >= 0) && (theColor.mAlpha <= 255));
-
 	CommitBits();
 
 	mInterface->BltMirror(theImage, theX, theY, theSrcRect, theColor, theDrawMode);
@@ -174,10 +164,10 @@ void SDLImage::FillScanLinesWithCoverage(Span *theSpans, int theSpanCount, const
 	int r = l + theSpans[0].mWidth, b = t;
 	for (int i = 1; i < theSpanCount; ++i)
 	{
-		l = min(theSpans[i].mX, l);
-		r = max(theSpans[i].mX + theSpans[i].mWidth - 1, r);
-		t = min(theSpans[i].mY, t);
-		b = max(theSpans[i].mY + theSpans[i].mWidth - 1, b);
+		l = std::min(theSpans[i].mX, l);
+		r = std::max(theSpans[i].mX + theSpans[i].mWidth - 1, r);
+		t = std::min(theSpans[i].mY, t);
+		b = std::max(theSpans[i].mY + theSpans[i].mWidth - 1, b);
 	}
 	for (int i = 0; i < theSpanCount; ++i)
 	{

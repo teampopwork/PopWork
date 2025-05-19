@@ -59,7 +59,7 @@ BassMusicInterface::BassMusicInterface()
 {
 	bool success = false;
 
-	success = BASS_Init(1, 44100, 0, 0, NULL);
+	success = BASS_Init(1, 44100, 0, 0, nullptr);
 	BASS_SetConfig(BASS_CONFIG_BUFFER, 2000);
 
 	mMaxMusicVolume = 40;
@@ -84,24 +84,24 @@ bool BassMusicInterface::LoadMusic(int theSongId, const std::string &theFileName
 		aStream = BASS_StreamCreateFile(FALSE, (void *)theFileName.c_str(), 0, 0, 0);
 	else
 	{
-		PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
-		if (aFP == NULL)
+		FILE *aFP = fopen(theFileName.c_str(), "rb");
+		if (aFP == nullptr)
 			return false;
 
-		p_fseek(aFP, 0, SEEK_END);
-		int aSize = p_ftell(aFP);
-		p_fseek(aFP, 0, SEEK_SET);
+		fseek(aFP, 0, SEEK_END);
+		int aSize = ftell(aFP);
+		fseek(aFP, 0, SEEK_SET);
 
 		uchar *aData = new uchar[aSize];
-		p_fread(aData, 1, aSize, aFP);
-		p_fclose(aFP);
+		fread(aData, 1, aSize, aFP);
+		fclose(aFP);
 
 		aHMusic = BASS_MusicLoad(FALSE, (void *)theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP | BASS_MUSIC_RAMP, 0);
 
 		delete aData;
 	}
 
-	if (aHMusic == NULL && aStream == NULL)
+	if (!aHMusic && !aStream)
 		return false;
 
 	BassMusicInfo aMusicInfo;
@@ -327,7 +327,7 @@ void BassMusicInterface::SetSongMaxVolume(int theSongId, double theMaxVolume)
 		BassMusicInfo *aMusicInfo = &anItr->second;
 
 		aMusicInfo->mVolumeCap = theMaxVolume;
-		aMusicInfo->mVolume = min(aMusicInfo->mVolume, theMaxVolume);
+		aMusicInfo->mVolume = std::min(aMusicInfo->mVolume, theMaxVolume);
 		BASS_ChannelSetAttribute(aMusicInfo->GetHandle(), BASS_ATTRIB_MUSIC_VOL_GLOBAL,
 								 (int)(aMusicInfo->mVolume * 100));
 	}

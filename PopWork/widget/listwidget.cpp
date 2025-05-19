@@ -310,7 +310,7 @@ int ListWidget::GetOptimalWidth()
 	int aMaxWidth = 0;
 
 	for (ulong i = 0; i < mLines.size(); i++)
-		aMaxWidth = max(aMaxWidth, mFont->StringWidth(mLines[i]));
+		aMaxWidth = std::max(aMaxWidth, mFont->StringWidth(mLines[i]));
 
 	return aMaxWidth + 16;
 }
@@ -346,7 +346,7 @@ void ListWidget::Draw(Graphics *g)
 	aClipG.SetFont(mFont);
 
 	int aFirstLine = (int)mPosition;
-	int aLastLine = min((int)mLines.size() - 1, (int)mPosition + (int)mPageSize + 1);
+	int aLastLine = std::min((int)mLines.size() - 1, (int)mPosition + (int)mPageSize + 1);
 
 	int anItemHeight, anItemOffset;
 	if (mItemHeight != -1)

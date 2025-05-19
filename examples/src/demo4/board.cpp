@@ -302,7 +302,8 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 	// set by setting the mRegKey variable in GameApp's constructor.
 	// The functions return false if there was an error reading the
 	// key or the key doesn't exist:
-	mApp->RegistryReadString("ListItem", &PopWorkStringToStringFast(mText));
+	std::string temp = PopWorkStringToStringFast(mText);
+	mApp->RegistryReadString("ListItem", &temp);
 }
 
 //////////////////////////////////////////////////////////////////////////

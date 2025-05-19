@@ -29,10 +29,10 @@ class SysFont : public Font
   public:
 	SysFont(const std::string &theFace, int thePointSize, bool bold = false, bool italics = false,
 			bool underline = false);
-	SysFont(AppBase *theApp, const std::string &theFace, int thePointSize, int theScript = ANSI_CHARSET,
+	SysFont(AppBase *theApp, const std::string &theFace, int thePointSize, int theScript = 0,
 			bool bold = false, bool italics = false, bool underline = false);
 	SysFont(AppBase *theApp, const unsigned char aData[], size_t aDataSize, int thePointSize,
-			int theScript = ANSI_CHARSET, bool bold = false, bool italics = false, bool underline = false);
+			int theScript = 0, bool bold = false, bool italics = false, bool underline = false);
 	SysFont(const SysFont &theSysFont);
 
 	virtual ~SysFont();

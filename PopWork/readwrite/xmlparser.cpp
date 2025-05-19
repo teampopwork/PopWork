@@ -1,5 +1,5 @@
 #include "xmlparser.h"
-#include "debug/debug.h"
+#include "debug/debug.hpp"
 #include "paklib/pakinterface.h"
 
 using namespace PopWork;
@@ -122,8 +122,6 @@ bool XMLParser::GetUTF8Char(wchar_t *theChar, bool *error)
 
 			aTempChar &= ~aMaskData[aLen];
 			int aTotalLen = aLen + 1;
-
-			DBG_ASSERTE(aTotalLen >= 2 && aTotalLen <= 6);
 
 			int anExtraChar = 0;
 			while (aLen > 0)
@@ -654,7 +652,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 										aAttributeValue = XMLDecodeString(aAttributeValue);
 
 										//										theElement->mAttributes[aAttributeKey] =
-										//aAttributeValue;
+										// aAttributeValue;
 
 										AddAttribute(theElement, WStringToPopWorkString(aAttributeKey),
 													 WStringToPopWorkString(aAttributeValue));

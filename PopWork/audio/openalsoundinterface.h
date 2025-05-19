@@ -10,6 +10,8 @@
 
 namespace PopWork
 {
+class OpenALSoundManager;
+
 class OpenALSoundInstance : public SoundInstance
 {
 	friend class OpenALSoundManager;

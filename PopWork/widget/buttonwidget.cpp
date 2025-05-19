@@ -66,7 +66,7 @@ void ButtonWidget::Draw(Graphics *g)
 	if (mBtnNoDraw)
 		return;
 
-	if ((mFont == NULL) && (mLabel.length() > 0))
+	if ((!mFont) && (mLabel.length() > 0))
 		mFont = new SysFont(mWidgetManager->mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 10);
 
 	bool isDown = mIsDown && mIsOver && !mDisabled;

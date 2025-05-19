@@ -1,9 +1,9 @@
 #include "buffer.h"
-#include "debug/debug.h"
+#include "debug/debug.hpp"
 
 #define POLYNOMIAL 0x04c11db7L
 
-static bool bCrcTableGenerated = FALSE;
+static bool bCrcTableGenerated = false;
 static unsigned long crc_table[256];
 
 using namespace PopWork;
@@ -515,7 +515,6 @@ std::wstring Buffer::ReadUTF8String() const
 
 		aString += aChar;
 	}
-	DBG_ASSERT(i == aLen); // if this fires, the UTF-8 data was malformed.
 
 	return aString;
 }

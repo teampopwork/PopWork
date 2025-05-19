@@ -4,7 +4,7 @@
 #include "appbase.h"
 #include "widgetmanager.h"
 #include "graphics/sysfont.h"
-#include "graphics/ImageFont.h"
+#include "graphics/imagefont.h"
 #include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace PopWork;

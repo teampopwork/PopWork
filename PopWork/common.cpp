@@ -1,14 +1,14 @@
 #include "common.h"
 #include "math/mtrand.h"
-#include "debug/debug.h"
-#include <direct.h>
-#include <io.h>
+#include "debug/debug.hpp"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
-#include <aclapi.h>
+#include <filesystem>
+#include <cstdarg>
+#include <wchar.h>
 
-#include "debug/debug.h"
+#include "debug/debug.hpp"
 
 bool PopWork::gDebug = false;
 static PopWork::MTRand gMTRand;
@@ -469,8 +469,7 @@ PopWorkString PopWork::CommaSeperate(int theValue)
 
 std::string PopWork::GetCurDir()
 {
-	char aDir[256];
-	return _getcwd(aDir, sizeof(aDir));
+    return std::filesystem::current_path().string();
 }
 
 std::string PopWork::GetFullPath(const std::string &theRelPath)
@@ -579,159 +578,22 @@ std::string PopWork::GetPathFrom(const std::string &theRelPath, const std::strin
 
 bool PopWork::AllowAllAccess(const std::string &theFileName)
 {
-	HMODULE aLib = LoadLibraryA("advapi32.dll");
-	if (aLib == NULL)
-		return false;
-
-	BOOL(WINAPI * fnSetFileSecurity)
-	(LPCTSTR lpFileName, SECURITY_INFORMATION SecurityInformation, PSECURITY_DESCRIPTOR pSecurityDescriptor);
-	BOOL(WINAPI * fnSetSecurityDescriptorDacl)
-	(PSECURITY_DESCRIPTOR pSecurityDescriptor, BOOL bDaclPresent, PACL pDacl, BOOL bDaclDefaulted);
-	BOOL(WINAPI * fnInitializeSecurityDescriptor)(PSECURITY_DESCRIPTOR pSecurityDescriptor, DWORD dwRevision);
-	BOOL(WINAPI * fnAllocateAndInitializeSid)
-	(PSID_IDENTIFIER_AUTHORITY pIdentifierAuthority, BYTE nSubAuthorityCount, DWORD dwSubAuthority0,
-	 DWORD dwSubAuthority1, DWORD dwSubAuthority2, DWORD dwSubAuthority3, DWORD dwSubAuthority4, DWORD dwSubAuthority5,
-	 DWORD dwSubAuthority6, DWORD dwSubAuthority7, PSID * pSid);
-	DWORD(WINAPI * fnSetEntriesInAcl)
-	(ULONG cCountOfExplicitEntries, PEXPLICIT_ACCESS pListOfExplicitEntries, PACL OldAcl, PACL * NewAcl);
-	PVOID(WINAPI * fnFreeSid)(PSID pSid);
-
-	*(void **)&fnSetFileSecurity = (void *)GetProcAddress(aLib, "SetFileSecurityA");
-	*(void **)&fnSetSecurityDescriptorDacl = (void *)GetProcAddress(aLib, "SetSecurityDescriptorDacl");
-	*(void **)&fnInitializeSecurityDescriptor = (void *)GetProcAddress(aLib, "InitializeSecurityDescriptor");
-	*(void **)&fnAllocateAndInitializeSid = (void *)GetProcAddress(aLib, "AllocateAndInitializeSid");
-	*(void **)&fnSetEntriesInAcl = (void *)GetProcAddress(aLib, "SetEntriesInAclA");
-	*(void **)&fnFreeSid = (void *)GetProcAddress(aLib, "FreeSid");
-
-	if (!(fnSetFileSecurity && fnSetSecurityDescriptorDacl && fnInitializeSecurityDescriptor &&
-		  fnAllocateAndInitializeSid && fnSetEntriesInAcl && fnFreeSid))
-	{
-		FreeLibrary(aLib);
-		return false;
-	}
-
-	PSID pEveryoneSID = NULL;
-	SID_IDENTIFIER_AUTHORITY SIDAuthWorld = SECURITY_WORLD_SID_AUTHORITY;
-	bool result = false;
-
-	// Create a well-known SID for the Everyone group.
-	if (fnAllocateAndInitializeSid(&SIDAuthWorld, 1, SECURITY_WORLD_RID, 0, 0, 0, 0, 0, 0, 0, &pEveryoneSID))
-	{
-		EXPLICIT_ACCESS ea;
-
-		// Initialize an EXPLICIT_ACCESS structure for an ACE.
-		// The ACE will allow Everyone read access to the key.
-		ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
-		ea.grfAccessPermissions = STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL;
-		ea.grfAccessMode = SET_ACCESS;
-		ea.grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
-		ea.Trustee.TrusteeForm = TRUSTEE_IS_SID;
-		ea.Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
-		ea.Trustee.ptstrName = (LPTSTR)pEveryoneSID;
-
-		// Create a new ACL that contains the new ACEs.
-		PACL pACL = NULL;
-		if (fnSetEntriesInAcl(1, &ea, NULL, &pACL) == ERROR_SUCCESS)
-		{
-			// Initialize a security descriptor.
-			PSECURITY_DESCRIPTOR pSD = (PSECURITY_DESCRIPTOR) new char[SECURITY_DESCRIPTOR_MIN_LENGTH];
-
-			if (fnInitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
-			{
-				// Add the ACL to the security descriptor.
-				if (fnSetSecurityDescriptorDacl(pSD,
-												TRUE, // bDaclPresent flag
-												pACL,
-												FALSE)) // not a default DACL
-				{
-					if (fnSetFileSecurity(theFileName.c_str(), DACL_SECURITY_INFORMATION, pSD))
-						result = true;
-				}
-			}
-
-			delete[] pSD;
-		}
-	}
-
-	FreeLibrary(aLib);
-	return result;
+	return true;
 }
 
 bool PopWork::Deltree(const std::string &thePath)
 {
-	bool success = true;
-
-	std::string aSourceDir = thePath;
-
-	if (aSourceDir.length() < 2)
-		return false;
-
-	if ((aSourceDir[aSourceDir.length() - 1] != '\\') || (aSourceDir[aSourceDir.length() - 1] != '/'))
-		aSourceDir += "\\";
-
-	WIN32_FIND_DATAA aFindData;
-
-	HANDLE aFindHandle = FindFirstFileA((aSourceDir + "*.*").c_str(), &aFindData);
-	if (aFindHandle == INVALID_HANDLE_VALUE)
-		return false;
-
-	do
-	{
-		if ((aFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
-		{
-			if ((strcmp(aFindData.cFileName, ".") != 0) && (strcmp(aFindData.cFileName, "..") != 0))
-			{
-				// Follow the directory
-				if (!Deltree(aSourceDir + aFindData.cFileName))
-					success = false;
-			}
-		}
-		else
-		{
-			std::string aFullName = aSourceDir + aFindData.cFileName;
-			if (!DeleteFileA(aFullName.c_str()))
-				success = false;
-		}
-	} while (FindNextFileA(aFindHandle, &aFindData));
-	FindClose(aFindHandle);
-
-	if (rmdir(thePath.c_str()) == 0)
-		success = false;
-
-	return success;
+	return false;
 }
 
 bool PopWork::FileExists(const std::string &theFileName)
 {
-	WIN32_FIND_DATAA aFindData;
-
-	HANDLE aFindHandle = FindFirstFileA(theFileName.c_str(), &aFindData);
-	if (aFindHandle == INVALID_HANDLE_VALUE)
-		return false;
-
-	FindClose(aFindHandle);
-	return true;
+    return std::filesystem::exists(theFileName);
 }
 
 void PopWork::MkDir(const std::string &theDir)
 {
-	std::string aPath = theDir;
-
-	int aCurPos = 0;
-	for (;;)
-	{
-		int aSlashPos = aPath.find_first_of("\\/", aCurPos);
-		if (aSlashPos == -1)
-		{
-			_mkdir(aPath.c_str());
-			break;
-		}
-
-		aCurPos = aSlashPos + 1;
-
-		std::string aCurPath = aPath.substr(0, aSlashPos);
-		_mkdir(aCurPath.c_str());
-	}
+	std::filesystem::create_directories(theDir);
 }
 
 std::string PopWork::GetFileName(const std::string &thePath, bool noExtension)
@@ -792,25 +654,16 @@ std::string PopWork::AddTrailingSlash(const std::string &theDirectory, bool back
 
 time_t PopWork::GetFileDate(const std::string &theFileName)
 {
-	time_t aFileDate = 0;
-
-	WIN32_FIND_DATAA aFindData;
-	HANDLE aFindHandle = ::FindFirstFileA(theFileName.c_str(), &aFindData);
-
-	if (aFindHandle != INVALID_HANDLE_VALUE)
-	{
-		FILETIME aFileTime = aFindData.ftLastWriteTime;
-
-		// FileTimeToUnixTime(&aFileTime, &aFileDate, FALSE);
-
-		LONGLONG ll = (__int64)aFileTime.dwHighDateTime << 32;
-		ll = ll + aFileTime.dwLowDateTime - 116444736000000000;
-		aFileDate = (time_t)(ll / 10000000);
-
-		FindClose(aFindHandle);
-	}
-
-	return aFileDate;
+	namespace fs = std::filesystem;
+    try {
+        auto ftime = fs::last_write_time(theFileName);
+        auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+            ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now()
+        );
+        return std::chrono::system_clock::to_time_t(sctp);
+    } catch (...) {
+        return 0; // file doesn't exist
+    }
 }
 
 std::string PopWork::vformat(const char *fmt, va_list argPtr)
@@ -868,14 +721,27 @@ std::string PopWork::vformat(const char *fmt, va_list argPtr)
 }
 
 // overloaded StrFormat: should only be used by the xml strings
-std::string PopWork::StrFormat(const char *fmt...)
+std::string PopWork::StrFormat(const char* fmt, ...)
 {
-	va_list argList;
-	va_start(argList, fmt);
-	std::string result = vformat(fmt, argList);
-	va_end(argList);
+    va_list args;
+    va_start(args, fmt);
 
-	return result;
+    va_list argsCopy;
+    va_copy(argsCopy, args);
+
+    int size = std::vsnprintf(nullptr, 0, fmt, argsCopy);
+    va_end(argsCopy);
+
+    if (size <= 0) {
+        va_end(args);
+        return {};
+    }
+
+    std::vector<char> buffer(size + 1);
+    std::vsnprintf(buffer.data(), buffer.size(), fmt, args);
+    va_end(args);
+
+    return std::string(buffer.data());
 }
 
 std::wstring PopWork::vformat(const wchar_t *fmt, va_list argPtr)
@@ -895,7 +761,7 @@ std::wstring PopWork::vformat(const wchar_t *fmt, va_list argPtr)
 #ifdef _WIN32
 	numChars = _vsnwprintf(stackBuffer, attemptedSize, fmt, argPtr);
 #else
-	numChars = vsnwprintf(stackBuffer, attemptedSize, fmt, argPtr);
+	numChars = vswprintf(stackBuffer, attemptedSize, fmt, argPtr);
 #endif
 
 	// cout << "NumChars: " << numChars << endl;
@@ -920,7 +786,7 @@ std::wstring PopWork::vformat(const wchar_t *fmt, va_list argPtr)
 #ifdef _WIN32
 		numChars = _vsnwprintf(heapBuffer, attemptedSize, fmt, argPtr);
 #else
-		numChars = vsnwprintf(heapBuffer, attemptedSize, fmt, argPtr);
+		numChars = vswprintf(heapBuffer, attemptedSize, fmt, argPtr);
 #endif
 	}
 

@@ -4,7 +4,8 @@
 #include "graphics/font.h"
 #include "graphics/image.h"
 #include "appbase.h"
-#include "debug/debug.h"
+#include "debug/debug.hpp"
+#include <cmath>
 
 using namespace PopWork;
 
@@ -338,8 +339,8 @@ Rect Widget::WriteCenteredLine(Graphics *g, int anOffset, const PopWorkString &t
 
 	// account for shadow in position and size
 	// TODO: this may not be necessary.
-	return Rect(aX + min(0, theShadowOffset.mX), anOffset - aFont->GetAscent() + min(0, theShadowOffset.mY),
-				aWidth + abs(theShadowOffset.mX), aFont->GetHeight() + abs(theShadowOffset.mY));
+	return Rect(aX + std::min(0, theShadowOffset.mX), anOffset - aFont->GetAscent() + std::min(0, theShadowOffset.mY),
+				aWidth + std::abs(theShadowOffset.mX), aFont->GetHeight() + std::abs(theShadowOffset.mY));
 }
 
 int Widget::WriteString(Graphics *g, const PopWorkString &theString, int theX, int theY, int theWidth,

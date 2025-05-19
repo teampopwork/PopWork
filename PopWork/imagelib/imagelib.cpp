@@ -1,8 +1,3 @@
-#ifdef _WIN32
-#include <Windows.h>
-#include <tchar.h>
-#endif
-
 #include "imagelib.h"
 #include "paklib/pakinterface.h"
 
@@ -19,7 +14,7 @@ Image::Image()
 	mWidth = 0;
 	mHeight = 0;
 	mNumChannels = 4; // Default to have R, G, B and A channels.
-	mBits = NULL;
+	mBits = nullptr;
 }
 
 Image::~Image()
@@ -47,17 +42,17 @@ unsigned long *Image::GetBits()
 
 Image *GetImageSTB(const std::string &theFileName)
 {
-	PFILE *fp;
+	FILE *fp;
 
-	if ((fp = p_fopen(theFileName.c_str(), "rb")) == NULL)
-		return NULL;
+	if ((fp = fopen(theFileName.c_str(), "rb")) == nullptr)
+		return nullptr;
 
-	p_fseek(fp, 0, SEEK_END);
-	size_t fileSize = p_ftell(fp);
-	p_fseek(fp, 0, SEEK_SET);
+	fseek(fp, 0, SEEK_END);
+	size_t fileSize = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
 	std::vector<uint8_t> data(fileSize);
-	p_fread(data.data(), 1, fileSize, fp);
-	p_fclose(fp);
+	fread(data.data(), 1, fileSize, fp);
+	fclose(fp);
 
 	int width, height, num_channels;
 	unsigned char *stb_image = stbi_load_from_memory(data.data(), fileSize, &width, &height, &num_channels, NULL);
@@ -115,18 +110,18 @@ Image *GetGIFImage(const std::string &theFileName)
 
 	PFILE *fp;
 
-	if ((fp = p_fopen(theFileName.c_str(), "rb")) == NULL)
-		return NULL;
+	if ((fp = p_fopen(theFileName.c_str(), "rb")) == nullptr)
+		return nullptr;
 	/*
 	Determine if this is a GIF file.
 	*/
 	status = p_fread(magick, sizeof(char), 6, fp);
 
 	if (((strncmp((char *)magick, "GIF87", 5) != 0) && (strncmp((char *)magick, "GIF89", 5) != 0)))
-		return NULL;
+		return nullptr;
 
 	global_colors = 0;
-	global_colormap = (unsigned char *)NULL;
+	global_colormap = (unsigned char *)nullptr;
 
 	short pw;
 	short ph;
@@ -144,8 +139,8 @@ Image *GetGIFImage(const std::string &theFileName)
 		*/
 		global_colors = 1 << ((flag & 0x07) + 1);
 		global_colormap = new unsigned char[3 * global_colors];
-		if (global_colormap == (unsigned char *)NULL)
-			return NULL;
+		if (global_colormap == (unsigned char *)nullptr)
+			return nullptr;
 
 		p_fread(global_colormap, sizeof(char), 3 * global_colors, fp);
 	}
@@ -192,23 +187,23 @@ Image *GetGIFImage(const std::string &theFileName)
 				/*
 				Read Comment extension.
 				*/
-				comments = (char *)NULL;
+				comments = (char *)nullptr;
 				for (;;)
 				{
 					length = ReadBlobBlock(fp, (char *)header);
 					if (length <= 0)
 						break;
-					if (comments == NULL)
+					if (comments == nullptr)
 					{
 						comments = new char[length + 1];
-						if (comments != (char *)NULL)
+						if (comments != (char *)nullptr)
 							*comments = '\0';
 					}
 
 					header[length] = '\0';
 					strcat(comments, (char *)header);
 				}
-				if (comments == (char *)NULL)
+				if (comments == (char *)nullptr)
 					break;
 
 				delete comments;
@@ -246,10 +241,10 @@ Image *GetGIFImage(const std::string &theFileName)
 			*/
 
 			/*AllocateNextImage(image_info,image);
-			if (image->next == (Image *) NULL)
+			if (image->next == (Image *) nullptr)
 			{
 			DestroyImages(image);
-			return((Image *) NULL);
+			return((Image *) nullptr);
 			}
 			image=image->next;
 			MagickMonitor(LoadImagesText,TellBlob(image),image->filesize);*/
@@ -286,7 +281,7 @@ Image *GetGIFImage(const std::string &theFileName)
 		return(image);
 		}*/
 		if ((width == 0) || (height == 0))
-			return NULL;
+			return nullptr;
 		/*
 		Inititialize colormap.
 		*/
@@ -350,15 +345,15 @@ Image *GetGIFImage(const std::string &theFileName)
 		*/
 		// status=DecodeImage(image,opacity,exception);
 
-		// if (global_colormap != (unsigned char *) NULL)
+		// if (global_colormap != (unsigned char *) nullptr)
 		//  LiberateMemory((void **) &global_colormap);
-		if (global_colormap != NULL)
+		if (global_colormap != nullptr)
 		{
 			delete[] global_colormap;
-			global_colormap = NULL;
+			global_colormap = nullptr;
 		}
 
-		// while (image->previous != (Image *) NULL)
+		// while (image->previous != (Image *) nullptr)
 		//     image=image->previous;
 
 #define MaxStackSize 4096
@@ -413,12 +408,12 @@ Image *GetGIFImage(const std::string &theFileName)
 
 		unsigned long *aBits = new unsigned long[width * height];
 
-		unsigned char *c = NULL;
+		unsigned char *c = nullptr;
 
 		for (y = 0; y < (int)height; y++)
 		{
 			// q=SetImagePixels(image,0,offset,width,1);
-			// if (q == (PixelPacket *) NULL)
+			// if (q == (PixelPacket *) nullptr)
 			// break;
 			// indexes=GetIndexes(image);
 
@@ -568,7 +563,7 @@ Image *GetGIFImage(const std::string &theFileName)
 			if (x < width)
 				break;
 
-			/*if (image->previous == (Image *) NULL)
+			/*if (image->previous == (Image *) nullptr)
 			if (QuantumTick(y,image->rows))
 			MagickMonitor(LoadImageText,y,image->rows);*/
 		}
@@ -595,7 +590,7 @@ Image *GetGIFImage(const std::string &theFileName)
 
 	p_fclose(fp);
 
-	return NULL;
+	return nullptr;
 }
 
 bool ImageLib::WriteImage(const std::string &theFileName, const std::string &theExtension, Image *theImage)
@@ -675,7 +670,7 @@ Image *ImageLib::GetImage(const std::string &theFilename, bool lookForAlphaImage
 		lookForAlphaImage = false;
 
 	int aLastDotPos = theFilename.rfind('.');
-	int aLastSlashPos = max((int)theFilename.rfind('\\'), (int)theFilename.rfind('/'));
+	int aLastSlashPos = std::max((int)theFilename.rfind('\\'), (int)theFilename.rfind('/'));
 
 	std::string anExt;
 	std::string aFilename;
@@ -688,22 +683,22 @@ Image *ImageLib::GetImage(const std::string &theFilename, bool lookForAlphaImage
 	else
 		aFilename = theFilename;
 
-	Image *anImage = NULL;
+	Image *anImage = nullptr;
 
-	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".tga") == 0) || (anExt.length() == 0)))
+	if ((anImage == nullptr) && ((stricmp(anExt.c_str(), ".tga") == 0) || (anExt.length() == 0)))
 		anImage = GetImageSTB(aFilename + ".tga");
 
-	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".jpg") == 0) || (anExt.length() == 0)))
+	if ((anImage == nullptr) && ((stricmp(anExt.c_str(), ".jpg") == 0) || (anExt.length() == 0)))
 		anImage = GetImageSTB(aFilename + ".jpg");
 
-	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".png") == 0) || (anExt.length() == 0)))
+	if ((anImage == nullptr) && ((stricmp(anExt.c_str(), ".png") == 0) || (anExt.length() == 0)))
 		anImage = GetImageSTB(aFilename + ".png");
 
-	if ((anImage == NULL) && ((stricmp(anExt.c_str(), ".gif") == 0) || (anExt.length() == 0)))
+	if ((anImage == nullptr) && ((stricmp(anExt.c_str(), ".gif") == 0) || (anExt.length() == 0)))
 		anImage = GetGIFImage(aFilename + ".gif");
 
 	// Check for alpha images
-	Image *anAlphaImage = NULL;
+	Image *anAlphaImage = nullptr;
 	if (lookForAlphaImage)
 	{
 		// Check _ImageName
@@ -712,14 +707,14 @@ Image *ImageLib::GetImage(const std::string &theFilename, bool lookForAlphaImage
 								false);
 
 		// Check ImageName_
-		if (anAlphaImage == NULL)
+		if (anAlphaImage == nullptr)
 			anAlphaImage = GetImage(theFilename + "_", false);
 	}
 
 	// Compose alpha channel with image
-	if (anAlphaImage != NULL)
+	if (anAlphaImage != nullptr)
 	{
-		if (anImage != NULL)
+		if (anImage != nullptr)
 		{
 			if ((anImage->mWidth == anAlphaImage->mWidth) && (anImage->mHeight == anAlphaImage->mHeight))
 			{

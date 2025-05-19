@@ -16,12 +16,11 @@
 #include "readwrite/modval.h"
 #ifdef _WIN32
 #include <direct.h>
-#define getcwd _getcwd
-#define chdir _chdir
-#define mkdir _mkdir
 #else
 #include <unistd.h>
 #include <sys/stat.h>
+
+#define _strtime strftime
 #endif
 #include <fstream>
 #include "graphics/sysfont.h"
@@ -29,12 +28,16 @@
 #include "audio/bassmusicinterface.h"
 #include "audio/bass.h"
 #include "misc/autocrit.h"
-#include "debug/debug.h"
+#include "debug/debug.hpp"
 #include "paklib/pakinterface.h"
 
 #include <string>
 #include <ctime>
 #include <cmath>
+
+#include <filesystem>
+#include <set>
+#include <regex>
 
 #include "debug/memmgr.h"
 
@@ -43,8 +46,9 @@
 #include <stb_image.h>
 
 using namespace PopWork;
+namespace fs = std::filesystem;
 
-AppBase *PopWork::gAppBase = NULL;
+AppBase *PopWork::gAppBase = nullptr;
 
 static bool gScreenSaverActive = false;
 
@@ -52,66 +56,7 @@ static bool gScreenSaverActive = false;
 #define SPI_GETSCREENSAVERRUNNING 114
 #endif
 
-// HotSpot: 11 4
-// Size: 32 32
-unsigned char gFingerCursorData[] = {
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xe7, 0xff,
-	0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xff, 0xff, 0xc0,
-	0xff, 0xff, 0xff, 0xc0, 0x1f, 0xff, 0xff, 0xc0, 0x07, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xfc, 0x40, 0x01, 0xff, 0xfc,
-	0x00, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff, 0xfc, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01, 0xff, 0xff, 0x00, 0x01, 0xff,
-	0xff, 0x80, 0x01, 0xff, 0xff, 0x80, 0x03, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xff, 0xc0, 0x03, 0xff, 0xff, 0xe0, 0x07,
-	0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xe0, 0x07, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00,
-	0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x1b, 0x00,
-	0x00, 0x00, 0x1b, 0x60, 0x00, 0x00, 0x1b, 0x68, 0x00, 0x00, 0x1b, 0x6c, 0x00, 0x01, 0x9f, 0xec, 0x00, 0x01, 0xdf,
-	0xfc, 0x00, 0x00, 0xdf, 0xfc, 0x00, 0x00, 0x5f, 0xfc, 0x00, 0x00, 0x7f, 0xfc, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00,
-	0x3f, 0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x0f, 0xf0, 0x00, 0x00, 0x0f, 0xf0, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-// HotSpot: 15 10
-// Size: 32 32
-unsigned char gDraggingCursorData[] = {
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f,
-	0xff, 0xff, 0xfc, 0x0f, 0xff, 0xff, 0xf0, 0x07, 0xff, 0xff, 0xe0, 0x01, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0,
-	0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xff, 0xe0, 0x00, 0xff, 0xfe, 0x60, 0x00, 0xff, 0xfc, 0x20, 0x00, 0xff, 0xfc,
-	0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x80, 0x00, 0xff,
-	0xff, 0x80, 0x01, 0xff, 0xff, 0xc0, 0x01, 0xff, 0xff, 0xe0, 0x01, 0xff, 0xff, 0xf0, 0x03, 0xff, 0xff, 0xf8, 0x03,
-	0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xf8, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x80, 0x00,
-	0x00, 0x01, 0xb0, 0x00, 0x00, 0x0d, 0xb0, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6,
-	0x00, 0x00, 0x0d, 0xb6, 0x00, 0x00, 0x0d, 0xb6, 0x00, 0x01, 0x8d, 0xb6, 0x00, 0x01, 0xcf, 0xfe, 0x00, 0x00, 0xef,
-	0xfe, 0x00, 0x00, 0xff, 0xfe, 0x00, 0x00, 0x7f, 0xfe, 0x00, 0x00, 0x3f, 0xfe, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00,
-	0x1f, 0xfc, 0x00, 0x00, 0x0f, 0xfc, 0x00, 0x00, 0x07, 0xf8, 0x00, 0x00, 0x03, 0xf8, 0x00, 0x00, 0x03, 0xf8, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-static SDLImage *gFPSImage = NULL;
-
-//////////////////////////////////////////////////////////////////////////
-
-typedef HRESULT(WINAPI *SHGetFolderPathFunc)(HWND, int, HANDLE, DWORD, LPTSTR);
-void *GetSHGetFolderPath(const char *theDLL, HMODULE *theMod)
-{
-	HMODULE aMod = LoadLibrary(theDLL);
-	SHGetFolderPathFunc aFunc = NULL;
-
-	if (aMod != NULL)
-	{
-		*((void **)&aFunc) = (void *)GetProcAddress(aMod, "SHGetFolderPathA");
-		if (aFunc == NULL)
-		{
-			FreeLibrary(aMod);
-			aMod = NULL;
-		}
-	}
-
-	*theMod = aMod;
-	return aFunc;
-}
-
-//////////////////////////////////////////////////////////////////////////
+static SDLImage *gFPSImage = nullptr;
 
 AppBase::AppBase()
 {
@@ -123,8 +68,7 @@ AppBase::AppBase()
 
 	gAppBase = this;
 
-	mMutex = NULL;
-	mNotifyGameMessage = 0;
+	mMutex = nullptr;
 
 #ifdef _DEBUG
 	mOnlyAllowOneCopyToRun = false;
@@ -134,7 +78,7 @@ AppBase::AppBase()
 
 	// Extract product version
 	// char aPath[_MAX_PATH];
-	// GetModuleFileNameA(NULL, aPath, 256);
+	// GetModuleFileNameA(nullptr, aPath, 256);
 	// mProductVersion = GetProductVersion(aPath);
 	// mChangeDirTo = GetFileDir(aPath);
 
@@ -156,8 +100,8 @@ AppBase::AppBase()
 	mPreferredY = -1;
 	mIsScreenSaver = false;
 	mAllowMonitorPowersave = true;
-	mSDLInterface = NULL;
-	mMusicInterface = NULL;
+	mSDLInterface = nullptr;
+	mMusicInterface = nullptr;
 	mFrameTime = 10;
 	mNonDrawCount = 0;
 	mDrawCount = 0;
@@ -176,7 +120,7 @@ AppBase::AppBase()
 	mFastForwardToUpdateNum = 0;
 	mFastForwardToMarker = false;
 	mFastForwardStep = false;
-	mSoundManager = NULL;
+	mSoundManager = nullptr;
 	mCursorNum = CURSOR_POINTER;
 	mMouseIn = false;
 	mRunning = false;
@@ -202,8 +146,8 @@ AppBase::AppBase()
 	mHasFocus = true;
 	mCustomCursorsEnabled = false;
 	mCustomCursorDirty = false;
-	mOverrideCursor = NULL;
-	mTitleBarIcon = NULL;
+	mOverrideCursor = nullptr;
+	mTitleBarIcon = nullptr;
 	mIsOpeningURL = false;
 	mInitialized = false;
 	mLastShutdownWasGraceful = true;
@@ -258,7 +202,7 @@ AppBase::AppBase()
 	int i;
 
 	for (i = 0; i < NUM_CURSORS; i++)
-		mCursorImages[i] = NULL;
+		mCursorImages[i] = nullptr;
 
 	for (i = 0; i < 256; i++)
 		mAdd8BitMaxTable[i] = i;
@@ -284,19 +228,20 @@ AppBase::AppBase()
 
 	mPrimaryThreadId = (SDL_ThreadID)0;
 
+	/*
 	if (GetSystemMetrics(86)) // check for tablet pc
 	{
 		mTabletPC = true;
 		mFullScreenPageFlip = false; // so that tablet keyboard can show up
 	}
-	else
-		mTabletPC = false;
+	else*/
+	mTabletPC = false;
 
 	// std::wifstream stringsFile(_wfopen(L".\\properties\\fstrings", L"rb"));
 	//
 	// if(!stringsFile)
 	//{
-	//	MessageBox(NULL, "file missing: 'install-folder\\properties\\fstrings' Please re-install", "FATAL ERROR",
+	//	MessageBox(nullptr, "file missing: 'install-folder\\properties\\fstrings' Please re-install", "FATAL ERROR",
 	//MB_OK); 	DoExit(1);
 	// }
 	// std::getline(stringsFile, mString_HardwareAccelSwitchedOn);
@@ -315,6 +260,10 @@ AppBase::AppBase()
 	// std::getline(stringsFile, mString_PleaseHelpBy);
 	// std::getline(stringsFile, mString_FailedConnectPopcap);
 	// stringsFile.close();
+}
+
+namespace PopWork {
+    extern bool gSDLInterfacePreDrawError;
 }
 
 AppBase::~AppBase()
@@ -375,8 +324,7 @@ AppBase::~AppBase()
 			RegistryWriteBoolean("Is3D", mSDLInterface->mIs3D);
 	}
 
-	extern bool gSDLInterfacePreDrawError;
-	if (!showedMsgBox && gSDLInterfacePreDrawError && !IsScreenSaver())
+	if (!showedMsgBox && PopWork::gSDLInterfacePreDrawError && !IsScreenSaver())
 	{
 		const SDL_MessageBoxButtonData buttons[] = {
 			{0, 0, "No"},
@@ -394,7 +342,7 @@ AppBase::~AppBase()
 			GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
 		SDL_MessageBoxData messageBoxData = {
-			SDL_MESSAGEBOX_INFORMATION, NULL, aTitle.c_str(), aMessage.c_str(), SDL_arraysize(buttons), buttons, NULL};
+			SDL_MESSAGEBOX_INFORMATION, nullptr, aTitle.c_str(), aMessage.c_str(), SDL_arraysize(buttons), buttons, nullptr};
 
 		int aResult = mSDLInterface->MakeResultMessageBox(messageBoxData);
 		if (aResult == 0)
@@ -414,7 +362,7 @@ AppBase::~AppBase()
 	delete mWidgetManager;
 	delete mResourceManager;
 	delete gFPSImage;
-	gFPSImage = NULL;
+	gFPSImage = nullptr;
 
 	SharedImageMap::iterator aSharedImageItr = mSharedImageMap.begin();
 	while (aSharedImageItr != mSharedImageMap.end())
@@ -436,7 +384,7 @@ AppBase::~AppBase()
 	SDL_DestroyCursor(mHandCursor);
 	SDL_DestroyCursor(mDraggingCursor);
 
-	gAppBase = NULL;
+	gAppBase = nullptr;
 }
 
 void AppBase::ClearUpdateBacklog(bool relaxForASecond)
@@ -462,7 +410,7 @@ Dialog *AppBase::NewDialog(int theDialogId, bool isModal, const PopWorkString &t
 						   const PopWorkString &theDialogLines, const PopWorkString &theDialogFooter, int theButtonMode)
 {
 	Dialog *aDialog =
-		new Dialog(NULL, NULL, theDialogId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
+		new Dialog(nullptr, nullptr, theDialogId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
 	return aDialog;
 }
 
@@ -485,7 +433,7 @@ Dialog *AppBase::GetDialog(int theDialogId)
 	if (anItr != mDialogMap.end())
 		return anItr->second;
 
-	return NULL;
+	return nullptr;
 }
 
 bool AppBase::KillDialog(int theDialogId, bool removeWidget, bool deleteWidget)
@@ -639,15 +587,15 @@ std::string AppBase::GetProductVersion(const std::string &thePath)
 {
 	/*
 	// Dynamically Load Version.dll
-	typedef DWORD (APIENTRY *GetFileVersionInfoSizeFunc)(LPSTR lptstrFilename, LPDWORD lpdwHandle);
-	typedef BOOL (APIENTRY *GetFileVersionInfoFunc)(LPSTR lptstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData);
+	typedef uint32_t (APIENTRY *GetFileVersionInfoSizeFunc)(LPSTR lptstrFilename, LPuint32_t lpdwHandle);
+	typedef BOOL (APIENTRY *GetFileVersionInfoFunc)(LPSTR lptstrFilename, uint32_t dwHandle, uint32_t dwLen, LPVOID lpData);
 	typedef BOOL (APIENTRY *VerQueryValueFunc)(const LPVOID pBlock, LPSTR lpSubBlock, LPVOID * lplpBuffer, PUINT puLen);
 
-	static GetFileVersionInfoSizeFunc aGetFileVersionInfoSizeFunc = NULL;
-	static GetFileVersionInfoFunc aGetFileVersionInfoFunc = NULL;
-	static VerQueryValueFunc aVerQueryValueFunc = NULL;
+	static GetFileVersionInfoSizeFunc aGetFileVersionInfoSizeFunc = nullptr;
+	static GetFileVersionInfoFunc aGetFileVersionInfoFunc = nullptr;
+	static VerQueryValueFunc aVerQueryValueFunc = nullptr;
 
-	if (aGetFileVersionInfoSizeFunc==NULL)
+	if (aGetFileVersionInfoSizeFunc==nullptr)
 	{
 		aGetFileVersionInfoSizeFunc = (GetFileVersionInfoSizeFunc)GetProcAddress(gVersionDLL,"GetFileVersionInfoSizeA");
 		aGetFileVersionInfoFunc = (GetFileVersionInfoFunc)GetProcAddress(gVersionDLL,"GetFileVersionInfoA");
@@ -704,7 +652,7 @@ int WriteScreenShotThread(void *theArg)
 	//////////////////////////////////////////////////////////////////////////
 	// Validate the passed parameter
 	SDL_Surface *theSurface = (SDL_Surface *)theArg;
-	if (theSurface == NULL)
+	if (!theSurface)
 		return 1;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -725,7 +673,7 @@ int WriteScreenShotThread(void *theArg)
 	aSaveImage.mWidth = theSurface->w;
 	aSaveImage.mHeight = theSurface->h;
 	ImageLib::WriteImage(anImageName, ".png", &aSaveImage);
-	aSaveImage.mBits = NULL;
+	aSaveImage.mBits = nullptr;
 
 	//////////////////////////////////////////////////////////////////////////
 	// delete the image in this thread
@@ -741,12 +689,11 @@ void AppBase::TakeScreenshot()
 
 void AppBase::DumpProgramInfo()
 {
-
 	Deltree(GetAppDataFolder() + "_dump");
 
 	for (;;)
 	{
-		if (mkdir((GetAppDataFolder() + "_dump").c_str()))
+		if (std::filesystem::create_directory(GetAppDataFolder() + "_dump"))
 			break;
 		SDL_Delay(100);
 	}
@@ -793,24 +740,24 @@ void AppBase::DumpProgramInfo()
 		int aTextureMemory = 0;
 
 		int aMemorySize = 0;
-		if (aMemoryImage->mBits != NULL)
+		if (aMemoryImage->mBits != nullptr)
 			aBitsMemory = aNumPixels * 4;
-		if ((aSDLImage != NULL) && (aSDLImage->mD3DData != NULL))
+		if ((aSDLImage != nullptr) && (aSDLImage->mD3DData != nullptr))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
-		if (aMemoryImage->mColorTable != NULL)
+		if (aMemoryImage->mColorTable != nullptr)
 			aPalletizedMemory = aNumPixels + 256 * 4;
-		if (aMemoryImage->mNativeAlphaData != NULL)
+		if (aMemoryImage->mNativeAlphaData != nullptr)
 		{
-			if (aMemoryImage->mColorTable != NULL)
+			if (aMemoryImage->mColorTable != nullptr)
 				aNativeAlphaMemory = 256 * 4;
 			else
 				aNativeAlphaMemory = aNumPixels * 4;
 		}
-		if (aMemoryImage->mRLAlphaData != NULL)
+		if (aMemoryImage->mRLAlphaData != nullptr)
 			aRLAlphaMemory = aNumPixels;
-		if (aMemoryImage->mRLAdditiveData != NULL)
+		if (aMemoryImage->mRLAdditiveData != nullptr)
 			aRLAdditiveMemory = aNumPixels;
-		if (aMemoryImage->mD3DData != NULL)
+		if (aMemoryImage->mD3DData != nullptr)
 			aTextureMemory += ((SDLTextureData *)aMemoryImage->mD3DData)->GetMemSize();
 
 		aMemorySize = aBitsMemory + aSurfaceMemory + aPalletizedMemory + aNativeAlphaMemory + aRLAlphaMemory +
@@ -865,24 +812,24 @@ void AppBase::DumpProgramInfo()
 		int aTextureMemory = 0;
 		std::string aTextureFormatName;
 
-		if (aMemoryImage->mBits != NULL)
+		if (aMemoryImage->mBits != nullptr)
 			aBitsMemory = aNumPixels * 4;
-		if ((aSDLImage != NULL) && (aSDLImage->mD3DData != NULL))
+		if ((aSDLImage != nullptr) && (aSDLImage->mD3DData != nullptr))
 			aSurfaceMemory = aNumPixels * 4; // Assume 32bit screen...
-		if (aMemoryImage->mColorTable != NULL)
+		if (aMemoryImage->mColorTable != nullptr)
 			aPalletizedMemory = aNumPixels + 256 * 4;
-		if (aMemoryImage->mNativeAlphaData != NULL)
+		if (aMemoryImage->mNativeAlphaData != nullptr)
 		{
-			if (aMemoryImage->mColorTable != NULL)
+			if (aMemoryImage->mColorTable != nullptr)
 				aNativeAlphaMemory = 256 * 4;
 			else
 				aNativeAlphaMemory = aNumPixels * 4;
 		}
-		if (aMemoryImage->mRLAlphaData != NULL)
+		if (aMemoryImage->mRLAlphaData != nullptr)
 			aRLAlphaMemory = aNumPixels;
-		if (aMemoryImage->mRLAdditiveData != NULL)
+		if (aMemoryImage->mRLAdditiveData != nullptr)
 			aRLAdditiveMemory = aNumPixels;
-		if (aMemoryImage->mD3DData != NULL)
+		if (aMemoryImage->mD3DData != nullptr)
 		{
 			aTextureMemory += ((SDLTextureData *)aMemoryImage->mD3DData)->GetMemSize();
 
@@ -917,7 +864,7 @@ void AppBase::DumpProgramInfo()
 						   ((aSurfaceMemory != 0) ? _S("DDSurface<BR>") + CommaSeperate(aSurfaceMemory) : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(((aMemoryImage->mD3DData != NULL)
+					<< PopWorkStringToString(((aMemoryImage->mD3DData != nullptr)
 												  ? _S("Texture<BR>") + StringToPopWorkString(aTextureFormatName) +
 														_S("<BR>") + CommaSeperate(aTextureMemory)
 												  : _S("&nbsp;")))
@@ -979,7 +926,7 @@ void AppBase::DumpProgramInfo()
 
 		ImageLib::WriteImage((GetAppDataFolder() + std::string("_dump/") + anImageName).c_str(), ".png", &anFullImage);
 
-		anFullImage.mBits = NULL;
+		anFullImage.mBits = nullptr;
 
 		anImgNum++;
 
@@ -1017,63 +964,28 @@ double AppBase::GetLoadingThreadProgress()
 
 bool AppBase::RegistryWrite(const std::string &theValueName, ulong theType, const uchar *theValue, ulong theLength)
 {
-	if (mRegKey.length() == 0)
-		return false;
-
-	HKEY aGameKey;
-
-	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
-	std::string aValueName;
-
-	int aSlashPos = (int)theValueName.rfind('\\');
-	if (aSlashPos != -1)
-	{
-		aKeyName += "\\" + theValueName.substr(0, aSlashPos);
-		aValueName = theValueName.substr(aSlashPos + 1);
-	}
-	else
-	{
-		aValueName = theValueName;
-	}
-
-	int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_WRITE, &aGameKey);
-	if (aResult != ERROR_SUCCESS)
-	{
-		ulong aDisp;
-		aResult = RegCreateKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, "Key", REG_OPTION_NON_VOLATILE,
-								  KEY_ALL_ACCESS, NULL, &aGameKey, &aDisp);
-	}
-
-	if (aResult != ERROR_SUCCESS)
-	{
-		return false;
-	}
-
-	RegSetValueExA(aGameKey, aValueName.c_str(), 0, theType, theValue, theLength);
-	RegCloseKey(aGameKey);
-
 	return true;
 }
 
 bool AppBase::RegistryWriteString(const std::string &theValueName, const std::string &theString)
 {
-	return RegistryWrite(theValueName, REG_SZ, (uchar *)theString.c_str(), theString.length());
+	return RegistryWrite(theValueName, 0, (uchar *)theString.c_str(), theString.length());
 }
 
 bool AppBase::RegistryWriteInteger(const std::string &theValueName, int theValue)
 {
-	return RegistryWrite(theValueName, REG_DWORD, (uchar *)&theValue, sizeof(int));
+	return RegistryWrite(theValueName, 0, (uchar *)&theValue, sizeof(int));
 }
 
 bool AppBase::RegistryWriteBoolean(const std::string &theValueName, bool theValue)
 {
 	int aValue = theValue ? 1 : 0;
-	return RegistryWrite(theValueName, REG_DWORD, (uchar *)&aValue, sizeof(int));
+	return RegistryWrite(theValueName, 0, (uchar *)&aValue, sizeof(int));
 }
 
 bool AppBase::RegistryWriteData(const std::string &theValueName, const uchar *theValue, ulong theLength)
 {
-	return RegistryWrite(theValueName, REG_BINARY, (uchar *)theValue, theLength);
+	return RegistryWrite(theValueName, 0, (uchar *)theValue, theLength);
 }
 
 void AppBase::WriteToRegistry()
@@ -1097,12 +1009,6 @@ bool AppBase::RegistryEraseKey(const PopWorkString &_theKeyName)
 
 	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey) + "\\" + theKeyName;
 
-	int aResult = RegDeleteKeyA(HKEY_CURRENT_USER, aKeyName.c_str());
-	if (aResult != ERROR_SUCCESS)
-	{
-		return false;
-	}
-
 	return true;
 }
 
@@ -1112,73 +1018,24 @@ void AppBase::RegistryEraseValue(const PopWorkString &_theValueName)
 	if (mRegKey.length() == 0)
 		return;
 
-	HKEY aGameKey;
-	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
-	std::string aValueName;
-
-	int aSlashPos = (int)theValueName.rfind('\\');
-	if (aSlashPos != -1)
-	{
-		aKeyName += "\\" + theValueName.substr(0, aSlashPos);
-		aValueName = theValueName.substr(aSlashPos + 1);
-	}
-	else
-	{
-		aValueName = theValueName;
-	}
-
-	int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_WRITE, &aGameKey);
-	if (aResult == ERROR_SUCCESS)
-	{
-		RegDeleteValueA(aGameKey, aValueName.c_str());
-		RegCloseKey(aGameKey);
-	}
+	return;
 }
 
 bool AppBase::RegistryGetSubKeys(const std::string &theKeyName, StringVector *theSubKeys)
 {
-	theSubKeys->clear();
-
-	if (mRegKey.length() == 0)
-		return false;
-
-	HKEY aKey;
-
-	std::string aKeyName = RemoveTrailingSlash(RemoveTrailingSlash("SOFTWARE\\" + mRegKey) + "\\" + theKeyName);
-	int aResult = RegOpenKeyExA(HKEY_CURRENT_USER, aKeyName.c_str(), 0, KEY_READ, &aKey);
-
-	if (aResult == ERROR_SUCCESS)
-	{
-		for (int anIdx = 0;; anIdx++)
-		{
-			char aStr[1024];
-
-			aResult = RegEnumKeyA(aKey, anIdx, aStr, 1024);
-			if (aResult != ERROR_SUCCESS)
-				break;
-
-			theSubKeys->push_back(aStr);
-		}
-
-		RegCloseKey(aKey);
-
-		return true;
-	}
 	return false;
 }
 
 bool AppBase::RegistryRead(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength)
 {
-	return RegistryReadKey(theValueName, theType, theValue, theLength, HKEY_CURRENT_USER);
+	return RegistryReadKey(theValueName, theType, theValue, theLength, 0);
 }
 
 bool AppBase::RegistryReadKey(const std::string &theValueName, ulong *theType, uchar *theValue, ulong *theLength,
-							  HKEY theKey)
+							  ulong theKey)
 {
 	if (mRegKey.length() == 0)
 		return false;
-
-	HKEY aGameKey;
 
 	std::string aKeyName = RemoveTrailingSlash("SOFTWARE\\" + mRegKey);
 	std::string aValueName;
@@ -1192,18 +1049,6 @@ bool AppBase::RegistryReadKey(const std::string &theValueName, ulong *theType, u
 	else
 	{
 		aValueName = theValueName;
-	}
-
-	if (RegOpenKeyExA(theKey, aKeyName.c_str(), 0, KEY_READ, &aGameKey) == ERROR_SUCCESS)
-	{
-		if (RegQueryValueExA(aGameKey, aValueName.c_str(), 0, theType, (uchar *)theValue, theLength) == ERROR_SUCCESS)
-		{
-
-			RegCloseKey(aGameKey);
-			return true;
-		}
-
-		RegCloseKey(aGameKey);
 	}
 
 	return false;
@@ -1218,9 +1063,6 @@ bool AppBase::RegistryReadString(const std::string &theKey, std::string *theStri
 	if (!RegistryRead(theKey, &aType, (uchar *)aStr, &aLen))
 		return false;
 
-	if (aType != REG_SZ)
-		return false;
-
 	aStr[aLen] = 0;
 
 	*theString = aStr;
@@ -1233,9 +1075,6 @@ bool AppBase::RegistryReadInteger(const std::string &theKey, int *theValue)
 	ulong aLong;
 	ulong aLen = 4;
 	if (!RegistryRead(theKey, &aType, (uchar *)&aLong, &aLen))
-		return false;
-
-	if (aType != REG_DWORD)
 		return false;
 
 	*theValue = aLong;
@@ -1257,9 +1096,6 @@ bool AppBase::RegistryReadData(const std::string &theKey, uchar *theValue, ulong
 	ulong aType;
 	ulong aLen = *theLength;
 	if (!RegistryRead(theKey, &aType, (uchar *)theValue, theLength))
-		return false;
-
-	if (aType != REG_BINARY)
 		return false;
 
 	return true;
@@ -1303,11 +1139,10 @@ void AppBase::ReadFromRegistry()
 
 bool AppBase::WriteBytesToFile(const std::string &theFileName, const void *theData, unsigned long theDataLen)
 {
-
 	MkDir(GetFileDir(theFileName));
 	FILE *aFP = fopen(theFileName.c_str(), "w+b");
 
-	if (aFP == NULL)
+	if (aFP == nullptr)
 	{
 		return false;
 	}
@@ -1325,21 +1160,19 @@ bool AppBase::WriteBufferToFile(const std::string &theFileName, const Buffer *th
 
 bool AppBase::ReadBufferFromFile(const std::string &theFileName, Buffer *theBuffer)
 {
-	PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
+	FILE *aFP = fopen(theFileName.c_str(), "rb");
 
-	if (aFP == NULL)
-	{
+	if (!aFP)
 		return false;
-	}
 
-	p_fseek(aFP, 0, SEEK_END);
-	int aFileSize = p_ftell(aFP);
-	p_fseek(aFP, 0, SEEK_SET);
+	fseek(aFP, 0, SEEK_END);
+	int aFileSize = ftell(aFP);
+	fseek(aFP, 0, SEEK_SET);
 
 	uchar *aData = new uchar[aFileSize];
 
-	p_fread(aData, 1, aFileSize, aFP);
-	p_fclose(aFP);
+	fread(aData, 1, aFileSize, aFP);
+	fclose(aFP);
 
 	theBuffer->Clear();
 	theBuffer->SetData(aData, aFileSize);
@@ -1351,12 +1184,12 @@ bool AppBase::ReadBufferFromFile(const std::string &theFileName, Buffer *theBuff
 
 bool AppBase::FileExists(const std::string &theFileName)
 {
-	PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
+	FILE *aFP = fopen(theFileName.c_str(), "rb");
 
-	if (aFP == NULL)
+	if (!aFP)
 		return false;
 
-	p_fclose(aFP);
+	fclose(aFP);
 	return true;
 }
 
@@ -1421,7 +1254,7 @@ void AppBase::Shutdown()
 			SDL_Delay(10);
 		}
 
-		if (mMusicInterface != NULL)
+		if (mMusicInterface != nullptr)
 			mMusicInterface->StopAllMusic();
 
 		RestoreScreenResolution();
@@ -1498,93 +1331,6 @@ void AppBase::Redraw(Rect *theClipRect)
 	if (gScreenSaverActive)
 		return;
 	mSDLInterface->Redraw(theClipRect);
-	/*
-	static DWORD aRetryTick = 0;
-	if (!mSDLInterface->Redraw(theClipRect))
-	{
-		extern bool gSDLInterfacePreDrawError;
-		gSDLInterfacePreDrawError = false; // this predraw error happens naturally when ddraw is failing
-		if (!gIsFailing)
-		{
-			//gDebugStream << SDL_GetTicks() << " Redraw failed!" << std::endl;
-			gIsFailing = true;
-		}
-
-		WINDOWPLACEMENT aWindowPlacement;
-		ZeroMemory(&aWindowPlacement, sizeof(aWindowPlacement));
-		aWindowPlacement.length = sizeof(aWindowPlacement);
-		::GetWindowPlacement(mHWnd, &aWindowPlacement);
-
-		DWORD aTick = SDL_GetTicks();
-		if ((mActive || (aTick-aRetryTick>1000 && mIsPhysWindowed)) && (aWindowPlacement.showCmd != SW_SHOWMINIMIZED) &&
-	(!mMinimized))
-		{
-			aRetryTick = aTick;
-
-			mWidgetManager->mImage = NULL;
-
-			// Re-check resolution at this point, because we hit here when you change your resolution.
-			if (((mWidth >= GetSystemMetrics(SM_CXFULLSCREEN)) || (mHeight >= GetSystemMetrics(SM_CYFULLSCREEN))) &&
-	(mIsWindowed))
-			{
-				if (mForceWindowed)
-				{
-					Popup(GetString("PLEASE_SET_COLOR_DEPTH", _S("Please set your desktop color depth to 16 bit.")));
-					Shutdown();
-					return;
-				}
-				mForceFullscreen = true;
-
-				SwitchScreenMode(false);
-				return;
-			}
-
-
-			int aResult = InitDDInterface();
-
-			//gDebugStream << SDL_GetTicks() << " ReInit..." << std::endl;
-
-			if ((mIsWindowed) && (aResult == DDInterface::RESULT_INVALID_COLORDEPTH))
-			{
-				//gDebugStream << SDL_GetTicks() << "ReInit Invalid Colordepth" << std::endl;
-				if (!mActive) // don't switch to full screen if not active app
-					return;
-
-				SwitchScreenMode(false);
-				mForceFullscreen = true;
-				return;
-			}
-			else if (aResult == DDInterface::RESULT_3D_FAIL)
-			{
-				Set3DAcclerated(false);
-				return;
-			}
-			else if (aResult != DDInterface::RESULT_OK)
-			{
-				//gDebugStream << SDL_GetTicks() << " ReInit Failed" << std::endl;
-				//Fail("Failed to initialize DirectDraw");
-				//Sleep(1000);
-
-				return;
-			}
-
-			ReInitImages();
-
-			mWidgetManager->mImage = mDDInterface->GetScreenImage();
-			mWidgetManager->MarkAllDirty();
-
-			mLastTime = SDL_GetTicks();
-		}
-	}
-	else
-	{
-		if (gIsFailing)
-		{
-			//gDebugStream << SDL_GetTicks() << " Redraw succeeded" << std::endl;
-			gIsFailing = false;
-			aRetryTick = 0;
-		}
-	}*/
 
 	mFPSFlipCount++;
 }
@@ -1602,7 +1348,7 @@ static void CalculateFPS()
 	gFrameCount++;
 
 	static SysFont aFont(gAppBase, LiberationSans_Regular, LiberationSans_Regular_Size, 8);
-	if (gFPSImage == NULL)
+	if (gFPSImage == nullptr)
 	{
 		gFPSImage = new SDLImage(gAppBase->mSDLInterface);
 		gFPSImage->Create(50, aFont.GetHeight() + 4);
@@ -1644,7 +1390,7 @@ static void CalculateFPS()
 static void FPSDrawCoords(int theX, int theY)
 {
 	static SysFont aFont(gAppBase, "Tahoma", 8);
-	if (gFPSImage == NULL)
+	if (gFPSImage == nullptr)
 	{
 		gFPSImage = new SDLImage(gAppBase->mSDLInterface);
 		gFPSImage->Create(50, aFont.GetHeight() + 4);
@@ -1665,7 +1411,7 @@ static void FPSDrawCoords(int theX, int theY)
 	gFPSImage->mBitsChangedCount++;
 }
 
-static void UpdateScreenSaverInfo(DWORD theTick)
+static void UpdateScreenSaverInfo(uint32_t theTick)
 {
 	if (gAppBase->IsScreenSaver() || !gAppBase->mIsPhysWindowed)
 		return;
@@ -1678,7 +1424,7 @@ bool AppBase::DrawDirtyStuff()
 
 	if (gIsFailing) // just try to reinit
 	{
-		Redraw(NULL);
+		Redraw(nullptr);
 		mHasPendingDraw = false;
 		mLastDrawWasEmpty = true;
 		return false;
@@ -1692,16 +1438,16 @@ bool AppBase::DrawDirtyStuff()
 			CalculateFPS();
 			break;
 		case FPS_ShowCoords:
-			if (mWidgetManager != NULL)
+			if (mWidgetManager != nullptr)
 				FPSDrawCoords(mWidgetManager->mLastMouseX, mWidgetManager->mLastMouseY);
 			break;
 		}
 	}
 
-	DWORD aStartTime = SDL_GetTicks();
+	uint32_t aStartTime = SDL_GetTicks();
 
 	// Update user input and screen saver info
-	static DWORD aPeriodicTick = 0;
+	static uint32_t aPeriodicTick = 0;
 	if (aStartTime - aPeriodicTick > 1000)
 	{
 		aPeriodicTick = aStartTime;
@@ -1726,7 +1472,7 @@ bool AppBase::DrawDirtyStuff()
 
 		mDrawCount++;
 
-		DWORD aMidTime = SDL_GetTicks();
+		uint32_t aMidTime = SDL_GetTicks();
 
 		mFPSCount++;
 		mFPSTime += aMidTime - aStartTime;
@@ -1741,20 +1487,20 @@ bool AppBase::DrawDirtyStuff()
 
 		if (mWaitForVSync && mIsPhysWindowed && mSoftVSyncWait)
 		{
-			DWORD aTick = SDL_GetTicks();
+			uint32_t aTick = SDL_GetTicks();
 			if (aTick - mLastDrawTick < mSDLInterface->mMillisecondsPerFrame)
 				SDL_Delay(mSDLInterface->mMillisecondsPerFrame - (aTick - mLastDrawTick));
 		}
 
-		DWORD aPreScreenBltTime = SDL_GetTicks();
+		uint32_t aPreScreenBltTime = SDL_GetTicks();
 		mLastDrawTick = aPreScreenBltTime;
 
-		Redraw(NULL);
+		Redraw(nullptr);
 
 		// This is our one UpdateFTimeAcc if we are vsynched
 		UpdateFTimeAcc();
 
-		DWORD aEndTime = SDL_GetTicks();
+		uint32_t aEndTime = SDL_GetTicks();
 
 		mScreenBltTime = aEndTime - aPreScreenBltTime;
 
@@ -1814,9 +1560,17 @@ void AppBase::LogScreenSaverError(const std::string &theError)
 	firstTime = false;
 
 	FILE *aFile = fopen("ScrError.txt", aFlag);
-	if (aFile != NULL)
+	if (aFile != nullptr)
 	{
+#ifdef _WIN32
 		fprintf(aFile, "%s %s %u\n", theError.c_str(), _strtime(aBuf), SDL_GetTicks());
+#else
+		char aBuf[9];  // HH:MM:SS
+		time_t now = time(nullptr);
+		strftime(aBuf, sizeof(aBuf), "%H:%M:%S", localtime(&now));
+
+		fprintf(aFile, "%s %s %u\n", theError.c_str(), aBuf, SDL_GetTicks());
+#endif
 		fclose(aFile);
 	}
 }
@@ -1844,7 +1598,7 @@ void AppBase::EndPopup()
 	if (mWidgetManager->mDownButtons)
 	{
 		mWidgetManager->DoMouseUps();
-		ReleaseCapture();
+//		ReleaseCapture();
 	}
 }
 
@@ -1853,7 +1607,7 @@ int AppBase::MsgBox(const std::string &theText, const std::string &theTitle, int
 	if (IsScreenSaver())
 	{
 		LogScreenSaverError(theText);
-		return IDOK;
+		return 0;
 	}
 
 	SDL_MessageBoxData messageBoxData = {
@@ -1928,7 +1682,7 @@ int AppBase::MsgBox(const std::wstring &theText, const std::wstring &theTitle, i
 	if (IsScreenSaver())
 	{
 		LogScreenSaverError(WStringToString(theText));
-		return IDOK;
+		return 0;
 	}
 
 	SDL_MessageBoxData messageBoxData = {SDL_MESSAGEBOX_INFORMATION,
@@ -2071,7 +1825,7 @@ void AppBase::RehupFocus()
 			mWidgetManager->LostFocus();
 			LostFocus();
 
-			ReleaseCapture();
+//			ReleaseCapture();
 			mWidgetManager->DoMouseUps();
 		}
 	}
@@ -2079,7 +1833,7 @@ void AppBase::RehupFocus()
 
 void AppBase::ClearKeysDown()
 {
-	if (mWidgetManager != NULL) // fix stuck alt-key problem
+	if (mWidgetManager != nullptr) // fix stuck alt-key problem
 	{
 		for (int aKeyNum = 0; aKeyNum < 0xFF; aKeyNum++)
 			mWidgetManager->mKeyDown[aKeyNum] = false;
@@ -2091,10 +1845,10 @@ void AppBase::ClearKeysDown()
 void AppBase::ShowMemoryUsage()
 {
 	/*
-	DWORD aTotal = 0;
-	DWORD aFree = 0;
+	uint32_t aTotal = 0;
+	uint32_t aFree = 0;
 
-	if (mDDInterface->mDD7 != NULL)
+	if (mDDInterface->mDD7 != nullptr)
 	{
 		DDSCAPS2 aCaps;
 		ZeroMemory(&aCaps,sizeof(aCaps));
@@ -2110,7 +1864,7 @@ void AppBase::ShowMemoryUsage()
 	while (anItr != mMemoryImageSet.end())
 	{
 		MemoryImage* aMemoryImage = *anItr;
-		if (aMemoryImage->mD3DData != NULL)
+		if (aMemoryImage->mD3DData != nullptr)
 		{
 			TextureData *aData = (TextureData*)aMemoryImage->mD3DData;
 			aTextureMemory += aData->mTexMemSize;
@@ -2156,7 +1910,7 @@ void AppBase::ShowMemoryUsage()
 	*/
 }
 
-bool AppBase::IsAltKeyUsed(WPARAM wParam)
+bool AppBase::IsAltKeyUsed(long wParam)
 {
 	int aChar = tolower(wParam);
 	switch (aChar)
@@ -2174,9 +1928,7 @@ bool AppBase::DebugKeyDown(int theKey)
 	if ((theKey == 'R') && (mWidgetManager->mKeyDown[KEYCODE_MENU]))
 	{
 #ifndef RELEASEFINAL
-		if (ReparseModValues())
-			PlaySoundA("c:\\windows\\media\\Windows XP Menu Command.wav", NULL, SND_ASYNC);
-		else
+		if (!ReparseModValues())
 		{
 			for (int aKeyNum = 0; aKeyNum < 0xFF; aKeyNum++) // prevent alt from getting stuck
 				mWidgetManager->mKeyDown[aKeyNum] = false;
@@ -2212,7 +1964,7 @@ bool AppBase::DebugKeyDown(int theKey)
 
 			char aBuf[512];
 			sprintf(aBuf, "3D-Mode: %s", Is3DAccelerated() ? "ON" : "OFF");
-			MsgBox(aBuf, "Mode Switch", MB_OK);
+			MsgBox(aBuf, "Mode Switch", 0);
 			mLastTime = SDL_GetTicks();
 		}
 		else
@@ -2262,7 +2014,7 @@ bool AppBase::DebugKeyDown(int theKey)
 		else
 		{
 			PopWorkPerf::EndPerf();
-			MsgBox(PopWorkPerf::GetResults().c_str(), "Perf Results", MB_OK);
+			MsgBox(PopWorkPerf::GetResults().c_str(), "Perf Results", 0);
 			ClearUpdateBacklog();
 		}
 	}
@@ -2414,7 +2166,7 @@ std::string AppBase::NotifyCrashHook()
 
 void AppBase::MakeWindow()
 {
-	if (mSDLInterface == NULL)
+	if (mSDLInterface == nullptr)
 	{
 		mSDLInterface = new SDLInterface(this);
 
@@ -2460,7 +2212,7 @@ void AppBase::MakeWindow()
 	mWidgetManager->mImage = mSDLInterface->GetScreenImage();
 	mWidgetManager->MarkAllDirty();
 
-	//	SetTimer(mHWnd, 100, mFrameTime, NULL);
+	//	SetTimer(mHWnd, 100, mFrameTime, nullptr);
 }
 
 void AppBase::DeleteNativeImageData()
@@ -2513,7 +2265,7 @@ int AppBase::LoadingThreadProcStub(void *theArg)
 
 	char aStr[256];
 	sprintf(aStr, "Resource Loading Time: %d\r\n", (SDL_GetTicks() - aPopWorkApp->mTimeLoaded));
-	OutputDebugStringA(aStr);
+	SDL_Log(aStr);
 
 	aPopWorkApp->mLoadingThreadCompleted = true;
 
@@ -2621,7 +2373,7 @@ void AppBase::SwitchScreenMode(bool wantWindowed, bool is3d, bool force)
 
 	MakeWindow();
 
-	if (mSoundManager != NULL)
+	if (mSoundManager != nullptr)
 	{
 		mSoundManager->SetCooperativeWindow(mIsWindowed);
 	}
@@ -2654,18 +2406,18 @@ void AppBase::EnforceCursor()
 {
 	bool wantSysCursor = true;
 
-	if (mSDLInterface == NULL)
+	if (mSDLInterface == nullptr)
 		return;
 
 	if ((mSEHOccured) || (!mMouseIn))
 	{
 		mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_DEFAULT);
-		if (mSDLInterface->SetCursorImage(NULL))
+		if (mSDLInterface->SetCursorImage(nullptr))
 			mCustomCursorDirty = true;
 	}
 	else
 	{
-		if ((mCursorImages[mCursorNum] == NULL) || ((!mCustomCursorsEnabled) && (mCursorNum != CURSOR_CUSTOM)))
+		if ((mCursorImages[mCursorNum] == nullptr) || ((!mCustomCursorsEnabled) && (mCursorNum != CURSOR_CUSTOM)))
 		{
 			switch (mCursorNum)
 			{
@@ -2699,14 +2451,14 @@ void AppBase::EnforceCursor()
 				break;
 			case CURSOR_CUSTOM:
 			case CURSOR_NONE:
-				SDL_SetCursor(NULL);
+				SDL_SetCursor(nullptr);
 				break;
 			default:
 				mSDLInterface->SetCursor(SDL_SYSTEM_CURSOR_DEFAULT);
 				break;
 			}
 
-			if (mSDLInterface->SetCursorImage(NULL))
+			if (mSDLInterface->SetCursorImage(nullptr))
 				mCustomCursorDirty = true;
 		}
 		else
@@ -2748,7 +2500,7 @@ void AppBase::ProcessSafeDeleteList()
 
 void AppBase::UpdateFTimeAcc()
 {
-	DWORD aCurTime = SDL_GetTicks();
+	uint32_t aCurTime = SDL_GetTicks();
 
 	if (mLastTimeCheck != 0)
 	{
@@ -2764,11 +2516,11 @@ void AppBase::UpdateFTimeAcc()
 }
 
 // int aNumCalls = 0;
-// DWORD aLastCheck = 0;
+// uint32_t aLastCheck = 0;
 
 bool AppBase::Process(bool allowSleep)
 {
-	/*DWORD aTimeNow = SDL_GetTicks();
+	/*uint32_t aTimeNow = SDL_GetTicks();
 	if (aTimeNow - aLastCheck >= 10000)
 	{
 		OutputDebugString(StrFormat(_S("FUpdates: %d\n"), aNumCalls).c_str());
@@ -2837,7 +2589,7 @@ bool AppBase::Process(bool allowSleep)
 					if (mUpdateMultiplier == 1.0)
 					{
 						mVSyncBrokenTestUpdates++;
-						if (mVSyncBrokenTestUpdates >= (DWORD)((1000 + mFrameTime - 1) / mFrameTime))
+						if (mVSyncBrokenTestUpdates >= (uint32_t)((1000 + mFrameTime - 1) / mFrameTime))
 						{
 							// It has to be running 33% fast to be "broken" (25% = 1/0.800)
 							if (aStartTime - mVSyncBrokenTestStartTick <= 800)
@@ -2961,19 +2713,19 @@ bool AppBase::Process(bool allowSleep)
 
 /*void AppBase::DoMainLoop()
 {
-	Dialog* aDialog = NULL;
+	Dialog* aDialog = nullptr;
 	if (theModalDialogId != -1)
 	{
 		aDialog = GetDialog(theModalDialogId);
-		DBG_ASSERTE(aDialog != NULL);
-		if (aDialog == NULL)
+		DBG_ASSERTE(aDialog != nullptr);
+		if (aDialog == nullptr)
 			return;
 	}
 
 	while (!mShutdown)
 	{
 		MSG msg;
-		while ((PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) && (!mShutdown))
+		while ((PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) && (!mShutdown))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -2982,7 +2734,7 @@ bool AppBase::Process(bool allowSleep)
 		ProcessDemo();
 		ProcessDeferredMessages();
 
-		if ((aDialog != NULL) && (aDialog->mResult != -1))
+		if ((aDialog != nullptr) && (aDialog->mResult != -1))
 			return;
 
 		if (!mShutdown)
@@ -3005,7 +2757,7 @@ void AppBase::DoMainLoop()
 
 bool AppBase::UpdateAppStep(bool *updated)
 {
-	if (updated != NULL)
+	if (updated != nullptr)
 		*updated = false;
 
 	if (mExitToTop)
@@ -3047,7 +2799,7 @@ bool AppBase::UpdateAppStep(bool *updated)
 		{
 			int anOldUpdateCnt = mUpdateCount;
 			Process();
-			if (updated != NULL)
+			if (updated != nullptr)
 				*updated = mUpdateCount != anOldUpdateCnt;
 		}
 	}
@@ -3122,23 +2874,23 @@ void AppBase::Start()
 
 	char aString[256];
 	sprintf(aString, "Seconds       = %g\r\n", (SDL_GetTicks() - aStartTime) / 1000.0);
-	OutputDebugStringA(aString);
+	SDL_Log(aString);
 	// sprintf(aString, "Count         = %d\r\n", aCount);
 	// OutputDebugString(aString);
 	sprintf(aString, "Sleep Count   = %d\r\n", mSleepCount);
-	OutputDebugStringA(aString);
+	SDL_Log(aString);
 	sprintf(aString, "Update Count  = %d\r\n", mUpdateCount);
-	OutputDebugStringA(aString);
+	SDL_Log(aString);
 	sprintf(aString, "Draw Count    = %d\r\n", mDrawCount);
-	OutputDebugStringA(aString);
+	SDL_Log(aString);
 	sprintf(aString, "Draw Time     = %d\r\n", mDrawTime);
-	OutputDebugStringA(aString);
+	SDL_Log(aString);
 	sprintf(aString, "Screen Blt    = %d\r\n", mScreenBltTime);
-	OutputDebugStringA(aString);
+	SDL_Log(aString);
 	if (mDrawTime + mScreenBltTime > 0)
 	{
 		sprintf(aString, "Avg FPS       = %d\r\n", (mDrawCount * 1000) / (mDrawTime + mScreenBltTime));
-		OutputDebugStringA(aString);
+		SDL_Log(aString);
 	}
 
 	PreTerminate();
@@ -3191,12 +2943,12 @@ bool AppBase::LoadProperties(const std::string &theFileName, bool required, bool
 bool AppBase::LoadProperties()
 {
 	// Load required language-file properties
-	return LoadProperties("properties\\default.xml", true, false);
+	return LoadProperties("properties/default.xml", true, false);
 }
 
 void AppBase::LoadResourceManifest()
 {
-	if (!mResourceManager->ParseResourcesFile("properties\\resources.xml"))
+	if (!mResourceManager->ParseResourcesFile("properties/resources.xml"))
 		ShowResourceError(true);
 }
 
@@ -3334,21 +3086,23 @@ void AppBase::SetDouble(const std::string &theId, double theValue)
 
 void AppBase::DoParseCmdLine()
 {
+	/*
 	char *aCmdLine = GetCommandLineA();
 	char *aCmdLinePtr = aCmdLine;
 	if (aCmdLinePtr[0] == '"')
 	{
 		aCmdLinePtr = strchr(aCmdLinePtr + 1, '"');
-		if (aCmdLinePtr != NULL)
+		if (aCmdLinePtr != nullptr)
 			aCmdLinePtr++;
 	}
 
-	if (aCmdLinePtr != NULL)
+	if (aCmdLinePtr != nullptr)
 	{
 		aCmdLinePtr = strchr(aCmdLinePtr, ' ');
-		if (aCmdLinePtr != NULL)
+		if (aCmdLinePtr != nullptr)
 			ParseCmdLine(aCmdLinePtr + 1);
 	}
+	*/
 
 	mCmdLineParsed = true;
 }
@@ -3400,33 +3154,38 @@ void AppBase::ParseCmdLine(const std::string &theCmdLine)
 
 static int GetMaxDemoFileNum(const std::string &theDemoPrefix, int theMaxToKeep, bool doErase)
 {
-	WIN32_FIND_DATAA aData;
-	HANDLE aHandle = FindFirstFileA((theDemoPrefix + "*.dmo").c_str(), &aData);
-	if (aHandle == INVALID_HANDLE_VALUE)
-		return 0;
-
 	typedef std::set<int> IntSet;
-	IntSet aSet;
+    IntSet aSet;
 
-	do
-	{
-		int aNum = 0;
-		if (sscanf(aData.cFileName, (theDemoPrefix + "%d.dmo").c_str(), &aNum) == 1)
-			aSet.insert(aNum);
+    std::string prefixDir = fs::path(theDemoPrefix).parent_path().string();
+    std::string prefixBase = fs::path(theDemoPrefix).filename().string(); // just the prefix, e.g., "demo"
 
-	} while (FindNextFileA(aHandle, &aData));
-	FindClose(aHandle);
+    if (prefixDir.empty()) prefixDir = "."; // use current dir if none
 
-	IntSet::iterator anItr = aSet.begin();
-	if ((int)aSet.size() > theMaxToKeep - 1 && doErase)
-		DeleteFile(StrFormat((theDemoPrefix + "%d.dmo").c_str(), *anItr).c_str());
+    std::regex pattern("^" + prefixBase + R"((\d+)\.dmo$)");
 
-	if (aSet.empty())
-		return 0;
+    for (const auto& entry : fs::directory_iterator(prefixDir)) {
+        if (!entry.is_regular_file()) continue;
 
-	anItr = aSet.end();
-	--anItr;
-	return (*anItr);
+        std::smatch match;
+        std::string filename = entry.path().filename().string();
+
+        if (std::regex_match(filename, match, pattern)) {
+            int num = std::stoi(match[1]);
+            aSet.insert(num);
+        }
+    }
+
+    if (!aSet.empty() && (int)aSet.size() > theMaxToKeep - 1 && doErase) {
+        auto anItr = aSet.begin();
+        std::string fileToDelete = theDemoPrefix + std::to_string(*anItr) + ".dmo";
+        fs::remove(fileToDelete);
+    }
+
+    if (aSet.empty())
+        return 0;
+
+    return *aSet.rbegin(); // last (max) value
 }
 
 void AppBase::HandleCmdLineParam(const std::string &theParamName, const std::string &theParamValue)
@@ -3479,7 +3238,7 @@ void AppBase::HandleCmdLineParam(const std::string &theParamName, const std::str
 	else */
 	if (theParamName == "-crash")
 	{
-		// Try to access NULL
+		// Try to access nullptr
 		char *a = 0;
 		*a = '!';
 	}
@@ -3554,14 +3313,8 @@ void AppBase::Init()
 
 	gPakInterface->AddPakFile("main.pak");
 
-	// Create a message we can use to talk to ourselves inter-process
-	mNotifyGameMessage =
-		RegisterWindowMessage(PopWorkStringToStringFast(_S("Notify") + StringToPopWorkStringFast(mProdName)).c_str());
-
 	// Create a globally unique mutex
 	mMutex = new std::mutex();
-	if (::GetLastError() == ERROR_ALREADY_EXISTS)
-		HandleGameAlreadyRunning();
 
 	mRandSeed = SDL_GetTicks();
 	SRand(mRandSeed);
@@ -3580,7 +3333,12 @@ void AppBase::Init()
 	if (mIsWindowed && !mFullScreenWindow)
 	{
 		// How can we be windowed if our screen isn't even big enough?
-		if ((mWidth >= GetSystemMetrics(SM_CXFULLSCREEN)) || (mHeight >= GetSystemMetrics(SM_CYFULLSCREEN)))
+		SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
+		const SDL_DisplayMode* dm = SDL_GetCurrentDisplayMode(displayID);
+		int screenWidth = dm->w;
+		int screenHeight = dm->h;
+
+		if (mWidth >= screenWidth || mHeight >= screenHeight)
 		{
 			mIsWindowed = false;
 			mForceFullscreen = true;
@@ -3589,7 +3347,7 @@ void AppBase::Init()
 
 	MakeWindow();
 
-	if (mSoundManager == NULL)
+	if (mSoundManager == nullptr)
 		mSoundManager = new OpenALSoundManager();
 
 	SetSfxVolume(mSfxVolume);
@@ -3612,10 +3370,6 @@ void AppBase::HandleGameAlreadyRunning()
 {
 	if (mOnlyAllowOneCopyToRun)
 	{
-		// Notify the other window and then shut ourselves down
-		if (mNotifyGameMessage != 0)
-			PostMessage(HWND_BROADCAST, mNotifyGameMessage, 0, 0);
-
 		DoExit(0);
 	}
 }
@@ -3680,8 +3434,8 @@ PopWork::SDLImage *AppBase::GetImage(const std::string &theFileName, bool commit
 {
 	ImageLib::Image *aLoadedImage = ImageLib::GetImage(theFileName, true);
 
-	if (aLoadedImage == NULL)
-		return NULL;
+	if (aLoadedImage == nullptr)
+		return nullptr;
 
 	SDLImage *anImage = new SDLImage(mSDLInterface);
 	anImage->mFilePath = theFileName;
@@ -3697,21 +3451,21 @@ PopWork::SDLImage *AppBase::CreateCrossfadeImage(PopWork::Image *theImage1, cons
 	MemoryImage *aMemoryImage1 = dynamic_cast<MemoryImage *>(theImage1);
 	MemoryImage *aMemoryImage2 = dynamic_cast<MemoryImage *>(theImage2);
 
-	if ((aMemoryImage1 == NULL) || (aMemoryImage2 == NULL))
-		return NULL;
+	if ((aMemoryImage1 == nullptr) || (aMemoryImage2 == nullptr))
+		return nullptr;
 
 	if ((theRect1.mX < 0) || (theRect1.mY < 0) || (theRect1.mX + theRect1.mWidth > theImage1->GetWidth()) ||
 		(theRect1.mY + theRect1.mHeight > theImage1->GetHeight()))
 	{
 		DBG_ASSERTE("Crossfade Rect1 out of bounds");
-		return NULL;
+		return nullptr;
 	}
 
 	if ((theRect2.mX < 0) || (theRect2.mY < 0) || (theRect2.mX + theRect2.mWidth > theImage2->GetWidth()) ||
 		(theRect2.mY + theRect2.mHeight > theImage2->GetHeight()))
 	{
 		DBG_ASSERTE("Crossfade Rect2 out of bounds");
-		return NULL;
+		return nullptr;
 	}
 
 	int aWidth = theRect1.mWidth;
@@ -3759,13 +3513,13 @@ void AppBase::ColorizeImage(Image *theImage, const Color &theColor)
 {
 	MemoryImage *aSrcMemoryImage = dynamic_cast<MemoryImage *>(theImage);
 
-	if (aSrcMemoryImage == NULL)
+	if (aSrcMemoryImage == nullptr)
 		return;
 
 	ulong *aBits;
 	int aNumColors;
 
-	if (aSrcMemoryImage->mColorTable == NULL)
+	if (aSrcMemoryImage->mColorTable == nullptr)
 	{
 		aBits = aSrcMemoryImage->GetBits();
 		aNumColors = theImage->GetWidth() * theImage->GetHeight();
@@ -3819,8 +3573,8 @@ SDLImage *AppBase::CreateColorizedImage(Image *theImage, const Color &theColor)
 {
 	MemoryImage *aSrcMemoryImage = dynamic_cast<MemoryImage *>(theImage);
 
-	if (aSrcMemoryImage == NULL)
-		return NULL;
+	if (aSrcMemoryImage == nullptr)
+		return nullptr;
 
 	SDLImage *anImage = new SDLImage(mSDLInterface);
 
@@ -3830,7 +3584,7 @@ SDLImage *AppBase::CreateColorizedImage(Image *theImage, const Color &theColor)
 	ulong *aDestBits;
 	int aNumColors;
 
-	if (aSrcMemoryImage->mColorTable == NULL)
+	if (aSrcMemoryImage->mColorTable == nullptr)
 	{
 		aSrcBits = aSrcMemoryImage->GetBits();
 		aDestBits = anImage->GetBits();
@@ -3963,10 +3717,10 @@ void AppBase::RotateImageHue(PopWork::MemoryImage *theImage, int theDelta)
 		theDelta += 256;
 
 	int aSize = theImage->mWidth * theImage->mHeight;
-	DWORD *aPtr = theImage->GetBits();
+	uint32_t* aPtr = reinterpret_cast<uint32_t*>(theImage->GetBits());
 	for (int i = 0; i < aSize; i++)
 	{
-		DWORD aPixel = *aPtr;
+		uint32_t aPixel = *aPtr;
 		int alpha = aPixel & 0xff000000;
 		int r = (aPixel >> 16) & 0xff;
 		int g = (aPixel >> 8) & 0xff;
@@ -4182,7 +3936,7 @@ void AppBase::PlaySample(int theSoundNum)
 		return;
 
 	SoundInstance *aSoundInstance = mSoundManager->GetSoundInstance(theSoundNum);
-	if (aSoundInstance != NULL)
+	if (aSoundInstance != nullptr)
 	{
 		aSoundInstance->Play(false, true);
 	}
@@ -4194,7 +3948,7 @@ void AppBase::PlaySample(int theSoundNum, int thePan)
 		return;
 
 	SoundInstance *aSoundInstance = mSoundManager->GetSoundInstance(theSoundNum);
-	if (aSoundInstance != NULL)
+	if (aSoundInstance != nullptr)
 	{
 		aSoundInstance->SetPan(thePan);
 		aSoundInstance->Play(false, true);
@@ -4238,7 +3992,7 @@ void AppBase::SetMusicVolume(double theVolume)
 {
 	mMusicVolume = theVolume;
 
-	if (mMusicInterface != NULL)
+	if (mMusicInterface != nullptr)
 		mMusicInterface->SetVolume((mMuteCount > 0) ? 0.0 : mMusicVolume * 10);
 }
 
@@ -4251,7 +4005,7 @@ void AppBase::SetSfxVolume(double theVolume)
 {
 	mSfxVolume = theVolume;
 
-	if (mSoundManager != NULL)
+	if (mSoundManager != nullptr)
 		mSoundManager->SetVolume((mMuteCount > 0) ? 0.0 : mSfxVolume);
 }
 
@@ -4356,7 +4110,7 @@ SharedImageRef AppBase::GetSharedImage(const std::string &theFileName, const std
 		aSharedImageRef = &aResultPair.first->second;
 	}
 
-	if (isNew != NULL)
+	if (isNew != nullptr)
 		*isNew = aResultPair.second;
 
 	if (aResultPair.second)

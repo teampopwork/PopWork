@@ -13,7 +13,7 @@ using namespace PopWork;
 
 SysFont::SysFont(const std::string &theFace, int thePointSize, bool bold, bool italics, bool underline)
 {
-	Init(gAppBase, theFace, thePointSize, ANSI_CHARSET, bold, italics, underline, false);
+	Init(gAppBase, theFace, thePointSize, 0, bold, italics, underline, false);
 }
 
 SysFont::SysFont(AppBase *theApp, const std::string &theFace, int thePointSize, int theScript, bool bold, bool italics,
@@ -112,10 +112,10 @@ ImageFont *SysFont::CreateImageFont()
 	aHeader.biBitCount = 32;
 	aHeader.biCompression = BI_RGB;
 
-	HDC aDC = CreateCompatibleDC(NULL);
+	HDC aDC = CreateCompatibleDC(nullptr);
 
-	DWORD *aBits = NULL;
-	HBITMAP aBitmap = CreateDIBSection(aDC,&aBitmapInfo,DIB_RGB_COLORS,(void**)&aBits,NULL,0);
+	DWORD *aBits = nullptr;
+	HBITMAP aBitmap = CreateDIBSection(aDC,&aBitmapInfo,DIB_RGB_COLORS,(void**)&aBits,nullptr,0);
 
 	HBITMAP anOldBitmap = (HBITMAP)SelectObject(aDC,aBitmap);
 	HFONT anOldFont = (HFONT)SelectObject(aDC,mHFont);
@@ -184,7 +184,7 @@ ImageFont *SysFont::CreateImageFont()
 int SysFont::StringWidth(const PopWorkString &theString)
 {
 	int w = 0;
-	TTF_GetStringSize(mTTFFont, PopWorkStringToStringFast(theString).c_str(), NULL, &w, nullptr);
+	TTF_GetStringSize(mTTFFont, PopWorkStringToStringFast(theString).c_str(), 0, &w, nullptr);
 
 	return w;
 }
@@ -195,7 +195,7 @@ void SysFont::DrawString(Graphics *g, int theX, int theY, const PopWorkString &t
 	SDL_Renderer *renderer = mApp->mSDLInterface->mRenderer;
 	SDL_Color aColor = {(Uint8)theColor.mRed, (Uint8)theColor.mGreen, (Uint8)theColor.mBlue, (Uint8)theColor.mAlpha};
 	SDL_Surface *textSurface =
-		TTF_RenderText_Blended(mTTFFont, PopWorkStringToStringFast(theString).c_str(), NULL, aColor);
+		TTF_RenderText_Blended(mTTFFont, PopWorkStringToStringFast(theString).c_str(), 0, aColor);
 	if (!textSurface)
 	{
 		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to render text: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);

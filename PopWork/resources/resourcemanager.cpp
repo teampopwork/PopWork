@@ -140,7 +140,7 @@ bool ResourceManager::Fail(const std::string &theErrorText)
 	if (!mHasFailed)
 	{
 		mHasFailed = true;
-		if (mXMLParser == NULL)
+		if (!mXMLParser)
 		{
 			mError = theErrorText;
 			return false;
@@ -352,7 +352,7 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	aRes->mAnimInfo.mAnimType = anAnimType;
 	if (anAnimType != AnimType_None)
 	{
-		int aNumCels = max(aRes->mRows, aRes->mCols);
+		int aNumCels = std::max(aRes->mRows, aRes->mCols);
 		int aBeginDelay = 0, anEndDelay = 0;
 
 		anItr = theElement.mAttributes.find(_S("framedelay"));
@@ -669,7 +669,7 @@ bool ResourceManager::ReparseResourcesFile(const std::string &theFilename)
 bool ResourceManager::LoadAlphaGridImage(ImageRes *theRes, SDLImage *theImage)
 {
 	ImageLib::Image *anAlphaImage = ImageLib::GetImage(theRes->mAlphaGridImage, true);
-	if (anAlphaImage == NULL)
+	if (!anAlphaImage)
 		return Fail(StrFormat("Failed to load image: %s", theRes->mAlphaGridImage.c_str()));
 
 	std::unique_ptr<ImageLib::Image> aDelAlphaImage(anAlphaImage);
@@ -721,7 +721,7 @@ bool ResourceManager::LoadAlphaImage(ImageRes *theRes, SDLImage *theImage)
 	ImageLib::Image *anAlphaImage = ImageLib::GetImage(theRes->mAlphaImage, true);
 	POPWORK_PERF_END("ResourceManager::GetImage");
 
-	if (anAlphaImage == NULL)
+	if (!anAlphaImage)
 		return Fail(StrFormat("Failed to load image: %s", theRes->mAlphaImage.c_str()));
 
 	std::unique_ptr<ImageLib::Image> aDelAlphaImage(anAlphaImage);
@@ -763,8 +763,7 @@ bool ResourceManager::DoLoadImage(ImageRes *theRes)
 	ImageLib::gAlphaComposeColor = 0xFFFFFF;
 
 	SDLImage *aSDLImage = (SDLImage *)aSharedImageRef;
-
-	if (aSDLImage == NULL)
+	if (!aSDLImage)
 		return Fail(StrFormat("Failed to load image: %s", theRes->mPath.c_str()));
 
 	if (isNew)
@@ -909,7 +908,7 @@ bool ResourceManager::DoLoadFont(FontRes *theRes)
 		{
 			std::string aRefName = theRes->mPath.substr(5);
 			Font *aRefFont = ((FontRes *)GetFontRef(aRefName)->mBaseResP)->mFont;
-			if (aRefFont == NULL)
+			if (!aRefFont)
 				return Fail("Ref font not found: " + aRefName);
 
 			aFont = aRefFont->Duplicate();
@@ -920,7 +919,7 @@ bool ResourceManager::DoLoadFont(FontRes *theRes)
 	else
 	{
 		Image *anImage = mApp->GetImage(theRes->mImagePath);
-		if (anImage == NULL)
+		if (!anImage)
 			return Fail(StrFormat("Failed to load image: %s", theRes->mImagePath.c_str()));
 
 		theRes->mImage = anImage;
@@ -928,9 +927,9 @@ bool ResourceManager::DoLoadFont(FontRes *theRes)
 	}
 
 	ImageFont *anImageFont = dynamic_cast<ImageFont *>(aFont);
-	if (anImageFont != NULL)
+	if (anImageFont)
 	{
-		if (anImageFont->mFontData == NULL || !anImageFont->mFontData->mInitialized)
+		if (!anImageFont->mFontData || !anImageFont->mFontData->mInitialized)
 		{
 			delete aFont;
 			return Fail(StrFormat("Failed to load font: %s", theRes->mPath.c_str()));
@@ -941,7 +940,7 @@ bool ResourceManager::DoLoadFont(FontRes *theRes)
 			char aBuf[1024];
 			strcpy(aBuf, theRes->mTags.c_str());
 			const char *aPtr = strtok(aBuf, ", \r\n\t");
-			while (aPtr != NULL)
+			while (aPtr)
 			{
 				anImageFont->AddTag(aPtr);
 				aPtr = strtok(NULL, ", \r\n\t");
@@ -1027,7 +1026,7 @@ bool ResourceManager::LoadNextResource()
 	if (HadError())
 		return false;
 
-	if (mCurResGroupList == NULL)
+	if (!mCurResGroupList)
 		return false;
 
 	while (mCurResGroupListItr != mCurResGroupList->end())

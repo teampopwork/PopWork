@@ -20,7 +20,7 @@ namespace PopWork
 class PerfTimer
 {
   protected:
-	__int64 mStart;
+	int64_t mStart;
 	double mDuration;
 	bool mRunning;
 
@@ -33,7 +33,7 @@ class PerfTimer
 
 	double GetDuration();
 
-	static __int64 GetCPUSpeed(); // in Hz
+	static int64_t GetCPUSpeed(); // in Hz
 	static int GetCPUSpeedMHz();
 };
 

@@ -120,7 +120,7 @@ class SDLInterface : public NativeDisplay
 	bool InitSDLWindow(bool IsWindowed);
 	bool InitSDLRenderer();
 
-	bool Redraw(Rect *theClipRect = NULL);
+	bool Redraw(Rect *theClipRect);
 	void SetVideoOnlyDraw(bool videoOnly);
 
 	void SetCursorPos(int theCursorX, int theCursorY);

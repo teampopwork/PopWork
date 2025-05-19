@@ -1,5 +1,5 @@
 # CMakeLists.txt
-cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -46,14 +46,15 @@ else ()
 endif()
 
 # external libraries
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build as DLL" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build as DLL" FORCE)
+set(SDL_STATIC ON CACHE BOOL "" FORCE)
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/ogg EXCLUDE_FROM_ALL)
 add_subdirectory(external/vorbis EXCLUDE_FROM_ALL)
 add_subdirectory(external/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(external/SDL_ttf EXCLUDE_FROM_ALL)
 add_subdirectory(external/openal EXCLUDE_FROM_ALL)
 add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build as DLL" FORCE)
 
 add_subdirectory(PopWork)
 if(BUILD_TOOLS AND WIN32) # we can't afford linux yet

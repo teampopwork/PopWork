@@ -22,20 +22,28 @@
 #include <list>
 #include <algorithm>
 #include <cstdlib>
-
+#include <cmath>
 #include <cstdint>
 #include <ctime>
+
+#ifdef _WIN32
+#define NOMINMAX
+#endif
 
 #ifdef _WIN32
 #include <windows.h>
 #include <shellapi.h>
 #include <mmsystem.h>
 #else
-
 #include <wctype.h>
 #include <string.h>
 #include <stdint.h>
+
 #define _stricmp strcasecmp
+#ifndef _WIN32
+#define stricmp strcasecmp
+#endif
+
 #define _cdecl
 typedef uint8_t BYTE;
 typedef uint16_t WORD;
@@ -46,20 +54,28 @@ typedef int64_t __int64;
 
 typedef std::map<std::string, std::string> DefinesMap;
 typedef std::map<std::wstring, std::wstring> WStringWStringMap;
-typedef PopWorkString::value_type PopWorkChar;
-#define HAS_POPWORKCHAR
-
 #endif
+
 #include "readwrite/modval.h"
 
 #ifdef _USE_WIDE_STRING
-
 typedef std::wstring PopWorkString;
 #define _S(x) L##x
 
+#ifndef _WIN32
+inline int _wtoi(const wchar_t *str)
+{
+  return (int)wcstol(str, 0, 10);
+}
+#endif
+
 #define popstrncmp wcsncmp
 #define popstrcmp wcscmp
+#ifdef _WIN32
 #define popstricmp wcsicmp
+#else
+#define popstricmp wcscasecmp
+#endif
 #define popsscanf swscanf
 #define popatoi _wtoi
 #define popstrcpy wcscpy

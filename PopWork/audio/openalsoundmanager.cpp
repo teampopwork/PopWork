@@ -8,34 +8,46 @@
 #include "vorbis/codec.h"
 #include "vorbis/vorbisfile.h"
 
+#include <cmath>
 #include <miniaudio.h>
 #include <SDL3/SDL.h>
 
-#define AL_CHECK_ERROR()                                                                                               \
-	{                                                                                                                  \
-		if (alGetError() != AL_NO_ERROR)                                                                               \
-			__debugbreak();                                                                                            \
-	}
+#if defined(_MSC_VER)
+    #define DEBUG_BREAK() __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+    #include <signal.h>
+    #define DEBUG_BREAK() raise(SIGTRAP)
+#else
+    #define DEBUG_BREAK() ((void)0)
+#endif
+
+#define AL_CHECK_ERROR()                    \
+    do {                                    \
+        if (alGetError() != AL_NO_ERROR)    \
+            DEBUG_BREAK();                  \
+    } while (0)
 
 using namespace PopWork;
 
-ALCdevice *mALDevice = nullptr;
-ALCcontext *mALContext = nullptr;
+ALCdevice *mALDevice = NULL;
+ALCcontext *mALContext = NULL;
 
 OpenALSoundManager::OpenALSoundManager()
 {
-
-	mALDevice = alcOpenDevice(nullptr); // Default device
+	mALDeviceD = NULL;
+	mALDevice = alcOpenDevice(NULL); // Default device
 	if (!mALDevice)
 	{
-		printf("Failed to open OpenAL device!\n");
+		SDL_Log("Failed to open OpenAL device!\n");
 		return;
 	}
 
-	mALContext = alcCreateContext(mALDevice, nullptr);
+	mALDeviceD = mALDevice; // hacky hack
+
+	mALContext = alcCreateContext(mALDevice, NULL);
 	if (!mALContext)
 	{
-		printf("Failed to create OpenAL context!\n");
+		SDL_Log("Failed to create OpenAL context!\n");
 		alcCloseDevice(mALDevice);
 		return;
 	}
@@ -61,16 +73,18 @@ OpenALSoundManager::~OpenALSoundManager()
 {
 	ReleaseChannels();
 	ReleaseSounds();
-	alcMakeContextCurrent(nullptr);
+	alcMakeContextCurrent(NULL);
 	if (mALContext)
 		alcDestroyContext(mALContext);
 	if (mALDevice)
 		alcCloseDevice(mALDevice);
+
+	mALDeviceD = NULL; // hacky hack
 }
 
 bool OpenALSoundManager::Initialized()
 {
-	return mALDevice != nullptr && mALContext != nullptr;
+	return mALDevice != NULL && mALContext != NULL;
 }
 
 int OpenALSoundManager::FindFreeChannel()
@@ -84,7 +98,7 @@ int OpenALSoundManager::FindFreeChannel()
 
 	for (int i = 0; i < MAX_CHANNELS; i++)
 	{
-		if (mPlayingSounds[i] == NULL)
+		if (!mPlayingSounds[i])
 			return i;
 
 		if (mPlayingSounds[i]->IsReleased())
@@ -96,6 +110,11 @@ int OpenALSoundManager::FindFreeChannel()
 	}
 
 	return -1;
+}
+
+double log10(double x)
+{
+	return std::log(x) / std::log(10.0);
 }
 
 int OpenALSoundManager::VolumeToDB(double theVolume)
@@ -191,7 +210,7 @@ int OpenALSoundManager::LoadSound(const std::string &theFilename)
 
 	for (i = MAX_SOURCE_SOUNDS - 1; i >= 0; i--)
 	{
-		if (mSourceSounds[i] == NULL)
+		if (!mSourceSounds[i])
 		{
 			if (!LoadSound(i, theFilename))
 				return -1;
@@ -205,8 +224,9 @@ int OpenALSoundManager::LoadSound(const std::string &theFilename)
 
 static int p_fseek64_wrap(PFILE *f, ogg_int64_t off, int whence)
 {
-	if (f == NULL)
-		return (-1);
+	if (!f)
+		return -1;
+	
 	return p_fseek(f, (long)off, whence);
 }
 
@@ -225,7 +245,7 @@ bool OpenALSoundManager::LoadOGGSound(unsigned int theSfxID, const std::string &
 	int current_section;
 
 	PFILE *aFile = p_fopen(theFilename.c_str(), "rb");
-	if (aFile == NULL)
+	if (!aFile)
 		return false;
 
 	if (ov_pak_open(aFile, &vf, NULL, 0) < 0)
@@ -326,7 +346,7 @@ bool OpenALSoundManager::LoadAUSound(unsigned int theSfxID, const std::string &t
 
 void OpenALSoundManager::ReleaseSound(unsigned int theSfxID)
 {
-	if (mSourceSounds[theSfxID] != NULL)
+	if (mSourceSounds[theSfxID])
 	{
 		ForceReleaseSources(mSourceSounds[theSfxID]);
 		alDeleteBuffers(1, &mSourceSounds[theSfxID]);
@@ -351,7 +371,7 @@ int OpenALSoundManager::GetFreeSoundId()
 {
 	for (int i = 0; i < MAX_SOURCE_SOUNDS; i++)
 	{
-		if (mSourceSounds[i] == NULL)
+		if (!mSourceSounds[i])
 			return i;
 	}
 
@@ -363,7 +383,7 @@ int OpenALSoundManager::GetNumSounds()
 	int aCount = 0;
 	for (int i = 0; i < MAX_SOURCE_SOUNDS; i++)
 	{
-		if (mSourceSounds[i] != NULL)
+		if (mSourceSounds[i])
 			aCount++;
 	}
 
@@ -418,7 +438,7 @@ SoundInstance *OpenALSoundManager::GetSoundInstance(unsigned int theSfxID)
 	if (aFreeChannel < 0)
 		return NULL;
 
-	if (mSourceSounds[theSfxID] == NULL)
+	if (!mSourceSounds[theSfxID])
 		return NULL;
 
 	mPlayingSounds[aFreeChannel] = new OpenALSoundInstance(this, mSourceSounds[theSfxID]);
@@ -432,7 +452,7 @@ SoundInstance *OpenALSoundManager::GetSoundInstance(unsigned int theSfxID)
 void OpenALSoundManager::ReleaseSounds()
 {
 	for (int i = 0; i < MAX_SOURCE_SOUNDS; i++)
-		if (mSourceSounds[i] != NULL)
+		if (mSourceSounds[i])
 		{
 			alDeleteBuffers(1, &mSourceSounds[i]);
 			mSourceSounds[i] = NULL;

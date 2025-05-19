@@ -385,7 +385,7 @@ void GameApp::HandleCmdLineParam(const std::string &theParamName, const std::str
 	// We actually don't care to, in this. The purpose was to show you how you'd do it,
 	// and this function is the one you use to read those values. We'll just print the
 	// parameters out for now:
-	OutputDebugString(
+	SDL_Log(
 		StrFormat("theParamName = \"%s\", theParamValue = \"%s\"", theParamName.c_str(), theParamValue.c_str())
 			.c_str());
 }

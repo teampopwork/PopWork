@@ -4,14 +4,14 @@ foreach(dir demo1 demo2 demo3 demo4 demo5 hun-garr v12demo v14demo xmldemo)
 endforeach()
 
 # installing and stuff
+if (WIN32)
+    set(BASS_PATH "${BASS_LIB_PATH}/bass.dll")
+elseif (UNIX)
+    set(BASS_PATH "${BASS_LIB_PATH}/libbass.so")
+endif()
+
 install(FILES
-    $<TARGET_FILE:SDL3::SDL3>
-    $<TARGET_FILE:OpenAL::OpenAL>
-    $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
-    $<TARGET_FILE:Vorbis::vorbisfile>
-    $<TARGET_FILE:Vorbis::vorbis>
-    $<TARGET_FILE:ogg>
-    ${BASS_LIB_PATH}/bass.dll
+    ${BASS_PATH}
     DESTINATION ${CMAKE_SOURCE_DIR}/examples/bin
 )
 

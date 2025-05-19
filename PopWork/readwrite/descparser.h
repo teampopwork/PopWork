@@ -18,7 +18,7 @@ class DataElement
 	DataElement();
 	virtual ~DataElement();
 
-	virtual DataElement *Duplicate() = NULL;
+	virtual DataElement *Duplicate() {return new DataElement(*this);};
 };
 
 class SingleDataElement : public DataElement

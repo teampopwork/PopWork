@@ -240,7 +240,7 @@ bool Profile::HasAttribute(PopWork::XMLElement *theNode, PopWorkString theAttrib
 // we are storing in this class.  See Notes below.
 void Profile::ParseXML(PopWork::XMLParser *theParser)
 {
-	if (theParser == NULL)
+	if (!theParser)
 		return; // OOPS
 
 	XMLElement aNode;

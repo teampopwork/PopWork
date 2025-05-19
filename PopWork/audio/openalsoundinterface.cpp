@@ -1,16 +1,18 @@
 #include "openalsoundinterface.h"
 #include "openalsoundmanager.h"
+#include <complex.h>
 
-using namespace PopWork;
+namespace PopWork {
 
-OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager *theSoundManager, ALuint theSourceSound)
+OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager* theSoundManager,
+                                         ALuint theSourceSound)
 {
 	mSoundManagerP = theSoundManager;
 	mReleased = false;
 	mAutoRelease = false;
 	mHasPlayed = false;
 	mSourceSoundBuffer = theSourceSound;
-	mSoundSource = NULL;
+	mSoundSource = 0;
 
 	mBaseVolume = 1.0;
 	mBasePan = 0;
@@ -21,7 +23,7 @@ OpenALSoundInstance::OpenALSoundInstance(OpenALSoundManager *theSoundManager, AL
 	mDefaultFrequency = 44100;
 
 	// Generate the OpenAL source.
-	if (mSourceSoundBuffer != NULL)
+	if (mSourceSoundBuffer != 0)
 	{
 		alGenSources(1, &mSoundSource);
 		alSourcei(mSoundSource, AL_BUFFER, mSourceSoundBuffer);
@@ -39,7 +41,7 @@ OpenALSoundInstance::~OpenALSoundInstance()
 
 void OpenALSoundInstance::RehupVolume()
 {
-	if (mSoundSource != NULL)
+	if (mSoundSource != 0)
 	{
 		alSourcef(mSoundSource, AL_GAIN, mVolume * mBaseVolume * mSoundManagerP->mMasterVolume);
 	}
@@ -47,7 +49,7 @@ void OpenALSoundInstance::RehupVolume()
 
 void OpenALSoundInstance::RehupPan()
 {
-	if (mSoundSource != NULL)
+	if (mSoundSource)
 	{
 		float converted_panning = (mBasePan + mPan) / 10000.0f;
 		if (converted_panning < -1.0f)
@@ -91,15 +93,17 @@ void OpenALSoundInstance::SetPan(int thePosition)
 
 bool OpenALSoundInstance::Play(bool looping, bool autoRelease)
 {
+	if (!mSoundSource)
+		return false;
+
+	if (!mSoundManagerP->mALDeviceD) // hacky hack
+		return false;
+	
 	Stop();
 
 	mHasPlayed = true;
 	mAutoRelease = autoRelease;
 
-	if (mSoundSource == NULL)
-	{
-		return false;
-	}
 	alSourcei(mSoundSource, AL_LOOPING, looping);
 	alSourcePlay(mSoundSource);
 	return true;
@@ -107,20 +111,23 @@ bool OpenALSoundInstance::Play(bool looping, bool autoRelease)
 
 void OpenALSoundInstance::Stop()
 {
-	if (mSoundSource != NULL)
-	{
-		alSourceStop(mSoundSource);
-		alSourcei(mSoundSource, AL_SEC_OFFSET, 0);
-		mAutoRelease = false;
-	}
+	if (!mSoundSource)
+		return;
+
+	if (!mSoundManagerP->mALDeviceD) // hacky hack
+		return;
+
+	alSourceStop(mSoundSource);
+	alSourcei(mSoundSource, AL_SEC_OFFSET, 0);
+	mAutoRelease = false;
 }
 
 void OpenALSoundInstance::AdjustPitch(double theNumSteps)
 {
-	if (mSoundSource != NULL)
+	if (mSoundSource)
 	{
 		// 1.059463..... is the twelfth root of 2, which is the how many semitones per steps.
-		double aFrequencyMult = pow(1.0594630943592952645618252949463, theNumSteps);
+		double aFrequencyMult = std::pow(1.0594630943592952645618252949463, theNumSteps);
 		alSourcef(mSoundSource, AL_PITCH, aFrequencyMult);
 	}
 }
@@ -130,7 +137,7 @@ bool OpenALSoundInstance::IsPlaying()
 	if (!mHasPlayed)
 		return false;
 
-	if (mSoundSource == NULL)
+	if (!mSoundSource)
 		return false;
 
 	ALint aStatus;
@@ -153,3 +160,5 @@ double OpenALSoundInstance::GetVolume()
 {
 	return mVolume;
 }
+
+};

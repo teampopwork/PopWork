@@ -79,7 +79,7 @@ endforeach()
 
 set(ALL_GROUPED_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
-add_library(${PROJECT_NAME} ${ALL_GROUPED_FILES})
+add_library(${PROJECT_NAME} STATIC ${ALL_GROUPED_FILES})
 
 # hacks!!
 include_directories(
@@ -104,14 +104,12 @@ elseif (UNIX)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-    SDL3::SDL3
+    SDL3::SDL3-static
     SDL3_ttf::SDL3_ttf
     OpenAL::OpenAL
     miniaudio
     ogg
     Vorbis::vorbisfile
     Vorbis::vorbis
-    winmm
-    ws2_32
     ${BASS_PATH}
 )

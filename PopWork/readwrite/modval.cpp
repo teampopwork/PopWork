@@ -113,7 +113,7 @@ static bool FindModValsInMemoryHelper(const char *theMem, DWORD theLength)
 	while (true)
 	{
 		aPtr = FindFileInStringTable(aSearchStr, theMem, theLength, aPtr);
-		if (aPtr == NULL)
+		if (!aPtr)
 			break;
 
 		int aCounter, aLineNum;
@@ -197,7 +197,7 @@ static ModStorage *CreateFileModsHelper(const char *theFileName)
 
 static ModStorage *CreateFileMods(const char *theFileName)
 {
-	if (gSampleString == NULL)
+	if (!gSampleString)
 		gSampleString = theFileName;
 
 	std::string aFileName = theFileName + 15; // skip POPWORK_POPWORKMODVAL

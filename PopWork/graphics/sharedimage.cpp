@@ -6,14 +6,14 @@ using namespace PopWork;
 
 SharedImage::SharedImage()
 {
-	mImage = NULL;
+	mImage = nullptr;
 	mRefCount = 0;
 }
 
 SharedImageRef::SharedImageRef(const SharedImageRef &theSharedImageRef)
 {
 	mSharedImage = theSharedImageRef.mSharedImage;
-	if (mSharedImage != NULL)
+	if (mSharedImage != nullptr)
 		mSharedImage->mRefCount++;
 	mUnsharedImage = theSharedImageRef.mUnsharedImage;
 	mOwnsUnshared = false;
@@ -21,18 +21,18 @@ SharedImageRef::SharedImageRef(const SharedImageRef &theSharedImageRef)
 
 SharedImageRef::SharedImageRef()
 {
-	mSharedImage = NULL;
-	mUnsharedImage = NULL;
+	mSharedImage = nullptr;
+	mUnsharedImage = nullptr;
 	mOwnsUnshared = false;
 }
 
 SharedImageRef::SharedImageRef(SharedImage *theSharedImage)
 {
 	mSharedImage = theSharedImage;
-	if (theSharedImage != NULL)
+	if (theSharedImage != nullptr)
 		mSharedImage->mRefCount++;
 
-	mUnsharedImage = NULL;
+	mUnsharedImage = nullptr;
 	mOwnsUnshared = false;
 }
 
@@ -45,20 +45,20 @@ void SharedImageRef::Release()
 {
 	if (mOwnsUnshared)
 		delete mUnsharedImage;
-	mUnsharedImage = NULL;
-	if (mSharedImage != NULL)
+	mUnsharedImage = nullptr;
+	if (mSharedImage != nullptr)
 	{
 		if (--mSharedImage->mRefCount == 0)
 			gAppBase->mCleanupSharedImages = true;
 	}
-	mSharedImage = NULL;
+	mSharedImage = nullptr;
 }
 
 SharedImageRef &SharedImageRef::operator=(const SharedImageRef &theSharedImageRef)
 {
 	Release();
 	mSharedImage = theSharedImageRef.mSharedImage;
-	if (mSharedImage != NULL)
+	if (mSharedImage != nullptr)
 		mSharedImage->mRefCount++;
 	return *this;
 }
@@ -90,7 +90,7 @@ SharedImageRef::operator Image *()
 
 SharedImageRef::operator MemoryImage *()
 {
-	if (mUnsharedImage != NULL)
+	if (mUnsharedImage != nullptr)
 		return mUnsharedImage;
 	else
 		return (SDLImage *)*this;
@@ -98,8 +98,8 @@ SharedImageRef::operator MemoryImage *()
 
 SharedImageRef::operator SDLImage *()
 {
-	if (mSharedImage != NULL)
+	if (mSharedImage != nullptr)
 		return mSharedImage->mImage;
 	else
-		return NULL;
+		return nullptr;
 }

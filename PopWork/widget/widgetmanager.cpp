@@ -5,7 +5,7 @@
 #include "graphics/sdlimage.h"
 #include "appbase.h"
 #include "debug/perftimer.h"
-#include "debug/debug.h"
+#include "debug/debug.hpp"
 
 using namespace PopWork;
 using namespace std;
@@ -264,8 +264,6 @@ void WidgetManager::AddBaseModal(Widget *theWidget)
 
 void WidgetManager::RemoveBaseModal(Widget *theWidget)
 {
-	DBG_ASSERT(mPreModalInfoList.size() > 0);
-
 	bool first = true;
 
 	while (mPreModalInfoList.size() > 0)

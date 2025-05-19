@@ -39,7 +39,7 @@ class Font
 	virtual void DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
 							const Rect &theClipRect);
 
-	virtual Font *Duplicate() = NULL;
+	virtual Font *Duplicate() {return new Font(*this);};
 };
 
 } // namespace PopWork

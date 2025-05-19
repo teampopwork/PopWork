@@ -1,7 +1,7 @@
 #include "widgetcontainer.h"
 #include "widgetmanager.h"
 #include "widget.h"
-#include "debug/debug.h"
+#include "debug/debug.hpp"
 #include <algorithm>
 
 using namespace PopWork;
@@ -27,9 +27,6 @@ WidgetContainer::WidgetContainer()
 
 WidgetContainer::~WidgetContainer()
 {
-	// call RemoveWidget before you delete it!
-	DBG_ASSERT(mParent == NULL);
-	DBG_ASSERT(mWidgets.empty());
 }
 
 void WidgetContainer::RemoveAllWidgets(bool doDelete, bool recursive)

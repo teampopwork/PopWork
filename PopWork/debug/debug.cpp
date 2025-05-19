@@ -1,5 +1,4 @@
-#include "common.h"
-#include "debug.h"
+#include "./debug.hpp"
 
 #include "misc/autocrit.h"
 #include "misc/critsect.h"
@@ -12,7 +11,7 @@
 extern bool gInAssert = false;
 extern bool gPopWorkDumpLeakedMem = false;
 
-static FILE *gTraceFile = NULL;
+static FILE *gTraceFile = nullptr;
 static int gTraceFileLen = 0;
 static int gTraceFileNum = 1;
 
@@ -52,13 +51,13 @@ static PopWorkAllocMap gPopWorkAllocMap;
 ///////////////////////////////////////////////////////////////////////////////
 void PopWorkTrace(const char *theStr)
 {
-	if (gTraceFile == NULL)
+	if (gTraceFile == nullptr)
 	{
 		gTraceFileNum = (gTraceFileNum + 1) % 2;
 		char aBuf[50];
 		sprintf(aBuf, "trace%d.txt", gTraceFileNum + 1);
 		gTraceFile = fopen(aBuf, "w");
-		if (gTraceFile == NULL)
+		if (gTraceFile == nullptr)
 			return;
 	}
 
@@ -69,14 +68,14 @@ void PopWorkTrace(const char *theStr)
 	if (gTraceFileLen > 100000)
 	{
 		fclose(gTraceFile);
-		gTraceFile = NULL;
+		gTraceFile = nullptr;
 		gTraceFileLen = 0;
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void PopWorkTraceFmt(const PopWorkChar *fmt...)
+void PopWorkTraceFmt(const PopWorkChar *fmt, ...)
 {
 	// Does not append a newline by default, also takes vararg parameters
 
@@ -85,13 +84,13 @@ void PopWorkTraceFmt(const PopWorkChar *fmt...)
 	std::string result = PopWorkStringToStringFast(vformat(fmt, argList));
 	va_end(argList);
 
-	if (gTraceFile == NULL)
+	if (gTraceFile == nullptr)
 	{
 		gTraceFileNum = (gTraceFileNum + 1) % 2;
 		char aBuf[50];
 		sprintf(aBuf, "trace%d.txt", gTraceFileNum + 1);
 		gTraceFile = fopen(aBuf, "w");
-		if (gTraceFile == NULL)
+		if (gTraceFile == nullptr)
 			return;
 	}
 
@@ -102,7 +101,7 @@ void PopWorkTraceFmt(const PopWorkChar *fmt...)
 	if (gTraceFileLen > 100000)
 	{
 		fclose(gTraceFile);
-		gTraceFile = NULL;
+		gTraceFile = nullptr;
 		gTraceFileLen = 0;
 	}
 }
@@ -159,7 +158,7 @@ void PopWorkDumpUnfreed()
 	if (!f)
 		return;
 
-	time_t aTime = time(NULL);
+	time_t aTime = time(nullptr);
 	sprintf(buf, "Memory Leak Report for %s\n", asctime(localtime(&aTime)));
 	fprintf(f, buf);
 	printf("\n%s", buf);
@@ -235,7 +234,7 @@ void PopWorkDumpUnfreed()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void OutputDebug(const PopWorkChar *fmt...)
+void OutputDebug(const PopWorkChar *fmt, ...)
 {
 	va_list argList;
 	va_start(argList, fmt);

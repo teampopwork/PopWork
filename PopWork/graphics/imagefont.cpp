@@ -123,7 +123,7 @@ FontData::FontData()
 {
 	mInitialized = false;
 
-	mApp = NULL;
+	mApp = nullptr;
 	mRefCount = 0;
 	mDefaultPointSize = 0;
 
@@ -159,7 +159,7 @@ void FontData::DeRef()
 
 bool FontData::Error(const std::string &theError)
 {
-	if (mApp != NULL)
+	if (mApp != nullptr)
 	{
 		std::string anErrorString = mFontErrorHeader + theError;
 
@@ -176,7 +176,7 @@ bool FontData::Error(const std::string &theError)
 
 bool FontData::DataToLayer(DataElement *theSource, FontLayer **theFontLayer)
 {
-	*theFontLayer = NULL;
+	*theFontLayer = nullptr;
 
 	if (theSource->mIsList)
 		return false;
@@ -544,7 +544,7 @@ bool FontData::HandleCommand(const ListDataElement &theParams)
 				bool isNew;
 				SharedImageRef anImage = mApp->GetSharedImage(aFileName, "", &isNew);
 
-				if ((Image *)anImage != NULL)
+				if ((Image *)anImage != nullptr)
 				{
 					if (isNew)
 						anImage->Palletize();
@@ -769,7 +769,7 @@ bool FontData::HandleCommand(const ListDataElement &theParams)
 			{
 				if (aCharsVector.size() == aRectList.mElementVector.size())
 				{
-					if ((Image *)aLayer->mImage != NULL)
+					if ((Image *)aLayer->mImage)
 					{
 						int anImageWidth = aLayer->mImage->GetWidth();
 						int anImageHeight = aLayer->mImage->GetHeight();
@@ -1027,7 +1027,7 @@ bool FontData::LoadLegacy(Image *theFontImage, const std::string &theFontDescFil
 	int aCharPos = 0;
 	FILE *aStream = fopen(theFontDescFileName.c_str(), "r");
 
-	if (aStream == NULL)
+	if (aStream == nullptr)
 		return false;
 
 	mSourceFile = theFontDescFileName;
@@ -1073,7 +1073,7 @@ bool FontData::LoadLegacy(Image *theFontImage, const std::string &theFontDescFil
 
 ActiveFontLayer::ActiveFontLayer()
 {
-	mScaledImage = NULL;
+	mScaledImage = nullptr;
 	mOwnsImage = false;
 }
 
@@ -1267,7 +1267,7 @@ void ImageFont::GenerateActiveFontLayers()
 
 					for (aCharNum = 0; aCharNum < 256; aCharNum++)
 					{
-						if ((Image *)aFontLayer->mImage != NULL)
+						if ((Image *)aFontLayer->mImage != nullptr)
 							g.DrawImage(aFontLayer->mImage, anActiveFontLayer->mScaledCharImageRects[aCharNum],
 										aFontLayer->mCharData[aCharNum].mImageRect);
 					}
@@ -1415,21 +1415,21 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 
 	for (aPoolIdx = 0; aPoolIdx < 256; aPoolIdx++)
 	{
-		gRenderHead[aPoolIdx] = NULL;
-		gRenderTail[aPoolIdx] = NULL;
+		gRenderHead[aPoolIdx] = nullptr;
+		gRenderTail[aPoolIdx] = nullptr;
 	}
 
 	int aXPos = theX;
 
-	if (theDrawnAreas != NULL)
+	if (theDrawnAreas != nullptr)
 		theDrawnAreas->clear();
 
-	/*if (theDrawnArea != NULL)
+	/*if (theDrawnArea != nullptr)
 	 *theDrawnArea = Rect(0, 0, 0, 0);*/
 
 	if (!mFontData->mInitialized)
 	{
-		if (theWidth != NULL)
+		if (theWidth != nullptr)
 			*theWidth = 0;
 		return;
 	}
@@ -1511,16 +1511,16 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 			}
 
 			Color aColor;
-			aColor.mRed = min((theColor.mRed * anActiveFontLayer->mBaseFontLayer->mColorMult.mRed / 255) +
+			aColor.mRed = std::min((theColor.mRed * anActiveFontLayer->mBaseFontLayer->mColorMult.mRed / 255) +
 								  anActiveFontLayer->mBaseFontLayer->mColorAdd.mRed,
 							  255);
-			aColor.mGreen = min((theColor.mGreen * anActiveFontLayer->mBaseFontLayer->mColorMult.mGreen / 255) +
+			aColor.mGreen = std::min((theColor.mGreen * anActiveFontLayer->mBaseFontLayer->mColorMult.mGreen / 255) +
 									anActiveFontLayer->mBaseFontLayer->mColorAdd.mGreen,
 								255);
-			aColor.mBlue = min((theColor.mBlue * anActiveFontLayer->mBaseFontLayer->mColorMult.mBlue / 255) +
+			aColor.mBlue = std::min((theColor.mBlue * anActiveFontLayer->mBaseFontLayer->mColorMult.mBlue / 255) +
 								   anActiveFontLayer->mBaseFontLayer->mColorAdd.mBlue,
 							   255);
-			aColor.mAlpha = min((theColor.mAlpha * anActiveFontLayer->mBaseFontLayer->mColorMult.mAlpha / 255) +
+			aColor.mAlpha = std::min((theColor.mAlpha * anActiveFontLayer->mBaseFontLayer->mColorMult.mAlpha / 255) +
 									anActiveFontLayer->mBaseFontLayer->mColorAdd.mAlpha,
 								255);
 
@@ -1541,11 +1541,11 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 			aRenderCommand->mSrc[2] = anActiveFontLayer->mScaledCharImageRects[(uchar)aChar].mWidth;
 			aRenderCommand->mSrc[3] = anActiveFontLayer->mScaledCharImageRects[(uchar)aChar].mHeight;
 			aRenderCommand->mMode = anActiveFontLayer->mBaseFontLayer->mDrawMode;
-			aRenderCommand->mNext = NULL;
+			aRenderCommand->mNext = nullptr;
 
-			int anOrderIdx = min(max(anOrder + 128, 0), 255);
+			int anOrderIdx = std::min(std::max(anOrder + 128, 0), 255);
 
-			if (gRenderTail[anOrderIdx] == NULL)
+			if (gRenderTail[anOrderIdx] == nullptr)
 			{
 				gRenderTail[anOrderIdx] = aRenderCommand;
 				gRenderHead[anOrderIdx] = aRenderCommand;
@@ -1563,11 +1563,11 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 				g->SetDrawMode(anActiveFontLayer->mBaseFontLayer->mDrawMode);
 			Color anOrigColor = g->GetColor();
 			g->SetColor(aColor);
-			if (anActiveFontLayer->mScaledImage != NULL)
+			if (anActiveFontLayer->mScaledImage != nullptr)
 				g->DrawImage(anActiveFontLayer->mScaledImage, anImageX, anImageY,
 			anActiveFontLayer->mScaledCharImageRects[aChar]); g->SetColor(anOrigColor); g->SetDrawMode(anOldDrawMode);*/
 
-			if (theDrawnAreas != NULL)
+			if (theDrawnAreas != nullptr)
 			{
 				Rect aDestRect = Rect(anImageX, anImageY, anActiveFontLayer->mScaledCharImageRects[(uchar)aChar].mWidth,
 									  anActiveFontLayer->mScaledCharImageRects[(uchar)aChar].mHeight);
@@ -1611,7 +1611,7 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 		aCurXPos = aMaxXPos;
 	}
 
-	if (theWidth != NULL)
+	if (theWidth != nullptr)
 		*theWidth = aCurXPos - theX;
 
 	Color anOrigColor = g->GetColor();
@@ -1620,13 +1620,13 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 	{
 		RenderCommand *aRenderCommand = gRenderHead[aPoolIdx];
 
-		while (aRenderCommand != NULL)
+		while (aRenderCommand != nullptr)
 		{
 			int anOldDrawMode = g->GetDrawMode();
 			if (aRenderCommand->mMode != -1)
 				g->SetDrawMode(aRenderCommand->mMode);
 			g->SetColor(Color(aRenderCommand->mColor));
-			if (aRenderCommand->mImage != NULL)
+			if (aRenderCommand->mImage != nullptr)
 				g->DrawImage(aRenderCommand->mImage, aRenderCommand->mDest[0], aRenderCommand->mDest[1],
 							 Rect(aRenderCommand->mSrc[0], aRenderCommand->mSrc[1], aRenderCommand->mSrc[2],
 								  aRenderCommand->mSrc[3]));
@@ -1648,7 +1648,7 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 			g->SetDrawMode(aRenderCommand->mMode);
 		Color anOrigColor = g->GetColor();
 		g->SetColor(aRenderCommand->mColor);
-		if (aRenderCommand->mImage != NULL)
+		if (aRenderCommand->mImage != nullptr)
 			g->DrawImage(aRenderCommand->mImage, aRenderCommand->mDest.mX, aRenderCommand->mDest.mY,
 	aRenderCommand->mSrc); g->SetColor(anOrigColor); g->SetDrawMode(anOldDrawMode);
 
@@ -1661,7 +1661,7 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 void ImageFont::DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
 						   const Rect &theClipRect)
 {
-	DrawStringEx(g, theX, theY, theString, theColor, &theClipRect, NULL, NULL);
+	DrawStringEx(g, theX, theY, theString, theColor, &theClipRect, nullptr, nullptr);
 }
 
 Font *ImageFont::Duplicate()
@@ -1725,7 +1725,7 @@ std::string ImageFont::GetDefine(const std::string &theName)
 {
 	DataElement *aDataElement = mFontData->Dereference(theName);
 
-	if (aDataElement == NULL)
+	if (aDataElement == nullptr)
 		return "";
 
 	return mFontData->DataElementToString(aDataElement);

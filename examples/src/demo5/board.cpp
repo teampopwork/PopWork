@@ -29,8 +29,8 @@
 // OTHER FILE INCLUDES OR ELSE IT WILL CAUSE LINKER AND COMPILER ERRORS!
 // Memory leaks will automatically be dumped to "mem_leaks.txt" when
 // the app is closed.
-#define POPWORK_MEMTRACE
-#include "PopWork/Debug/memmgr.h"
+//#define POPWORK_MEMTRACE
+#include "PopWork/debug/memmgr.h"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

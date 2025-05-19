@@ -26,7 +26,7 @@ SDLInterface::SDLInterface(AppBase *theApp)
 	mDisplayWidth = mWidth;
 	mDisplayHeight = mHeight;
 	mPresentationRect = Rect(0, 0, mWidth, mHeight);
-	mScreenImage = NULL;
+	mScreenImage = nullptr;
 	mHasInitiated = false;
 	mCursorX = 0;
 	mCursorY = 0;
@@ -54,7 +54,7 @@ void SDLInterface::Cleanup()
 		MemoryImage *anImage = *anItr;
 		SDLTextureData *aData = (SDLTextureData *)anImage->mD3DData;
 		delete aData;
-		anImage->mD3DData = NULL;
+		anImage->mD3DData = nullptr;
 	}
 	mImageSet.clear();
 
@@ -81,10 +81,10 @@ void SDLInterface::RemoveSDLImage(SDLImage *theSDLImage)
 
 void SDLInterface::Remove3DData(MemoryImage *theImage)
 {
-	if (theImage->mD3DData != NULL)
+	if (theImage->mD3DData != nullptr)
 	{
 		delete (SDLTextureData *)theImage->mD3DData;
-		theImage->mD3DData = NULL;
+		theImage->mD3DData = nullptr;
 
 		AutoCrit aCrit(mCritSect); // Make images thread safe
 		mImageSet.erase(theImage);
@@ -160,7 +160,7 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 
 bool SDLInterface::InitSDLRenderer()
 {
-	mRenderer = SDL_CreateRenderer(mWindow, NULL);
+	mRenderer = SDL_CreateRenderer(mWindow, nullptr);
 	if (mRenderer == nullptr)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Renderer Creation Failed", SDL_GetError(), nullptr);
@@ -188,7 +188,10 @@ bool SDLInterface::InitSDLRenderer()
 	return true;
 }
 
-bool gSDLInterfacePreDrawError = false;
+namespace PopWork {
+    bool gSDLInterfacePreDrawError = false;
+}
+
 bool SDLInterface::Redraw(Rect *theClipRect)
 {
 	SDL_SetRenderTarget(mRenderer, nullptr);
@@ -204,11 +207,11 @@ bool SDLInterface::Redraw(Rect *theClipRect)
 
 	SDL_SetRenderClipRect(mRenderer, &clipRect);
 
-	gSDLInterfacePreDrawError = (SDL_RenderTexture(mRenderer, mScreenTexture, nullptr, nullptr) < 0);
+	PopWork::gSDLInterfacePreDrawError = (SDL_RenderTexture(mRenderer, mScreenTexture, nullptr, nullptr) < 0);
 
 	SDL_RenderPresent(mRenderer);
 
-	return !gSDLInterfacePreDrawError;
+	return !PopWork::gSDLInterfacePreDrawError;
 }
 
 /// <summary>
@@ -240,7 +243,7 @@ void SDLInterface::SetCursorPos(int theCursorX, int theCursorY)
 }
 
 /// <summary>
-/// Set the cursor image to a Image* or NULL to hide the cursor
+/// Set the cursor image to a Image* or nullptr to hide the cursor
 /// </summary>
 /// <param name="theImage"></param>
 /// <returns></returns>
@@ -251,7 +254,7 @@ bool SDLInterface::SetCursorImage(Image *theImage)
 	if (mCursorImage != theImage)
 	{
 		mCursorImage = theImage;
-		if (theImage == NULL)
+		if (theImage == nullptr)
 			return true;
 		SDL_Surface *aSurface =
 			SDL_CreateSurfaceFrom(theImage->mWidth, theImage->mHeight, SDL_PIXELFORMAT_ARGB8888,
@@ -331,7 +334,7 @@ bool SDLInterface::CreateImageTexture(MemoryImage *theImage)
 {
 	bool wantPurge = false;
 
-	if (theImage->mD3DData == NULL)
+	if (theImage->mD3DData == nullptr)
 	{
 		theImage->mD3DData = new SDLTextureData(mRenderer);
 
@@ -353,7 +356,7 @@ bool SDLInterface::CreateImageTexture(MemoryImage *theImage)
 
 bool SDLInterface::RecoverBits(MemoryImage *theImage)
 {
-	if (theImage->mD3DData == NULL)
+	if (theImage->mD3DData == nullptr)
 		return false;
 
 	SDLTextureData *aData = (SDLTextureData *)theImage->mD3DData;
@@ -366,7 +369,7 @@ bool SDLInterface::RecoverBits(MemoryImage *theImage)
 	void *pixels;
 	int pitch;
 
-	if (SDL_LockTexture(aData->mTexture, NULL, &pixels, &pitch) &&
+	if (SDL_LockTexture(aData->mTexture, nullptr, &pixels, &pitch) &&
 		SDL_GetTextureSize(aData->mTexture, &aWidth, &aHeight))
 	{
 		theImage->SetBits((ulong *)pixels, (int)aWidth, (int)aHeight);
@@ -448,7 +451,7 @@ void SDLTextureData::CreateTextures(MemoryImage *theImage)
 			}
 			else
 			{
-				SDL_Log("Error: Image bits are NULL, cannot update texture.");
+				SDL_Log("Error: Image bits are nullptr, cannot update texture.");
 			}
 		}
 		else
@@ -465,7 +468,7 @@ void SDLTextureData::CreateTextures(MemoryImage *theImage)
 		}
 		else
 		{
-			SDL_Log("Error: Image bits are NULL, cannot update texture.");
+			SDL_Log("Error: Image bits are nullptr, cannot update texture.");
 		}
 	}
 
@@ -553,7 +556,7 @@ void SDLInterface::BltClipF(Image *theImage, float theX, float theY, const Rect 
 	SDL_SetRenderClipRect(mRenderer, &clipRect);
 	SDL_SetTextureBlendMode(aTexture, ChooseBlendMode(theDrawMode));
 	SDL_RenderTexture(mRenderer, aTexture, &srcRect, &destRect);
-	SDL_SetRenderClipRect(mRenderer, NULL);
+	SDL_SetRenderClipRect(mRenderer, nullptr);
 	SDL_SetRenderTarget(mRenderer, nullptr);
 }
 
@@ -770,7 +773,7 @@ void SDLInterface::DrawTriangle(const TriVertex &p1, const TriVertex &p2, const 
 							  {SDL_FPoint{p2.x, p2.y}, aColor, {p2.u, p2.v}},
 							  {SDL_FPoint{p3.x, p3.y}, aColor, {p3.u, p3.v}}};
 
-	SDL_RenderGeometry(mRenderer, NULL, vertices, 3, indices, 3);
+	SDL_RenderGeometry(mRenderer, nullptr, vertices, 3, indices, 3);
 	SDL_SetRenderTarget(mRenderer, nullptr);
 }
 
@@ -855,7 +858,7 @@ void SDLInterface::DrawTrianglesTex(const TriVertex theVertices[][3], int theNum
 		vertices[1].color = aColor[1];
 		vertices[2].color = aColor[2];
 
-		SDL_RenderGeometry(mRenderer, aTexture, vertices, 3, NULL, 3);
+		SDL_RenderGeometry(mRenderer, aTexture, vertices, 3, nullptr, 3);
 	}
 
 	SDL_SetRenderTarget(mRenderer, nullptr);

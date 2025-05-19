@@ -18,7 +18,7 @@ class OpenALSoundManager : public SoundManager
 	friend class OpenALSoundInstance;
 	friend class BassMusicInterface;
 
-  protected:
+  public:
 	ALuint mSourceSounds[MAX_SOURCE_SOUNDS];
 	std::string mSourceFileNames[MAX_SOURCE_SOUNDS];
 	ulong mSourceDataSizes[MAX_SOURCE_SOUNDS];
@@ -28,12 +28,13 @@ class OpenALSoundManager : public SoundManager
 	double mMasterVolume;
 	DWORD mLastReleaseTick;
 
-  protected:
+	// hack
+	ALCdevice *mALDeviceD;
+
 	int FindFreeChannel();
 	int VolumeToDB(double theVolume);
 	void ReleaseFreeChannels();
 
-  public:
 	OpenALSoundManager();
 	virtual ~OpenALSoundManager();
 
