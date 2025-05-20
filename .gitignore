@@ -31,3 +31,5 @@ examples/bin/*.pdb
 # bass
 examples/bin/bass.dll
 examples/bin/libbass.so
+
+examples/bin/screenshots/*
