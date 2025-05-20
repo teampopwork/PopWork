@@ -43,7 +43,9 @@
 
 // H521
 #undef STB_IMAGE_IMPLEMENTATION
+#undef STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image.h>
+#include "stb_image_write.h"
 
 // H522
 #include <json.hpp>
@@ -688,7 +690,33 @@ int WriteScreenShotThread(void *theArg)
 
 void AppBase::TakeScreenshot()
 {
-	// TODO: Reimplement screenshots
+	std::filesystem::path screenshotDir = std::filesystem::current_path() / "screenshots";
+	std::filesystem::create_directory(screenshotDir); // create silently
+
+	std::time_t t = std::time(nullptr);
+	std::tm tm = *std::localtime(&t);
+	std::ostringstream filenameStream;
+	filenameStream << std::put_time(&tm, "%Y%m%d_%H%M%S") << ".png";
+	std::filesystem::path filePath = screenshotDir / filenameStream.str();
+
+	SDL_Surface *surface = SDL_RenderReadPixels(mSDLInterface->mRenderer, nullptr);
+	if (!surface)
+		return;
+
+	uint8_t *bgra = static_cast<uint8_t *>(surface->pixels);
+	int size = surface->w * surface->h * 4;
+	std::vector<uint8_t> rgba(size);
+
+	for (int i = 0; i < size; i += 4)
+	{
+		rgba[i + 0] = bgra[i + 2]; // R
+		rgba[i + 1] = bgra[i + 1]; // G
+		rgba[i + 2] = bgra[i + 0]; // B
+		rgba[i + 3] = bgra[i + 3]; // A
+	}
+
+	stbi_write_png(filePath.string().c_str(), surface->w, surface->h, 4, rgba.data(), surface->w * 4);
+	SDL_DestroySurface(surface);
 }
 
 void AppBase::DumpProgramInfo()
