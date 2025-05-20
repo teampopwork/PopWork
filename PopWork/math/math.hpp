@@ -1,5 +1,5 @@
-#ifndef __POPMATH_HPP__
-#define __POPMATH_HPP__
+#ifndef __MATH_HPP__
+#define __MATH_HPP__
 #ifdef _WIN32
 #pragma once
 #endif

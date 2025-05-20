@@ -12,11 +12,13 @@ namespace PopWork
 class WorkerThread
 {
   public:
-	WorkerThread();
+	WorkerThread(const std::string &name);
 	virtual ~WorkerThread();
 	void DoTask(void (*)(void *), void *);
 	void WaitForTask();
 	bool IsProcessingTask();
+
+	std::string mName;
 
   protected:
 	static int StaticThreadProc(void *);

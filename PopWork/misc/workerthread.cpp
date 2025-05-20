@@ -2,13 +2,13 @@
 
 using namespace PopWork;
 
-WorkerThread::WorkerThread()
+WorkerThread::WorkerThread(const std::string &name)
 	: mThread(nullptr), mMutex(nullptr), mCond(nullptr), mTask(nullptr), mTaskArg(nullptr), mStopped(false),
-	  mTaskPending(false)
+	  mTaskPending(false), mName(name)
 {
 	mMutex = SDL_CreateMutex();
 	mCond = SDL_CreateCondition();
-	mThread = SDL_CreateThread(StaticThreadProc, "WorkerThread", this);
+	mThread = SDL_CreateThread(StaticThreadProc, mName.c_str(), this);
 }
 
 WorkerThread::~WorkerThread()
