@@ -36,7 +36,7 @@ const float MAX_BEAM_SPEED = 2.5f;
 
 // Table of random planet names
 const int NUM_PLANET_NAMES = 28;
-const PopWorkString PLANET_NAME[] = {_S("Deev-z"),
+const PopString PLANET_NAME[] = {_S("Deev-z"),
 									 _S("SEN-Hen"),
 									 _S("Wallach IX"),
 									 _S("Salusa Secundus"),
@@ -67,7 +67,7 @@ const PopWorkString PLANET_NAME[] = {_S("Deev-z"),
 
 // Table of random planet exports:
 const int NUM_PLANET_EXPORTS = 23;
-const PopWorkString PLANET_EXPORTS[] = {
+const PopString PLANET_EXPORTS[] = {
 	_S("Happiness"),	  _S("Donkeys"),		_S("Rabies"),	   _S("AstroPop"),
 	_S("Idiocy"),		  _S("Minimal Techno"), _S("Citizens"),	   _S("Pain-relieving Pants"),
 	_S("The Quad-Laser"), _S("Septic Systems"), _S("Video Games"), _S("Robots"),
@@ -857,7 +857,7 @@ void Board::DrawUI(Graphics *g)
 	int height = FONT_HUNGARR->GetHeight();
 
 	g->SetFont(FONT_HUNGARR);
-	PopWorkString s;
+	PopString s;
 	int rightX = FONT_HUNGARR->StringWidth(_S("POPULATION CONSUMED: ")) + 5;
 
 	int strWidth;
@@ -1929,7 +1929,7 @@ void Board::Pause(bool p)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::KeyChar(PopWorkChar theChar)
+void Board::KeyChar(PopChar theChar)
 {
 	if (theChar == ' ')
 		Pause(mPauseLevel == 0);
@@ -1954,8 +1954,8 @@ void Board::GivePlanetBonus(Planet *p)
 
 	++mNumPlanetsEaten;
 
-	PopWorkString pName = PLANET_NAME[p->mNameIdx];
-	PopWorkString pExport = PLANET_EXPORTS[p->mExportIdx];
+	PopString pName = PLANET_NAME[p->mNameIdx];
+	PopString pExport = PLANET_EXPORTS[p->mExportIdx];
 	int points = mLevel * 1000;
 	AddBonusText(StrFormat(_S("%s: +%d"), pName.c_str(), points), p->mX, p->mY);
 	mScore += points;
@@ -2033,7 +2033,7 @@ void Board::UpdatePercentComplete(void)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddBonusText(PopWorkString t)
+void Board::AddBonusText(PopString t)
 {
 	AddBonusText(t, mWidth / 2 - FONT_HUNGARR->StringWidth(t) / 2,
 				 (mHeight - GRID_START_Y) / 2 - FONT_HUNGARR->GetHeight() / 2);
@@ -2041,7 +2041,7 @@ void Board::AddBonusText(PopWorkString t)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void Board::AddBonusText(PopWorkString t, float x, float y)
+void Board::AddBonusText(PopString t, float x, float y)
 {
 	BonusText bt;
 	bt.mText = t;

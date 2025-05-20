@@ -165,7 +165,7 @@ struct BonusText
 	int mHue;	// See the .CPP file for info on using hue/saturation/luminance values
 	int mAlpha; // How faded out the text is
 	float mX, mY;
-	PopWorkString mText;
+	PopString mText;
 
 	BonusText()
 	{
@@ -231,7 +231,7 @@ class Board : public Widget, public ButtonListener
 	// When a planet is eaten, we dump its name, export, and population (comma delimited) in that
 	// order into this list, which will be passed to the level up class for a stats summary of
 	// the past level.
-	std::vector<PopWorkString> mPlanetsEaten;
+	std::vector<PopString> mPlanetsEaten;
 	std::vector<Particle> mParticles;
 
 	GameApp *mApp;
@@ -539,7 +539,7 @@ class Board : public Widget, public ButtonListener
 	//
 	//	Purpose: Adds floating bonus text to the center of the screen
 	//////////////////////////////////////////////////////////////////////////
-	void AddBonusText(PopWorkString t);
+	void AddBonusText(PopString t);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: AddBonusText
@@ -549,7 +549,7 @@ class Board : public Widget, public ButtonListener
 	//
 	//	Purpose: Allows exact placement of the bonus text
 	//////////////////////////////////////////////////////////////////////////
-	void AddBonusText(PopWorkString t, float x, float y);
+	void AddBonusText(PopString t, float x, float y);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: LostLife
@@ -587,7 +587,7 @@ class Board : public Widget, public ButtonListener
 	//	Purpose: Called by the WidgetManager if a key is pressed and the Board
 	//	has focus. Used to see if space was pressed, to toggle pause state.
 	//////////////////////////////////////////////////////////////////////////
-	virtual void KeyChar(PopWorkChar theChar);
+	virtual void KeyChar(PopChar theChar);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: Draw
