@@ -48,7 +48,7 @@
 //	* How to be master of the universe. OK maybe not.
 //////////////////////////////////////////////////////////////////////////
 
-#include "v14demoapp.h"
+#include "v14demoapp.hpp"
 #ifndef _CONSOLE_ON
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN

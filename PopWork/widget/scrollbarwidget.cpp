@@ -1,7 +1,7 @@
-#include "scrollbarwidget.h"
-#include "widgetmanager.h"
-#include "scrolllistener.h"
-#include "scrollbuttonwidget.h"
+#include "scrollbarwidget.hpp"
+#include "widgetmanager.hpp"
+#include "scrolllistener.hpp"
+#include "scrollbuttonwidget.hpp"
 
 using namespace PopWork;
 

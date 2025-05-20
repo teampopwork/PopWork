@@ -1,0 +1,41 @@
+#ifndef __PROPERTIES_PARSER_HPP__
+#define __PROPERTIES_PARSER_HPP__
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "appbase.hpp"
+
+namespace PopWork
+{
+
+class XMLParser;
+
+class PropertiesParser
+{
+  public:
+	AppBase *mApp;
+	XMLParser *mXMLParser;
+	PopString mError;
+	bool mHasFailed;
+
+  protected:
+	void Fail(const PopString &theErrorText);
+
+	bool ParseSingleElement(PopString *theString);
+	bool ParseStringArray(StringVector *theStringVector);
+	bool ParseProperties();
+	bool DoParseProperties();
+
+  public:
+	PropertiesParser(AppBase *theApp);
+	virtual ~PropertiesParser();
+
+	bool ParsePropertiesFile(const std::string &theFilename);
+	bool ParsePropertiesBuffer(const Buffer &theBuffer);
+	PopString GetErrorText();
+};
+
+} // namespace PopWork
+
+#endif

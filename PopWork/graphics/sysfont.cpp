@@ -1,11 +1,11 @@
-#include "sysfont.h"
-#include "sdlimage.h"
-#include "appbase.h"
-#include "graphics.h"
-#include "imagefont.h"
-#include "memoryimage.h"
-#include "sdlinterface.h"
-#include "widget/widgetmanager.h"
+#include "sysfont.hpp"
+#include "sdlimage.hpp"
+#include "appbase.hpp"
+#include "graphics.hpp"
+#include "imagefont.hpp"
+#include "memoryimage.hpp"
+#include "sdlinterface.hpp"
+#include "widget/widgetmanager.hpp"
 
 #include <stdlib.h>
 

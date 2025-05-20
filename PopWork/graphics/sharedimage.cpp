@@ -1,6 +1,6 @@
-#include "sharedimage.h"
-#include "sdlimage.h"
-#include "appbase.h"
+#include "sharedimage.hpp"
+#include "sdlimage.hpp"
+#include "appbase.hpp"
 
 using namespace PopWork;
 

@@ -1,12 +1,12 @@
 #include "./debug.hpp"
 
-#include "misc/autocrit.h"
-#include "misc/critsect.h"
+#include "misc/autocrit.hpp"
+#include "misc/critsect.hpp"
 
 #include <time.h>
 #include <stdarg.h>
 
-#include "memmgr.h"
+#include "memmgr.hpp"
 
 extern bool gInAssert = false;
 extern bool gPopWorkDumpLeakedMem = false;

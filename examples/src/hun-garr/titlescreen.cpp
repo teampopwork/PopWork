@@ -1,13 +1,13 @@
-#include "titlescreen.h"
-#include "gameapp.h"
-#include "res.h"
+#include "titlescreen.hpp"
+#include "gameapp.hpp"
+#include "res.hpp"
 
-#include "PopWork/graphics/font.h"
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/graphics/image.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/math/rect.h"
-#include "PopWork/widget/hyperlinkwidget.h"
+#include "PopWork/graphics/font.hpp"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/graphics/image.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/math/rect.hpp"
+#include "PopWork/widget/hyperlinkwidget.hpp"
 
 using namespace PopWork;
 

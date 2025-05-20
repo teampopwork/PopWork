@@ -1,9 +1,9 @@
-#include "xmldemoapp.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/resources/resourcemanager.h"
-#include "PopWork/readwrite/xmlparser.h"
-#include "board.h"
-#include "res.h"
+#include "xmldemoapp.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/resources/resourcemanager.hpp"
+#include "PopWork/readwrite/xmlparser.hpp"
+#include "board.hpp"
+#include "res.hpp"
 
 using namespace PopWork;
 

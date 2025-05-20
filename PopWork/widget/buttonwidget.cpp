@@ -1,8 +1,8 @@
-#include "buttonwidget.h"
-#include "graphics/image.h"
-#include "graphics/sysfont.h"
-#include "widgetmanager.h"
-#include "buttonlistener.h"
+#include "buttonwidget.hpp"
+#include "graphics/image.hpp"
+#include "graphics/sysfont.hpp"
+#include "widgetmanager.hpp"
+#include "buttonlistener.hpp"
 #include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace PopWork;

@@ -1,4 +1,4 @@
-#include "quantize.h"
+#include "quantize.hpp"
 #include <assert.h>
 #include <math.h>
 

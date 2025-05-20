@@ -1,5 +1,5 @@
-#include "descparser.h"
-#include "paklib/pakinterface.h"
+#include "descparser.hpp"
+#include "paklib/pakinterface.hpp"
 
 using namespace PopWork;
 

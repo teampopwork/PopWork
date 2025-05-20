@@ -1,5 +1,5 @@
-#include "httptransfer.h"
-#include "appbase.h"
+#include "httptransfer.hpp"
+#include "appbase.hpp"
 
 using namespace PopWork;
 

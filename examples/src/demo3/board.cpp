@@ -1,29 +1,29 @@
-#include "board.h"
-#include "gameapp.h"
-#include "PopWork/graphics/graphics.h"
+#include "board.hpp"
+#include "gameapp.hpp"
+#include "PopWork/graphics/graphics.hpp"
 
 // See the Draw method for more information on using the Color class.
-#include "PopWork/graphics/color.h"
+#include "PopWork/graphics/color.hpp"
 
 // The Image.h file just declares basic functions. All images are either of
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "PopWork/graphics/sdlimage.h"
+#include "PopWork/graphics/sdlimage.hpp"
 
 // The Rectangle template, used to specify X, Y, Width, Height
-#include "PopWork/math/rect.h"
+#include "PopWork/math/rect.hpp"
 
 // We're going to be making a button in this demo so we need to
 // include this file.
-#include "PopWork/widget/buttonwidget.h"
+#include "PopWork/widget/buttonwidget.hpp"
 
 // We're going to add our own button widget, which requires knowing about the
 // WidgetManager.
-#include "PopWork/widget/widgetmanager.h"
+#include "PopWork/widget/widgetmanager.hpp"
 
-#include "PopWork/graphics/imagefont.h"
+#include "PopWork/graphics/imagefont.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

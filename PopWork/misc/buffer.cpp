@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "buffer.hpp"
 #include "debug/debug.hpp"
 
 #define POLYNOMIAL 0x04c11db7L

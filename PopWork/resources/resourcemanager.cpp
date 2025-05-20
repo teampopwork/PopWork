@@ -1,14 +1,14 @@
 #include <memory>
-#include "resourcemanager.h"
-#include "readwrite/xmlparser.h"
-#include "audio/soundmanager.h"
-#include "graphics/sdlimage.h"
-#include "graphics/sdlinterface.h"
-#include "graphics/imagefont.h"
-#include "graphics/sysfont.h"
-#include "imagelib/imagelib.h"
+#include "resourcemanager.hpp"
+#include "readwrite/xmlparser.hpp"
+#include "audio/soundmanager.hpp"
+#include "graphics/sdlimage.hpp"
+#include "graphics/sdlinterface.hpp"
+#include "graphics/imagefont.hpp"
+#include "graphics/sysfont.hpp"
+#include "imagelib/imagelib.hpp"
 
-#include "debug/perftimer.h"
+#include "debug/perftimer.hpp"
 
 using namespace PopWork;
 

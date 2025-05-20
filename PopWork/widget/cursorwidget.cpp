@@ -1,5 +1,5 @@
-#include "cursorwidget.h"
-#include "graphics/image.h"
+#include "cursorwidget.hpp"
+#include "graphics/image.hpp"
 
 using namespace PopWork;
 

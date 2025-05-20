@@ -1,16 +1,16 @@
-#include "gameapp.h"
-#include "board.h"
-#include "PopWork/widget/widgetmanager.h"
+#include "gameapp.hpp"
+#include "board.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
 
 // The Image.h file just declares basic functions. All images are either of
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "PopWork/graphics/sdlimage.h"
+#include "PopWork/graphics/sdlimage.hpp"
 
 // We're going to create a font for Board's button widget's label
-#include "PopWork/graphics/imagefont.h"
+#include "PopWork/graphics/imagefont.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

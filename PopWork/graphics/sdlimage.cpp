@@ -1,9 +1,9 @@
-#include "sdlimage.h"
-#include "misc/critsect.h"
+#include "sdlimage.hpp"
+#include "misc/critsect.hpp"
 #include "debug/debug.hpp"
-#include "sdlinterface.h"
-#include "appbase.h"
-#include "image.h"
+#include "sdlinterface.hpp"
+#include "appbase.hpp"
+#include "image.hpp"
 
 using namespace PopWork;
 

@@ -1,6 +1,6 @@
-#include "dialogbutton.h"
-#include "graphics/sysfont.h"
-#include "widgetmanager.h"
+#include "dialogbutton.hpp"
+#include "graphics/sysfont.hpp"
+#include "widgetmanager.hpp"
 #include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace PopWork;

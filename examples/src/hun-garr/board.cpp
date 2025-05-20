@@ -1,22 +1,22 @@
 #pragma warning(disable : 4244)
 #pragma warning(disable : 4018)
-#include "board.h"
-#include "gameapp.h"
-#include "res.h"
-#include "levelupeffect.h"
-#include "gameovereffect.h"
-#include "optionsdialog.h"
+#include "board.hpp"
+#include "gameapp.hpp"
+#include "res.hpp"
+#include "levelupeffect.hpp"
+#include "gameovereffect.hpp"
+#include "optionsdialog.hpp"
 
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/graphics/color.h"
-#include "PopWork/math/rect.h"
-#include "PopWork/widget/buttonwidget.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/graphics/imagefont.h"
-#include "PopWork/audio/soundmanager.h"
-#include "PopWork/audio/soundinstance.h"
-#include "PopWork/misc/buffer.h"
-#include "PopWork/audio/musicinterface.h"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/graphics/color.hpp"
+#include "PopWork/math/rect.hpp"
+#include "PopWork/widget/buttonwidget.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/graphics/imagefont.hpp"
+#include "PopWork/audio/soundmanager.hpp"
+#include "PopWork/audio/soundinstance.hpp"
+#include "PopWork/misc/buffer.hpp"
+#include "PopWork/audio/musicinterface.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

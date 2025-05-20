@@ -14,7 +14,7 @@
 //	* Widgets: buttons, listeners, basic events, mouse move/down/up/drag
 //////////////////////////////////////////////////////////////////////////
 
-#include "gameapp.h"
+#include "gameapp.hpp"
 #ifndef _CONSOLE_ON
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN

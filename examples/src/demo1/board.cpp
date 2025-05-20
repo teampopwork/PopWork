@@ -1,11 +1,11 @@
-#include "board.h"
-#include "PopWork/graphics/graphics.h"
+#include "board.hpp"
+#include "PopWork/graphics/graphics.hpp"
 
 // See the Draw method for more information on using the Color class.
-#include "PopWork/graphics/color.h"
+#include "PopWork/graphics/color.hpp"
 
 // A generic X, Y point template. See Draw() below for usage info.
-#include "PopWork/math/point.h"
+#include "PopWork/math/point.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

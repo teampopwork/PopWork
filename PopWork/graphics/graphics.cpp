@@ -1,8 +1,8 @@
-#include "graphics.h"
-#include "font.h"
-#include "sdlimage.h"
-#include "memoryimage.h"
-#include "math/matrix.h"
+#include "graphics.hpp"
+#include "font.hpp"
+#include "sdlimage.hpp"
+#include "memoryimage.hpp"
+#include "math/matrix.hpp"
 #include <math.h>
 
 using namespace PopWork;

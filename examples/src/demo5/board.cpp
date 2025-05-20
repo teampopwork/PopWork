@@ -1,26 +1,26 @@
-#include "board.h"
-#include "gameapp.h"
+#include "board.hpp"
+#include "gameapp.hpp"
 
 // Contains all the resources from the resources.xml file in our
 // properties directory. See that file for more information.
-#include "res.h"
+#include "res.hpp"
 
 // You should remember these files from the previous demos
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/graphics/color.h"
-#include "PopWork/math/rect.h"
-#include "PopWork/widget/buttonwidget.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/graphics/imagefont.h"
-#include "PopWork/graphics/image.h"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/graphics/color.hpp"
+#include "PopWork/math/rect.hpp"
+#include "PopWork/widget/buttonwidget.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/graphics/imagefont.hpp"
+#include "PopWork/graphics/image.hpp"
 
 // Our example dialog box
-#include "demodialog.h"
+#include "demodialog.hpp"
 
 // And for our performance profiling example, we first have to define POPWORK_PERF_ENABLED
 // before including PerfTimer.h:
 #define POPWORK_PERF_ENABLED
-#include "PopWork/debug/perftimer.h"
+#include "PopWork/debug/perftimer.hpp"
 
 // Lastly, for our example of how to catch memory leaks, we first
 // enable leak detection with a #define in EACH of the files we want
@@ -30,7 +30,7 @@
 // Memory leaks will automatically be dumped to "mem_leaks.txt" when
 // the app is closed.
 //#define POPWORK_MEMTRACE
-#include "PopWork/debug/memmgr.h"
+#include "PopWork/debug/memmgr.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

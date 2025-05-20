@@ -12,14 +12,14 @@ set(SOURCES
 	gameovereffect.cpp
 
 	# Headers
-	gameapp.h
-	board.h
-	titlescreen.h
-	optionsdialog.h
-	levelupeffect.h
-	gameovereffect.h
+	gameapp.hpp
+	board.hpp
+	titlescreen.hpp
+	optionsdialog.hpp
+	levelupeffect.hpp
+	gameovereffect.hpp
 	
-	../res.h
+	../res.hpp
 	../res.cpp
 )
 
@@ -27,7 +27,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE
 	../
 	${CMAKE_SOURCE_DIR}
-	${CMAKE_SOURCE_DIR}/PopWork/ # common.h
+	${CMAKE_SOURCE_DIR}/PopWork/ # common.hpp
 )
 
 target_link_libraries(${PROJECT_NAME} PopWork)

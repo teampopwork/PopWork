@@ -1,6 +1,6 @@
-#include "bassmusicinterface.h"
+#include "bassmusicinterface.hpp"
 #include "bass.h"
-#include "paklib/pakinterface.h"
+#include "paklib/pakinterface.hpp"
 
 using namespace PopWork;
 

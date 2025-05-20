@@ -1,22 +1,22 @@
-#include "gameapp.h"
-#include "titlescreen.h"
-#include "board.h"
-#include "demodialog.h"
-#include "PopWork/widget/widgetmanager.h"
+#include "gameapp.hpp"
+#include "titlescreen.hpp"
+#include "board.hpp"
+#include "demodialog.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
 
-#include "PopWork/widget/checkbox.h"
+#include "PopWork/widget/checkbox.hpp"
 
 // We will be accessing the resource manager in this demo, so include it's header
-#include "PopWork/resources/resourcemanager.h"
+#include "PopWork/resources/resourcemanager.hpp"
 
 // Required for playing music
-#include "PopWork/audio/bassmusicinterface.h"
+#include "PopWork/audio/bassmusicinterface.hpp"
 
 // Contains all the resources from the resources.xml file in our
 // properties directory. See that file for more information.
-#include "res.h"
+#include "res.hpp"
 
-#include "PopWork/widget/dialog.h"
+#include "PopWork/widget/dialog.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

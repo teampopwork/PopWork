@@ -1,9 +1,9 @@
-#include "listwidget.h"
-#include "graphics/font.h"
-#include "widgetmanager.h"
-#include "scrollbarwidget.h"
-#include "listlistener.h"
-#include "appbase.h"
+#include "listwidget.hpp"
+#include "graphics/font.hpp"
+#include "widgetmanager.hpp"
+#include "scrollbarwidget.hpp"
+#include "listlistener.hpp"
+#include "appbase.hpp"
 
 using namespace PopWork;
 

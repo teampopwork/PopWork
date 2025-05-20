@@ -1,14 +1,14 @@
 #pragma warning(disable : 4244)
 #pragma warning(disable : 4018)
 
-#include "gameovereffect.h"
-#include "res.h"
-#include "board.h"
+#include "gameovereffect.hpp"
+#include "res.hpp"
+#include "board.hpp"
 
-#include "PopWork/appbase.h"
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/graphics/font.h"
-#include "PopWork/graphics/image.h"
+#include "PopWork/appbase.hpp"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/graphics/font.hpp"
+#include "PopWork/graphics/image.hpp"
 
 using namespace PopWork;
 

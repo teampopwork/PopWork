@@ -1,5 +1,5 @@
-#include "imagelib.h"
-#include "paklib/pakinterface.h"
+#include "imagelib.hpp"
+#include "paklib/pakinterface.hpp"
 
 #include <stb_image.h>
 #include <stb_image_write.h>

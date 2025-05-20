@@ -1,8 +1,8 @@
-#include "textwidget.h"
-#include "graphics/graphics.h"
-#include "scrollbarwidget.h"
-#include "widgetmanager.h"
-#include "graphics/font.h"
+#include "textwidget.hpp"
+#include "graphics/graphics.hpp"
+#include "scrollbarwidget.hpp"
+#include "widgetmanager.hpp"
+#include "graphics/font.hpp"
 
 using namespace PopWork;
 

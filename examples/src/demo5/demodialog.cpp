@@ -1,15 +1,15 @@
-#include "demodialog.h"
-#include "res.h"
-#include "gameapp.h"
+#include "demodialog.hpp"
+#include "res.hpp"
+#include "gameapp.hpp"
 
-#include "PopWork/appbase.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/graphics/font.h"
-#include "PopWork/widget/dialogbutton.h"
-#include "PopWork/widget/checkbox.h"
+#include "PopWork/appbase.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/graphics/font.hpp"
+#include "PopWork/widget/dialogbutton.hpp"
+#include "PopWork/widget/checkbox.hpp"
 
 // We're going to use a slider widget to control sound/music volume
-#include "PopWork/widget/slider.h"
+#include "PopWork/widget/slider.hpp"
 
 using namespace PopWork;
 

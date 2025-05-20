@@ -1,10 +1,10 @@
-#include "widgetmanager.h"
-#include "widget.h"
-#include "graphics/graphics.h"
-#include "graphics/image.h"
-#include "graphics/sdlimage.h"
-#include "appbase.h"
-#include "debug/perftimer.h"
+#include "widgetmanager.hpp"
+#include "widget.hpp"
+#include "graphics/graphics.hpp"
+#include "graphics/image.hpp"
+#include "graphics/sdlimage.hpp"
+#include "appbase.hpp"
+#include "debug/perftimer.hpp"
 #include "debug/debug.hpp"
 
 using namespace PopWork;

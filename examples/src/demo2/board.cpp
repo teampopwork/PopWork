@@ -1,26 +1,26 @@
-#include "board.h"
-#include "gameapp.h"
-#include "PopWork/graphics/graphics.h"
+#include "board.hpp"
+#include "gameapp.hpp"
+#include "PopWork/graphics/graphics.hpp"
 
 // See the Draw method for more information on using the Color class.
-#include "PopWork/graphics/color.h"
+#include "PopWork/graphics/color.hpp"
 
 // Why are we including ImageFont.h and not Font.h? Font.h is just a generic
 // base class. ImageFont creates fonts from an image that contains all the
 // text characters as well as a text file that indicates character widths
 // and kerning information, as well as some more advanced features not used
 // in this tutorial such as font layers, etc.
-#include "PopWork/graphics/imagefont.h"
+#include "PopWork/graphics/imagefont.hpp"
 
 // The Image.h file just declares basic functions. All images are either of
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "PopWork/graphics/sdlimage.h"
+#include "PopWork/graphics/sdlimage.hpp"
 
 // The Rectangle template, used to specify X, Y, Width, Height
-#include "PopWork/math/rect.h"
+#include "PopWork/math/rect.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

@@ -1,6 +1,6 @@
-#include "widgetcontainer.h"
-#include "widgetmanager.h"
-#include "widget.h"
+#include "widgetcontainer.hpp"
+#include "widgetmanager.hpp"
+#include "widget.hpp"
 #include "debug/debug.hpp"
 #include <algorithm>
 

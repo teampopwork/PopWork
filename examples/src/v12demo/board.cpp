@@ -1,16 +1,16 @@
-#include "board.h"
-#include "demowidget.h"
-#include "res.h"
-#include "v12demoapp.h"
+#include "board.hpp"
+#include "demowidget.hpp"
+#include "res.hpp"
+#include "v12demoapp.hpp"
 
-#include "PopWork/graphics/font.h"
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/widget/buttonwidget.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/widget/dialog.h"
-#include "PopWork/misc/flags.h"
-#include "PopWork/math/matrix.h"
-#include "PopWork/math/trivertex.h"
+#include "PopWork/graphics/font.hpp"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/widget/buttonwidget.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/widget/dialog.hpp"
+#include "PopWork/misc/flags.hpp"
+#include "PopWork/math/matrix.hpp"
+#include "PopWork/math/trivertex.hpp"
 
 using namespace PopWork;
 

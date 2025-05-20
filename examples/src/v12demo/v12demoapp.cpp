@@ -1,11 +1,11 @@
-#include "v12demoapp.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/graphics/sdlimage.h"
-#include "PopWork/resources/resourcemanager.h"
-#include "PopWork/widget/dialog.h"
-#include "PopWork/graphics/SWTri/SWTri.h"
-#include "board.h"
-#include "res.h"
+#include "v12demoapp.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/graphics/sdlimage.hpp"
+#include "PopWork/resources/resourcemanager.hpp"
+#include "PopWork/widget/dialog.hpp"
+#include "PopWork/graphics/SWTri/SWTri.hpp"
+#include "board.hpp"
+#include "res.hpp"
 
 using namespace PopWork;
 

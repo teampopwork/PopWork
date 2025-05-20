@@ -19,12 +19,10 @@
 //
 // ***************************************************************
 
-#include "profile.h"
-#include "readwrite/xmlwriter.h" // Write
-#include "readwrite/xmlparser.h" // Read
-#include "appbase.h"
-
-#include "common.h" // PopWork Functions like FileExists()
+#include "profile.hpp"
+#include "readwrite/xmlwriter.hpp" // Write
+#include "readwrite/xmlparser.hpp" // Read
+#include "appbase.hpp"
 
 using namespace PopWork;
 

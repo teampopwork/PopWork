@@ -1,5 +1,5 @@
-#include "propertiesparser.h"
-#include "readwrite/xmlparser.h"
+#include "propertiesparser.hpp"
+#include "readwrite/xmlparser.hpp"
 #include <stdlib.h>
 
 using namespace PopWork;

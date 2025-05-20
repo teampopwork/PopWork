@@ -1,7 +1,7 @@
-#include "gameapp.h"
-#include "board.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/common.h"
+#include "gameapp.hpp"
+#include "board.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/common.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

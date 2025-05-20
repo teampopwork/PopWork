@@ -1,5 +1,5 @@
-#include "res.h"
-#include "PopWork/resources/resourcemanager.h"
+#include "res.hpp"
+#include "PopWork/resources/resourcemanager.hpp"
 #include <cstdint>
 
 using namespace PopWork;

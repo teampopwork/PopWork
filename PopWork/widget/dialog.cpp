@@ -1,10 +1,10 @@
-#include "common.h"
-#include "dialog.h"
-#include "dialogbutton.h"
-#include "appbase.h"
-#include "widgetmanager.h"
-#include "graphics/sysfont.h"
-#include "graphics/imagefont.h"
+#include "common.hpp"
+#include "dialog.hpp"
+#include "dialogbutton.hpp"
+#include "appbase.hpp"
+#include "widgetmanager.hpp"
+#include "graphics/sysfont.hpp"
+#include "graphics/imagefont.hpp"
 #include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace PopWork;

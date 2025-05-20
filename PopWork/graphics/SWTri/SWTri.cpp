@@ -1,6 +1,6 @@
 #pragma warning(disable : 4244 4305 4309)
 
-#include "SWTri.h"
+#include "SWTri.hpp"
 #include "debug/debug.hpp"
 
 using namespace PopWork;

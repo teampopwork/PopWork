@@ -1,6 +1,6 @@
-#include "scrollbuttonwidget.h"
-#include "buttonlistener.h"
-#include "graphics/graphics.h"
+#include "scrollbuttonwidget.hpp"
+#include "buttonlistener.hpp"
+#include "graphics/graphics.hpp"
 
 using namespace PopWork;
 

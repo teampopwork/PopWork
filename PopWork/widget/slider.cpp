@@ -1,9 +1,9 @@
-#include "slider.h"
-#include "graphics/graphics.h"
-#include "graphics/image.h"
-#include "sliderlistener.h"
-#include "widgetmanager.h"
-#include "appbase.h"
+#include "slider.hpp"
+#include "graphics/graphics.hpp"
+#include "graphics/image.hpp"
+#include "sliderlistener.hpp"
+#include "widgetmanager.hpp"
+#include "appbase.hpp"
 
 using namespace PopWork;
 

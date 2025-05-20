@@ -1,8 +1,8 @@
-#include "hyperlinkwidget.h"
-#include "graphics/graphics.h"
-#include "graphics/imagefont.h"
-#include "graphics/sysfont.h"
-#include "widgetmanager.h"
+#include "hyperlinkwidget.hpp"
+#include "graphics/graphics.hpp"
+#include "graphics/imagefont.hpp"
+#include "graphics/sysfont.hpp"
+#include "widgetmanager.hpp"
 #include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace PopWork;

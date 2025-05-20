@@ -9,11 +9,11 @@ set(SOURCES
 	demowidget.cpp
 
 	# Headers
-	v14demoapp.h
-	board.h
-	demowidget.h
+	v14demoapp.hpp
+	board.hpp
+	demowidget.hpp
 	
-	../res.h
+	../res.hpp
 	../res.cpp
 )
 
@@ -25,7 +25,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE
 	../
 	${CMAKE_SOURCE_DIR}
-	${CMAKE_SOURCE_DIR}/PopWork/ # common.h
+	${CMAKE_SOURCE_DIR}/PopWork/ # common.hpp
 )
 
 target_link_libraries(${PROJECT_NAME} PopWork)

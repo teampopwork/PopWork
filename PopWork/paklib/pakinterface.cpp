@@ -1,5 +1,5 @@
-#include "pakinterface.h"
-#include "common.h"
+#include "pakinterface.hpp"
+#include "common.hpp"
 #include <algorithm>
 #include <cstring>
 #include <cstdlib>

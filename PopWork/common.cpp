@@ -1,5 +1,5 @@
-#include "common.h"
-#include "math/mtrand.h"
+#include "common.hpp"
+#include "math/mtrand.hpp"
 #include "debug/debug.hpp"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -72,7 +72,7 @@ void PopWork::SetAppDataFolder(const std::string &thePath)
 
 std::string PopWork::URLEncode(const std::string &theString)
 {
-	char *aHexChars = "0123456789ABCDEF";
+	const char *aHexChars = "0123456789ABCDEF";
 
 	std::string aString;
 

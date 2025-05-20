@@ -1,22 +1,22 @@
-#include "titlescreen.h"
+#include "titlescreen.hpp"
 
-#include "gameapp.h"
+#include "gameapp.hpp"
 
 // Contains all the resources from the resources.xml file in our
 // properties directory. See that file for more information.
-#include "res.h"
+#include "res.hpp"
 
 // Now that we're on our 4th demo, the reason for including the headers
 // below should be apparent. If you forgot, review demos 1-3.
-#include "PopWork/graphics/font.h"
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/graphics/image.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/math/rect.h"
+#include "PopWork/graphics/font.hpp"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/graphics/image.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/math/rect.hpp"
 
 // A new class: the HyperlinkWidget. It acts and resembles a standard
 // WWW hyperlink.
-#include "PopWork/widget/hyperlinkwidget.h"
+#include "PopWork/widget/hyperlinkwidget.hpp"
 
 using namespace PopWork;
 

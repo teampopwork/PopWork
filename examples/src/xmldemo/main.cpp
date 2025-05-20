@@ -17,7 +17,7 @@
 //  * How to sift through the XML data and extract the information you need
 //////////////////////////////////////////////////////////////////////////
 
-#include "xmldemoapp.h"
+#include "xmldemoapp.hpp"
 #ifndef _CONSOLE_ON
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN

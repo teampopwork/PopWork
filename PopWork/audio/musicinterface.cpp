@@ -1,5 +1,5 @@
-#include "musicinterface.h"
-#include "appbase.h"
+#include "musicinterface.hpp"
+#include "appbase.hpp"
 
 using namespace PopWork;
 

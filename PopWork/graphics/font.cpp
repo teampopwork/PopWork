@@ -1,5 +1,5 @@
-#include "font.h"
-#include "image.h"
+#include "font.hpp"
+#include "image.hpp"
 
 using namespace PopWork;
 

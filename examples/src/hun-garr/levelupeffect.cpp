@@ -1,13 +1,13 @@
 #pragma warning(disable : 4244)
 #pragma warning(disable : 4018)
 
-#include "levelupeffect.h"
-#include "board.h"
-#include "res.h"
+#include "levelupeffect.hpp"
+#include "board.hpp"
+#include "res.hpp"
 
-#include "PopWork/appbase.h"
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/graphics/font.h"
+#include "PopWork/appbase.hpp"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/graphics/font.hpp"
 
 using namespace PopWork;
 

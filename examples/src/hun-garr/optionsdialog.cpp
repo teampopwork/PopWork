@@ -1,13 +1,13 @@
-#include "optionsdialog.h"
-#include "res.h"
-#include "board.h"
+#include "optionsdialog.hpp"
+#include "res.hpp"
+#include "board.hpp"
 
-#include "PopWork/appbase.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/graphics/font.h"
-#include "PopWork/widget/dialogbutton.h"
-#include "PopWork/widget/checkbox.h"
-#include "PopWork/widget/slider.h"
+#include "PopWork/appbase.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/graphics/font.hpp"
+#include "PopWork/widget/dialogbutton.hpp"
+#include "PopWork/widget/checkbox.hpp"
+#include "PopWork/widget/slider.hpp"
 
 using namespace PopWork;
 

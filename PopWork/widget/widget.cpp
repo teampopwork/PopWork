@@ -1,9 +1,9 @@
-#include "widget.h"
-#include "widgetmanager.h"
-#include "graphics/graphics.h"
-#include "graphics/font.h"
-#include "graphics/image.h"
-#include "appbase.h"
+#include "widget.hpp"
+#include "widgetmanager.hpp"
+#include "graphics/graphics.hpp"
+#include "graphics/font.hpp"
+#include "graphics/image.hpp"
+#include "appbase.hpp"
 #include "debug/debug.hpp"
 #include <cmath>
 

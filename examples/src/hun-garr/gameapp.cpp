@@ -1,12 +1,12 @@
-#include "gameapp.h"
-#include "titlescreen.h"
-#include "board.h"
-#include "optionsdialog.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/resources/resourcemanager.h"
-#include "PopWork/audio/bassmusicinterface.h"
-#include "PopWork/widget/dialog.h"
-#include "res.h"
+#include "gameapp.hpp"
+#include "titlescreen.hpp"
+#include "board.hpp"
+#include "optionsdialog.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/resources/resourcemanager.hpp"
+#include "PopWork/audio/bassmusicinterface.hpp"
+#include "PopWork/widget/dialog.hpp"
+#include "res.hpp"
 
 using namespace PopWork;
 

@@ -1,11 +1,10 @@
-
-#include "sdlinterface.h"
-#include "sdlimage.h"
-#include "appbase.h"
-#include "misc/autocrit.h"
-#include "misc/critsect.h"
-#include "graphics.h"
-#include "memoryimage.h"
+#include "sdlinterface.hpp"
+#include "sdlimage.hpp"
+#include "appbase.hpp"
+#include "misc/autocrit.hpp"
+#include "misc/critsect.hpp"
+#include "graphics.hpp"
+#include "memoryimage.hpp"
 #include <SDL3_ttf/SDL_ttf.h>
 
 using namespace PopWork;

@@ -1,5 +1,5 @@
-#include "modval.h"
-#include "common.h"
+#include "modval.hpp"
+#include "common.hpp"
 #include <fstream>
 
 struct ModStorage

@@ -7,8 +7,8 @@
 #include <string>
 #include <list>
 
-#include "pakinterface.h"
-#include "common.h" // get MkDir and some other helper functions.
+#include "pakinterface.hpp"
+#include "common.hpp" // get MkDir and some other helper functions.
 
 using namespace PopWork;
 

@@ -1,6 +1,6 @@
-#include "xmlparser.h"
+#include "xmlparser.hpp"
 #include "debug/debug.hpp"
-#include "paklib/pakinterface.h"
+#include "paklib/pakinterface.hpp"
 
 using namespace PopWork;
 

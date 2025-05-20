@@ -15,7 +15,7 @@
 //	* Introduction to the structure and organization of a AppBase game
 //////////////////////////////////////////////////////////////////////////
 
-#include "gameapp.h"
+#include "gameapp.hpp"
 #ifndef _CONSOLE_ON
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN

@@ -1,5 +1,5 @@
-#include "openalsoundinterface.h"
-#include "openalsoundmanager.h"
+#include "openalsoundinterface.hpp"
+#include "openalsoundmanager.hpp"
 #include <complex.h>
 
 namespace PopWork {

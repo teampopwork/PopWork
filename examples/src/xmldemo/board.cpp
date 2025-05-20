@@ -1,7 +1,7 @@
-#include "board.h"
-#include "xmldemoapp.h"
-#include "PopWork/graphics/graphics.h"
-#include "res.h"
+#include "board.hpp"
+#include "xmldemoapp.hpp"
+#include "PopWork/graphics/graphics.hpp"
+#include "res.hpp"
 
 using namespace PopWork;
 

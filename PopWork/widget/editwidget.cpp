@@ -1,8 +1,8 @@
-#include "editwidget.h"
-#include "graphics/sysfont.h"
-#include "widgetmanager.h"
-#include "appbase.h"
-#include "editlistener.h"
+#include "editwidget.hpp"
+#include "graphics/sysfont.hpp"
+#include "widgetmanager.hpp"
+#include "appbase.hpp"
+#include "editlistener.hpp"
 #include "graphics/HeaderFont/LiberationSansRegular.h"
 
 using namespace PopWork;

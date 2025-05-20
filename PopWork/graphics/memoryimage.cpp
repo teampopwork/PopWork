@@ -1,13 +1,13 @@
-#include "memoryimage.h"
+#include "memoryimage.hpp"
 
-#include "appbase.h"
-#include "graphics.h"
-#include "nativedisplay.h"
-#include "sdlinterface.h"
+#include "appbase.hpp"
+#include "graphics.hpp"
+#include "nativedisplay.hpp"
+#include "sdlinterface.hpp"
 #include "debug/debug.hpp"
-#include "quantize.h"
-#include "debug/perftimer.h"
-#include "SWTri/SWTri.h"
+#include "quantize.hpp"
+#include "debug/perftimer.hpp"
+#include "SWTri/SWTri.hpp"
 
 #include <math.h>
 

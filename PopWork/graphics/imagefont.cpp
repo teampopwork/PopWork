@@ -1,10 +1,10 @@
-#include "imagefont.h"
-#include "graphics.h"
-#include "image.h"
-#include "appbase.h"
-#include "memoryimage.h"
-#include "sdlimage.h"
-#include "misc/autocrit.h"
+#include "imagefont.hpp"
+#include "graphics.hpp"
+#include "image.hpp"
+#include "appbase.hpp"
+#include "memoryimage.hpp"
+#include "sdlimage.hpp"
+#include "misc/autocrit.hpp"
 
 using namespace PopWork;
 

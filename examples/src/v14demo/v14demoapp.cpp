@@ -1,13 +1,13 @@
-#include "v14demoapp.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/graphics/sdlimage.h"
-#include "PopWork/graphics/sdlinterface.h"
-#include "PopWork/imagelib/imagelib.h"
-#include "PopWork/resources/resourcemanager.h"
-#include "PopWork/widget/dialog.h"
-#include "PopWork/graphics/SWTri/SWTri.h"
-#include "board.h"
-#include "res.h"
+#include "v14demoapp.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/graphics/sdlimage.hpp"
+#include "PopWork/graphics/sdlinterface.hpp"
+#include "PopWork/imagelib/imagelib.hpp"
+#include "PopWork/resources/resourcemanager.hpp"
+#include "PopWork/widget/dialog.hpp"
+#include "PopWork/graphics/SWTri/SWTri.hpp"
+#include "board.hpp"
+#include "res.hpp"
 
 using namespace PopWork;
 

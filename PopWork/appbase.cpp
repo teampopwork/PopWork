@@ -1,19 +1,19 @@
-#include "appbase.h"
-#include "widget/widgetmanager.h"
-#include "widget/widget.h"
-#include "misc/keycodes.h"
-#include "graphics/sdlinterface.h"
-#include "graphics/sdlimage.h"
-#include "graphics/memoryimage.h"
-#include "widget/dialog.h"
-#include "imagelib/imagelib.h"
-#include "audio/openalsoundmanager.h"
-#include "audio/openalsoundinterface.h"
-#include "math/rect.h"
-#include "resources/propertiesparser.h"
-#include "debug/perftimer.h"
-#include "math/mtrand.h"
-#include "readwrite/modval.h"
+#include "appbase.hpp"
+#include "widget/widgetmanager.hpp"
+#include "widget/widget.hpp"
+#include "misc/keycodes.hpp"
+#include "graphics/sdlinterface.hpp"
+#include "graphics/sdlimage.hpp"
+#include "graphics/memoryimage.hpp"
+#include "widget/dialog.hpp"
+#include "imagelib/imagelib.hpp"
+#include "audio/openalsoundmanager.hpp"
+#include "audio/openalsoundinterface.hpp"
+#include "math/rect.hpp"
+#include "resources/propertiesparser.hpp"
+#include "debug/perftimer.hpp"
+#include "math/mtrand.hpp"
+#include "readwrite/modval.hpp"
 #ifdef _WIN32
 #include <direct.h>
 #else
@@ -23,13 +23,13 @@
 #define _strtime strftime
 #endif
 #include <fstream>
-#include "graphics/sysfont.h"
-#include "resources/resourcemanager.h"
-#include "audio/bassmusicinterface.h"
+#include "graphics/sysfont.hpp"
+#include "resources/resourcemanager.hpp"
+#include "audio/bassmusicinterface.hpp"
 #include "audio/bass.h"
-#include "misc/autocrit.h"
+#include "misc/autocrit.hpp"
 #include "debug/debug.hpp"
-#include "paklib/pakinterface.h"
+#include "paklib/pakinterface.hpp"
 
 #include <string>
 #include <ctime>
@@ -39,7 +39,7 @@
 #include <set>
 #include <regex>
 
-#include "debug/memmgr.h"
+#include "debug/memmgr.hpp"
 
 // H521
 #undef STB_IMAGE_IMPLEMENTATION
@@ -773,7 +773,8 @@ void AppBase::DumpProgramInfo()
 		++anItr;
 	}
 
-	aDumpStream << "Total Image Allocation: " << CommaSeperate(aTotalMemory).c_str() << " bytes<BR>";
+	aDumpStream << "Total Image Allocation: " << PopStringToStringFast(CommaSeperate(aTotalMemory)).c_str()
+				<< " bytes<BR>";
 	aDumpStream << "<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=4>";
 
 	int aTotalMemorySize = 0;

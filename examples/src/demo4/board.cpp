@@ -1,33 +1,33 @@
-#include "board.h"
-#include "gameapp.h"
+#include "board.hpp"
+#include "gameapp.hpp"
 
 // Contains all the resources from the resources.xml file in our
 // properties directory. See that file for more information.
-#include "res.h"
+#include "res.hpp"
 
 // You should remember these files from the previous demos
-#include "PopWork/graphics/graphics.h"
-#include "PopWork/graphics/color.h"
-#include "PopWork/math/rect.h"
-#include "PopWork/widget/buttonwidget.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/graphics/imagefont.h"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/graphics/color.hpp"
+#include "PopWork/math/rect.hpp"
+#include "PopWork/widget/buttonwidget.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/graphics/imagefont.hpp"
 
 // The following are needed for some new widgets we're going to learn about:
-#include "PopWork/widget/editwidget.h"
-#include "PopWork/widget/checkbox.h"
-#include "PopWork/widget/listwidget.h"
-#include "PopWork/widget/scrollbarwidget.h"
-#include "PopWork/widget/scrolllistener.h"
+#include "PopWork/widget/editwidget.hpp"
+#include "PopWork/widget/checkbox.hpp"
+#include "PopWork/widget/listwidget.hpp"
+#include "PopWork/widget/scrollbarwidget.hpp"
+#include "PopWork/widget/scrolllistener.hpp"
 
 // As part of our pitch shifted sound example, we'll need to
 // access the sound manager in our GameApp class as well as
 // individual sound instances:
-#include "PopWork/audio/soundmanager.h"
-#include "PopWork/audio/soundinstance.h"
+#include "PopWork/audio/soundmanager.hpp"
+#include "PopWork/audio/soundinstance.hpp"
 
 // Used for file I/O:
-#include "PopWork/misc/buffer.h"
+#include "PopWork/misc/buffer.hpp"
 
 // The PopWork resides in the "PopWork" namespace. As a convenience,
 // you'll see in all the .cpp files "using namespace PopWork" to avoid

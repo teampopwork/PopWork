@@ -1,4 +1,4 @@
-#include "perftimer.h"
+#include "perftimer.hpp"
 #include <map>
 #include <SDL3/SDL.h>
 

@@ -1,6 +1,6 @@
-#include "checkbox.h"
-#include "checkboxlistener.h"
-#include "graphics/graphics.h"
+#include "checkbox.hpp"
+#include "checkboxlistener.hpp"
+#include "graphics/graphics.hpp"
 
 using namespace PopWork;
 

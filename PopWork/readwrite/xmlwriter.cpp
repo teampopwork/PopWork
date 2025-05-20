@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "xmlwriter.h"
+#include "xmlwriter.hpp"
 
 #pragma warning(disable : 4018)
 #ifndef _CRT_SECURE_NO_WARNINGS

@@ -1,8 +1,8 @@
-#include "demowidget.h"
-#include "res.h"
-#include "PopWork/widget/widgetmanager.h"
-#include "PopWork/widget/buttonwidget.h"
-#include "v14demoapp.h"
+#include "demowidget.hpp"
+#include "res.hpp"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/widget/buttonwidget.hpp"
+#include "v14demoapp.hpp"
 
 using namespace PopWork;
 
