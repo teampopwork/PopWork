@@ -26,7 +26,7 @@ class AppBase;
 class Font;
 
 typedef std::map<std::string, std::string> StringToStringMap;
-typedef std::map<PopWorkString, PopWorkString> XMLParamMap;
+typedef std::map<PopString, PopString> XMLParamMap;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ class ResourceManager
 		bool mNearestFilter;
 		int mRows;
 		int mCols;
-		DWORD mAlphaColor;
+		uint32_t mAlphaColor;
 		AnimInfo mAnimInfo;
 
 		ImageRes()

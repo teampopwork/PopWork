@@ -26,8 +26,8 @@ class EditWidget : public Widget
 	};
 
 	int mId;
-	PopWorkString mString;
-	PopWorkString mPasswordDisplayString;
+	PopString mString;
+	PopString mPasswordDisplayString;
 	Font *mFont;
 
 	struct WidthCheck
@@ -50,23 +50,23 @@ class EditWidget : public Widget
 	int mLeftPos;
 	int mMaxChars;
 	int mMaxPixels;
-	PopWorkChar mPasswordChar;
+	PopChar mPasswordChar;
 
-	PopWorkString mUndoString;
+	PopString mUndoString;
 	int mUndoCursor;
 	int mUndoHilitePos;
 	int mLastModifyIdx;
 
   protected:
-	virtual void ProcessKey(KeyCode theKey, PopWorkChar theChar);
-	PopWorkString &GetDisplayString();
+	virtual void ProcessKey(KeyCode theKey, PopChar theChar);
+	PopString &GetDisplayString();
 	virtual void HiliteWord();
 	void UpdateCaretPos();
 
   public:
 	virtual void SetFont(Font *theFont, Font *theWidthCheckFont = NULL);
-	virtual void SetText(const PopWorkString &theText, bool leftPosToZero = true);
-	virtual bool IsPartOfWord(PopWorkChar theChar);
+	virtual void SetText(const PopString &theText, bool leftPosToZero = true);
+	virtual bool IsPartOfWord(PopChar theChar);
 	virtual int GetCharAt(int x, int y);
 
 	virtual void Resize(int theX, int theY, int theWidth, int theHeight);
@@ -81,7 +81,7 @@ class EditWidget : public Widget
 	virtual void FocusCursor(bool bigJump);
 
 	virtual void KeyDown(KeyCode theKey);
-	virtual void KeyChar(PopWorkChar theChar);
+	virtual void KeyChar(PopChar theChar);
 
 	virtual void MouseDown(int x, int y, int theClickCount)
 	{

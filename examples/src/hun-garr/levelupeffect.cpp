@@ -268,7 +268,7 @@ void LevelupEffect::Draw(Graphics *g)
 		// to begin the next level, we display info on the user's performance from the last level.
 		int y = 50;
 		g->SetColor(gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF);
-		PopWorkString s = StrFormat(_S("LEVEL %d COMPLETE!"), mStats.mLevelCompleted);
+		PopString s = StrFormat(_S("LEVEL %d COMPLETE!"), mStats.mLevelCompleted);
 		g->DrawString(s, gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, y);
 
 		g->SetColor(Color::White);

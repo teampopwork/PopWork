@@ -25,7 +25,7 @@ class BassMusicInfo
   public:
 	BassMusicInfo();
 
-	DWORD GetHandle()
+	uint32_t GetHandle()
 	{
 		return mHMusic ? mHMusic : mHStream;
 	}

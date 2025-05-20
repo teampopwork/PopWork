@@ -24,13 +24,13 @@ class Graphics;
 //////////////////////////////////////////////////////////////////////////
 struct BouncyChar
 {
-	PopWorkString mChar; // The character bouncing
+	PopString mChar; // The character bouncing
 	bool mDone;			 // Completed bouncing yet?
 	float mX, mY;
 	float mBounceSpeed;	   // How fast up or down it's bouncing, affected by "gravity"
 	float mOldBounceSpeed; // The base value that mBounceSpeed started at. Gets reduced over time.
 
-	BouncyChar(PopWorkString t, float x, float y, float s)
+	BouncyChar(PopString t, float x, float y, float s)
 	{
 		mChar = t;
 		mX = x;
@@ -51,7 +51,7 @@ struct LevelupStats
 
 	// Always 3 strings per planet:
 	// Planet name, exports, population (comma delimited)
-	std::vector<PopWorkString> mPlanetsEaten;
+	std::vector<PopString> mPlanetsEaten;
 };
 
 class LevelupEffect

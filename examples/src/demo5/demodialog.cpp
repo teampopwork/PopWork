@@ -58,8 +58,8 @@ using namespace PopWork;
 //	The NO/CANCEL buttons have a value of 3000 + the dialog's ID.
 //////////////////////////////////////////////////////////////////////////
 DemoDialog::DemoDialog(std::string theHeader, std::string theBody)
-	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, StringToPopWorkStringFast(theHeader),
-			 StringToPopWorkStringFast(theBody), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
+	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, StringToPopStringFast(theHeader),
+			 StringToPopStringFast(theBody), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
 {
 	// We can set the rectangular region in which all text/buttons are to go
 	// by changing the mContentInsets variable. The first parameter

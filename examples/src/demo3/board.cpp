@@ -214,7 +214,7 @@ void Board::Draw(Graphics *g)
 	g->SetColor(Color(255, 255, 255));
 	g->DrawString(StrFormat(_S("X, Y is %d, %d"), mMouseX, mMouseY), 630, 20);
 
-	PopWorkString buttonStr;
+	PopString buttonStr;
 	if (mLeftDown)
 		buttonStr += _S("Left button is down. ");
 	if (mRightDown)

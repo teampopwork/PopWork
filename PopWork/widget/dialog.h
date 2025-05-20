@@ -15,10 +15,10 @@ class ButtonWidget;
 class DialogButton;
 class Font;
 
-extern PopWorkString DIALOG_YES_STRING;
-extern PopWorkString DIALOG_NO_STRING;
-extern PopWorkString DIALOG_OK_STRING;
-extern PopWorkString DIALOG_CANCEL_STRING;
+extern PopString DIALOG_YES_STRING;
+extern PopString DIALOG_NO_STRING;
+extern PopString DIALOG_OK_STRING;
+extern PopString DIALOG_CANCEL_STRING;
 
 typedef std::vector<std::string> StringVector;
 
@@ -60,9 +60,9 @@ class Dialog : public Widget, public ButtonListener
 	DialogButton *mNoButton;
 	int mNumButtons;
 
-	PopWorkString mDialogHeader;
-	PopWorkString mDialogFooter;
-	PopWorkString mDialogLines;
+	PopString mDialogHeader;
+	PopString mDialogFooter;
+	PopString mDialogLines;
 
 	int mButtonMode;
 	Font *mHeaderFont;
@@ -88,8 +88,8 @@ class Dialog : public Widget, public ButtonListener
 
   public:
 	Dialog(Image *theComponentImage, Image *theButtonComponentImage, int theId, bool isModal,
-		   const PopWorkString &theDialogHeader, const PopWorkString &theDialogLines,
-		   const PopWorkString &theDialogFooter, int theButtonMode); // UNICODE
+		   const PopString &theDialogHeader, const PopString &theDialogLines,
+		   const PopString &theDialogFooter, int theButtonMode); // UNICODE
 
 	virtual ~Dialog();
 

@@ -4,7 +4,7 @@
 
 using namespace PopWork;
 
-bool BASS_MusicSetAmplify(HMUSIC handle, DWORD amp)
+bool BASS_MusicSetAmplify(HMUSIC handle, uint32_t amp)
 {
 	BASS_ChannelSetAttribute(handle, BASS_ATTRIB_MUSIC_AMPLIFY, amp);
 	return true;
@@ -15,7 +15,7 @@ bool BASS_MusicPlay(HMUSIC handle)
 	return BASS_ChannelPlay(handle, true);
 }
 
-bool BASS_MusicPlayEx(HMUSIC handle, DWORD pos, int flags, bool reset)
+bool BASS_MusicPlayEx(HMUSIC handle, uint32_t pos, int flags, bool reset)
 {
 	BASS_ChannelStop(handle);
 	BASS_ChannelSetPosition(handle, MAKELONG(pos, 0), BASS_POS_BYTE);
@@ -24,12 +24,12 @@ bool BASS_MusicPlayEx(HMUSIC handle, DWORD pos, int flags, bool reset)
 	return BASS_ChannelPlay(handle, reset);
 }
 
-bool BASS_ChannelResume(DWORD handle)
+bool BASS_ChannelResume(uint32_t handle)
 {
 	return BASS_ChannelPlay(handle, false);
 }
 
-bool BASS_StreamStop(DWORD handle, DWORD pos, int flags)
+bool BASS_StreamStop(uint32_t handle, uint32_t pos, int flags)
 {
 	// BASS_ChannelSetPosition(handle, MAKELONG(0,0), BASS_POS_BYTE);
 	// BASS_ChannelFlags(handle, flags, -1);
@@ -37,7 +37,7 @@ bool BASS_StreamStop(DWORD handle, DWORD pos, int flags)
 	return BASS_ChannelStop(handle);
 }
 
-bool BASS_StreamPlay(HSTREAM handle, BOOL flush, DWORD flags)
+bool BASS_StreamPlay(HSTREAM handle, bool flush, uint32_t flags)
 {
 	BASS_ChannelStop(handle);
 	BASS_ChannelSetPosition(handle, 0, BASS_POS_BYTE);

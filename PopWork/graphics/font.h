@@ -32,11 +32,11 @@ class Font
 	virtual int GetHeight();
 	virtual int GetLineSpacingOffset();
 	virtual int GetLineSpacing();
-	virtual int StringWidth(const PopWorkString &theString);
-	virtual int CharWidth(PopWorkChar theChar);
-	virtual int CharWidthKern(PopWorkChar theChar, PopWorkChar thePrevChar);
+	virtual int StringWidth(const PopString &theString);
+	virtual int CharWidth(PopChar theChar);
+	virtual int CharWidthKern(PopChar theChar, PopChar thePrevChar);
 
-	virtual void DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+	virtual void DrawString(Graphics *g, int theX, int theY, const PopString &theString, const Color &theColor,
 							const Rect &theClipRect);
 
 	virtual Font *Duplicate() {return new Font(*this);};

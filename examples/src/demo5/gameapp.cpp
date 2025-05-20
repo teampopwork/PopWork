@@ -34,7 +34,7 @@ GameApp::GameApp()
 	mProductVersion = "1.0";
 
 	// This is the text that appears in the title bar of the application window
-	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on
@@ -369,8 +369,8 @@ Dialog *GameApp::NewDialog(int theDialogId, bool isModal, const std::string &the
 	// Rather than dupliate a lengthy explanation, check out the top of DemoDialog.cpp for a complete description
 	// of what all the parameters and functions are.
 	Dialog *d = new Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, theDialogId, isModal,
-						   StringToPopWorkStringFast(theDialogHeader), StringToPopWorkStringFast(theDialogLines),
-						   StringToPopWorkStringFast(theDialogFooter), theButtonMode);
+						   StringToPopStringFast(theDialogHeader), StringToPopStringFast(theDialogLines),
+						   StringToPopStringFast(theDialogFooter), theButtonMode);
 
 	d->SetButtonFont(FONT_DEFAULT);
 	d->SetLinesFont(FONT_DEFAULT);

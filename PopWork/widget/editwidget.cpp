@@ -56,7 +56,7 @@ void EditWidget::AddWidthCheckFont(Font *theFont, int theMaxPixels)
 	aCheck.mFont = theFont->Duplicate();
 }
 
-void EditWidget::SetText(const PopWorkString &theText, bool leftPosToZero)
+void EditWidget::SetText(const PopString &theText, bool leftPosToZero)
 {
 	mString = theText;
 	mCursorPos = mString.length();
@@ -69,14 +69,14 @@ void EditWidget::SetText(const PopWorkString &theText, bool leftPosToZero)
 	MarkDirty();
 }
 
-PopWorkString &EditWidget::GetDisplayString()
+PopString &EditWidget::GetDisplayString()
 {
 	if (mPasswordChar == 0)
 		return mString;
 
 	if (mPasswordDisplayString.size() != mString.size())
 	{
-		mPasswordDisplayString = PopWorkString(mString.size(), mPasswordChar);
+		mPasswordDisplayString = PopString(mString.size(), mPasswordChar);
 		// mPasswordDisplayString.resize(mString.size());
 		// for (int i=0; i<(int)mPasswordDisplayString.length(); i++)
 		//	mPasswordDisplayString[i] = mPasswordChar;
@@ -112,7 +112,7 @@ void EditWidget::Draw(Graphics *g) // Already translated
 	if (mFont == NULL)
 		mFont = new SysFont(mWidgetManager->mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 10, false);
 
-	PopWorkString &aString = GetDisplayString();
+	PopString &aString = GetDisplayString();
 
 	g->SetColor(mColors[COLOR_BKG]);
 	g->FillRect(0, 0, mWidth, mHeight);
@@ -244,7 +244,7 @@ void EditWidget::EnforceMaxPixels()
 	}
 }
 
-bool EditWidget::IsPartOfWord(PopWorkChar theChar)
+bool EditWidget::IsPartOfWord(PopChar theChar)
 {
 	return (((theChar >= _S('A')) && (theChar <= _S('Z'))) || ((theChar >= _S('a')) && (theChar <= _S('z'))) ||
 			((theChar >= _S('0')) && (theChar <= _S('9'))) ||
@@ -252,7 +252,7 @@ bool EditWidget::IsPartOfWord(PopWorkChar theChar)
 			(theChar == _S('_')));
 }
 
-void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
+void EditWidget::ProcessKey(KeyCode theKey, PopChar theChar)
 {
 	bool shiftDown = mWidgetManager->mKeyDown[KEYCODE_SHIFT];
 	bool controlDown = mWidgetManager->mKeyDown[KEYCODE_CONTROL];
@@ -266,7 +266,7 @@ void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
 	if (shiftDown && (mHilitePos == -1))
 		mHilitePos = mCursorPos;
 
-	PopWorkString anOldString = mString;
+	PopString anOldString = mString;
 	int anOldCursorPos = mCursorPos;
 	int anOldHilitePos = mHilitePos;
 	if ((theChar == 3) || (theChar == 24))
@@ -277,10 +277,10 @@ void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
 		{
 			if (mCursorPos < mHilitePos)
 				mWidgetManager->mApp->CopyToClipboard(
-					PopWorkStringToString(GetDisplayString().substr(mCursorPos, mHilitePos)));
+					PopStringToString(GetDisplayString().substr(mCursorPos, mHilitePos)));
 			else
 				mWidgetManager->mApp->CopyToClipboard(
-					PopWorkStringToString(GetDisplayString().substr(mHilitePos, mCursorPos)));
+					PopStringToString(GetDisplayString().substr(mHilitePos, mCursorPos)));
 
 			if (theChar == 3)
 			{
@@ -299,11 +299,11 @@ void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
 	{
 		// Paste selection
 
-		PopWorkString aBaseString = StringToPopWorkString(mWidgetManager->mApp->GetClipboard());
+		PopString aBaseString = StringToPopString(mWidgetManager->mApp->GetClipboard());
 
 		if (aBaseString.length() > 0)
 		{
-			PopWorkString aString;
+			PopString aString;
 
 			for (ulong i = 0; i < aBaseString.length(); i++)
 			{
@@ -339,7 +339,7 @@ void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
 
 		mLastModifyIdx = -1;
 
-		PopWorkString aSwapString = mString;
+		PopString aSwapString = mString;
 		int aSwapCursorPos = mCursorPos;
 		int aSwapHilitePos = mHilitePos;
 
@@ -455,7 +455,7 @@ void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
 	}
 	else
 	{
-		PopWorkString aString = PopWorkString(1, theChar);
+		PopString aString = PopString(1, theChar);
 		unsigned char uTheChar = (unsigned int)theChar;
 		unsigned char range = 127;
 		if (gAppBase->mbAllowExtendedChars)
@@ -469,7 +469,7 @@ void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
 			if ((mHilitePos != -1) && (mHilitePos != mCursorPos))
 			{
 				// Replace selection with new character
-				mString = mString.substr(0, std::min(mCursorPos, mHilitePos)) + PopWorkString(1, theChar) +
+				mString = mString.substr(0, std::min(mCursorPos, mHilitePos)) + PopString(1, theChar) +
 						  mString.substr(std::max(mCursorPos, mHilitePos));
 				mCursorPos = std::min(mCursorPos, mHilitePos);
 				mHilitePos = -1;
@@ -479,7 +479,7 @@ void EditWidget::ProcessKey(KeyCode theKey, PopWorkChar theChar)
 			else
 			{
 				// Insert character where cursor is
-				mString = mString.substr(0, mCursorPos) + PopWorkString(1, theChar) + mString.substr(mCursorPos);
+				mString = mString.substr(0, mCursorPos) + PopString(1, theChar) + mString.substr(mCursorPos);
 
 				if (mCursorPos != mLastModifyIdx + 1)
 					bigChange = true;
@@ -539,7 +539,7 @@ void EditWidget::KeyDown(KeyCode theKey)
 	Widget::KeyDown(theKey);
 }
 
-void EditWidget::KeyChar(PopWorkChar theChar)
+void EditWidget::KeyChar(PopChar theChar)
 {
 	//	if (mEditListener->AllowChar(mId, theChar))
 	ProcessKey(KEYCODE_UNKNOWN, theChar);
@@ -551,12 +551,12 @@ int EditWidget::GetCharAt(int x, int y)
 {
 	int aPos = 0;
 
-	PopWorkString &aString = GetDisplayString();
+	PopString &aString = GetDisplayString();
 
 	for (int i = mLeftPos; i < (int)aString.length(); i++)
 	{
-		PopWorkString aLoSubStr = aString.substr(mLeftPos, i - mLeftPos);
-		PopWorkString aHiSubStr = aString.substr(mLeftPos, i - mLeftPos + 1);
+		PopString aLoSubStr = aString.substr(mLeftPos, i - mLeftPos);
+		PopString aHiSubStr = aString.substr(mLeftPos, i - mLeftPos + 1);
 
 		int aLoLen = mFont->StringWidth(aLoSubStr);
 		int aHiLen = mFont->StringWidth(aHiSubStr);
@@ -580,7 +580,7 @@ void EditWidget::FocusCursor(bool bigJump)
 
 	if (mFont != NULL)
 	{
-		PopWorkString &aString = GetDisplayString();
+		PopString &aString = GetDisplayString();
 		while ((mWidth - 8 > 0) &&
 			   (mFont->StringWidth(aString.substr(0, mCursorPos)) - mFont->StringWidth(aString.substr(0, mLeftPos)) >=
 				mWidth - 8))
@@ -633,7 +633,7 @@ void EditWidget::MouseUp(int x, int y, int theBtnNum, int theClickCount)
 
 void EditWidget::HiliteWord()
 {
-	PopWorkString &aString = GetDisplayString();
+	PopString &aString = GetDisplayString();
 
 	if (mCursorPos < (int)aString.length())
 	{

@@ -1317,7 +1317,7 @@ void ImageFont::GenerateActiveFontLayers()
 	}
 }
 
-int ImageFont::StringWidth(const PopWorkString &theString)
+int ImageFont::StringWidth(const PopString &theString)
 {
 	int aWidth = 0;
 	char aPrevChar = 0;
@@ -1406,7 +1406,7 @@ static RenderCommand gRenderCommandPool[POOL_SIZE];
 static RenderCommand *gRenderTail[256];
 static RenderCommand *gRenderHead[256];
 
-void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopString &theString, const Color &theColor,
 							 const Rect *theClipRect, RectList *theDrawnAreas, int *theWidth)
 {
 	AutoCrit anAutoCrit(gRenderCritSec);
@@ -1658,7 +1658,7 @@ void ImageFont::DrawStringEx(Graphics *g, int theX, int theY, const PopWorkStrin
 	g->SetColorizeImages(colorizeImages);
 }
 
-void ImageFont::DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+void ImageFont::DrawString(Graphics *g, int theX, int theY, const PopString &theString, const Color &theColor,
 						   const Rect &theClipRect)
 {
 	DrawStringEx(g, theX, theY, theString, theColor, &theClipRect, nullptr, nullptr);

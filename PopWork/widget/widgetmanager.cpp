@@ -742,7 +742,7 @@ void WidgetManager::MouseWheel(int theDelta)
 		mFocusWidget->MouseWheel(theDelta);
 }
 
-bool WidgetManager::KeyChar(PopWorkChar theChar)
+bool WidgetManager::KeyChar(PopChar theChar)
 {
 	mLastInputUpdateCnt = mUpdateCnt;
 

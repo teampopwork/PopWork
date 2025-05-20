@@ -75,13 +75,13 @@ void PopWorkTrace(const char *theStr)
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
-void PopWorkTraceFmt(const PopWorkChar *fmt, ...)
+void PopWorkTraceFmt(const PopChar *fmt, ...)
 {
 	// Does not append a newline by default, also takes vararg parameters
 
 	va_list argList;
 	va_start(argList, fmt);
-	std::string result = PopWorkStringToStringFast(vformat(fmt, argList));
+	std::string result = PopStringToStringFast(vformat(fmt, argList));
 	va_end(argList);
 
 	if (gTraceFile == nullptr)
@@ -234,11 +234,11 @@ void PopWorkDumpUnfreed()
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-void OutputDebug(const PopWorkChar *fmt, ...)
+void OutputDebug(const PopChar *fmt, ...)
 {
 	va_list argList;
 	va_start(argList, fmt);
-	std::string result = PopWorkStringToStringFast(vformat(fmt, argList));
+	std::string result = PopStringToStringFast(vformat(fmt, argList));
 	va_end(argList);
 
 	printf("%s", result.c_str());

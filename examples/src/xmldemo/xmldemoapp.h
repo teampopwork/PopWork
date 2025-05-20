@@ -20,24 +20,24 @@ class XMLParser;
 // The names correspond to the attributes/sections from the XML file.
 struct s_Section1
 {
-	PopWorkString mItem1Text;
+	PopString mItem1Text;
 
-	PopWorkString mBoolParamText;
+	PopString mBoolParamText;
 	bool mBoolParamElement;
 };
 
 struct s_Section2
 {
-	PopWorkString mSectionAttribText;
+	PopString mSectionAttribText;
 
-	PopWorkString mIntParamText;
+	PopString mIntParamText;
 	int mIntParamElement;
 
-	PopWorkString mMultiAttrib1;
-	PopWorkString mMultiAttrib2;
-	PopWorkString mMultiAttrib3;
+	PopString mMultiAttrib1;
+	PopString mMultiAttrib2;
+	PopString mMultiAttrib3;
 
-	PopWorkString mSubsectionItem2;
+	PopString mSubsectionItem2;
 };
 
 class XMLDemoApp : public AppBase
@@ -47,8 +47,8 @@ class XMLDemoApp : public AppBase
 	Board *mBoard;
 	s_Section1 mSection1;
 	s_Section2 mSection2;
-	PopWorkString mInstructionTag;
-	PopWorkString mInstruction;
+	PopString mInstructionTag;
+	PopString mInstruction;
 
   private:
 	// With this class, we'll read in our sample XML file, properties/demo.xml

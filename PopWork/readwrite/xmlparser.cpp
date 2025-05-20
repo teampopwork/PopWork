@@ -46,7 +46,7 @@ void XMLParser::SetEncodingType(XMLEncodingType theEncoding)
 	}
 }
 
-void XMLParser::Fail(const PopWorkString &theErrorText)
+void XMLParser::Fail(const PopString &theErrorText)
 {
 	mHasFailed = true;
 	mErrorText = theErrorText;
@@ -62,8 +62,8 @@ void XMLParser::Init()
 	mByteSwap = false;
 }
 
-bool XMLParser::AddAttribute(XMLElement *theElement, const PopWorkString &theAttributeKey,
-							 const PopWorkString &theAttributeValue)
+bool XMLParser::AddAttribute(XMLElement *theElement, const PopString &theAttributeKey,
+							 const PopString &theAttributeValue)
 {
 	std::pair<XMLParamMap::iterator, bool> aRet;
 
@@ -283,7 +283,7 @@ bool XMLParser::OpenFile(const std::string &theFileName)
 	if (mFile == NULL)
 	{
 		mLineNum = 0;
-		Fail(StringToPopWorkString("Unable to open file " + theFileName));
+		Fail(StringToPopString("Unable to open file " + theFileName));
 		return false;
 	}
 	else if (!mForcedEncodingType)
@@ -413,9 +413,9 @@ bool XMLParser::NextElement(XMLElement *theElement)
 				{
 					// Just add text to theElement->mInstruction until we find -->
 
-					PopWorkString *aStrPtr = &theElement->mInstruction;
+					PopString *aStrPtr = &theElement->mInstruction;
 
-					*aStrPtr += (PopWorkChar)c;
+					*aStrPtr += (PopChar)c;
 
 					int aLen = aStrPtr->length();
 
@@ -429,12 +429,12 @@ bool XMLParser::NextElement(XMLElement *theElement)
 				{
 					// Just add text to theElement->mInstruction until we find ?>
 
-					PopWorkString *aStrPtr = &theElement->mValue;
+					PopString *aStrPtr = &theElement->mValue;
 
 					if ((theElement->mInstruction.length() != 0) || (::iswspace(c)))
 						aStrPtr = &theElement->mInstruction;
 
-					*aStrPtr += (PopWorkChar)c;
+					*aStrPtr += (PopChar)c;
 
 					int aLen = aStrPtr->length();
 
@@ -503,8 +503,8 @@ bool XMLParser::NextElement(XMLElement *theElement)
 										aAttributeValue = XMLDecodeString(aAttributeValue);
 
 										aLastAttributeKey = aAttributeKey;
-										AddAttribute(theElement, WStringToPopWorkString(aLastAttributeKey),
-													 WStringToPopWorkString(aAttributeValue));
+										AddAttribute(theElement, WStringToPopString(aLastAttributeKey),
+													 WStringToPopString(aAttributeValue));
 
 										aAttributeKey = L"";
 										aAttributeValue = L"";
@@ -512,8 +512,8 @@ bool XMLParser::NextElement(XMLElement *theElement)
 
 									if (aLastAttributeKey.length() > 0)
 									{
-										PopWorkString aVal =
-											theElement->mAttributes[WStringToPopWorkString(aLastAttributeKey)];
+										PopString aVal =
+											theElement->mAttributes[WStringToPopString(aLastAttributeKey)];
 
 										int aLen = aVal.length();
 
@@ -523,7 +523,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 											//											theElement->mAttributes[aLastAttributeKey]
 											//= aVal.substr(0, aLen - 1);
 
-											AddAttribute(theElement, WStringToPopWorkString(aLastAttributeKey),
+											AddAttribute(theElement, WStringToPopString(aLastAttributeKey),
 														 XMLDecodeString(aVal.substr(0, aLen - 1)));
 
 											insertEnd = true;
@@ -545,7 +545,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 								// Do we want to fake an ending section?
 								if (insertEnd)
 								{
-									PopWorkString anAddString = _S("</") + theElement->mValue + _S(">");
+									PopString anAddString = _S("</") + theElement->mValue + _S(">");
 
 									int anOldSize = mBufferedText.size();
 									int anAddLength = anAddString.length();
@@ -578,7 +578,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 									return false;
 								}
 
-								PopWorkString aLastSectionName = mSection.substr(aLastSlash + 1);
+								PopString aLastSectionName = mSection.substr(aLastSlash + 1);
 
 								if (aLastSectionName != theElement->mValue)
 								{
@@ -654,8 +654,8 @@ bool XMLParser::NextElement(XMLElement *theElement)
 										//										theElement->mAttributes[aAttributeKey] =
 										// aAttributeValue;
 
-										AddAttribute(theElement, WStringToPopWorkString(aAttributeKey),
-													 WStringToPopWorkString(aAttributeValue));
+										AddAttribute(theElement, WStringToPopString(aAttributeKey),
+													 WStringToPopString(aAttributeValue));
 
 										aAttributeKey = L"";
 										aAttributeValue = L"";
@@ -677,7 +677,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 
 							if (!doingAttribute)
 							{
-								theElement->mValue += (PopWorkChar)c;
+								theElement->mValue += (PopChar)c;
 							}
 							else
 							{
@@ -708,7 +708,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 								hasSpace = false;
 							}
 
-							theElement->mValue += (PopWorkChar)c;
+							theElement->mValue += (PopChar)c;
 						}
 					}
 				}
@@ -728,7 +728,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 			aAttributeValue = XMLDecodeString(aAttributeValue);
 			//			theElement->mAttributes[aAttributeKey] = aAttributeValue;
 
-			AddAttribute(theElement, WStringToPopWorkString(aAttributeKey), WStringToPopWorkString(aAttributeValue));
+			AddAttribute(theElement, WStringToPopString(aAttributeKey), WStringToPopString(aAttributeValue));
 		}
 
 		theElement->mValue = XMLDecodeString(theElement->mValue);
@@ -744,7 +744,7 @@ bool XMLParser::HasFailed()
 	return mHasFailed;
 }
 
-PopWorkString XMLParser::GetErrorText()
+PopString XMLParser::GetErrorText()
 {
 	return mErrorText;
 }

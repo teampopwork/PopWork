@@ -138,7 +138,7 @@ class ImageFont : public Font
 
   public:
 	virtual void GenerateActiveFontLayers();
-	virtual void DrawStringEx(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+	virtual void DrawStringEx(Graphics *g, int theX, int theY, const PopString &theString, const Color &theColor,
 							  const Rect *theClipRect, RectList *theDrawnAreas, int *theWidth);
 
   public:
@@ -153,8 +153,8 @@ class ImageFont : public Font
 
 	virtual int CharWidth(char theChar);
 	virtual int CharWidthKern(char theChar, char thePrevChar);
-	virtual int StringWidth(const PopWorkString &theString);
-	virtual void DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+	virtual int StringWidth(const PopString &theString);
+	virtual void DrawString(Graphics *g, int theX, int theY, const PopString &theString, const Color &theColor,
 							const Rect &theClipRect);
 
 	virtual Font *Duplicate();

@@ -190,7 +190,7 @@ void Board::DrawOverlay(Graphics* g)
 	g->SetColor(Color(0, 255, 255));
 }
 
-void Board::KeyChar(PopWorkChar theChar)
+void Board::KeyChar(PopChar theChar)
 {
 
 }

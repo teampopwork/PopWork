@@ -38,8 +38,8 @@ class SysFont : public Font
 	virtual ~SysFont();
 
 	ImageFont *CreateImageFont();
-	virtual int StringWidth(const PopWorkString &theString);
-	virtual void DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+	virtual int StringWidth(const PopString &theString);
+	virtual void DrawString(Graphics *g, int theX, int theY, const PopString &theString, const Color &theColor,
 							const Rect &theClipRect);
 
 	virtual Font *Duplicate();

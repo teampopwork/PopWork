@@ -83,7 +83,7 @@ class Board : public Widget, public ButtonListener, public EditListener, public 
 	ListWidget *mListWidget;
 	ScrollbarWidget *mScrollbarWidget;
 
-	PopWorkString mText; // When we press enter on the edit box, we'll set this string and print it
+	PopString mText; // When we press enter on the edit box, we'll set this string and print it
 
 	// Both are floats to ensure that the only difference in the movement demo
 	// is the fact that one is updated in UpdateF and the other is in Update.

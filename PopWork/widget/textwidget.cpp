@@ -16,12 +16,12 @@ TextWidget::TextWidget()
 	mScrollbar = NULL;
 }
 
-PopWorkStringVector TextWidget::GetLines()
+PopStringVector TextWidget::GetLines()
 {
 	return mLogicalLines;
 }
 
-void TextWidget::SetLines(PopWorkStringVector theNewLines)
+void TextWidget::SetLines(PopStringVector theNewLines)
 {
 	mLogicalLines = theNewLines;
 }
@@ -35,14 +35,14 @@ void TextWidget::Clear()
 	MarkDirty();
 }
 
-void TextWidget::DrawColorString(Graphics *g, const PopWorkString &theString, int x, int y, bool useColors)
+void TextWidget::DrawColorString(Graphics *g, const PopString &theString, int x, int y, bool useColors)
 {
 	int aWidth = 0;
 
 	if (useColors)
 		g->SetColor(Color(0, 0, 0));
 
-	PopWorkString aCurString = _S("");
+	PopString aCurString = _S("");
 	for (int i = 0; i < (int)theString.length(); i++)
 	{
 		if (theString[i] == 0x100)
@@ -64,7 +64,7 @@ void TextWidget::DrawColorString(Graphics *g, const PopWorkString &theString, in
 		g->DrawString(aCurString, x + aWidth, y);
 }
 
-void TextWidget::DrawColorStringHilited(Graphics *g, const PopWorkString &theString, int x, int y, int theStartPos,
+void TextWidget::DrawColorStringHilited(Graphics *g, const PopString &theString, int x, int y, int theStartPos,
 										int theEndPos)
 {
 	DrawColorString(g, theString, x, y, true);
@@ -85,14 +85,14 @@ void TextWidget::DrawColorStringHilited(Graphics *g, const PopWorkString &theStr
 	}
 }
 
-int TextWidget::GetStringIndex(const PopWorkString &theString, int thePixel)
+int TextWidget::GetStringIndex(const PopString &theString, int thePixel)
 {
 	int aPos = 0;
 
 	for (int i = 0; i < (int)theString.length(); i++)
 	{
-		PopWorkString aLoSubStr = theString.substr(0, i);
-		PopWorkString aHiSubStr = theString.substr(0, i + 1);
+		PopString aLoSubStr = theString.substr(0, i);
+		PopString aHiSubStr = theString.substr(0, i + 1);
 
 		int aLoLen = GetColorStringWidth(aLoSubStr);
 		int aHiLen = GetColorStringWidth(aHiSubStr);
@@ -104,10 +104,10 @@ int TextWidget::GetStringIndex(const PopWorkString &theString, int thePixel)
 }
 
 // UNICODE
-int TextWidget::GetColorStringWidth(const PopWorkString &theString)
+int TextWidget::GetColorStringWidth(const PopString &theString)
 {
 	int aWidth = 0;
-	PopWorkString aTempString;
+	PopString aTempString;
 
 	for (int i = 0; i < (int)theString.length(); i++)
 	{
@@ -167,7 +167,7 @@ void TextWidget::Resize(int theX, int theY, int theWidth, int theHeight)
 }
 
 // UNICODE
-Color TextWidget::GetLastColor(const PopWorkString &theString)
+Color TextWidget::GetLastColor(const PopString &theString)
 {
 	int anIdx = theString.rfind((char)0xFF);
 	if (anIdx < 0)
@@ -177,9 +177,9 @@ Color TextWidget::GetLastColor(const PopWorkString &theString)
 }
 
 // UNICODE
-void TextWidget::AddToPhysicalLines(int theIdx, const PopWorkString &theLine)
+void TextWidget::AddToPhysicalLines(int theIdx, const PopString &theLine)
 {
-	PopWorkString aCurString = _S("");
+	PopString aCurString = _S("");
 
 	if (GetColorStringWidth(theLine) <= mWidth - 8)
 	{
@@ -198,14 +198,14 @@ void TextWidget::AddToPhysicalLines(int theIdx, const PopWorkString &theLine)
 			if (aSpacePos == -1)
 				aSpacePos = theLine.length();
 
-			PopWorkString aNewString = aCurString + theLine.substr(aCurPos, aSpacePos - aCurPos);
+			PopString aNewString = aCurString + theLine.substr(aCurPos, aSpacePos - aCurPos);
 			if (GetColorStringWidth(aNewString) > mWidth - 8)
 			{
 				mPhysicalLines.push_back(aCurString);
 				mLineMap.push_back(theIdx);
 				Color aColor = GetLastColor(aCurString);
-				aCurString = _S("  ") + PopWorkChar(0xFF) + (PopWorkChar)aColor.mRed + (PopWorkChar)aColor.mGreen +
-							 (PopWorkChar)aColor.mBlue + theLine.substr(aNextCheckPos, aSpacePos - aNextCheckPos);
+				aCurString = _S("  ") + PopChar(0xFF) + (PopChar)aColor.mRed + (PopChar)aColor.mGreen +
+							 (PopChar)aColor.mBlue + theLine.substr(aNextCheckPos, aSpacePos - aNextCheckPos);
 			}
 			else
 				aCurString = aNewString;
@@ -222,9 +222,9 @@ void TextWidget::AddToPhysicalLines(int theIdx, const PopWorkString &theLine)
 }
 
 // UNICODE
-void TextWidget::AddLine(const PopWorkString &theLine)
+void TextWidget::AddLine(const PopString &theLine)
 {
-	PopWorkString aLine = theLine;
+	PopString aLine = theLine;
 
 	if (aLine.compare(_S("")) == 0)
 		aLine = _S(" ");
@@ -324,7 +324,7 @@ void TextWidget::Draw(Graphics *g)
 	for (int i = aFirstLine; i <= aLastLine; i++)
 	{
 		int aYPos = 4 + (int)((i - (int)mPosition) * mFont->GetHeight()) + mFont->GetAscent();
-		PopWorkString aString = mPhysicalLines[i];
+		PopString aString = mPhysicalLines[i];
 
 		int aHilitePos[2];
 		GetSelectedIndices(i, aHilitePos);
@@ -379,16 +379,16 @@ void TextWidget::MouseDrag(int x, int y)
 	MarkDirty();
 }
 
-PopWorkString TextWidget::GetSelection()
+PopString TextWidget::GetSelection()
 {
-	PopWorkString aSelString = _S("");
+	PopString aSelString = _S("");
 	int aSelIndices[2];
 	bool first = true;
 
 	bool reverse = SelectionReversed();
 	for (int aLineNum = mHiliteArea[reverse ? 1 : 0][1]; aLineNum <= mHiliteArea[reverse ? 0 : 1][1]; aLineNum++)
 	{
-		PopWorkString aString = mPhysicalLines[aLineNum];
+		PopString aString = mPhysicalLines[aLineNum];
 
 		GetSelectedIndices(aLineNum, aSelIndices);
 
@@ -397,7 +397,7 @@ PopWorkString TextWidget::GetSelection()
 
 		for (int aStrIdx = aSelIndices[0]; aStrIdx < aSelIndices[1]; aStrIdx++)
 		{
-			PopWorkChar aChar = aString[aStrIdx];
+			PopChar aChar = aString[aStrIdx];
 			if (aChar != 0x100)
 				aSelString += aChar;
 			else

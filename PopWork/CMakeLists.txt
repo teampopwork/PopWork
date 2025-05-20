@@ -88,7 +88,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/external/openal
     ${CMAKE_SOURCE_DIR}/external/ogg/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../lib/stb_image
+    ${CMAKE_SOURCE_DIR}/external/misc
+    ${CMAKE_SOURCE_DIR}/external/stb_image
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE

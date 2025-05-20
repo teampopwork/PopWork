@@ -59,7 +59,7 @@ typedef std::map<std::wstring, std::wstring> WStringWStringMap;
 #include "readwrite/modval.h"
 
 #ifdef _USE_WIDE_STRING
-typedef std::wstring PopWorkString;
+typedef std::wstring PopString;
 #define _S(x) L##x
 
 #ifndef _WIN32
@@ -80,14 +80,14 @@ inline int _wtoi(const wchar_t *str)
 #define popatoi _wtoi
 #define popstrcpy wcscpy
 
-#define PopWorkStringToStringFast(x) WStringToString(x)
-#define PopWorkStringToWStringFast(x) (x)
-#define StringToPopWorkStringFast(x) StringToWString(x)
-#define WStringToPopWorkStringFast(x) (x)
+#define PopStringToStringFast(x) WStringToString(x)
+#define PopStringToWStringFast(x) (x)
+#define StringToPopStringFast(x) StringToWString(x)
+#define WStringToPopStringFast(x) (x)
 
 #else
 
-typedef std::string PopWorkString;
+typedef std::string PopString;
 #define _S(x) x
 
 #define popstrncmp strncmp
@@ -97,10 +97,10 @@ typedef std::string PopWorkString;
 #define popatoi atoi
 #define popstrcpy strcpy
 
-#define PopWorkStringToStringFast(x) (x)
-#define PopWorkStringToWStringFast(x) StringToWString(x)
-#define StringToPopWorkStringFast(x) (x)
-#define WStringToPopWorkStringFast(x) WStringToString(x)
+#define PopStringToStringFast(x) (x)
+#define PopStringToWStringFast(x) StringToWString(x)
+#define StringToPopStringFast(x) (x)
+#define WStringToPopStringFast(x) WStringToString(x)
 
 #endif
 
@@ -120,8 +120,8 @@ typedef __int64 int64;
 
 typedef std::map<std::string, std::string> DefinesMap;
 typedef std::map<std::wstring, std::wstring> WStringWStringMap;
-typedef PopWorkString::value_type PopWorkChar;
-#define HAS_POPWORKCHAR
+typedef PopString::value_type PopChar;
+#define HAS_PopChar
 
 namespace PopWork
 {
@@ -149,10 +149,10 @@ std::string StringToLower(const std::string &theString);
 std::wstring StringToLower(const std::wstring &theString);
 std::wstring StringToWString(const std::string &theString);
 std::string WStringToString(const std::wstring &theString);
-PopWorkString StringToPopWorkString(const std::string &theString);
-PopWorkString WStringToPopWorkString(const std::wstring &theString);
-std::string PopWorkStringToString(const PopWorkString &theString);
-std::wstring PopWorkStringToWString(const PopWorkString &theString);
+PopString StringToPopString(const std::string &theString);
+PopString WStringToPopString(const std::wstring &theString);
+std::string PopStringToString(const PopString &theString);
+std::wstring PopStringToWString(const PopString &theString);
 std::string Upper(const std::string &theData);
 std::wstring Upper(const std::wstring &theData);
 std::string Lower(const std::string &theData);
@@ -165,7 +165,7 @@ bool StringToInt(const std::wstring theString, int *theIntVal);
 bool StringToDouble(const std::wstring theString, double *theDoubleVal);
 int StrFindNoCase(const char *theStr, const char *theFind);
 bool StrPrefixNoCase(const char *theStr, const char *thePrefix, int maxLength = 10000000);
-PopWorkString CommaSeperate(int theValue);
+PopString CommaSeperate(int theValue);
 std::string Evaluate(const std::string &theString, const DefinesMap &theDefinesMap);
 std::string XMLDecodeString(const std::string &theString);
 std::string XMLEncodeString(const std::string &theString);

@@ -89,7 +89,7 @@ bool OpenALSoundManager::Initialized()
 
 int OpenALSoundManager::FindFreeChannel()
 {
-	DWORD aTick = SDL_GetTicks();
+	uint32_t aTick = SDL_GetTicks();
 	if (aTick - mLastReleaseTick > 1000)
 	{
 		ReleaseFreeChannels();
@@ -468,10 +468,10 @@ void OpenALSoundManager::ReleaseSounds()
 void OpenALSoundManager::ReleaseChannels()
 {
 	for (int i = 0; i < MAX_CHANNELS; i++)
-		if (mPlayingSounds[i] != NULL)
+		if (mPlayingSounds[i] != nullptr)
 		{
 			delete mPlayingSounds[i];
-			mPlayingSounds[i] = NULL;
+			mPlayingSounds[i] = nullptr;
 		}
 }
 

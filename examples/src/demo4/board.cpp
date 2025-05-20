@@ -290,7 +290,7 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 		// file format.
 
 		while (!buffer.AtEnd())
-			mListWidget->AddLine(StringToPopWorkStringFast(buffer.ReadString()), true);
+			mListWidget->AddLine(StringToPopStringFast(buffer.ReadString()), true);
 	}
 
 	// If you read Board::ListClicked, you'll see that we
@@ -302,7 +302,7 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 	// set by setting the mRegKey variable in GameApp's constructor.
 	// The functions return false if there was an error reading the
 	// key or the key doesn't exist:
-	std::string temp = PopWorkStringToStringFast(mText);
+	std::string temp = PopStringToStringFast(mText);
 	mApp->RegistryReadString("ListItem", &temp);
 }
 
@@ -396,7 +396,7 @@ void Board::EditWidgetText(int theId, const std::string &theString)
 		if (StringToUpper(theString) == "CLEAR")
 			mListWidget->RemoveAll();
 		else
-			mListWidget->AddLine(StringToPopWorkStringFast(theString), true);
+			mListWidget->AddLine(StringToPopStringFast(theString), true);
 
 		// Now clear the edit box
 		mEditWidget->SetText(_S(""));
@@ -412,7 +412,7 @@ void Board::EditWidgetText(int theId, const std::string &theString)
 		// And now all we do is say WriteString. There are other methods
 		// for writing other data types too:
 		for (unsigned int i = 0; i < mListWidget->mLines.size(); i++)
-			buffer.WriteString(PopWorkStringToStringFast(mListWidget->mLines.at(i)));
+			buffer.WriteString(PopStringToStringFast(mListWidget->mLines.at(i)));
 
 		// Now we need to write the buffer to disk. GameApp can help us out with
 		// that. This data is saved in a special binary format that allows
@@ -475,7 +475,7 @@ void Board::ListClicked(int theId, int theIdx, int theClickCount)
 		// location that you set in GameApp's constructor when you
 		// set the mRegKey variable. The function returns false
 		// if there was an error, such as a lack of permission:
-		if (!mApp->RegistryWriteString("ListItem", PopWorkStringToStringFast(mText)))
+		if (!mApp->RegistryWriteString("ListItem", PopStringToStringFast(mText)))
 			mApp->Popup("Couldn't save \"ListItem\" to registry");
 	}
 }

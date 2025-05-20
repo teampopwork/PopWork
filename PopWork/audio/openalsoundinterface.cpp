@@ -37,6 +37,7 @@ OpenALSoundInstance::~OpenALSoundInstance()
 	alSourceStop(mSoundSource);			   // Stop the source first
 	alSourcei(mSoundSource, AL_BUFFER, 0); // Detach buffer
 	alDeleteSources(1, &mSoundSource);	   /// Delete the source
+	mSoundSource = 0;
 }
 
 void OpenALSoundInstance::RehupVolume()

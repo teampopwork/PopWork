@@ -11,7 +11,7 @@ XMLDemoApp::XMLDemoApp()
 {
 	mProdName = "XMLDemo";
 	mProductVersion = "1.0";
-	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 	mRegKey = "PopCap\\PopWork\\XMLDemo";
 
 	mBoard = NULL;

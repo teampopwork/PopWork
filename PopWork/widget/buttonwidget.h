@@ -33,7 +33,7 @@ class ButtonWidget : public Widget
 	};
 
 	int mId;
-	PopWorkString mLabel;
+	PopString mLabel;
 	int mLabelJustify;
 	Font *mFont;
 	Image *mButtonImage;

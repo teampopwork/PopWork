@@ -174,25 +174,25 @@ std::string PopWork::WStringToString(const std::wstring &theString)
 	}
 }
 
-PopWorkString PopWork::StringToPopWorkString(const std::string &theString)
+PopString PopWork::StringToPopString(const std::string &theString)
 {
 #ifdef _USE_WIDE_STRING
 	return StringToWString(theString);
 #else
-	return PopWorkString(theString);
+	return PopString(theString);
 #endif
 }
 
-PopWorkString PopWork::WStringToPopWorkString(const std::wstring &theString)
+PopString PopWork::WStringToPopString(const std::wstring &theString)
 {
 #ifdef _USE_WIDE_STRING
-	return PopWorkString(theString);
+	return PopString(theString);
 #else
 	return WStringToString(theString);
 #endif
 }
 
-std::string PopWork::PopWorkStringToString(const PopWorkString &theString)
+std::string PopWork::PopStringToString(const PopString &theString)
 {
 #ifdef _USE_WIDE_STRING
 	return WStringToString(theString);
@@ -201,7 +201,7 @@ std::string PopWork::PopWorkStringToString(const PopWorkString &theString)
 #endif
 }
 
-std::wstring PopWork::PopWorkStringToWString(const PopWorkString &theString)
+std::wstring PopWork::PopStringToWString(const PopString &theString)
 {
 #ifdef _USE_WIDE_STRING
 	return std::wstring(theString);
@@ -451,12 +451,12 @@ bool PopWork::StringToDouble(const std::wstring theString, double *theDoubleVal)
 }
 
 // TODO: Use <locale> for localization of number output?
-PopWorkString PopWork::CommaSeperate(int theValue)
+PopString PopWork::CommaSeperate(int theValue)
 {
 	if (theValue == 0)
 		return _S("0");
 
-	PopWorkString aCurString;
+	PopString aCurString;
 
 	int aPlace = 0;
 	int aCurValue = theValue;
@@ -465,7 +465,7 @@ PopWorkString PopWork::CommaSeperate(int theValue)
 	{
 		if ((aPlace != 0) && (aPlace % 3 == 0))
 			aCurString = _S(',') + aCurString;
-		aCurString = (PopWorkChar)(_S('0') + (aCurValue % 10)) + aCurString;
+		aCurString = (PopChar)(_S('0') + (aCurValue % 10)) + aCurString;
 		aCurValue /= 10;
 		aPlace++;
 	}

@@ -28,18 +28,18 @@ XMLWriter::~XMLWriter()
 		fclose(mFile);
 }
 
-void XMLWriter::Fail(const PopWorkString &theErrorText)
+void XMLWriter::Fail(const PopString &theErrorText)
 {
 	mHasFailed = true;
 	mErrorText = theErrorText;
 }
 
-void XMLWriter::Warn(const PopWorkString &theWarning)
+void XMLWriter::Warn(const PopString &theWarning)
 {
 	mWarningStack.push(_S("WARNING: ") + theWarning);
 }
 
-void XMLWriter::Comment(const PopWorkString &theComment)
+void XMLWriter::Comment(const PopString &theComment)
 {
 	mWarningStack.push(theComment);
 }
@@ -50,9 +50,9 @@ void XMLWriter::Init()
 	mHasFailed = false;
 }
 
-bool XMLWriter::OpenFile(const PopWorkString &theFileName)
+bool XMLWriter::OpenFile(const PopString &theFileName)
 {
-	mFile = fopen(PopWorkStringToStringFast(theFileName).c_str(), "w+t");
+	mFile = fopen(PopStringToStringFast(theFileName).c_str(), "w+t");
 
 	if (mFile == NULL)
 	{
@@ -71,7 +71,7 @@ bool XMLWriter::HasFailed()
 	return mHasFailed;
 }
 
-PopWorkString XMLWriter::GetErrorText()
+PopString XMLWriter::GetErrorText()
 {
 	return mErrorText;
 }
@@ -81,7 +81,7 @@ int XMLWriter::GetCurrentLineNum()
 	return mLineNum;
 }
 
-PopWorkString XMLWriter::GetFileName()
+PopString XMLWriter::GetFileName()
 {
 	return mFileName;
 }
@@ -89,8 +89,8 @@ PopWorkString XMLWriter::GetFileName()
 /*
 	Used as a tool to add attributes to XMLElement Nodes.
 */
-bool XMLWriter::AddAttribute(XMLElement *theElement, const PopWorkString &theAttributeKey,
-							 const PopWorkString &theAttributeValue)
+bool XMLWriter::AddAttribute(XMLElement *theElement, const PopString &theAttributeKey,
+							 const PopString &theAttributeValue)
 {
 	std::pair<XMLParamMap::iterator, bool> aRet;
 
@@ -108,7 +108,7 @@ bool XMLWriter::AddAttribute(XMLElement *theElement, const PopWorkString &theAtt
 	Pushes the Element onto the section stack and creates
 	a new Node with an Attributes section
 */
-bool XMLWriter::StartElement(const PopWorkString &theElementName)
+bool XMLWriter::StartElement(const PopString &theElementName)
 {
 	CheckFileOpen();
 	if (mHasFailed)
@@ -146,7 +146,7 @@ bool XMLWriter::StartElement(const PopWorkString &theElementName)
 }
 
 // Warning: This Stops the Element!
-bool XMLWriter::WriteElementText(PopWorkString theText)
+bool XMLWriter::WriteElementText(PopString theText)
 {
 	CheckFileOpen();
 	if (mHasFailed)
@@ -159,7 +159,7 @@ bool XMLWriter::WriteElementText(PopWorkString theText)
 		mOpenAttributes = false;
 	}
 
-	const PopWorkString aNodeName = mSectionStack.top();
+	const PopString aNodeName = mSectionStack.top();
 	mSectionStack.pop();
 
 	try
@@ -187,7 +187,7 @@ bool XMLWriter::StartElement(XMLElement *theElement)
 	if (StartElement(theElement->mValue.c_str()) == false)
 		return false;
 
-	std::map<PopWorkString, PopWorkString>::iterator map_itr;
+	std::map<PopString, PopString>::iterator map_itr;
 	map_itr = theElement->mAttributes.begin();
 
 	for (; map_itr != theElement->mAttributes.end(); map_itr++)
@@ -215,7 +215,7 @@ bool XMLWriter::StopElement()
 		return false;
 	}
 
-	const PopWorkString aNodeName = mSectionStack.top();
+	const PopString aNodeName = mSectionStack.top();
 	mSectionStack.pop();
 
 	if (mOpenAttributes)
@@ -250,7 +250,7 @@ bool XMLWriter::StopElement()
 	Adds an attribute to the Current Element.  If No element is open, then it returns
 	false.
 */
-bool XMLWriter::WriteAttribute(const PopWorkString &aAttributeKey, const PopWorkString &aAttributeValue)
+bool XMLWriter::WriteAttribute(const PopString &aAttributeKey, const PopString &aAttributeValue)
 {
 	CheckFileOpen();
 	if (mHasFailed)
@@ -275,12 +275,12 @@ bool XMLWriter::WriteAttribute(const PopWorkString &aAttributeKey, const PopWork
 	return false;
 }
 
-bool XMLWriter::WriteAttribute(const PopWorkString &aAttributeKey, const int &aAttributeValue)
+bool XMLWriter::WriteAttribute(const PopString &aAttributeKey, const int &aAttributeValue)
 {
 	return WriteAttribute(aAttributeKey, StrFormat(_S("%d"), aAttributeValue));
 }
 
-bool XMLWriter::WriteAttribute(const PopWorkString &aAttributeKey, const float &aAttributeValue)
+bool XMLWriter::WriteAttribute(const PopString &aAttributeKey, const float &aAttributeValue)
 {
 	return WriteAttribute(aAttributeKey, StrFormat(_S("%f"), aAttributeValue));
 }
@@ -302,9 +302,9 @@ bool XMLWriter::CloseFile()
 	return false;
 }
 
-bool XMLWriter::ValidateElementNodeName(const PopWorkString &theNodeName)
+bool XMLWriter::ValidateElementNodeName(const PopString &theNodeName)
 {
-	const PopWorkChar *aNodeName = theNodeName.c_str();
+	const PopChar *aNodeName = theNodeName.c_str();
 
 	for (int i = 0; i < theNodeName.size(); i++)
 	{
@@ -329,7 +329,7 @@ bool XMLWriter::CheckFileOpen()
 	return false;
 }
 
-bool PopWork::XMLWriter::WriteAttribute(const PopWorkString &aAttributeKey)
+bool PopWork::XMLWriter::WriteAttribute(const PopString &aAttributeKey)
 {
 	CheckFileOpen();
 	if (mHasFailed)

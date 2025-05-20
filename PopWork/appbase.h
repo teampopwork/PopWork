@@ -64,7 +64,7 @@ typedef std::list<Dialog *> DialogList;
 typedef std::vector<std::string> StringVector;
 // typedef std::basic_string<TCHAR> tstring; // string of TCHARs
 
-typedef std::map<std::string, PopWorkString> StringPopWorkStringMap;
+typedef std::map<std::string, PopString> StringPopStringMap;
 typedef std::map<std::string, std::string> StringStringMap;
 typedef std::map<std::string, std::wstring> StringWStringMap;
 typedef std::map<std::string, bool> StringBoolMap;
@@ -123,7 +123,7 @@ class AppBase : public ButtonListener, public DialogListener
 	std::string mCompanyName;
 	std::string mFullCompanyName;
 	std::string mProdName;
-	PopWorkString mTitle;
+	PopString mTitle;
 	std::string mRegKey;
 	std::string mChangeDirTo;
 
@@ -178,9 +178,9 @@ class AppBase : public ButtonListener, public DialogListener
 	bool mIsOpeningURL;
 	bool mShutdownOnURLOpen;
 	std::string mOpeningURL;
-	DWORD mOpeningURLTime;
-	DWORD mLastTimerTime;
-	DWORD mLastBigDelayTime;
+	uint32_t mOpeningURLTime;
+	uint32_t mLastTimerTime;
+	uint32_t mLastBigDelayTime;
 	double mUnmutedMusicVolume;
 	double mUnmutedSfxVolume;
 	int mMuteCount;
@@ -262,15 +262,15 @@ class AppBase : public ButtonListener, public DialogListener
 	bool mVSyncUpdates;
 	bool mVSyncBroken;
 	int mVSyncBrokenCount;
-	DWORD mVSyncBrokenTestStartTick;
-	DWORD mVSyncBrokenTestUpdates;
+	uint32_t mVSyncBrokenTestStartTick;
+	uint32_t mVSyncBrokenTestUpdates;
 	bool mWaitForVSync;
 	bool mSoftVSyncWait;
 	bool mUserChanged3DSetting;
 	bool mAutoEnable3D;
 	bool mTest3D;
-	DWORD mMinVidMemory3D;
-	DWORD mRecommendedVidMemory3D;
+	uint32_t mMinVidMemory3D;
+	uint32_t mRecommendedVidMemory3D;
 
 	bool mWidescreenAware;
 	Rect mScreenBounds;
@@ -339,8 +339,8 @@ class AppBase : public ButtonListener, public DialogListener
 	virtual void LoadingThreadProc();
 	virtual void WriteToRegistry();
 	virtual void ReadFromRegistry();
-	virtual Dialog *NewDialog(int theDialogId, bool isModal, const PopWorkString &theDialogHeader,
-							  const PopWorkString &theDialogLines, const PopWorkString &theDialogFooter,
+	virtual Dialog *NewDialog(int theDialogId, bool isModal, const PopString &theDialogHeader,
+							  const PopString &theDialogLines, const PopString &theDialogFooter,
 							  int theButtonMode);
 	virtual void PreDisplayHook();
 
@@ -434,8 +434,8 @@ class AppBase : public ButtonListener, public DialogListener
 	virtual void SwitchScreenMode(bool wantWindowed, bool is3d, bool force = false);
 	virtual void SetAlphaDisabled(bool isDisabled);
 
-	virtual Dialog *DoDialog(int theDialogId, bool isModal, const PopWorkString &theDialogHeader,
-							 const PopWorkString &theDialogLines, const PopWorkString &theDialogFooter,
+	virtual Dialog *DoDialog(int theDialogId, bool isModal, const PopString &theDialogHeader,
+							 const PopString &theDialogLines, const PopString &theDialogFooter,
 							 int theButtonMode);
 	virtual Dialog *GetDialog(int theDialogId);
 	virtual void AddDialog(int theDialogId, Dialog *theDialog);
@@ -481,8 +481,8 @@ class AppBase : public ButtonListener, public DialogListener
 	int GetInteger(const std::string &theId, int theDefault);
 	double GetDouble(const std::string &theId);
 	double GetDouble(const std::string &theId, double theDefault);
-	PopWorkString GetString(const std::string &theId);
-	PopWorkString GetString(const std::string &theId, const PopWorkString &theDefault);
+	PopString GetString(const std::string &theId);
+	PopString GetString(const std::string &theId, const PopString &theDefault);
 
 	StringVector GetStringVector(const std::string &theId);
 
@@ -501,8 +501,8 @@ class AppBase : public ButtonListener, public DialogListener
 	bool RegistryWriteInteger(const std::string &theValueName, int theValue);
 	bool RegistryWriteBoolean(const std::string &theValueName, bool theValue);
 	bool RegistryWriteData(const std::string &theValueName, const uchar *theValue, ulong theLength);
-	bool RegistryEraseKey(const PopWorkString &theKeyName);
-	void RegistryEraseValue(const PopWorkString &theValueName);
+	bool RegistryEraseKey(const PopString &theKeyName);
+	void RegistryEraseValue(const PopString &theValueName);
 
 	// File access methods
 	bool WriteBufferToFile(const std::string &theFileName, const Buffer *theBuffer);

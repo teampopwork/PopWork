@@ -169,7 +169,7 @@ bool ResourceManager::ParseCommonResource(XMLElement &theElement, BaseRes *theRe
 {
 	mHadAlreadyDefinedError = false;
 
-	const PopWorkString &aPath = theElement.mAttributes[_S("path")];
+	const PopString &aPath = theElement.mAttributes[_S("path")];
 	if (aPath.empty())
 		return Fail("No path specified.");
 
@@ -177,19 +177,19 @@ bool ResourceManager::ParseCommonResource(XMLElement &theElement, BaseRes *theRe
 	theRes->mFromProgram = false;
 	if (aPath[0] == _S('!'))
 	{
-		theRes->mPath = PopWorkStringToStringFast(aPath);
+		theRes->mPath = PopStringToStringFast(aPath);
 		if (aPath == _S("!program"))
 			theRes->mFromProgram = true;
 	}
 	else
-		theRes->mPath = mDefaultPath + PopWorkStringToStringFast(aPath);
+		theRes->mPath = mDefaultPath + PopStringToStringFast(aPath);
 
 	std::string anId;
 	XMLParamMap::iterator anItr = theElement.mAttributes.find(_S("id"));
 	if (anItr == theElement.mAttributes.end())
 		anId = mDefaultIdPrefix + GetFileName(theRes->mPath, true);
 	else
-		anId = mDefaultIdPrefix + PopWorkStringToStringFast(anItr->second);
+		anId = mDefaultIdPrefix + PopStringToStringFast(anItr->second);
 
 	theRes->mResGroup = mCurResGroup;
 	theRes->mId = anId;
@@ -248,7 +248,7 @@ bool ResourceManager::ParseSoundResource(XMLElement &theElement)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-static void ReadIntVector(const PopWorkString &theVal, std::vector<int> &theVector)
+static void ReadIntVector(const PopString &theVal, std::vector<int> &theVector)
 {
 	theVector.clear();
 
@@ -302,7 +302,7 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	XMLParamMap::iterator anItr;
 	anItr = theElement.mAttributes.find(_S("alphaimage"));
 	if (anItr != theElement.mAttributes.end())
-		aRes->mAlphaImage = mDefaultPath + PopWorkStringToStringFast(anItr->second);
+		aRes->mAlphaImage = mDefaultPath + PopStringToStringFast(anItr->second);
 
 	aRes->mAlphaColor = 0xFFFFFF;
 	anItr = theElement.mAttributes.find(_S("alphacolor"));
@@ -311,11 +311,11 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 
 	anItr = theElement.mAttributes.find(_S("variant"));
 	if (anItr != theElement.mAttributes.end())
-		aRes->mVariant = PopWorkStringToStringFast(anItr->second);
+		aRes->mVariant = PopStringToStringFast(anItr->second);
 
 	anItr = theElement.mAttributes.find(_S("alphagrid"));
 	if (anItr != theElement.mAttributes.end())
-		aRes->mAlphaGridImage = mDefaultPath + PopWorkStringToStringFast(anItr->second);
+		aRes->mAlphaGridImage = mDefaultPath + PopStringToStringFast(anItr->second);
 
 	anItr = theElement.mAttributes.find(_S("rows"));
 	if (anItr != theElement.mAttributes.end())
@@ -333,7 +333,7 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	AnimType anAnimType = AnimType_None;
 	if (anItr != theElement.mAttributes.end())
 	{
-		const PopWorkChar *aType = anItr->second.c_str();
+		const PopChar *aType = anItr->second.c_str();
 
 		if (popstricmp(aType, _S("none")) == 0)
 			anAnimType = AnimType_None;
@@ -411,11 +411,11 @@ bool ResourceManager::ParseFontResource(XMLElement &theElement)
 	XMLParamMap::iterator anItr;
 	anItr = theElement.mAttributes.find(_S("image"));
 	if (anItr != theElement.mAttributes.end())
-		aRes->mImagePath = PopWorkStringToStringFast(anItr->second);
+		aRes->mImagePath = PopStringToStringFast(anItr->second);
 
 	anItr = theElement.mAttributes.find(_S("tags"));
 	if (anItr != theElement.mAttributes.end())
-		aRes->mTags = PopWorkStringToStringFast(anItr->second);
+		aRes->mTags = PopStringToStringFast(anItr->second);
 
 	if (strncmp(aRes->mPath.c_str(), "!sys:", 5) == 0)
 	{
@@ -466,11 +466,11 @@ bool ResourceManager::ParseSetDefaults(XMLElement &theElement)
 	XMLParamMap::iterator anItr;
 	anItr = theElement.mAttributes.find(_S("path"));
 	if (anItr != theElement.mAttributes.end())
-		mDefaultPath = RemoveTrailingSlash(PopWorkStringToStringFast(anItr->second)) + '/';
+		mDefaultPath = RemoveTrailingSlash(PopStringToStringFast(anItr->second)) + '/';
 
 	anItr = theElement.mAttributes.find(_S("idprefix"));
 	if (anItr != theElement.mAttributes.end())
-		mDefaultIdPrefix = RemoveTrailingSlash(PopWorkStringToStringFast(anItr->second));
+		mDefaultIdPrefix = RemoveTrailingSlash(PopStringToStringFast(anItr->second));
 
 	return true;
 }
@@ -555,13 +555,13 @@ bool ResourceManager::ParseResources()
 			}
 			else
 			{
-				Fail("Invalid Section '" + PopWorkStringToStringFast(aXMLElement.mValue) + "'");
+				Fail("Invalid Section '" + PopStringToStringFast(aXMLElement.mValue) + "'");
 				return false;
 			}
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 		{
-			Fail("Element Not Expected '" + PopWorkStringToStringFast(aXMLElement.mValue) + "'");
+			Fail("Element Not Expected '" + PopStringToStringFast(aXMLElement.mValue) + "'");
 			return false;
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
@@ -587,7 +587,7 @@ bool ResourceManager::DoParseResources()
 			{
 				if (aXMLElement.mValue == _S("Resources"))
 				{
-					mCurResGroup = PopWorkStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+					mCurResGroup = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
 					mCurResGroupList = &mResGroupMap[mCurResGroup];
 
 					if (mCurResGroup.empty())
@@ -601,20 +601,20 @@ bool ResourceManager::DoParseResources()
 				}
 				else
 				{
-					Fail("Invalid Section '" + PopWorkStringToStringFast(aXMLElement.mValue) + "'");
+					Fail("Invalid Section '" + PopStringToStringFast(aXMLElement.mValue) + "'");
 					break;
 				}
 			}
 			else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 			{
-				Fail("Element Not Expected '" + PopWorkStringToStringFast(aXMLElement.mValue) + "'");
+				Fail("Element Not Expected '" + PopStringToStringFast(aXMLElement.mValue) + "'");
 				break;
 			}
 		}
 	}
 
 	if (mXMLParser->HasFailed())
-		Fail(PopWorkStringToStringFast(mXMLParser->GetErrorText()));
+		Fail(PopStringToStringFast(mXMLParser->GetErrorText()));
 
 	delete mXMLParser;
 	mXMLParser = NULL;
@@ -634,7 +634,7 @@ bool ResourceManager::ParseResourcesFile(const std::string &theFilename)
 	while (!mXMLParser->HasFailed())
 	{
 		if (!mXMLParser->NextElement(&aXMLElement))
-			Fail(PopWorkStringToStringFast(mXMLParser->GetErrorText()));
+			Fail(PopStringToStringFast(mXMLParser->GetErrorText()));
 
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{

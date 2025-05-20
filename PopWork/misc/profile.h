@@ -18,12 +18,12 @@ class Profile
 	// To access it's class members. We will Access these variables
 	// through Get/Set functions (which will validate)
   protected:
-	PopWorkString mUserName;
+	PopString mUserName;
 
-	std::map<PopWorkString, int> mIntegerMap;
-	std::map<PopWorkString, bool> mBoolMap;
-	std::map<PopWorkString, PopWorkString> mStringMap;
-	std::map<PopWorkString, double> mFloatMap;
+	std::map<PopString, int> mIntegerMap;
+	std::map<PopString, bool> mBoolMap;
+	std::map<PopString, PopString> mStringMap;
+	std::map<PopString, double> mFloatMap;
 
 	Profile();
 
@@ -33,46 +33,46 @@ class Profile
 
 	// Serialization Functions
   public:
-	virtual bool Save(PopWorkString theFileName); // Returns 'true' if success
-	virtual bool Load(PopWorkString theFileName); // Returns 'true' if success
+	virtual bool Save(PopString theFileName); // Returns 'true' if success
+	virtual bool Load(PopString theFileName); // Returns 'true' if success
 	virtual void ParseXML(PopWork::XMLParser *theParser);
-	virtual bool HasAttribute(PopWork::XMLElement *theNode, PopWorkString theAttrib);
+	virtual bool HasAttribute(PopWork::XMLElement *theNode, PopString theAttrib);
 
 	// Even More Abstract Serialization functions
   public:
-	virtual bool LoadUser(PopWorkString theUserName);	   // Load the User from the users dir
+	virtual bool LoadUser(PopString theUserName);	   // Load the User from the users dir
 	virtual bool SaveUser();							   // Called to Save this User
-	virtual bool NewUser(PopWorkString theUserName);	   // Called to start a New User
-	virtual bool RenameUser(PopWorkString theNewUserName); // Called to Rename User
-	virtual bool DeleteUser(PopWorkString theUserName);	   // Called to Delete User
+	virtual bool NewUser(PopString theUserName);	   // Called to start a New User
+	virtual bool RenameUser(PopString theNewUserName); // Called to Rename User
+	virtual bool DeleteUser(PopString theUserName);	   // Called to Delete User
 
 	// Member Variable Get/Set Methods
   public:
-	virtual PopWorkString GetUserName()
+	virtual PopString GetUserName()
 	{
 		return mUserName;
 	};													 // returns the User Name
-	virtual bool SetUserName(PopWorkString theUserName); // Returns 'true' if success
+	virtual bool SetUserName(PopString theUserName); // Returns 'true' if success
 
 	virtual void ResetProfile();
 
 	// A new Feature!  Allows for Multiple State Types!  Story mode, Casual Mode, Mini Game Mode
-	virtual std::string GetStateFileName(PopWorkString theStateName, PopWorkString theUserName = _S(""));
-	virtual void EraseStateSaves(PopWorkString theUserName = _S(""));
-	virtual std::string GetUserFileName(PopWorkString theUserName = _S(""));
+	virtual std::string GetStateFileName(PopString theStateName, PopString theUserName = _S(""));
+	virtual void EraseStateSaves(PopString theUserName = _S(""));
+	virtual std::string GetUserFileName(PopString theUserName = _S(""));
 
 	// Another Cool Feature!  Read and Write integers with String Values!
-	virtual void SetIntegerValue(PopWorkString theValueName, int theValue);
-	virtual int GetIntegerValue(PopWorkString theValueName, int theDefault);
+	virtual void SetIntegerValue(PopString theValueName, int theValue);
+	virtual int GetIntegerValue(PopString theValueName, int theDefault);
 
-	virtual void SetBoolValue(PopWorkString theValueName, bool theValue);
-	virtual bool GetBoolValue(PopWorkString theValueName, bool theDefault);
+	virtual void SetBoolValue(PopString theValueName, bool theValue);
+	virtual bool GetBoolValue(PopString theValueName, bool theDefault);
 
-	virtual void SetFloatValue(PopWorkString theValueName, double theValue);
-	virtual double GetFloatValue(PopWorkString theValueName, double theDefault);
+	virtual void SetFloatValue(PopString theValueName, double theValue);
+	virtual double GetFloatValue(PopString theValueName, double theDefault);
 
-	virtual void SetStringValue(PopWorkString theValueName, PopWorkString theValue);
-	virtual PopWorkString GetStringValue(PopWorkString theValueName, PopWorkString theDefault);
+	virtual void SetStringValue(PopString theValueName, PopString theValue);
+	virtual PopString GetStringValue(PopString theValueName, PopString theDefault);
 };
 }; // namespace PopWork
 

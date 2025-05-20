@@ -16,13 +16,13 @@ class PropertiesParser
   public:
 	AppBase *mApp;
 	XMLParser *mXMLParser;
-	PopWorkString mError;
+	PopString mError;
 	bool mHasFailed;
 
   protected:
-	void Fail(const PopWorkString &theErrorText);
+	void Fail(const PopString &theErrorText);
 
-	bool ParseSingleElement(PopWorkString *theString);
+	bool ParseSingleElement(PopString *theString);
 	bool ParseStringArray(StringVector *theStringVector);
 	bool ParseProperties();
 	bool DoParseProperties();
@@ -33,7 +33,7 @@ class PropertiesParser
 
 	bool ParsePropertiesFile(const std::string &theFilename);
 	bool ParsePropertiesBuffer(const Buffer &theBuffer);
-	PopWorkString GetErrorText();
+	PopString GetErrorText();
 };
 
 } // namespace PopWork

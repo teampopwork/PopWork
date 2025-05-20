@@ -67,7 +67,7 @@ class Widget : public WidgetContainer
 	virtual void UpdateF(float theFrac);
 	virtual void GotFocus();
 	virtual void LostFocus();
-	virtual void KeyChar(PopWorkChar theChar);
+	virtual void KeyChar(PopChar theChar);
 	virtual void KeyDown(KeyCode theKey);
 	virtual void KeyUp(KeyCode theKey);
 	virtual void MouseEnter();
@@ -84,15 +84,15 @@ class Widget : public WidgetContainer
 
 	//////// Helper functions
 
-	virtual Rect WriteCenteredLine(Graphics *g, int anOffset, const PopWorkString &theLine);
-	virtual Rect WriteCenteredLine(Graphics *g, int anOffset, const PopWorkString &theLine, Color theColor1,
+	virtual Rect WriteCenteredLine(Graphics *g, int anOffset, const PopString &theLine);
+	virtual Rect WriteCenteredLine(Graphics *g, int anOffset, const PopString &theLine, Color theColor1,
 								   Color theColor2, const Point &theShadowOffset = Point(1, 2));
 
-	virtual int WriteString(Graphics *g, const PopWorkString &theString, int theX, int theY, int theWidth = -1,
+	virtual int WriteString(Graphics *g, const PopString &theString, int theX, int theY, int theWidth = -1,
 							int theJustification = -1, bool drawString = true, int theOffset = 0, int theLength = -1);
-	virtual int WriteWordWrapped(Graphics *g, const Rect &theRect, const PopWorkString &theLine, int theLineSpacing,
+	virtual int WriteWordWrapped(Graphics *g, const Rect &theRect, const PopString &theLine, int theLineSpacing,
 								 int theJustification);
-	virtual int GetWordWrappedHeight(Graphics *g, int theWidth, const PopWorkString &theLine, int aLineSpacing);
+	virtual int GetWordWrappedHeight(Graphics *g, int theWidth, const PopString &theLine, int aLineSpacing);
 	virtual int GetNumDigits(int theNumber);
 	virtual void WriteNumberFromStrip(Graphics *g, int theNumber, int theX, int theY, Image *theNumberStrip,
 									  int aSpacing);

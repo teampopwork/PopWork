@@ -11,7 +11,7 @@ PropertiesParser::PropertiesParser(AppBase *theApp)
 	mXMLParser = NULL;
 }
 
-void PropertiesParser::Fail(const PopWorkString &theErrorText)
+void PropertiesParser::Fail(const PopString &theErrorText)
 {
 	if (!mHasFailed)
 	{
@@ -30,7 +30,7 @@ PropertiesParser::~PropertiesParser()
 {
 }
 
-bool PropertiesParser::ParseSingleElement(PopWorkString *aString)
+bool PropertiesParser::ParseSingleElement(PopString *aString)
 {
 	*aString = _S("");
 
@@ -70,12 +70,12 @@ bool PropertiesParser::ParseStringArray(StringVector *theStringVector)
 		{
 			if (aXMLElement.mValue == _S("String"))
 			{
-				PopWorkString aString;
+				PopString aString;
 
 				if (!ParseSingleElement(&aString))
 					return false;
 
-				theStringVector->push_back(PopWorkStringToStringFast(aString));
+				theStringVector->push_back(PopStringToStringFast(aString));
 			}
 			else
 			{
@@ -107,12 +107,12 @@ bool PropertiesParser::ParseProperties()
 		{
 			if (aXMLElement.mValue == _S("String"))
 			{
-				PopWorkString aDef;
+				PopString aDef;
 				if (!ParseSingleElement(&aDef))
 					return false;
 
-				std::string anId = PopWorkStringToStringFast(aXMLElement.mAttributes[_S("id")]);
-				mApp->SetString(anId, PopWorkStringToWStringFast(aDef));
+				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				mApp->SetString(anId, PopStringToWStringFast(aDef));
 			}
 			else if (aXMLElement.mValue == _S("StringArray"))
 			{
@@ -121,13 +121,13 @@ bool PropertiesParser::ParseProperties()
 				if (!ParseStringArray(&aDef))
 					return false;
 
-				std::string anId = PopWorkStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
 
 				mApp->mStringVectorProperties.insert(StringStringVectorMap::value_type(anId, aDef));
 			}
 			else if (aXMLElement.mValue == _S("Boolean"))
 			{
-				PopWorkString aVal;
+				PopString aVal;
 
 				if (!ParseSingleElement(&aVal))
 					return false;
@@ -145,13 +145,13 @@ bool PropertiesParser::ParseProperties()
 					return false;
 				}
 
-				std::string anId = PopWorkStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
 
 				mApp->SetBoolean(anId, boolVal);
 			}
 			else if (aXMLElement.mValue == _S("Integer"))
 			{
-				PopWorkString aVal;
+				PopString aVal;
 
 				if (!ParseSingleElement(&aVal))
 					return false;
@@ -163,13 +163,13 @@ bool PropertiesParser::ParseProperties()
 					return false;
 				}
 
-				std::string anId = PopWorkStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
 
 				mApp->SetInteger(anId, anInt);
 			}
 			else if (aXMLElement.mValue == _S("Double"))
 			{
-				PopWorkString aVal;
+				PopString aVal;
 
 				if (!ParseSingleElement(&aVal))
 					return false;
@@ -181,7 +181,7 @@ bool PropertiesParser::ParseProperties()
 					return false;
 				}
 
-				std::string anId = PopWorkStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
 
 				mApp->SetDouble(anId, aDouble);
 			}
@@ -266,7 +266,7 @@ bool PropertiesParser::ParsePropertiesFile(const std::string &theFilename)
 	return DoParseProperties();
 }
 
-PopWorkString PropertiesParser::GetErrorText()
+PopString PropertiesParser::GetErrorText()
 {
 	return mError;
 }

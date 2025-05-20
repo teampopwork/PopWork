@@ -99,7 +99,7 @@ void TitleScreen::Draw(Graphics *g)
 	g->DrawImage(IMAGE_HUNGARR_LOGO, mWidth / 2 - IMAGE_HUNGARR_LOGO->mWidth / 2, 100);
 	g->SetColor(Color::White);
 	g->SetFont(FONT_HUNGARR);
-	PopWorkString s = _S("HUN-GARR NEEDS PLANETS!");
+	PopString s = _S("HUN-GARR NEEDS PLANETS!");
 	g->DrawString(s, mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, 200);
 }
 

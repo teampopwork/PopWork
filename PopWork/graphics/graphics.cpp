@@ -643,7 +643,7 @@ void Graphics::DrawLineAA(int theStartX, int theStartY, int theEndX, int theEndY
 	mDestImage->DrawLineAA(aStartX, aStartY, aEndX, aEndY, mColor, mDrawMode);
 }
 
-void Graphics::DrawString(const PopWorkString &theString, int theX, int theY)
+void Graphics::DrawString(const PopString &theString, int theX, int theY)
 {
 	if (mFont != nullptr)
 		mFont->DrawString(this, theX, theY, theString, mColor, mClipRect);
@@ -992,7 +992,7 @@ void Graphics::SetScale(float theScaleX, float theScaleY, float theOrigX, float 
 	mScaleOrigY = theOrigY + mTransY;
 }
 
-int Graphics::StringWidth(const PopWorkString &theString)
+int Graphics::StringWidth(const PopString &theString)
 {
 	return mFont->StringWidth(theString);
 }
@@ -1090,7 +1090,7 @@ void Graphics::DrawImageCel(Image *theImageStrip, const Rect &theDestRect, int t
 	DrawImage(theImageStrip, theDestRect, aSrcRect);
 }
 
-int Graphics::WriteString(const PopWorkString &theString, int theX, int theY, int theWidth, int theJustification,
+int Graphics::WriteString(const PopString &theString, int theX, int theY, int theWidth, int theJustification,
 						  bool drawString, int theOffset, int theLength, int theOldColor)
 {
 	Font *aFont = GetFont();
@@ -1118,7 +1118,7 @@ int Graphics::WriteString(const PopWorkString &theString, int theX, int theY, in
 	else
 		theLength = theOffset + theLength;
 
-	PopWorkString aString;
+	PopString aString;
 	int aXOffset = 0;
 
 	for (int i = theOffset; i < theLength; i++)
@@ -1144,7 +1144,7 @@ int Graphics::WriteString(const PopWorkString &theString, int theX, int theY, in
 				{
 					for (int aDigitNum = 0; aDigitNum < 6; aDigitNum++)
 					{
-						PopWorkChar aChar = theString[i + aDigitNum + 1];
+						PopChar aChar = theString[i + aDigitNum + 1];
 						int aVal = 0;
 
 						if ((aChar >= _S('0')) && (aChar <= _S('9')))
@@ -1185,7 +1185,7 @@ int Graphics::WriteString(const PopWorkString &theString, int theX, int theY, in
 	return aXOffset;
 }
 
-static int WriteWordWrappedHelper(Graphics *g, const PopWorkString &theString, int theX, int theY, int theWidth,
+static int WriteWordWrappedHelper(Graphics *g, const PopString &theString, int theX, int theY, int theWidth,
 								  int theJustification, bool drawString, int theOffset, int theLength, int theOldColor,
 								  int theMaxChars)
 {
@@ -1200,7 +1200,7 @@ static int WriteWordWrappedHelper(Graphics *g, const PopWorkString &theString, i
 						  theOldColor);
 }
 
-int Graphics::WriteWordWrapped(const Rect &theRect, const PopWorkString &theLine, int theLineSpacing,
+int Graphics::WriteWordWrapped(const Rect &theRect, const PopString &theLine, int theLineSpacing,
 							   int theJustification, int *theMaxWidth, int theMaxChars, int *theLastWidth)
 {
 	Color anOrigColor = GetColor();
@@ -1218,12 +1218,12 @@ int Graphics::WriteWordWrapped(const Rect &theRect, const PopWorkString &theLine
 	if (theLineSpacing == -1)
 		theLineSpacing = aFont->GetLineSpacing();
 
-	PopWorkString aCurString;
+	PopString aCurString;
 	ulong aCurPos = 0;
 	int aLineStartPos = 0;
 	int aCurWidth = 0;
-	PopWorkChar aCurChar = 0;
-	PopWorkChar aPrevChar = 0;
+	PopChar aCurChar = 0;
+	PopChar aPrevChar = 0;
 	int aSpacePos = -1;
 	int aMaxWidth = 0;
 	int anIndentX = 0;
@@ -1361,12 +1361,12 @@ int Graphics::WriteWordWrapped(const Rect &theRect, const PopWorkString &theLine
 	return aYOffset + aFont->GetDescent() - theLineSpacing;
 }
 
-int Graphics::DrawStringColor(const PopWorkString &theLine, int theX, int theY, int theOldColor)
+int Graphics::DrawStringColor(const PopString &theLine, int theX, int theY, int theOldColor)
 {
 	return WriteString(theLine, theX, theY, -1, -1, true, 0, -1, theOldColor);
 }
 
-int Graphics::DrawStringWordWrapped(const PopWorkString &theLine, int theX, int theY, int theWrapWidth,
+int Graphics::DrawStringWordWrapped(const PopString &theLine, int theX, int theY, int theWrapWidth,
 									int theLineSpacing, int theJustification, int *theMaxWidth)
 {
 	int aYOffset = mFont->GetAscent() - mFont->GetAscentPadding();
@@ -1375,7 +1375,7 @@ int Graphics::DrawStringWordWrapped(const PopWorkString &theLine, int theX, int 
 	return WriteWordWrapped(aRect, theLine, theLineSpacing, theJustification, theMaxWidth);
 }
 
-int Graphics::GetWordWrappedHeight(int theWidth, const PopWorkString &theLine, int theLineSpacing, int *theMaxWidth)
+int Graphics::GetWordWrappedHeight(int theWidth, const PopString &theLine, int theLineSpacing, int *theMaxWidth)
 {
 	Graphics aTestG;
 	aTestG.SetFont(mFont);

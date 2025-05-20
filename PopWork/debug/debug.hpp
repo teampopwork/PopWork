@@ -16,8 +16,8 @@ void PopWorkTrace(const char *theStr);
 #define POPWORK_TRACE(theStr)
 #endif
 
-void PopWorkTraceFmt(const PopWorkChar *fmt, ...);
-void OutputDebug(const PopWorkChar *fmt, ...);
+void PopWorkTraceFmt(const PopChar *fmt, ...);
+void OutputDebug(const PopChar *fmt, ...);
 
 #ifdef NDEBUG
 

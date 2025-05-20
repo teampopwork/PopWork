@@ -10,7 +10,7 @@
 namespace PopWork
 {
 
-typedef std::vector<PopWorkString> PopWorkStringVector;
+typedef std::vector<PopString> PopStringVector;
 typedef std::vector<Color> ColorVector;
 
 class ScrollbarWidget;
@@ -43,7 +43,7 @@ class ListWidget : public Widget, public ScrollListener
 	ScrollbarWidget *mScrollbar;
 	int mJustify;
 
-	PopWorkStringVector mLines;
+	PopStringVector mLines;
 	ColorVector mLineColors;
 	double mPosition;
 	double mPageSize;
@@ -68,15 +68,15 @@ class ListWidget : public Widget, public ScrollListener
 
 	virtual void RemovedFromManager(WidgetManager *theManager);
 
-	virtual PopWorkString GetSortKey(int theIdx);
+	virtual PopString GetSortKey(int theIdx);
 	virtual void Sort(bool ascending);
-	virtual PopWorkString GetStringAt(int theIdx);
+	virtual PopString GetStringAt(int theIdx);
 	virtual void Resize(int theX, int theY, int theWidth, int theHeight);
-	virtual int AddLine(const PopWorkString &theLine, bool alphabetical);
-	virtual void SetLine(int theIdx, const PopWorkString &theString);
+	virtual int AddLine(const PopString &theLine, bool alphabetical);
+	virtual void SetLine(int theIdx, const PopString &theString);
 	virtual int GetLineCount();
-	virtual int GetLineIdx(const PopWorkString &theLine);
-	virtual void SetColor(const PopWorkString &theLine, const Color &theColor);
+	virtual int GetLineIdx(const PopString &theLine);
+	virtual void SetColor(const PopString &theLine, const Color &theColor);
 	virtual void SetColor(int theIdx, const Color &theColor);
 	virtual void SetLineColor(int theIdx, const Color &theColor);
 	virtual void RemoveLine(int theIdx);

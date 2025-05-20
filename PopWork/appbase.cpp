@@ -291,11 +291,11 @@ AppBase::~AppBase()
 					SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
 														  {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "No"}};
 
-					std::string aTitle = PopWorkStringToStringFast(
-						StringToPopWorkStringFast(mCompanyName) + _S(" ") +
+					std::string aTitle = PopStringToStringFast(
+						StringToPopStringFast(mCompanyName) + _S(" ") +
 						GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
-					std::string aMessage = PopWorkStringToStringFast(
+					std::string aMessage = PopStringToStringFast(
 						GetString("HARDWARE_ACCEL_SWITCHED_ON",
 								  _S("Hardware Acceleration was switched on during this session.\n")
 									  _S("If this resulted in slower performance, it should be switched off.\n")
@@ -335,14 +335,14 @@ AppBase::~AppBase()
 			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
 		};
 
-		std::string aMessage = PopWorkStringToStringFast(
+		std::string aMessage = PopStringToStringFast(
 			GetString("HARDWARE_ACCEL_NOT_WORKING",
 					  _S("Hardware Acceleration may not have been working correctly during this session.\r\n")
 						  _S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
 							  _S("Would you like to keep Hardware Acceleration switched on?")));
 
-		std::string aTitle = PopWorkStringToStringFast(
-			StringToPopWorkStringFast(mCompanyName) + _S(" ") +
+		std::string aTitle = PopStringToStringFast(
+			StringToPopStringFast(mCompanyName) + _S(" ") +
 			GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
 		SDL_MessageBoxData messageBoxData = {
@@ -410,16 +410,16 @@ bool AppBase::AppCanRestore()
 	return !mIsDisabled;
 }
 
-Dialog *AppBase::NewDialog(int theDialogId, bool isModal, const PopWorkString &theDialogHeader,
-						   const PopWorkString &theDialogLines, const PopWorkString &theDialogFooter, int theButtonMode)
+Dialog *AppBase::NewDialog(int theDialogId, bool isModal, const PopString &theDialogHeader,
+						   const PopString &theDialogLines, const PopString &theDialogFooter, int theButtonMode)
 {
 	Dialog *aDialog =
 		new Dialog(nullptr, nullptr, theDialogId, isModal, theDialogHeader, theDialogLines, theDialogFooter, theButtonMode);
 	return aDialog;
 }
 
-Dialog *AppBase::DoDialog(int theDialogId, bool isModal, const PopWorkString &theDialogHeader,
-						  const PopWorkString &theDialogLines, const PopWorkString &theDialogFooter, int theButtonMode)
+Dialog *AppBase::DoDialog(int theDialogId, bool isModal, const PopString &theDialogHeader,
+						  const PopString &theDialogLines, const PopString &theDialogFooter, int theButtonMode)
 {
 	KillDialog(theDialogId);
 
@@ -855,44 +855,44 @@ void AppBase::DumpProgramInfo()
 		aDumpStream << "<TD ALIGN=RIGHT>" << aStr << "</TD>" << std::endl;
 
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(
+					<< PopStringToString(
 						   ((aBitsMemory != 0) ? _S("mBits<BR>") + CommaSeperate(aBitsMemory) : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(((aPalletizedMemory != 0)
+					<< PopStringToString(((aPalletizedMemory != 0)
 												  ? _S("Palletized<BR>") + CommaSeperate(aPalletizedMemory)
 												  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(
+					<< PopStringToString(
 						   ((aSurfaceMemory != 0) ? _S("DDSurface<BR>") + CommaSeperate(aSurfaceMemory) : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(((aMemoryImage->mD3DData != nullptr)
-												  ? _S("Texture<BR>") + StringToPopWorkString(aTextureFormatName) +
+					<< PopStringToString(((aMemoryImage->mD3DData != nullptr)
+												  ? _S("Texture<BR>") + StringToPopString(aTextureFormatName) +
 														_S("<BR>") + CommaSeperate(aTextureMemory)
 												  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mIsVolatile) ? _S("Volatile") : _S("&nbsp;")))
+		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mIsVolatile) ? _S("Volatile") : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mForcedMode) ? _S("Forced") : _S("&nbsp;")))
+		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mForcedMode) ? _S("Forced") : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mHasAlpha) ? _S("HasAlpha") : _S("&nbsp;")))
+		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mHasAlpha) ? _S("HasAlpha") : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopWorkStringToString(((aMemoryImage->mHasTrans) ? _S("HasTrans") : _S("&nbsp;")))
+		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mHasTrans) ? _S("HasTrans") : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(((aNativeAlphaMemory != 0)
+					<< PopStringToString(((aNativeAlphaMemory != 0)
 												  ? _S("NativeAlpha<BR>") + CommaSeperate(aNativeAlphaMemory)
 												  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(
+					<< PopStringToString(
 						   ((aRLAlphaMemory != 0) ? _S("RLAlpha<BR>") + CommaSeperate(aRLAlphaMemory) : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopWorkStringToString(((aRLAdditiveMemory != 0)
+					<< PopStringToString(((aRLAdditiveMemory != 0)
 												  ? _S("RLAdditive<BR>") + CommaSeperate(aRLAdditiveMemory)
 												  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
@@ -938,18 +938,18 @@ void AppBase::DumpProgramInfo()
 	}
 
 	aDumpStream << "<TD>Totals</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalMemorySize)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalBitsMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalPalletizedMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalSurfaceMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalTextureMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalMemorySize)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalBitsMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalPalletizedMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalSurfaceMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalTextureMemory)) << "</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalNativeAlphaMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalRLAlphaMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopWorkStringToString(CommaSeperate(aTotalRLAdditiveMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalNativeAlphaMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalRLAlphaMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalRLAdditiveMemory)) << "</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 
 	aDumpStream << "</TABLE></CENTER></BODY></HTML>" << std::endl;
@@ -1049,10 +1049,10 @@ void AppBase::WriteToRegistry()
 	RegistryWriteBoolean("WaitForVSync", mWaitForVSync);
 }
 
-bool AppBase::RegistryEraseKey(const PopWorkString &_theKeyName)
+bool AppBase::RegistryEraseKey(const PopString &_theKeyName)
 {
 	std::filesystem::path basePath = GetAppDataFolder();
-	std::filesystem::path keyPath = basePath / PopWorkStringToString(_theKeyName) / "registry.json";
+	std::filesystem::path keyPath = basePath / PopStringToString(_theKeyName) / "registry.json";
 
 	if (std::filesystem::exists(keyPath))
 	{
@@ -1064,11 +1064,11 @@ bool AppBase::RegistryEraseKey(const PopWorkString &_theKeyName)
 	return true;
 }
 
-void AppBase::RegistryEraseValue(const PopWorkString &_theValueName)
+void AppBase::RegistryEraseValue(const PopString &_theValueName)
 {
 	// H522
 	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
-	std::string keyName = PopWorkStringToString(_theValueName);
+	std::string keyName = PopStringToString(_theValueName);
 
 	if (!std::filesystem::exists(configPath))
 		return;
@@ -1305,7 +1305,7 @@ bool AppBase::RegistryReadData(const std::string &theKey, uchar *theValue, ulong
 void AppBase::ReadFromRegistry()
 {
 	mReadFromRegistry = true;
-	mRegKey = PopWorkStringToString(GetString("RegistryKey", StringToPopWorkString(mRegKey)));
+	mRegKey = PopStringToString(GetString("RegistryKey", StringToPopString(mRegKey)));
 
 	if (mRegKey.length() == 0)
 		return;
@@ -1576,7 +1576,7 @@ static void CalculateFPS()
 
 		Graphics aDrawG(gFPSImage);
 		aDrawG.SetFont(&aFont);
-		PopWorkString aFPS = StrFormat(_S("FPS: %d"), gFPSDisplay);
+		PopString aFPS = StrFormat(_S("FPS: %d"), gFPSDisplay);
 		aDrawG.SetColor(Color(0, 0, 0));
 		aDrawG.FillRect(0, 0, gFPSImage->GetWidth(), gFPSImage->GetHeight());
 		aDrawG.SetColor(Color(255, 255, 255));
@@ -1604,7 +1604,7 @@ static void FPSDrawCoords(int theX, int theY)
 
 	Graphics aDrawG(gFPSImage);
 	aDrawG.SetFont(&aFont);
-	PopWorkString aFPS = StrFormat(_S("%d,%d"), theX, theY);
+	PopString aFPS = StrFormat(_S("%d,%d"), theX, theY);
 	aDrawG.SetColor(0x000000);
 	aDrawG.FillRect(0, 0, gFPSImage->GetWidth(), gFPSImage->GetHeight());
 	aDrawG.SetColor(0xFFFFFF);
@@ -1968,7 +1968,7 @@ void AppBase::Popup(const std::string &theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		mSDLInterface->MakeSimpleMessageBox(PopWorkStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(),
+		mSDLInterface->MakeSimpleMessageBox(PopStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(),
 											theString.c_str(), SDL_MESSAGEBOX_ERROR);
 	EndPopup();
 }
@@ -1983,9 +1983,9 @@ void AppBase::Popup(const std::wstring &theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		//::MessageBoxW(mHWnd, theString.c_str(), PopWorkStringToWString(GetString("FATAL_ERROR", _S("FATAL
+		//::MessageBoxW(mHWnd, theString.c_str(), PopStringToWString(GetString("FATAL_ERROR", _S("FATAL
 		//:ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
-		// mSDLInterface->MakeSimpleMessageBox(PopWorkStringToString(GetString("FATAL_ERROR", _S("FATAL
+		// mSDLInterface->MakeSimpleMessageBox(PopStringToString(GetString("FATAL_ERROR", _S("FATAL
 		// ERROR"))).c_str(), theString.c_str(), SDL_MESSAGEBOX_ERROR); readding after wstring is working properly
 		EndPopup();
 }
@@ -2092,19 +2092,19 @@ void AppBase::ShowMemoryUsage()
 
 	aStr += StrFormat("Num Images: %d\r\n",(int)mMemoryImageSet.size());
 	aStr += StrFormat("Num Sounds: %d\r\n",mSoundManager->GetNumSounds());
-	aStr += StrFormat("Video Memory: %s/%s KB\r\n", PopWorkStringToString(CommaSeperate((aTotal-aFree)/1024)).c_str(),
-	PopWorkStringToString(CommaSeperate(aTotal/1024)).c_str()); aStr += StrFormat("Texture Memory: %s
+	aStr += StrFormat("Video Memory: %s/%s KB\r\n", PopStringToString(CommaSeperate((aTotal-aFree)/1024)).c_str(),
+	PopStringToString(CommaSeperate(aTotal/1024)).c_str()); aStr += StrFormat("Texture Memory: %s
 	KB\r\n",CommaSeperate(aTextureMemory/1024).c_str());
 
 	FormatUsage aUsage = aFormatMap[PixelFormat_A8R8G8B8];
 	aStr += StrFormat("A8R8G8B8: %d - %s
-	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
+	KB\r\n",aUsage.first,PopStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
 	aFormatMap[PixelFormat_A4R4G4B4]; aStr += StrFormat("A4R4G4B4: %d - %s
-	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
+	KB\r\n",aUsage.first,PopStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
 	aFormatMap[PixelFormat_R5G6B5]; aStr += StrFormat("R5G6B5: %d - %s
-	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
+	KB\r\n",aUsage.first,PopStringToString(CommaSeperate(aUsage.second/1024)).c_str()); aUsage =
 	aFormatMap[PixelFormat_Palette8]; aStr += StrFormat("Palette8: %d - %s
-	KB\r\n",aUsage.first,PopWorkStringToString(CommaSeperate(aUsage.second/1024)).c_str());
+	KB\r\n",aUsage.first,PopStringToString(CommaSeperate(aUsage.second/1024)).c_str());
 
 	MsgBox(aStr,"Video Stats",MB_OK);
 	mLastTime = SDL_GetTicks();
@@ -2344,9 +2344,9 @@ bool AppBase::ProcessDeferredMessages(bool singleMessage)
 		case SDL_EVENT_TEXT_INPUT: {
 			mLastUserInputTick = mLastTimerTime;
 
-			PopWorkChar aChar = event.text.text[0]; // assumes UTF-8 safe
+			PopChar aChar = event.text.text[0]; // assumes UTF-8 safe
 
-			mWidgetManager->KeyChar((PopWorkChar)aChar);
+			mWidgetManager->KeyChar((PopChar)aChar);
 			break;
 		}
 		}
@@ -3115,7 +3115,7 @@ bool AppBase::LoadProperties(const std::string &theFileName, bool required, bool
 		else
 		{
 			Popup(GetString("UNABLE_OPEN_PROPERTIES", _S("Unable to open properties file ")) +
-				  StringToPopWorkString(theFileName));
+				  StringToPopString(theFileName));
 			return false;
 		}
 	}
@@ -3124,7 +3124,7 @@ bool AppBase::LoadProperties(const std::string &theFileName, bool required, bool
 		if (!CheckSignature(aBuffer, theFileName))
 		{
 			Popup(GetString("PROPERTIES_SIG_FAILED", _S("Signature check failed on ")) +
-				  StringToPopWorkString(theFileName + "'"));
+				  StringToPopString(theFileName + "'"));
 			return false;
 		}
 	}
@@ -3223,23 +3223,23 @@ double AppBase::GetDouble(const std::string &theId, double theDefault)
 		return theDefault;
 }
 
-PopWorkString AppBase::GetString(const std::string &theId)
+PopString AppBase::GetString(const std::string &theId)
 {
 	StringWStringMap::iterator anItr = mStringProperties.find(theId);
 	DBG_ASSERTE(anItr != mStringProperties.end());
 
 	if (anItr != mStringProperties.end())
-		return WStringToPopWorkString(anItr->second);
+		return WStringToPopString(anItr->second);
 	else
 		return _S("");
 }
 
-PopWorkString AppBase::GetString(const std::string &theId, const PopWorkString &theDefault)
+PopString AppBase::GetString(const std::string &theId, const PopString &theDefault)
 {
 	StringWStringMap::iterator anItr = mStringProperties.find(theId);
 
 	if (anItr != mStringProperties.end())
-		return WStringToPopWorkString(anItr->second);
+		return WStringToPopString(anItr->second);
 	else
 		return theDefault;
 }
@@ -3408,7 +3408,7 @@ void AppBase::HandleCmdLineParam(const std::string &theParamName, const std::str
 	else
 	{
 		Popup(GetString("INVALID_COMMANDLINE_PARAM", _S("Invalid command line parameter: ")) +
-			  StringToPopWorkString(theParamName));
+			  StringToPopString(theParamName));
 		DoExit(0);
 	}
 }
@@ -4239,7 +4239,7 @@ void AppBase::Set3DAcclerated(bool is3D, bool reinit)
 		if (aResult != SDLInterface::RESULT_OK)
 		{
 			//	Popup(GetString("FAILED_INIT_DIRECTDRAW", _S("Failed to initialize DirectDraw: ")) +
-			//StringToPopWorkString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
+			//StringToPopString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
 			DoExit(1);
 		}
 

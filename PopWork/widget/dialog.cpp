@@ -9,18 +9,18 @@
 
 using namespace PopWork;
 
-PopWorkString PopWork::DIALOG_YES_STRING = _S("YES");
-PopWorkString PopWork::DIALOG_NO_STRING = _S("NO");
-PopWorkString PopWork::DIALOG_OK_STRING = _S("OK");
-PopWorkString PopWork::DIALOG_CANCEL_STRING = _S("CANCEL");
+PopString PopWork::DIALOG_YES_STRING = _S("YES");
+PopString PopWork::DIALOG_NO_STRING = _S("NO");
+PopString PopWork::DIALOG_OK_STRING = _S("OK");
+PopString PopWork::DIALOG_CANCEL_STRING = _S("CANCEL");
 
 static int gDialogColors[][3] = {{255, 255, 255}, {255, 255, 0},  {255, 255, 255}, {255, 255, 255}, {255, 255, 255},
 
 								 {80, 80, 80},	  {255, 255, 255}};
 
 Dialog::Dialog(Image *theComponentImage, Image *theButtonComponentImage, int theId, bool isModal,
-			   const PopWorkString &theDialogHeader, const PopWorkString &theDialogLines,
-			   const PopWorkString &theDialogFooter, int theButtonMode)
+			   const PopString &theDialogHeader, const PopString &theDialogLines,
+			   const PopString &theDialogFooter, int theButtonMode)
 {
 	mId = theId;
 	mResult = 0x7FFFFFFF;

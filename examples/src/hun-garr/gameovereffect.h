@@ -34,9 +34,9 @@ struct Explosion
 struct Letter
 {
 	int mRed;
-	PopWorkString mChar;
+	PopString mChar;
 
-	Letter(PopWorkString c)
+	Letter(PopString c)
 	{
 		mChar = c;
 		mRed = 0;
@@ -48,8 +48,8 @@ struct Letter
 //////////////////////////////////////////////////////////////////////////
 struct EndGameStats
 {
-	PopWorkString mFavoritePlanet; // We keep track of the planet
-	PopWorkString mFavoriteExport; // and export eaten most.
+	PopString mFavoritePlanet; // We keep track of the planet
+	PopString mFavoriteExport; // and export eaten most.
 	int mScore;
 	int mLevel;
 	int mNumPlanetsEaten;

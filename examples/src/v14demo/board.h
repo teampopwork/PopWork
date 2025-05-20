@@ -77,7 +77,7 @@ class Board : public Widget, public ButtonListener
 	//	using some sort of overlay widget as well.
 	//////////////////////////////////////////////////////////////////////////
 	void DrawOverlay(Graphics *g);
-	virtual void KeyChar(PopWorkChar theChar);
+	virtual void KeyChar(PopChar theChar);
 
 	void SetFocusLost(bool f)
 	{

@@ -187,7 +187,7 @@ void Board::Draw(Graphics *g)
 	// can use a printf style function, StrFormat, which is defined in Common.h, to
 	// format strings. You might want to look at Common.h for some...common...and handy functions.
 	g->SetColor(Color(0, 255, 255));
-	PopWorkString myString = StrFormat(_S("You got %d points!"), 147);
+	PopString myString = StrFormat(_S("You got %d points!"), 147);
 	g->SetFont(mApp->mTextFont);
 	g->DrawString(myString, 10, 80);
 	g->SetColor(Color(0, 255, 0));

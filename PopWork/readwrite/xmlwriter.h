@@ -23,44 +23,44 @@ namespace PopWork
 class XMLWriter
 {
   protected:
-	PopWorkString mFileName;
-	PopWorkString mErrorText;
+	PopString mFileName;
+	PopString mErrorText;
 	int mLineNum;
 	FILE *mFile;
 	bool mHasFailed;
 	bool mAllowComments;
 	bool mOpenAttributes;
 
-	std::stack<PopWorkString> mSectionStack;
-	std::stack<PopWorkString> mWarningStack;
+	std::stack<PopString> mSectionStack;
+	std::stack<PopString> mWarningStack;
 
   protected:
 	bool CheckFileOpen();
-	bool ValidateElementNodeName(const PopWorkString &theNodeName);
-	void Fail(const PopWorkString &theErrorText);
-	void Warn(const PopWorkString &theWarning);
+	bool ValidateElementNodeName(const PopString &theNodeName);
+	void Fail(const PopString &theErrorText);
+	void Warn(const PopString &theWarning);
 	void Init();
 
   public:
 	XMLWriter();
 	virtual ~XMLWriter();
 
-	static bool AddAttribute(XMLElement *theElement, const PopWorkString &aAttributeKey,
-							 const PopWorkString &aAttributeValue);
-	bool WriteAttribute(const PopWorkString &aAttributeKey, const PopWorkString &aAttributeValue);
-	bool WriteAttribute(const PopWorkString &aAttributeKey, const float &aAttributeValue);
-	bool WriteAttribute(const PopWorkString &aAttributeKey, const int &aAttributeValue);
-	bool WriteAttribute(const PopWorkString &aAttributeKey);
-	void Comment(const PopWorkString &theComment);
-	bool StartElement(const PopWorkString &theElementName);
+	static bool AddAttribute(XMLElement *theElement, const PopString &aAttributeKey,
+							 const PopString &aAttributeValue);
+	bool WriteAttribute(const PopString &aAttributeKey, const PopString &aAttributeValue);
+	bool WriteAttribute(const PopString &aAttributeKey, const float &aAttributeValue);
+	bool WriteAttribute(const PopString &aAttributeKey, const int &aAttributeValue);
+	bool WriteAttribute(const PopString &aAttributeKey);
+	void Comment(const PopString &theComment);
+	bool StartElement(const PopString &theElementName);
 	bool StartElement(XMLElement *theElement);
 	bool StopElement();
-	bool WriteElementText(PopWorkString theText);
-	bool OpenFile(const PopWorkString &theFilename);
+	bool WriteElementText(PopString theText);
+	bool OpenFile(const PopString &theFilename);
 	bool CloseFile();
-	PopWorkString GetErrorText();
+	PopString GetErrorText();
 	int GetCurrentLineNum();
-	PopWorkString GetFileName();
+	PopString GetFileName();
 
 	inline void AllowComments(bool doAllow)
 	{

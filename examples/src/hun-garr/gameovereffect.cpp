@@ -315,7 +315,7 @@ void GameOverEffect::Draw(Graphics *g)
 		g->SetColor(Color::White);
 		int rightX = gAppBase->mWidth / 2;
 		int y = 100;
-		PopWorkString s;
+		PopString s;
 		int strWidth;
 
 		s = _S("FINAL SCORE: ");

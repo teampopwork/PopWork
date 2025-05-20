@@ -28,7 +28,7 @@ class OpenALSoundManager : public SoundManager
 	int mBasePans[MAX_SOURCE_SOUNDS];
 	OpenALSoundInstance *mPlayingSounds[MAX_CHANNELS];
 	double mMasterVolume;
-	DWORD mLastReleaseTick;
+	uint32_t mLastReleaseTick;
 
 	// hack
 	ALCdevice *mALDeviceD;

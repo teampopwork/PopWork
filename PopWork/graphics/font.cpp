@@ -51,23 +51,23 @@ int Font::GetLineSpacing()
 	return mHeight + mLineSpacingOffset;
 }
 
-int Font::StringWidth(const PopWorkString &theString)
+int Font::StringWidth(const PopString &theString)
 {
 	return 0;
 }
 
-int Font::CharWidth(PopWorkChar theChar)
+int Font::CharWidth(PopChar theChar)
 {
-	PopWorkString aString(1, theChar);
+	PopString aString(1, theChar);
 	return StringWidth(aString);
 }
 
-int Font::CharWidthKern(PopWorkChar theChar, PopWorkChar thePrevChar)
+int Font::CharWidthKern(PopChar theChar, PopChar thePrevChar)
 {
 	return CharWidth(theChar);
 }
 
-void Font::DrawString(Graphics *g, int theX, int theY, const PopWorkString &theString, const Color &theColor,
+void Font::DrawString(Graphics *g, int theX, int theY, const PopString &theString, const Color &theColor,
 					  const Rect &theClipRect)
 {
 }

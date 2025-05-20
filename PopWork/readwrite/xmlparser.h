@@ -19,7 +19,7 @@ class XMLParam
 	std::string mValue;
 };
 
-typedef std::map<PopWorkString, PopWorkString> XMLParamMap;
+typedef std::map<PopString, PopString> XMLParamMap;
 typedef std::list<XMLParamMap::iterator> XMLParamMapIteratorList;
 
 typedef std::vector<wchar_t> XMLParserBuffer;
@@ -39,9 +39,9 @@ class XMLElement
 
   public:
 	int mType;
-	PopWorkString mSection;
-	PopWorkString mValue;
-	PopWorkString mInstruction;
+	PopString mSection;
+	PopString mValue;
+	PopString mInstruction;
 	XMLParamMap mAttributes;
 	XMLParamMapIteratorList mAttributeIteratorList; // stores attribute iterators in their original order
 };
@@ -50,23 +50,23 @@ class XMLParser
 {
   protected:
 	std::string mFileName;
-	PopWorkString mErrorText;
+	PopString mErrorText;
 	int mLineNum;
 	PFILE *mFile;
 	bool mHasFailed;
 	bool mAllowComments;
 	XMLParserBuffer mBufferedText;
-	PopWorkString mSection;
+	PopString mSection;
 	bool (XMLParser::*mGetCharFunc)(wchar_t *theChar, bool *error);
 	bool mForcedEncodingType;
 	bool mFirstChar;
 	bool mByteSwap;
 
   protected:
-	void Fail(const PopWorkString &theErrorText);
+	void Fail(const PopString &theErrorText);
 	void Init();
 
-	bool AddAttribute(XMLElement *theElement, const PopWorkString &aAttributeKey, const PopWorkString &aAttributeValue);
+	bool AddAttribute(XMLElement *theElement, const PopString &aAttributeKey, const PopString &aAttributeValue);
 
 	bool GetAsciiChar(wchar_t *theChar, bool *error);
 	bool GetUTF8Char(wchar_t *theChar, bool *error);
@@ -93,7 +93,7 @@ class XMLParser
 	void SetStringSource(const std::wstring &theString);
 	void SetStringSource(const std::string &theString);
 	bool NextElement(XMLElement *theElement);
-	PopWorkString GetErrorText();
+	PopString GetErrorText();
 	int GetCurrentLineNum();
 	std::string GetFileName();
 

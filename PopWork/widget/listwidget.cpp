@@ -49,9 +49,9 @@ void ListWidget::RemovedFromManager(WidgetManager *theManager)
 		mListListener->ListClosed(mId);
 }
 
-PopWorkString ListWidget::GetSortKey(int theIdx)
+PopString ListWidget::GetSortKey(int theIdx)
 {
-	PopWorkString aString = mLines[theIdx];
+	PopString aString = mLines[theIdx];
 
 	while (aString.length() < (ulong)mMaxNumericPlaces)
 		aString = _S("0") + aString;
@@ -73,7 +73,7 @@ void ListWidget::Sort(bool ascending)
 {
 	int aCount = mLines.size();
 	int *aMap = new int[aCount];
-	PopWorkString *aKeys = new PopWorkString[aCount];
+	PopString *aKeys = new PopString[aCount];
 
 	int i;
 	for (i = 0; i < aCount; i++)
@@ -92,7 +92,7 @@ void ListWidget::Sort(bool ascending)
 				aMap[j] = aMap[j + 1];
 				aMap[j + 1] = aSwapInt;
 
-				PopWorkString aSwapKey = aKeys[j];
+				PopString aSwapKey = aKeys[j];
 				aKeys[j] = aKeys[j + 1];
 				aKeys[j + 1] = aSwapKey;
 			}
@@ -104,7 +104,7 @@ void ListWidget::Sort(bool ascending)
 
 	while (aListWidget != NULL)
 	{
-		PopWorkStringVector aNewLines;
+		PopStringVector aNewLines;
 		ColorVector aNewLineColors;
 
 		for (int i = 0; i < aCount; i++)
@@ -125,7 +125,7 @@ void ListWidget::Sort(bool ascending)
 	delete aKeys;
 }
 
-PopWorkString ListWidget::GetStringAt(int theIdx)
+PopString ListWidget::GetStringAt(int theIdx)
 {
 	return mLines[theIdx];
 }
@@ -146,7 +146,7 @@ void ListWidget::Resize(int theX, int theY, int theWidth, int theHeight)
 		mScrollbar->SetPageSize(aPageSize);
 }
 
-int ListWidget::AddLine(const PopWorkString &theLine, bool alphabetical)
+int ListWidget::AddLine(const PopString &theLine, bool alphabetical)
 {
 	int anIdx = -1;
 	bool inserted = false;
@@ -210,7 +210,7 @@ int ListWidget::AddLine(const PopWorkString &theLine, bool alphabetical)
 	return anIdx;
 }
 
-void ListWidget::SetLine(int theIdx, const PopWorkString &theString)
+void ListWidget::SetLine(int theIdx, const PopString &theString)
 {
 	mLines[theIdx] = theString;
 	MarkDirty();
@@ -221,7 +221,7 @@ int ListWidget::GetLineCount()
 	return mLines.size();
 }
 
-int ListWidget::GetLineIdx(const PopWorkString &theLine)
+int ListWidget::GetLineIdx(const PopString &theLine)
 {
 	for (ulong i = 0; i < mLines.size(); i++)
 		if (popstrcmp(mLines[i].c_str(), theLine.c_str()) == 0)
@@ -230,7 +230,7 @@ int ListWidget::GetLineIdx(const PopWorkString &theLine)
 	return -1;
 }
 
-void ListWidget::SetColor(const PopWorkString &theLine, const Color &theColor)
+void ListWidget::SetColor(const PopString &theLine, const Color &theColor)
 {
 	int anIdx = GetLineIdx(theLine);
 	SetLineColor(anIdx, theColor);
@@ -377,7 +377,7 @@ void ListWidget::Draw(Graphics *g)
 		else
 			aClipG.SetColor(mLineColors[i]);
 
-		PopWorkString aString = mLines[i];
+		PopString aString = mLines[i];
 		int aFontX;
 		switch (mJustify)
 		{

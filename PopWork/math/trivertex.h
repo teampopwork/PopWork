@@ -13,7 +13,7 @@ class TriVertex
 {
   public:
 	float x, y, u, v;
-	DWORD color; // ARGB (0 = use color specified in function call)
+	uint32_t color; // ARGB (0 = use color specified in function call)
 
   public:
 	TriVertex()
@@ -28,7 +28,7 @@ class TriVertex
 	{
 		color = 0;
 	}
-	TriVertex(float theX, float theY, float theU, float theV, DWORD theColor)
+	TriVertex(float theX, float theY, float theU, float theV, uint32_t theColor)
 		: x(theX), y(theY), u(theU), v(theV), color(theColor)
 	{
 	}

@@ -16,7 +16,7 @@ GameApp::GameApp()
 {
 	mProdName = "Hun-garr Needs Planets!";
 	mProductVersion = "1.0";
-	mTitle = StringToPopWorkStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
 	mRegKey = "PopCap/PopWork/Hungarr";
 
 	mWidth = 640;
@@ -210,8 +210,8 @@ Dialog *GameApp::NewDialog(int theDialogId, bool isModal, const std::string &the
 	// Rather than dupliate a lengthy explanation, check out the top of DemoDialog.cpp for a complete description
 	// of what all the parameters and functions are, in Demo5.
 	Dialog *d = new Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, theDialogId, isModal,
-						   StringToPopWorkStringFast(theDialogHeader), StringToPopWorkStringFast(theDialogLines),
-						   StringToPopWorkStringFast(theDialogFooter), theButtonMode);
+						   StringToPopStringFast(theDialogHeader), StringToPopStringFast(theDialogLines),
+						   StringToPopStringFast(theDialogFooter), theButtonMode);
 
 	d->SetButtonFont(FONT_DEFAULT);
 	d->SetLinesFont(FONT_DEFAULT);
