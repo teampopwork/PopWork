@@ -1,0 +1,32 @@
+#ifndef __SCROLLBUTTONWIDGET_HPP__
+#define __SCROLLBUTTONWIDGET_HPP__
+#ifdef _WIN32
+#pragma once
+#endif
+
+#include "buttonwidget.hpp"
+
+namespace PopWork
+{
+
+class ButtonListener;
+
+class ScrollbuttonWidget : public ButtonWidget
+{
+  public:
+	bool mHorizontal;
+
+	// mType is a new way of doing things (1 = up, 2 = down, 3 = left, 4 = right).
+	// This overrides mHorizontal and mId.
+	int mType;
+
+  public:
+	ScrollbuttonWidget(int theId, ButtonListener *theButtonListener, int theType = 0);
+	virtual ~ScrollbuttonWidget();
+
+	void Draw(Graphics *g);
+};
+
+} // namespace PopWork
+
+#endif // __SCROLLBUTTONWIDGET_HPP__

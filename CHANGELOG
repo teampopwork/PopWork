@@ -1,0 +1,28 @@
+Changelog for PopWork version 1.4:
+
+General
+=======
+* Added the V14 demo, showcases: new blend modes (usage of SDL3), TTF text.
+* Added x64 support.
+* Fixed WideString.
+
+AppBase
+===========
+* Replaced the Windows API input parsing with SDL3 events.
+
+Graphics
+================================
+* Replaced the DirectX/DirectDraw rendering system with SDL3.
+
+Audio
+================================
+* Replaced DSound with OpenAL.
+
+BASS related:
+=============
+* Upgraded BASS to 2.4
+* Gave access to all functions in the library.
+
+ImageLib
+=============
+* removed JPEG2000 support.

@@ -1,89 +1,92 @@
-cmake_minimum_required(VERSION 3.18)
+# CMakeLists.txt
+cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(SexyAppFramework LANGUAGES C CXX ASM VERSION 1.4.0)
+project(PopWork LANGUAGES C CXX ASM VERSION 1.4.0)
 
 set(BUILD_SHARED_LIBS OFF)
 set(SDL_SHARED ON)
 
-function(copyDlls)
-    get_target_property(output_dir ${PROJECT_NAME} RUNTIME_OUTPUT_DIRECTORY)
-    file(COPY ${SDL3_DLL_PATH} DESTINATION ${output_dir})
-    file(COPY ${OPENAL_DLL_PATH} DESTINATION ${output_dir})
-    file(COPY ${BASS_LIB_PATH}/bass.dll DESTINATION ${output_dir})
-    message("Copied the DLLs into build folder.")
-endfunction()
+# temp workaround for me
+set(_Python3_EXECUTABLE_DEBUG "" CACHE FILEPATH "Python debug executable")
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+option(USE_WIDESTRING "Wide Strings" ON)
+option(BUILD_EXAMPLES "Build Examples" ON)
+option(CONSOLE "Show the console on Windows" ON)
+option(BUILD_TOOLS "Build Tools" ON)
 
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message (STATUS "Using x64")
+    message(STATUS "Using x64")
 	set(IS_64BIT true)
 else ()
     message (STATUS "Using x86")
 	set(IS_64BIT false)
 endif()
 
-option(WideStrings "Wide Strings" ON)
-if (${WideStrings})
+if(USE_WIDESTRING)
 	add_compile_definitions(_USE_WIDE_STRING)
 endif()
 
-option(BuildDemos "Build Demos" ON)
-
-option(CONSOLE "Show console on Windows" ON)
-
+if(CONSOLE AND WIN32)
+	add_compile_definitions(_CONSOLE_ON)
+endif()
 
 if (IS_64BIT)
     message (STATUS "Getting the x64 BASS path")
-	set(BASS_LIB_PATH ${CMAKE_SOURCE_DIR}/lib/Bass/x64)
+	set(BASS_LIB_PATH ${CMAKE_SOURCE_DIR}/external/bass/x64)
 	message (${BASS_LIB_PATH})
 else ()
     message (STATUS "Getting the x86 BASS path")
-	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/lib/Bass/x86)
+	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/external/bass/x86)
 	message (${BASS_LIB_PATH})
 endif()
 
-set(OPENAL_DLL_PATH "${CMAKE_BINARY_DIR}/_deps/openal-build/OpenAL32.dll")
+# external libraries
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build as DLL" FORCE)
+set(SDL_STATIC ON CACHE BOOL "" FORCE)
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(LIBTYPE "STATIC" CACHE BOOL "" FORCE) # OpenAL
+add_subdirectory(external/ogg EXCLUDE_FROM_ALL)
+add_subdirectory(external/vorbis EXCLUDE_FROM_ALL)
+add_subdirectory(external/SDL EXCLUDE_FROM_ALL)
+add_subdirectory(external/SDL_ttf EXCLUDE_FROM_ALL)
+add_subdirectory(external/openal EXCLUDE_FROM_ALL)
+add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
 
-set(SDL3_DLL_PATH "${CMAKE_BINARY_DIR}/_deps/sdl3-build/SDL3.dll")
+add_subdirectory(PopWork)
+if(BUILD_TOOLS AND WIN32) # we can't afford linux yet
+add_subdirectory(tools/PopPak)
+add_subdirectory(tools/PopPakPWE)
+endif()
 
-include(FetchContent)
+if(BUILD_EXAMPLES)
+	add_subdirectory(examples)
+endif()
 
-FetchContent_Declare(
-        SDL3
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL
-        # This will be a tag once SDL3 is released
-        GIT_TAG origin/main
+# djugjsfgufdgujdfgiujgdijfgifjdgidfjgifdgjfdgufdguifdg electr0gunner told me to add this
+if(BUILD_DEMOS OR BUILD_TOOLS)
+    set(demo_deps PopWork)
+
+    if(BUILD_DEMOS)
+        list(APPEND demo_deps
+            Demo1 Demo2 Demo3 Demo4 Demo5
+            Hun-garr V12Demo V14Demo XMLDemo
+        )
+    endif()
+
+    if(BUILD_DEMOS AND BUILD_TOOLS AND WIN32)
+        list(APPEND demo_deps PopPak PopPakPWE)
+    endif()
+
+    add_custom_target(alldemos ALL DEPENDS ${demo_deps})
+endif()
+
+if(NOT (DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true"))
+    add_custom_command(TARGET alldemos POST_BUILD
+        COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR} --config $<CONFIG>
     )
-FetchContent_MakeAvailable(SDL3)
-
-FetchContent_Declare(
-        SDL_TTF
-        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
-        # This will be a tag once SDL3 is released
-        GIT_TAG origin/main
-    )
-FetchContent_MakeAvailable(SDL_TTF)
-
-FetchContent_Declare(
-    openAL
-    GIT_REPOSITORY https://github.com/kcat/openal-soft
-    GIT_TAG        master
-)
-
-FetchContent_MakeAvailable(openAL)
-
-FetchContent_Declare(
-    miniAudio
-    GIT_REPOSITORY https://github.com/mackron/miniaudio
-    GIT_TAG        master
-)
-
-FetchContent_MakeAvailable(miniAudio)
-
-add_subdirectory(SexyAppFramework)
-
-if (${BuildDemos})
-	add_subdirectory(demos_src)
 endif()

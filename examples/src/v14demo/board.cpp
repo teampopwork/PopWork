@@ -1,0 +1,222 @@
+#include "board.hpp"
+#include "demowidget.hpp"
+#include "res.hpp"
+#include "v14demoapp.hpp"
+
+#include "PopWork/graphics/sysfont.hpp"
+#include "PopWork/graphics/font.hpp"
+#include "PopWork/graphics/graphics.hpp"
+#include "PopWork/widget/buttonwidget.hpp"
+#include "PopWork/graphics/HeaderFont/LiberationSansRegular.h"
+#include "PopWork/widget/widgetmanager.hpp"
+#include "PopWork/widget/dialog.hpp"
+#include "PopWork/misc/flags.hpp"
+#include "PopWork/imagelib/imagelib.hpp"
+#include "PopWork/graphics/memoryimage.hpp"
+#include "PopWork/math/matrix.hpp"
+#include "PopWork/math/trivertex.hpp"
+#include "PopWork/audio/soundmanager.hpp"
+#include "PopWork/audio/soundinstance.hpp"
+
+using namespace PopWork;
+
+Board::Board(V14DemoApp* theApp)
+{
+	mApp = theApp;
+
+	mWidgetFlagsMod.mAddFlags |= WIDGETFLAGS_MARK_DIRTY;
+
+	SysFont* aFont = new SysFont(mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 12, 0, false, false, false);
+
+	mDemoButton = new ButtonWidget(0, this);
+	mDemoButton->mLabel = _S("Demo Widget");
+	mDemoButton->SetFont(aFont);
+	mDemoButton->Resize(10, 10, 10 + aFont->StringWidth(mDemoButton->mLabel), 50);
+	AddWidget(mDemoButton);
+
+	mDialogButton = new ButtonWidget(1, this);
+	mDialogButton->mLabel = _S("Do Dialog");
+	mDialogButton->SetFont(FONT_DEFAULT);
+	int w = FONT_DEFAULT->StringWidth(mDialogButton->mLabel);
+	mDialogButton->Resize(mApp->mWidth - 20 - w, 10, w + 10, 50);
+	AddWidget(mDialogButton);
+
+	mMsgButton = new ButtonWidget(2, this);
+	mMsgButton->mLabel = _S("Create Message Box");
+	mMsgButton->SetFont(FONT_DEFAULT);
+	w = FONT_DEFAULT->StringWidth(mMsgButton->mLabel);
+	mMsgButton->Resize(mDemoButton->mX + 20 + mDemoButton->mWidth, 10, w + 10, 50);
+	AddWidget(mMsgButton);
+
+	mDemoWidget = NULL;
+
+	mRect = Rect(mApp->mWidth / 2 - 1, mApp->mHeight / 2 - 1, 2, 2);
+	mExpanding = true;
+	mMsgX = Rand() % (mApp->mWidth - 100);
+	mMsgY = Rand() % (mApp->mHeight - 100);
+	mLostFocus = false;
+
+	mCurtainWidth = 0;
+	mCurtainMode = CURTAIN_INACTIVE;
+
+	mDeferPriority = 0;
+}
+
+Board::~Board()
+{
+	RemoveAllWidgets();
+
+	delete mDemoButton;
+	delete mDialogButton;
+	delete mMsgButton;
+
+	if (mDemoWidget != NULL)
+		mApp->mWidgetManager->RemoveWidget(mDemoWidget);
+
+	delete mDemoWidget;
+}
+
+void Board::Update()
+{
+	Widget::Update();
+
+	if (mLostFocus)
+	{
+		if (mUpdateCnt % 100 == 0)
+		{
+			mMsgX = Rand() % (mApp->mWidth - 100);
+			mMsgY = Rand() % (mApp->mHeight - 100);
+
+			// Every second, we switch between drawing the overlay above or below
+			// the mDemoWidget object (assuming of course you have the widget on screen
+			//	when you lose focus).
+			mDeferPriority = mDeferPriority == 0 ? 2 : 0;
+		}
+	}
+	else
+	{		
+		// This just makes the rectangle in the middle grow/shrink. Nothing
+		// too crazy.
+		if (mExpanding)
+		{
+			mRect.mWidth += 2;
+			mRect.mHeight += 2;
+
+			if (mRect.mWidth >= mApp->mWidth)
+			{
+				mRect.mWidth = mApp->mWidth;
+				mExpanding = false;
+			}
+
+			if (mRect.mHeight >= mApp->mHeight)
+			{
+				mRect.mHeight = mApp->mHeight;
+				mExpanding = false;
+			}
+		}
+		else
+		{
+			mRect.mWidth -= 2;
+			mRect.mHeight -= 2;
+
+			if (mRect.mHeight <= 0)
+			{
+				mRect.mHeight = 0;
+				mExpanding = true;
+			}
+
+			if (mRect.mWidth <= 0)
+			{
+				mRect.mWidth = 0;
+				mExpanding = true;
+			}
+
+		}
+
+		mRect.mX = mApp->mWidth / 2 - mRect.mWidth / 2;
+		mRect.mY = mApp->mHeight / 2 - mRect.mHeight / 2;
+	}
+}
+
+void Board::Draw(Graphics* g)
+{
+	g->SetColor(Color::Black);
+	g->FillRect(0, 0, mWidth, mHeight);
+
+	g->SetColor(Color(255, 0, 0));
+	g->FillRect(mRect);
+
+	{
+		GraphicsAutoState auto_state(g);
+		g->SetScale(2.0f, 2.0f, 300.0f, 100.0f);
+		g->DrawImage(IMAGE_TESTPIXEL, 300, 100);
+	}
+
+
+	if (!mLostFocus)
+	{
+		GraphicsAutoState auto_state(g);
+		g->DrawImage(IMAGE_HUNGARR_LOGO, 10, 100);
+		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
+		g->SetColorizeImages(true);
+		g->SetColor(Color(mUpdateCnt % 128, mUpdateCnt % 255, mUpdateCnt % 64));
+		g->DrawImage(IMAGE_HUNGARR_LOGO, 10, 100);
+	}
+
+	if (mCurtainMode != CURTAIN_INACTIVE)
+	{
+		g->SetColor(Color(255, 255, 0));
+		g->FillRect(0, 0, mCurtainWidth, mHeight);
+		g->FillRect(mWidth - mCurtainWidth, 0, mCurtainWidth, mHeight);
+	}
+
+	if (mLostFocus)
+		DeferOverlay(mDeferPriority);
+
+}
+
+void Board::DrawOverlay(Graphics* g)
+{
+	g->SetColor(Color(0, 0, 255, 175));
+	g->FillRect(0, 0, mWidth, mHeight);
+
+	g->SetFont(FONT_DEFAULT);
+	g->SetColor(Color::White);
+	g->DrawString(_S("LOST FOCUS"), mMsgX, mMsgY);	
+
+	g->PushState();
+
+	g->SetColorizeImages(true);
+	g->SetColor(Color(0, 255, 255));
+}
+
+void Board::KeyChar(PopChar theChar)
+{
+
+}
+
+void Board::ButtonDepress(int id)
+{
+	if (id == mDemoButton->mId)
+	{
+		delete mDemoWidget;
+		mDemoWidget = new DemoWidget();
+		mApp->mWidgetManager->AddWidget(mDemoWidget);
+
+		FlagsMod flags;
+		flags.mRemoveFlags |= WIDGETFLAGS_ALLOW_MOUSE;
+		mApp->mWidgetManager->AddBaseModal(mDemoWidget, flags);
+	}
+	else if (id == mDialogButton->mId)
+	{
+
+		Dialog* d = mApp->DoDialog(100, true, _S("Fun Dialog"), _S("Line 1\nLine 2\nLine 3"), _S("Close!"), Dialog::BUTTONS_FOOTER);
+		d->SetButtonFont(FONT_DEFAULT);
+
+	}
+	else if (id == mMsgButton->mId)
+	{
+		mApp->MsgBox("This is a SDL3 Message Box", "Test", MsgBoxFlags::MsgBox_ABORTRETRYIGNORE);
+
+	}
+}

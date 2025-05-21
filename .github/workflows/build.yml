@@ -1,80 +1,111 @@
-name: Build SexyAppFramework
+# build.yml
+name: Build
 
 on:
   push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
-  # Windows x64
-  build_win64:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
-        with:
-            submodules: 'recursive'
-
-      - name: Set up CMake
-        uses: lukka/get-cmake@latest
-        with:
-            cmakeVersion: "3.25.0"
-
-      - name: Configure CMake project
-        run: |
-            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A x64
-
-      - name: Build project
-        run: cmake --build build --config Release
-  # Windows x32
-  build_win32:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.2.2
-        with:
-            submodules: 'recursive'
-
-      - name: Set up CMake
-        uses: lukka/get-cmake@latest
-        with:
-            cmakeVersion: "3.25.0"
-
-      - name: Configure CMake project
-        run: |
-            cmake -S . -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A Win32
-
-      - name: Build project
-        run: cmake --build build --config Release
-  # Linux
-  build-linux:
-    name: Build (Linux)
+  version:
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.extract.outputs.version }}
     steps:
-      - name: Checkout code
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Read VERSION
+        id: extract
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+  build:
+    needs: version
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2025
+            arch: x64
+            cmake_arch: x64
+          - os: windows-2025
+            arch: x86
+            cmake_arch: Win32
+          - os: ubuntu-latest
+            arch: x64
+            cmake_arch: native
+    name: Build ${{ matrix.arch }} on ${{ matrix.os }}
+    steps:
+      - name: Checkout
         uses: actions/checkout@v4.2.2
         with:
-          submodules: 'recursive'
+          submodules: recursive
 
       - name: Set up CMake
         uses: lukka/get-cmake@latest
         with:
-          cmakeVersion: "3.25.0"
+          cmakeVersion: latest
 
-      - name: Install dependencies
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential
+          sudo apt-get install -y \
+            build-essential libx11-dev libxcursor-dev libxi-dev \
+            libxrandr-dev libxext-dev libdrm-dev libgbm-dev \
+            libwayland-dev libegl1-mesa-dev libfreetype6-dev libharfbuzz-dev
 
-      - name: Configure project
+      - name: Configure
         run: |
-          cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            cmake -S . -B build_${{ matrix.arch }} -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -A ${{ matrix.cmake_arch }}
+          else
+            cmake -S . -B build_${{ matrix.arch }} -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+          fi
+        shell: bash
 
-      - name: Build project
-        run: cmake --build build --config Release
+      - name: Build
+        run: cmake --build build_${{ matrix.arch }} --config Release
+
+      - name: Install
+        run: cmake --install build_${{ matrix.arch }} --config Release
+
+      - name: Organize output
+        shell: bash
+        run: |
+          mkdir -p dist/examples dist/tools
+          cp VERSION dist/
+
+          if [[ -d examples/bin ]]; then
+           cp -r examples/bin/. dist/examples/
+          else
+           echo "warning: examples/bin does not exist."
+          fi
+
+          if [[ "$RUNNER_OS" == "Windows" && -d tools ]]; then
+            cp -r tools/*.exe dist/tools/ || echo "tools not found"
+          fi
+
+      - name: Upload dist directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/
+
+  release:
+    needs: [version, build]
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: artifacts/**/*

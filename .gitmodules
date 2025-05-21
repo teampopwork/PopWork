@@ -1,0 +1,18 @@
+[submodule "external/vorbis"]
+	path = external/vorbis
+	url = https://github.com/PvZDecompAssociation/vorbis
+[submodule "external/SDL"]
+	path = external/SDL
+	url = https://github.com/PvZDecompAssociation/SDL
+[submodule "external/SDL_ttf"]
+	path = external/SDL_ttf
+	url = https://github.com/PvZDecompAssociation/SDL_ttf
+[submodule "external/openal"]
+	path = external/openal
+	url = https://github.com/PvZDecompAssociation/openal-soft
+[submodule "external/ogg"]
+	path = external/ogg
+	url = https://github.com/PvZDecompAssociation/ogg
+[submodule "external/miniaudio"]
+	path = external/miniaudio
+	url = https://github.com/PvZDecompAssociation/miniaudio
