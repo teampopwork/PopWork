@@ -8,7 +8,7 @@
 #include "widget/dialog.hpp"
 #include "imagelib/imagelib.hpp"
 #include "audio/openalsoundmanager.hpp"
-#include "audio/openalsoundinterface.hpp"
+#include "audio/openalsoundinstance.hpp"
 #include "math/rect.hpp"
 #include "resources/propertiesparser.hpp"
 #include "debug/perftimer.hpp"

@@ -1,5 +1,5 @@
 ﻿#include "openalsoundmanager.hpp"
-#include "openalsoundinterface.hpp"
+#include "openalsoundinstance.hpp"
 #include "paklib/pakinterface.hpp"
 #include "common.hpp"
 #include "aureader.hpp"

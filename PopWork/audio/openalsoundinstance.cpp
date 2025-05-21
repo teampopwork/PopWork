@@ -1,4 +1,4 @@
-#include "openalsoundinterface.hpp"
+#include "openalsoundinstance.hpp"
 #include "openalsoundmanager.hpp"
 #include <complex.h>
 
