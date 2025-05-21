@@ -195,6 +195,12 @@ void Board::KeyChar(PopChar theChar)
 
 }
 
+void Board::KeyDown(KeyCode theKey)
+{
+	SDL_Log(GetKeyNameFromCode(theKey).c_str());
+}
+
+
 void Board::ButtonDepress(int id)
 {
 	if (id == mDemoButton->mId)

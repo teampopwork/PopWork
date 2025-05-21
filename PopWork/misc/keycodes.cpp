@@ -6,97 +6,84 @@ using namespace PopWork;
 
 typedef struct
 {
-	char mKeyName[MAX_KEYNAME_LEN];
+	SDL_Keycode mSDLKey;
 	KeyCode mKeyCode;
 } KeyNameEntry;
 
-KeyNameEntry aKeyCodeArray[] = {{"UNKNOWN", KEYCODE_UNKNOWN},
-								{"LBUTTON", KEYCODE_LBUTTON},
-								{"RBUTTON", KEYCODE_RBUTTON},
-								{"CANCEL", KEYCODE_CANCEL},
-								{"MBUTTON", KEYCODE_MBUTTON},
-								{"BACK", KEYCODE_BACK},
-								{"TAB", KEYCODE_TAB},
-								{"CLEAR", KEYCODE_CLEAR},
-								{"RETURN", KEYCODE_RETURN},
-								{"Left Shift", KEYCODE_SHIFT},
-								{"Left Ctrl", KEYCODE_CONTROL},
-								{"MENU", KEYCODE_MENU},
-								{"PAUSE", KEYCODE_PAUSE},
-								{"CAPITAL", KEYCODE_CAPITAL},
-								{"KANA", KEYCODE_KANA},
-								{"HANGEUL", KEYCODE_HANGEUL},
-								{"HANGUL", KEYCODE_HANGUL},
-								{"JUNJA", KEYCODE_JUNJA},
-								{"FINAL", KEYCODE_FINAL},
-								{"HANJA", KEYCODE_HANJA},
-								{"KANJI", KEYCODE_KANJI},
-								{"ESCAPE", KEYCODE_ESCAPE},
-								{"CONVERT", KEYCODE_CONVERT},
-								{"NONCONVERT", KEYCODE_NONCONVERT},
-								{"ACCEPT", KEYCODE_ACCEPT},
-								{"MODECHANGE", KEYCODE_MODECHANGE},
-								{"SPACE", KEYCODE_SPACE},
-								{"PRIOR", KEYCODE_PRIOR},
-								{"NEXT", KEYCODE_NEXT},
-								{"END", KEYCODE_END},
-								{"HOME", KEYCODE_HOME},
-								{"LEFT", KEYCODE_LEFT},
-								{"UP", KEYCODE_UP},
-								{"RIGHT", KEYCODE_RIGHT},
-								{"DOWN", KEYCODE_DOWN},
-								{"SELECT", KEYCODE_SELECT},
-								{"PRINT", KEYCODE_PRINT},
-								{"EXECUTE", KEYCODE_EXECUTE},
-								{"SNAPSHOT", KEYCODE_SNAPSHOT},
-								{"INSERT", KEYCODE_INSERT},
-								{"DELETE", KEYCODE_DELETE},
-								{"HELP", KEYCODE_HELP},
-								{"LWIN", KEYCODE_LWIN},
-								{"RWIN", KEYCODE_RWIN},
-								{"APPS", KEYCODE_APPS},
-								{"NUMPAD0", KEYCODE_NUMPAD0},
-								{"NUMPAD1", KEYCODE_NUMPAD1},
-								{"NUMPAD2", KEYCODE_NUMPAD2},
-								{"NUMPAD3", KEYCODE_NUMPAD3},
-								{"NUMPAD4", KEYCODE_NUMPAD4},
-								{"NUMPAD5", KEYCODE_NUMPAD5},
-								{"NUMPAD6", KEYCODE_NUMPAD6},
-								{"NUMPAD7", KEYCODE_NUMPAD7},
-								{"NUMPAD8", KEYCODE_NUMPAD8},
-								{"NUMPAD9", KEYCODE_NUMPAD9},
-								{"MULTIPLY", KEYCODE_MULTIPLY},
-								{"ADD", KEYCODE_ADD},
-								{"SEPARATOR", KEYCODE_SEPARATOR},
-								{"SUBTRACT", KEYCODE_SUBTRACT},
-								{"DECIMAL", KEYCODE_DECIMAL},
-								{"DIVIDE", KEYCODE_DIVIDE},
-								{"F1", KEYCODE_F1},
-								{"F2", KEYCODE_F2},
-								{"F3", KEYCODE_F3},
-								{"F4", KEYCODE_F4},
-								{"F5", KEYCODE_F5},
-								{"F6", KEYCODE_F6},
-								{"F7", KEYCODE_F7},
-								{"F8", KEYCODE_F8},
-								{"F9", KEYCODE_F9},
-								{"F10", KEYCODE_F10},
-								{"F11", KEYCODE_F11},
-								{"F12", KEYCODE_F12},
-								{"F13", KEYCODE_F13},
-								{"F14", KEYCODE_F14},
-								{"F15", KEYCODE_F15},
-								{"F16", KEYCODE_F16},
-								{"F17", KEYCODE_F17},
-								{"F18", KEYCODE_F18},
-								{"F19", KEYCODE_F19},
-								{"F20", KEYCODE_F20},
-								{"F21", KEYCODE_F21},
-								{"F22", KEYCODE_F22},
-								{"F23", KEYCODE_F23},
-								{"F24", KEYCODE_F24},
-								{"NUMLOCK", KEYCODE_NUMLOCK},
-								{"SCROLL", KEYCODE_SCROLL}};
+KeyNameEntry aKeyCodeArray[] = {{SDLK_UNKNOWN, KEYCODE_UNKNOWN},
+								{SDLK_CANCEL, KEYCODE_CANCEL},
+								{SDLK_BACKSPACE, KEYCODE_BACK},
+								{SDLK_TAB, KEYCODE_TAB},
+								{SDLK_CLEAR, KEYCODE_CLEAR},
+								{SDLK_RETURN, KEYCODE_RETURN},
+								{SDLK_LSHIFT, KEYCODE_SHIFT},
+								{SDLK_RSHIFT, KEYCODE_SHIFT},
+								{SDLK_LCTRL, KEYCODE_CONTROL},
+								{SDLK_RCTRL, KEYCODE_CONTROL},
+								{SDLK_MENU, KEYCODE_MENU},
+								{SDLK_PAUSE, KEYCODE_PAUSE},
+								{SDLK_CAPSLOCK, KEYCODE_CAPITAL},
+								{SDLK_ESCAPE, KEYCODE_ESCAPE},
+								{SDLK_SPACE, KEYCODE_SPACE},
+								{SDLK_PAGEUP, KEYCODE_PAGEUP},
+								{SDLK_PAGEDOWN, KEYCODE_PAGEDOWN},
+								{SDLK_END, KEYCODE_END},
+								{SDLK_HOME, KEYCODE_HOME},
+								{SDLK_LEFT, KEYCODE_LEFT},
+								{SDLK_UP, KEYCODE_UP},
+								{SDLK_RIGHT, KEYCODE_RIGHT},
+								{SDLK_DOWN, KEYCODE_DOWN},
+								{SDLK_SELECT, KEYCODE_SELECT},
+								{SDLK_EXECUTE, KEYCODE_EXECUTE},
+								{SDLK_PRINTSCREEN, KEYCODE_SNAPSHOT},
+								{SDLK_INSERT, KEYCODE_INSERT},
+								{SDLK_DELETE, KEYCODE_DELETE},
+								{SDLK_HELP, KEYCODE_HELP},
+								{SDLK_LGUI, KEYCODE_LWIN},
+								{SDLK_RGUI, KEYCODE_RWIN},
+								{SDLK_APPLICATION, KEYCODE_APPS},
+								{SDLK_KP_0, KEYCODE_NUMPAD0},
+								{SDLK_KP_1, KEYCODE_NUMPAD1},
+								{SDLK_KP_2, KEYCODE_NUMPAD2},
+								{SDLK_KP_3, KEYCODE_NUMPAD3},
+								{SDLK_KP_4, KEYCODE_NUMPAD4},
+								{SDLK_KP_5, KEYCODE_NUMPAD5},
+								{SDLK_KP_6, KEYCODE_NUMPAD6},
+								{SDLK_KP_7, KEYCODE_NUMPAD7},
+								{SDLK_KP_8, KEYCODE_NUMPAD8},
+								{SDLK_KP_9, KEYCODE_NUMPAD9},
+								{SDLK_KP_MULTIPLY, KEYCODE_MULTIPLY},
+								{SDLK_KP_PLUS, KEYCODE_ADD},
+								{SDLK_KP_DECIMAL, KEYCODE_SEPARATOR},
+								{SDLK_KP_MINUS, KEYCODE_SUBTRACT},
+								{SDLK_KP_DECIMAL, KEYCODE_DECIMAL},
+								{SDLK_KP_DIVIDE, KEYCODE_DIVIDE},
+								{SDLK_F1, KEYCODE_F1},
+								{SDLK_F2, KEYCODE_F2},
+								{SDLK_F3, KEYCODE_F3},
+								{SDLK_F4, KEYCODE_F4},
+								{SDLK_F5, KEYCODE_F5},
+								{SDLK_F6, KEYCODE_F6},
+								{SDLK_F7, KEYCODE_F7},
+								{SDLK_F8, KEYCODE_F8},
+								{SDLK_F9, KEYCODE_F9},
+								{SDLK_F10, KEYCODE_F10},
+								{SDLK_F11, KEYCODE_F11},
+								{SDLK_F12, KEYCODE_F12},
+								{SDLK_F13, KEYCODE_F13},
+								{SDLK_F14, KEYCODE_F14},
+								{SDLK_F15, KEYCODE_F15},
+								{SDLK_F16, KEYCODE_F16},
+								{SDLK_F17, KEYCODE_F17},
+								{SDLK_F18, KEYCODE_F18},
+								{SDLK_F19, KEYCODE_F19},
+								{SDLK_F20, KEYCODE_F20},
+								{SDLK_F21, KEYCODE_F21},
+								{SDLK_F22, KEYCODE_F22},
+								{SDLK_F23, KEYCODE_F23},
+								{SDLK_F24, KEYCODE_F24},
+								{SDLK_NUMLOCKCLEAR, KEYCODE_NUMLOCK},
+								{SDLK_SCROLLLOCK, KEYCODE_SCROLL}};
 
 KeyCode PopWork::GetKeyCodeFromSDLKeycode(const SDL_Keycode key)
 {
@@ -105,33 +92,19 @@ KeyCode PopWork::GetKeyCodeFromSDLKeycode(const SDL_Keycode key)
 
 KeyCode PopWork::GetKeyCodeFromName(const std::string &theKeyName)
 {
-	char aKeyName[MAX_KEYNAME_LEN];
-
 	if (theKeyName.length() >= MAX_KEYNAME_LEN - 1)
 		return KEYCODE_UNKNOWN;
 
-	strcpy(aKeyName, theKeyName.c_str());
-	char *s = aKeyName;
-	while (*s)
-	{
-		*s = toupper(*s);
-		s++;
-	}
-
 	if (theKeyName.length() == 1)
 	{
-		unsigned char aKeyNameChar = aKeyName[0];
+		unsigned char aKeyNameChar = theKeyName[0];
 
-		if ((aKeyNameChar >= (unsigned char)KEYCODE_ASCIIBEGIN) && (aKeyNameChar <= (unsigned char)KEYCODE_ASCIIEND))
+		if ((aKeyNameChar >= KEYCODE_ASCIIBEGIN) && (aKeyNameChar <= KEYCODE_ASCIIEND))
 			return (KeyCode)aKeyNameChar;
-
-		if ((aKeyNameChar >= ((unsigned char)KEYCODE_ASCIIBEGIN2) - 0x80) &&
-			(aKeyNameChar <= ((unsigned char)KEYCODE_ASCIIEND2) - 0x80))
-			return (KeyCode)(aKeyNameChar + 0x80);
 	}
 
 	for (int i = 0; i < sizeof(aKeyCodeArray) / sizeof(aKeyCodeArray[0]); i++)
-		if (strcmp(aKeyName, aKeyCodeArray[i].mKeyName) == 0)
+		if (strcmp(theKeyName.c_str(), SDL_GetKeyName(aKeyCodeArray[i].mSDLKey)) == 0)
 			return aKeyCodeArray[i].mKeyCode;
 
 	return KEYCODE_UNKNOWN;
@@ -145,15 +118,9 @@ const std::string PopWork::GetKeyNameFromCode(const KeyCode &theKeyCode)
 		return aStr;
 	}
 
-	if ((theKeyCode >= KEYCODE_ASCIIBEGIN2) && (theKeyCode <= KEYCODE_ASCIIEND2))
-	{
-		char aStr[2] = {((unsigned char)theKeyCode) - 0x80, 0};
-		return aStr;
-	}
-
 	for (int i = 0; i < sizeof(aKeyCodeArray) / sizeof(aKeyCodeArray[0]); i++)
 		if (theKeyCode == aKeyCodeArray[i].mKeyCode)
-			return aKeyCodeArray[i].mKeyName;
+			return SDL_GetKeyName(aKeyCodeArray[i].mSDLKey);
 
 	return "UNKNOWN";
 }

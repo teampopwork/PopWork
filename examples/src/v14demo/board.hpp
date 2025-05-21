@@ -51,6 +51,7 @@ class Board : public Widget, public ButtonListener
 	void Update();
 	void Draw(Graphics *g);
 	void ButtonDepress(int id);
+	void KeyDown(KeyCode theKey);
 
 	//////////////////////////////////////////////////////////////////////////
 	//	Function: DrawOverlay
