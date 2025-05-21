@@ -889,8 +889,8 @@ void AppBase::DumpProgramInfo()
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
 					<< PopStringToString(((aPalletizedMemory != 0)
-												  ? _S("Palletized<BR>") + CommaSeperate(aPalletizedMemory)
-												  : _S("&nbsp;")))
+											  ? _S("Palletized<BR>") + CommaSeperate(aPalletizedMemory)
+											  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
 					<< PopStringToString(
@@ -898,9 +898,9 @@ void AppBase::DumpProgramInfo()
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
 					<< PopStringToString(((aMemoryImage->mD3DData != nullptr)
-												  ? _S("Texture<BR>") + StringToPopString(aTextureFormatName) +
-														_S("<BR>") + CommaSeperate(aTextureMemory)
-												  : _S("&nbsp;")))
+											  ? _S("Texture<BR>") + StringToPopString(aTextureFormatName) + _S("<BR>") +
+													CommaSeperate(aTextureMemory)
+											  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 
 		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mIsVolatile) ? _S("Volatile") : _S("&nbsp;")))
@@ -913,8 +913,8 @@ void AppBase::DumpProgramInfo()
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
 					<< PopStringToString(((aNativeAlphaMemory != 0)
-												  ? _S("NativeAlpha<BR>") + CommaSeperate(aNativeAlphaMemory)
-												  : _S("&nbsp;")))
+											  ? _S("NativeAlpha<BR>") + CommaSeperate(aNativeAlphaMemory)
+											  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
 					<< PopStringToString(
@@ -922,8 +922,8 @@ void AppBase::DumpProgramInfo()
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
 					<< PopStringToString(((aRLAdditiveMemory != 0)
-												  ? _S("RLAdditive<BR>") + CommaSeperate(aRLAdditiveMemory)
-												  : _S("&nbsp;")))
+											  ? _S("RLAdditive<BR>") + CommaSeperate(aRLAdditiveMemory)
+											  : _S("&nbsp;")))
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>" << (aMemoryImage->mFilePath.empty() ? "&nbsp;" : aMemoryImage->mFilePath) << "</TD>"
 					<< std::endl;
@@ -2225,7 +2225,8 @@ bool AppBase::DebugKeyDown(int theKey)
 	}
 	else if (theKey == SDLK_F11)
 	{
-		if (mWidgetManager->mKeyDown[KEYCODE_SHIFT])
+		SDL_Keymod mod = SDL_GetModState();
+		if (mod & SDL_KMOD_LSHIFT)
 			DumpProgramInfo();
 		else
 			TakeScreenshot();

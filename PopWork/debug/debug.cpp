@@ -5,6 +5,7 @@
 
 #include <time.h>
 #include <stdarg.h>
+#include <SDL3/SDL.h>
 
 #include "memmgr.hpp"
 
@@ -161,12 +162,12 @@ void PopWorkDumpUnfreed()
 	time_t aTime = time(nullptr);
 	sprintf(buf, "Memory Leak Report for %s\n", asctime(localtime(&aTime)));
 	fprintf(f, buf);
-	printf("\n%s", buf);
+	SDL_Log("\n%s", buf);
 	for (i = gPopWorkAllocMap.begin(); i != gPopWorkAllocMap.end(); i++)
 	{
 		sprintf(buf, "%s(%d) : Leak %d byte%s\n", i->second.file, i->second.line, i->second.size,
 				i->second.size > 1 ? "s" : "");
-		printf("%s", buf);
+		SDL_Log("%s", buf);
 		fprintf(f, buf);
 
 #ifdef POPWORK_DUMP_LEAKED_MEM
@@ -226,9 +227,9 @@ void PopWorkDumpUnfreed()
 
 	sprintf(buf, "-----------------------------------------------------------\n");
 	fprintf(f, buf);
-	printf("%s", buf);
+	SDL_Log("%s", buf);
 	sprintf(buf, "Total Unfreed: %d bytes (%dKB)\n\n", totalSize, totalSize / 1024);
-	printf("%s", buf);
+	SDL_Log("%s", buf);
 	fprintf(f, buf);
 }
 
@@ -241,5 +242,5 @@ void OutputDebug(const PopChar *fmt, ...)
 	std::string result = PopStringToStringFast(vformat(fmt, argList));
 	va_end(argList);
 
-	printf("%s", result.c_str());
+	SDL_Log("%s", result.c_str());
 }
