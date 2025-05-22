@@ -291,7 +291,7 @@ void SDLInterface::SetCursor(SDL_SystemCursor theCursorType)
 {
 	SDL_Cursor *aCursor = SDL_CreateSystemCursor(theCursorType);
 	SDL_SetCursor(aCursor);
-	SDL_DestroyCursor(aCursor);
+	//SDL_DestroyCursor(aCursor);
 }
 
 void SDLInterface::MakeSimpleMessageBox(const char *theTitle, const char *theMessage, SDL_MessageBoxFlags flags)

@@ -114,3 +114,22 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Vorbis::vorbis
     ${BASS_PATH}
 )
+
+# Doxygen
+find_package(Doxygen REQUIRED)
+
+set(DOXYGEN_INPUT_DIR .) # hack
+set(DOXYGEN_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/docs/doxygen)
+
+set(DOXYGEN_CONFIG_FILE_IN ${CMAKE_SOURCE_DIR}/Doxyfile)
+set(DOXYGEN_CONFIG_FILE ${CMAKE_BINARY_DIR}/Doxyfile)
+
+configure_file(${DOXYGEN_CONFIG_FILE_IN} ${DOXYGEN_CONFIG_FILE} @ONLY)
+file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
+
+add_custom_target(doc_doxygen
+    COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_CONFIG_FILE}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Generating documentation"
+    VERBATIM
+)

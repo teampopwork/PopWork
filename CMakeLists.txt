@@ -57,6 +57,9 @@ add_subdirectory(external/SDL_ttf EXCLUDE_FROM_ALL)
 add_subdirectory(external/openal EXCLUDE_FROM_ALL)
 add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
 
+# games like pvz use zlib for hashing and stuff, so why not
+add_subdirectory(external/zlib EXCLUDE_FROM_ALL)
+
 add_subdirectory(PopWork)
 if(BUILD_TOOLS AND WIN32) # we can't afford linux yet
 add_subdirectory(tools/PopPak)
