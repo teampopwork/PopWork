@@ -16,3 +16,6 @@
 [submodule "external/miniaudio"]
 	path = external/miniaudio
 	url = https://github.com/PvZDecompAssociation/miniaudio
+[submodule "external/zlib"]
+	path = external/zlib
+	url = https://github.com/madler/zlib.git
