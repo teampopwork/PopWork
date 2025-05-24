@@ -19,3 +19,6 @@
 [submodule "external/curl"]
 	path = external/curl
 	url = https://github.com/teampopwork/curl.git
+[submodule "external/mbedtls"]
+	path = external/mbedtls
+	url = https://github.com/teampopwork/mbedtls
