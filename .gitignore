@@ -33,3 +33,5 @@ examples/bin/bass.dll
 examples/bin/libbass.so
 
 examples/bin/screenshots/*
+
+docs/doxygen/

@@ -55,6 +55,7 @@ class FontLayer
   public:
 	FontLayer(FontData *theFontData);
 	FontLayer(const FontLayer &theFontLayer);
+	CharData *GetCharData(PopChar value);
 };
 
 typedef std::list<FontLayer> FontLayerList;
@@ -167,6 +168,8 @@ class ImageFont : public Font
 	virtual bool RemoveTag(const std::string &theTagName);
 	virtual bool HasTag(const std::string &theTagName);
 	virtual std::string GetDefine(const std::string &theName);
+
+	PopChar GetMappedChar(char value);
 
 	virtual void Prepare();
 };
