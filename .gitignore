@@ -35,3 +35,4 @@ examples/bin/libbass.so
 examples/bin/screenshots/*
 
 docs/doxygen/
+imgui.ini
