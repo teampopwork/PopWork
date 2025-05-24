@@ -39,6 +39,7 @@ namespace PopWork
 
 class WidgetManager;
 class SDLInterface;
+class ErrorHandler;
 class Image;
 class SDLImage;
 class Widget;
@@ -167,6 +168,7 @@ class AppBase : public ButtonListener, public DialogListener
 	bool mFullScreenPageFlip;
 	bool mTabletPC;
 	SDLInterface *mSDLInterface;
+	ErrorHandler *mErrorHandler;
 	bool mAlphaDisabled;
 	MusicInterface *mMusicInterface;
 	bool mReadFromRegistry;
