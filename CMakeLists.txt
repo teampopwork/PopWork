@@ -57,6 +57,12 @@ add_subdirectory(external/SDL_ttf EXCLUDE_FROM_ALL)
 add_subdirectory(external/openal EXCLUDE_FROM_ALL)
 add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
 
+# what the hell am i doing with my life
+set(BUILD_CURL_EXE OFF CACHE BOOL "Don't build curl command line tool")
+set(HTTP_ONLY ON CACHE BOOL "Enable only HTTP/HTTPS protocols")
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libcurl as static")
+add_subdirectory(external/curl EXCLUDE_FROM_ALL)
+
 add_subdirectory(PopWork)
 if(BUILD_TOOLS AND WIN32) # we can't afford linux yet
 add_subdirectory(tools/PopPak)
