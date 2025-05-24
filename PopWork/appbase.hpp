@@ -370,7 +370,7 @@ class AppBase : public ButtonListener, public DialogListener
 	int mFPSDirtyCount;
 	/// @brief TBA
 	int mFPSTime;
-	/// @brief TBA
+	/// @brief total frames count
 	int mFPSCount;
 	/// @brief true if should show current FPS
 	bool mShowFPS;

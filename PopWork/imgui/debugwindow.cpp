@@ -10,6 +10,10 @@ bool &GetDebugWindowToggle()
 	return debugWind;
 }
 
+static Uint64 lastTime = SDL_GetPerformanceCounter();
+static int frameCount = 0;
+static float fps = 0.0f;
+
 static struct RegisterDebugWindow
 {
 	RegisterDebugWindow()
@@ -31,7 +35,20 @@ static struct RegisterDebugWindow
 			ImGui::Text("Width: %d", gAppBase->mWidth);
 			ImGui::Text("Height: %d", gAppBase->mHeight);
 
-			ImGui::Text("FPS: %d", gAppBase->mFPSCount);
+			// fps
+			Uint64 currentTime = SDL_GetPerformanceCounter();
+			frameCount++;
+
+			static Uint64 fpsTimer = currentTime;
+			if ((currentTime - fpsTimer) > SDL_GetPerformanceFrequency())
+			{
+				float elapsed = (float)(currentTime - fpsTimer) / SDL_GetPerformanceFrequency();
+				fps = frameCount / elapsed;
+				frameCount = 0;
+				fpsTimer = currentTime;
+			}
+
+			ImGui::Text("FPS: %.2f", fps);
 
 			// quit button
 			const float padding = 10.0f;
