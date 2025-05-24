@@ -20,6 +20,8 @@ PopCap Games Framework License Version 1.1
 
 Copyright 2005-2009 PopCap Games, Inc. All rights reserved.
 
+---
+
 Modifications and additions by Team PopWork
 
 GNU Affero General Public License, version 3
