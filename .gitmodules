@@ -16,3 +16,6 @@
 [submodule "external/miniaudio"]
 	path = external/miniaudio
 	url = https://github.com/PvZDecompAssociation/miniaudio
+[submodule "external/curl"]
+	path = external/curl
+	url = https://github.com/teampopwork/curl.git
