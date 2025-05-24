@@ -50,6 +50,8 @@ class SoundManager;
 class MusicInterface;
 class MemoryImage;
 class HTTPTransfer;
+class ErrorHandler;
+class ImGuiManager;
 class Dialog;
 
 class ResourceManager;
@@ -182,6 +184,11 @@ class AppBase : public ButtonListener, public DialogListener
 	bool mStandardWordWrap;
 	/// @brief TBA
 	bool mbAllowExtendedChars;
+
+	/// @brief the error handler
+	ErrorHandler *mErrorHandler;
+	/// @brief imgui manager object, IGUI = ImGui
+	ImGuiManager *mIGUIManager;
 
 	/// @brief TBA
 	std::mutex *mMutex;

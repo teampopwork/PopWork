@@ -51,11 +51,17 @@ class PakCollection
 
 typedef std::list<PakCollection> PakCollectionList;
 
+/**
+ * @brief file struct that allows to exist both locally and inside a .pak file
+ */
 struct PFILE
 {
-	PakRecord *mRecord = nullptr; // non-null => in‐pak file
-	FILE *mFP = nullptr;		  // wrapped FILE* for on‐disk files
-	long mPos = 0;				  // current read position
+	/// @brief non-null => in‐pak file
+	PakRecord *mRecord = nullptr;
+	/// @brief wrapped FILE* for on‐disk files
+	FILE *mFP = nullptr;
+	/// @brief current read position
+	long mPos = 0;
 };
 
 struct PFindData
