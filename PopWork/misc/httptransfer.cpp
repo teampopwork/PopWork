@@ -102,13 +102,9 @@ void HTTPTransfer::GetHelper(const std::string &theURL)
 	CURL *curl = curl_easy_init();
 	if (!curl)
 	{
-		SDL_Log("Failed to init CURL");
 		Fail(RESULT_HTTP_ERROR);
 		return;
 	}
-
-	SDL_Log("CURL initialized");
-	SDL_Log("Setting URL: %s", theURL.c_str());
 
 	curl_easy_setopt(curl, CURLOPT_URL, theURL.c_str());
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -125,11 +121,9 @@ void HTTPTransfer::GetHelper(const std::string &theURL)
 	{
 		long response_code = 0;
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-		SDL_Log("CURL HTTP response code: %ld", response_code);
 
 		mResult = (response_code == 200) ? RESULT_DONE : RESULT_HTTP_ERROR;
 		mContentLength = static_cast<int>(mContent.size());
-		SDL_Log("Received %d bytes", mContentLength);
 	}
 
 	curl_easy_cleanup(curl);

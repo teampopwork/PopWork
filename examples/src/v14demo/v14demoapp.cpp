@@ -98,8 +98,10 @@ void V14DemoApp::InitHook()
 	PopWork::HTTPTransfer transfer;
 
 #ifdef _DEBUG
-	// simple GET test
-	std::string testURL = "https://httpbin.org/get";
+	// simple GET test,
+	// we use HTTP because curl is an asshole
+	// that depends on 20gb of slop
+	std::string testURL = "http://httpbin.org/get";
 	transfer.Get(testURL);
 
 	SDL_Log("GET result: %d", transfer.GetResultCode());
