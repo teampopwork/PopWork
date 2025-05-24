@@ -58,9 +58,17 @@ add_subdirectory(external/openal EXCLUDE_FROM_ALL)
 add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
 
 # what the hell am i doing with my life
-set(BUILD_CURL_EXE OFF CACHE BOOL "Don't build curl command line tool")
-set(HTTP_ONLY ON CACHE BOOL "Enable only HTTP/HTTPS protocols")
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build libcurl as static")
+add_subdirectory(external/mbedtls EXCLUDE_FROM_ALL)
+set(MBEDTLS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/mbedtls/include")
+set(MBEDTLS_LIBRARY mbedtls)
+set(MBEDX509_LIBRARY mbedx509)
+set(MBEDCRYPTO_LIBRARY mbedcrypto)
+
+set(BUILD_CURL_EXE OFF CACHE BOOL "Build curl executable" FORCE)
+set(HTTP_ONLY OFF CACHE BOOL "" FORCE)
+set(CURL_USE_LIBPSL OFF CACHE BOOL "Use libpsl" FORCE)
+set(CURL_USE_OPENSSL OFF CACHE BOOL "" FORCE)
+set(CURL_USE_MBEDTLS ON CACHE BOOL "Use mbedTLS for SSL/TLS" FORCE)
 add_subdirectory(external/curl EXCLUDE_FROM_ALL)
 
 add_subdirectory(PopWork)

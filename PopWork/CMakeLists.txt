@@ -112,6 +112,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     ogg
     Vorbis::vorbisfile
     Vorbis::vorbis
+    CURL::libcurl
+    mbedtls
+    mbedx509
+    mbedcrypto
     ${BASS_PATH}
 )
 

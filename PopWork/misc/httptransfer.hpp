@@ -4,7 +4,11 @@
 #pragma once
 #endif
 
+#define CURL_STATICLIB
+
 #include "common.hpp"
+#include "curl/curl.h"
+#include <thread>
 
 namespace PopWork
 {
@@ -45,6 +49,9 @@ class HTTPTransfer
 	bool mExiting;
 	bool mAborted;
 	int mResult;
+
+  private:
+	std::thread mThread;
 
   protected:
 	void PrepareTransfer(const std::string &theURL);
