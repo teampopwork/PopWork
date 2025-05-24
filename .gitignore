@@ -36,3 +36,7 @@ examples/bin/screenshots/*
 
 docs/doxygen/
 imgui.ini
+
+# tools
+PopPak.exe
+PopPakPWE.exe
