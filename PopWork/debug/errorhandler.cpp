@@ -3,13 +3,15 @@
 
 using namespace PopWork;
 
+ErrorHandler *PopWork::gErrorHandler = nullptr; // global error handler!!! :P
+
 ErrorHandler::ErrorHandler(AppBase *theApp)
 {
-    gErrorHandler = this;
+	gErrorHandler = this;
 
-    mApp = theApp;
+	mApp = theApp;
 }
-    
+
 ErrorHandler::~ErrorHandler()
 {
 }

@@ -8,6 +8,7 @@
 #include "PopWork/graphics/SWTri/SWTri.hpp"
 #include "board.hpp"
 #include "res.hpp"
+#include "PopWork/misc/httptransfer.hpp"
 
 using namespace PopWork;
 
@@ -93,6 +94,20 @@ void V14DemoApp::InitHook()
 	mBoard->Resize(0, 0, mWidth, mHeight);
 	mWidgetManager->AddWidget(mBoard);
 	mWidgetManager->SetFocus(mBoard);
+
+	PopWork::HTTPTransfer transfer;
+
+#ifdef _DEBUG
+	// simple GET test,
+	// we use HTTP because curl is an asshole
+	// that depends on 20gb of slop
+	std::string testURL = "http://httpbin.org/get";
+	transfer.Get(testURL);
+
+	SDL_Log("GET result: %d", transfer.GetResultCode());
+	SDL_Log("GET content length: %zu", transfer.GetContent().size());
+	SDL_Log("GET content:\n%s", transfer.GetContent().c_str());
+#endif
 
 	// H521
 	SetTaskBarIcon("v14icon.png");

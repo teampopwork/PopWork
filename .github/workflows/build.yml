@@ -3,7 +3,15 @@ name: Build
 
 on:
   push:
+    paths:
+      - '**/*.cpp'
+      - '**/*.hpp'
+      - '**/*.h'
   pull_request:
+    paths:
+      - '**/*.cpp'
+      - '**/*.hpp'
+      - '**/*.h'
   release:
     types: [created]
 

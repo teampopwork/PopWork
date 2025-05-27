@@ -5,6 +5,7 @@
 #include "misc/critsect.hpp"
 #include "graphics.hpp"
 #include "memoryimage.hpp"
+#include "imgui/imguimanager.hpp"
 #include <SDL3_ttf/SDL_ttf.h>
 
 using namespace PopWork;
@@ -193,6 +194,9 @@ namespace PopWork {
 
 bool SDLInterface::Redraw(Rect *theClipRect)
 {
+	// HACK: i dont know where to put this
+	mApp->mIGUIManager->Frame();
+
 	SDL_SetRenderTarget(mRenderer, nullptr);
 
 	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0);
@@ -207,6 +211,9 @@ bool SDLInterface::Redraw(Rect *theClipRect)
 	SDL_SetRenderClipRect(mRenderer, &clipRect);
 
 	PopWork::gSDLInterfacePreDrawError = (SDL_RenderTexture(mRenderer, mScreenTexture, nullptr, nullptr) < 0);
+
+	if (ImGui::GetDrawData() != nullptr)
+		ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), mRenderer);
 
 	SDL_RenderPresent(mRenderer);
 
@@ -291,7 +298,7 @@ void SDLInterface::SetCursor(SDL_SystemCursor theCursorType)
 {
 	SDL_Cursor *aCursor = SDL_CreateSystemCursor(theCursorType);
 	SDL_SetCursor(aCursor);
-	SDL_DestroyCursor(aCursor);
+	//SDL_DestroyCursor(aCursor);
 }
 
 void SDLInterface::MakeSimpleMessageBox(const char *theTitle, const char *theMessage, SDL_MessageBoxFlags flags)

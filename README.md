@@ -16,14 +16,15 @@
 > see CONTRIBUTING.md
 
 ## License
-> see LICENSE
+PopCap Games Framework License Version 1.1.
+Copyright 2005-2009 PopCap Games, Inc. All rights reserved.
 
-*PopWork* is licensed under the **GNU Affero General Public License v3.0** (AGPL v3) license.
-
-You are free to use, modify, and redistribute *PopWork*, provided that you:
-- Include the original license
-- Make the source code available to people who interact with your project (even over a network)
-- License any derivative works under **AGPL v3** as well
+Modifications and additions by Team PopWork.
+GNU Affero General Public License, version 3.
 
 ## Building
 > see docs/getting_started.md
+
+---
+
+*Copyright 2025 Team PopWork. All rights reserved.*

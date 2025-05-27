@@ -123,46 +123,154 @@ typedef std::map<std::wstring, std::wstring> WStringWStringMap;
 typedef PopString::value_type PopChar;
 #define HAS_PopChar
 
+/**
+ * @namespace PopWork
+ * @brief root namespace for all PopWork classes
+ */
 namespace PopWork
 {
 
+/// @brief maximum random value
 const ulong POPWORK_RAND_MAX = 0x7FFFFFFF;
 
 extern bool gDebug;
 
+/// @brief random
+/// @return random int
 int Rand();
+/// @brief random range
+/// @param range 
+/// @return random int
 int Rand(int range);
+/// @brief float random range
+/// @param range 
+/// @return random float
 float Rand(float range);
+/// @brief ulong random
+/// @param theSeed 
 void SRand(ulong theSeed);
+/// @brief TBA
+/// @param fmt 
+/// @param argPtr 
+/// @return string
 extern std::string vformat(const char *fmt, va_list argPtr);
+/// @brief TBA
+/// @param fmt 
+/// @param argPtr 
+/// @return widestring
 extern std::wstring vformat(const wchar_t *fmt, va_list argPtr);
+/// @brief TBA
+/// @param ... 
+/// @return string
 extern std::string StrFormat(const char *fmt...);
+/// @brief TBA
+/// @param ... 
+/// @return widestring
 extern std::wstring StrFormat(const wchar_t *fmt...);
+/// @brief obsolete
+/// @return false
 bool CheckFor98Mill();
+/// @brief obsolete
+/// @return false
 bool CheckForVista();
+/// @brief gets the appdata folder
+/// @return .config on linux, appdata/local on windows
 std::string GetAppDataFolder();
+/// @brief obsolete
+/// @param thePath 
 void SetAppDataFolder(const std::string &thePath);
+/// @brief encodes a url
+/// @param theString 
+/// @return encoded url string
 std::string URLEncode(const std::string &theString);
+/// @brief converts a string to uppercase
+/// @param theString 
+/// @return string
 std::string StringToUpper(const std::string &theString);
+/// @brief converts a string to uppercase
+/// @param theString 
+/// @return wide string
 std::wstring StringToUpper(const std::wstring &theString);
+/// @brief converts a string to lowercase
+/// @param theString 
+/// @return string
 std::string StringToLower(const std::string &theString);
+/// @brief converts a string to lowercase
+/// @param theString 
+/// @return wide string
 std::wstring StringToLower(const std::wstring &theString);
+/// @brief converts a string to wide string
+/// @param theString 
+/// @return widestring
 std::wstring StringToWString(const std::string &theString);
+/// @brief converts a wide string to string
+/// @param theString 
+/// @return string
 std::string WStringToString(const std::wstring &theString);
+/// @brief converts a string to PopString
+/// @param theString 
+/// @return PopString
 PopString StringToPopString(const std::string &theString);
+/// @brief converts a wide string to PopString
+/// @param theString 
+/// @return PopString
 PopString WStringToPopString(const std::wstring &theString);
+/// @brief converts a PopString to string
+/// @param theString 
+/// @return string
 std::string PopStringToString(const PopString &theString);
+/// @brief converts a PopString to wide string
+/// @param theString 
+/// @return wide string
 std::wstring PopStringToWString(const PopString &theString);
+/// @brief TBA
+/// @param theData 
+/// @return string
 std::string Upper(const std::string &theData);
+/// @brief TBA
+/// @param theData 
+/// @return wide string
 std::wstring Upper(const std::wstring &theData);
+/// @brief TBA
+/// @param theData 
+/// @return string
 std::string Lower(const std::string &theData);
+/// @brief TBA
+/// @param theData 
+/// @return wide string
 std::wstring Lower(const std::wstring &theData);
+/// @brief TBA
+/// @param theString 
+/// @return string
 std::string Trim(const std::string &theString);
+/// @brief TBA
+/// @param theString 
+/// @return wide string
 std::wstring Trim(const std::wstring &theString);
+/// @brief TBA
+/// @param theString 
+/// @param theIntVal 
+/// @return true if success
 bool StringToInt(const std::string theString, int *theIntVal);
+/// @brief TBA
+/// @param theString 
+/// @param theDoubleVal 
+/// @return true if success
 bool StringToDouble(const std::string theString, double *theDoubleVal);
+/// @brief TBA
+/// @param theString 
+/// @param theIntVal 
+/// @return true if success
 bool StringToInt(const std::wstring theString, int *theIntVal);
+/// @brief TBA
+/// @param theString 
+/// @param theDoubleVal 
+/// @return true if success
 bool StringToDouble(const std::wstring theString, double *theDoubleVal);
+/// @brief TBA
+/// @param theStr 
+/// @param theFind 
+/// @return integer
 int StrFindNoCase(const char *theStr, const char *theFind);
 bool StrPrefixNoCase(const char *theStr, const char *thePrefix, int maxLength = 10000000);
 PopString CommaSeperate(int theValue);

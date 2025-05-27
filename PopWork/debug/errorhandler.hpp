@@ -4,25 +4,37 @@
 #pragma once
 #endif
 
+#include "common.hpp"
+
 namespace PopWork
 {
-    class AppBase;
+class AppBase;
 
-    class ErrorHandler
-    {
-    private:
-        /* data */
+/**
+ * @brief the error handler
+ *
+ * a replacement for SEHCatcher
+ */
+class ErrorHandler
+{
+  private:
+	// data
 
-    public:
-        AppBase *mApp;
+  public:
+	/// @brief the appbase
+	AppBase *mApp;
 
-    public:
-        ErrorHandler(AppBase *theApp);
-        ~ErrorHandler();
-    };
+  public:
+	/// @brief constructor
+	/// @param theApp 
+	ErrorHandler(AppBase *theApp);
+	/// @brief destructor
+	virtual ~ErrorHandler();
+};
 
-    extern ErrorHandler *gErrorHandler;
-    
-}
+/// @brief app error handler
+extern ErrorHandler *gErrorHandler;
+
+} // namespace PopWork
 
 #endif

@@ -1150,6 +1150,16 @@ ImageFont::ImageFont(Image *theFontImage, const std::string &theFontDescFileName
 	mActiveListValid = true;
 }
 
+PopChar ImageFont::GetMappedChar(char value)
+{
+	return mFontData->mCharMap[value];
+}
+
+CharData *FontLayer::GetCharData(PopChar value)
+{
+	return &mCharData[value];
+}
+
 ImageFont::~ImageFont()
 {
 	mFontData->DeRef();
