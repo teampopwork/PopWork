@@ -1,5 +1,5 @@
 # doxygen.yml
-name: Deploy documentation
+name: Deploy Documentation
 
 on:
   push:
@@ -14,15 +14,24 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Doxygen
-      run: sudo apt-get install -y doxygen graphviz
+    - name: Set up dependencies
+      run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
+
+    - name: Configure project with CMake
+      run: cmake -S . -B build
 
     - name: Generate Doxygen documentation
-      run: doxygen Doxyfile
+      run: cmake --build build --target doc_doxygen
+
+    - name: Add .nojekyll to bypass Jekyll
+      run: touch docs/doxygen/html/.nojekyll
+
+    - name: List generated documentation
+      run: ls -R docs/doxygen/html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/doxygen/html
+        publish_dir: docs/doxygen/html
         publish_branch: gh-pages
