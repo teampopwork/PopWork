@@ -22,7 +22,13 @@ jobs:
         cmakeVersion: latest
 
     - name: Dependencies
-      run: sudo apt-get update && sudo apt-get install -y doxygen graphviz
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential libx11-dev libxcursor-dev libxi-dev \
+          libxrandr-dev libxext-dev libdrm-dev libgbm-dev \
+          libwayland-dev libegl1-mesa-dev libfreetype6-dev libharfbuzz-dev \
+          doxygen graphviz
 
     - name: Configure project
       run: cmake -S . -B build
