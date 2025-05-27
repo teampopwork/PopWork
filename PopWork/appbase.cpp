@@ -29,7 +29,9 @@
 #include "audio/bass.h"
 #include "misc/autocrit.hpp"
 #include "debug/debug.hpp"
+#include "debug/errorhandler.hpp"
 #include "paklib/pakinterface.hpp"
+#include "imgui/imguimanager.hpp"
 
 #include <string>
 #include <ctime>
@@ -108,6 +110,8 @@ AppBase::AppBase()
 	mAllowMonitorPowersave = true;
 	mSDLInterface = nullptr;
 	mMusicInterface = nullptr;
+	mErrorHandler = nullptr;
+	mIGUIManager = nullptr;
 	mFrameTime = 10;
 	mNonDrawCount = 0;
 	mDrawCount = 0;
@@ -382,6 +386,8 @@ AppBase::~AppBase()
 	delete mSDLInterface;
 	delete mMusicInterface;
 	delete mSoundManager;
+	delete mErrorHandler;
+	delete mIGUIManager;
 
 	BASS_Stop();
 
@@ -1508,6 +1514,9 @@ void AppBase::DoExit(int theCode)
 	exit(theCode);
 }
 
+extern bool demoWind;
+extern bool debugWind;
+
 void AppBase::UpdateFrames()
 {
 	mUpdateCount++;
@@ -1560,6 +1569,7 @@ void AppBase::Redraw(Rect *theClipRect)
 
 	if (gScreenSaverActive)
 		return;
+
 	mSDLInterface->Redraw(theClipRect);
 
 	mFPSFlipCount++;
@@ -2233,6 +2243,20 @@ bool AppBase::DebugKeyDown(int theKey)
 
 		return true;
 	}
+	else if (theKey == SDLK_0)
+	{
+		if (demoWind)
+			demoWind = false;
+		else
+			demoWind = true;
+	}
+	else if (theKey == SDLK_9)
+	{
+		if (debugWind)
+			debugWind = false;
+		else
+			debugWind = true;
+	}
 	else if (theKey == SDLK_F2)
 	{
 		bool isPerfOn = !PopWorkPerf::IsPerfOn();
@@ -2271,6 +2295,8 @@ bool AppBase::ProcessDeferredMessages(bool singleMessage)
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
 	{
+		ImGui_ImplSDL3_ProcessEvent(&event);
+
 		switch (event.type)
 		{
 		case SDL_EVENT_QUIT:
@@ -3479,6 +3505,7 @@ void AppBase::InitHook()
 void AppBase::Init()
 {
 	mPrimaryThreadId = SDL_GetCurrentThreadID();
+	mErrorHandler = new ErrorHandler(this);
 
 	if (mShutdown)
 		return;
@@ -3547,6 +3574,11 @@ void AppBase::Init()
 	}
 
 	InitHook();
+
+	// TODO: check if this will crash
+	// edit: nope, it won't
+	mIGUIManager = new ImGuiManager(mSDLInterface);
+	RegisterImGuiWindows();
 
 	mInitialized = true;
 }
