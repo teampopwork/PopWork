@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['getappdatafolder_0',['GetAppDataFolder',['../namespacePopWork.html#a1c3ba68bdc93652bbfb47ee708d72a16',1,'PopWork']]],
+  ['getboolean_1',['getboolean',['../classPopWork_1_1AppBase.html#ab863b274f1ee65d50acc32788d50071b',1,'PopWork::AppBase::GetBoolean(const std::string &amp;theId, bool theDefault)'],['../classPopWork_1_1AppBase.html#a08a75c220fb1dd4b52a111c3ecf646ee',1,'PopWork::AppBase::GetBoolean(const std::string &amp;theId)']]],
+  ['getclipboard_2',['GetClipboard',['../classPopWork_1_1AppBase.html#ad5b478bbb8fac20ade64151e8b343a62',1,'PopWork::AppBase']]],
+  ['getcursor_3',['GetCursor',['../classPopWork_1_1AppBase.html#afbc5775a59898de92576382653d08d04',1,'PopWork::AppBase']]],
+  ['getdialog_4',['GetDialog',['../classPopWork_1_1AppBase.html#aaa996b4495a23a149d4f40ec62d4eb3b',1,'PopWork::AppBase']]],
+  ['getdialogcount_5',['GetDialogCount',['../classPopWork_1_1AppBase.html#aa1a952ad273501c2fde26a80caff7de6',1,'PopWork::AppBase']]],
+  ['getdouble_6',['getdouble',['../classPopWork_1_1AppBase.html#a1958a26eba71e6da66bf141da27d9fa3',1,'PopWork::AppBase::GetDouble(const std::string &amp;theId)'],['../classPopWork_1_1AppBase.html#aeb5fc0ca6ab55b11054a867e4df6f167',1,'PopWork::AppBase::GetDouble(const std::string &amp;theId, double theDefault)']]],
+  ['getgamesehinfo_7',['GetGameSEHInfo',['../classPopWork_1_1AppBase.html#ac028c844ad95efdd9177451ffde56b77',1,'PopWork::AppBase']]],
+  ['gethandle_8',['GetHandle',['../classPopWork_1_1BassMusicInfo.html#a7075032f24da6d3a982ec82f15d0e7eb',1,'PopWork::BassMusicInfo']]],
+  ['getimage_9',['GetImage',['../classPopWork_1_1AppBase.html#af1e8ce8133a2afc5269b5e48c4b2e71c',1,'PopWork::AppBase']]],
+  ['getinteger_10',['getinteger',['../classPopWork_1_1AppBase.html#a407e58a39824cbb4c247ba31d649c785',1,'PopWork::AppBase::GetInteger(const std::string &amp;theId, int theDefault)'],['../classPopWork_1_1AppBase.html#a63c647becd6904f689273a3fad0f9265',1,'PopWork::AppBase::GetInteger(const std::string &amp;theId)']]],
+  ['getloadingthreadprogress_11',['GetLoadingThreadProgress',['../classPopWork_1_1AppBase.html#a94117703eb09724ee85aa0d83f306e34',1,'PopWork::AppBase']]],
+  ['getmastervolume_12',['GetMasterVolume',['../classPopWork_1_1AppBase.html#a0a736a97ac94d2a6db32acb4074b7a2e',1,'PopWork::AppBase']]],
+  ['getmusicorder_13',['GetMusicOrder',['../classPopWork_1_1BassMusicInterface.html#a01e5d018bd2732a97a4c51089f2247d3',1,'PopWork::BassMusicInterface']]],
+  ['getmusicvolume_14',['GetMusicVolume',['../classPopWork_1_1AppBase.html#a5129a67868d15d6fd8c829c462f366a4',1,'PopWork::AppBase']]],
+  ['getproductversion_15',['GetProductVersion',['../classPopWork_1_1AppBase.html#aa5a2c30da7499150730d58fba37b7a12',1,'PopWork::AppBase']]],
+  ['getsehwebparams_16',['GetSEHWebParams',['../classPopWork_1_1AppBase.html#ade51665a7422f09e865086513b3b200c',1,'PopWork::AppBase']]],
+  ['getsfxvolume_17',['GetSfxVolume',['../classPopWork_1_1AppBase.html#ada86ad0f728bc721648b57f0b33236ad',1,'PopWork::AppBase']]],
+  ['getsharedimage_18',['GetSharedImage',['../classPopWork_1_1AppBase.html#a51e5195acc78313567609e0e0b49c7e7',1,'PopWork::AppBase']]],
+  ['getstring_19',['getstring',['../classPopWork_1_1AppBase.html#af601b1be39c9e644883d3493377d30fd',1,'PopWork::AppBase::GetString(const std::string &amp;theId)'],['../classPopWork_1_1AppBase.html#a54905951281f6b696cc870d55b590e09',1,'PopWork::AppBase::GetString(const std::string &amp;theId, const PopString &amp;theDefault)']]],
+  ['getstringvector_20',['GetStringVector',['../classPopWork_1_1AppBase.html#af30849c3909727da916fda11b2078efd',1,'PopWork::AppBase']]],
+  ['getvalueint_21',['GetValueInt',['../classPopWork_1_1JsonParser.html#a9ab25b2d70bdd586f71eb641813e1ff1',1,'PopWork::JsonParser']]],
+  ['getvaluestr_22',['GetValueStr',['../classPopWork_1_1JsonParser.html#a62c79d0bdb882606578b027609ae81b5',1,'PopWork::JsonParser']]],
+  ['gotfocus_23',['GotFocus',['../classPopWork_1_1AppBase.html#a8336a319c0d7bf684c8449ceb5760bfa',1,'PopWork::AppBase']]]
+];
