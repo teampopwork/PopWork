@@ -23,6 +23,7 @@ class PakRecord
 	std::string mFileName;
 	FileTime mFileTime;
 	std::streamoff mStartPos;
+	uint32_t mCompressedSize;
 	std::size_t mSize;
 };
 
@@ -32,21 +33,35 @@ class PakCollection
 {
   public:
 	explicit PakCollection(std::size_t size)
-	{
-		mDataPtr = std::malloc(size);
-	}
-	~PakCollection()
-	{
-		std::free(mDataPtr);
-	}
+        : mData(size) {}
 
-	void *data() const
-	{
-		return mDataPtr;
-	}
+    uint8_t* data()
+    {
+        return mData.data();
+    }
+
+    const uint8_t* data() const
+    {
+        return mData.data();
+    }
+
+    std::size_t size() const
+    {
+        return mData.size();
+    }
+
+    std::vector<uint8_t>& vector()
+    {
+        return mData;
+    }
+
+    const std::vector<uint8_t>& vector() const
+    {
+        return mData;
+    }
 
   private:
-	void *mDataPtr;
+	std::vector<uint8_t> mData;
 };
 
 typedef std::list<PakCollection> PakCollectionList;

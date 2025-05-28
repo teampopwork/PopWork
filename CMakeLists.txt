@@ -56,6 +56,9 @@ add_subdirectory(external/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(external/SDL_ttf EXCLUDE_FROM_ALL)
 add_subdirectory(external/openal EXCLUDE_FROM_ALL)
 add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
+add_subdirectory(external/zlib EXCLUDE_FROM_ALL)
+add_subdirectory(external/misc EXCLUDE_FROM_ALL)
+
 
 # what the hell am i doing with my life
 set(BUILD_CURL_EXE OFF CACHE BOOL "Build curl executable" FORCE)
@@ -66,10 +69,6 @@ set(CURL_USE_MBEDTLS OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/curl EXCLUDE_FROM_ALL)
 
 add_subdirectory(PopWork)
-if(BUILD_TOOLS AND WIN32) # we can't afford linux yet
-add_subdirectory(tools/PopPak)
-add_subdirectory(tools/PopPakPWE)
-endif()
 
 if(BUILD_EXAMPLES)
 	add_subdirectory(examples)
@@ -84,10 +83,6 @@ if(BUILD_DEMOS OR BUILD_TOOLS)
             Demo1 Demo2 Demo3 Demo4 Demo5
             Hun-garr V12Demo V14Demo XMLDemo
         )
-    endif()
-
-    if(BUILD_DEMOS AND BUILD_TOOLS AND WIN32)
-        list(APPEND demo_deps PopPak PopPakPWE)
     endif()
 
     add_custom_target(alldemos ALL DEPENDS ${demo_deps})

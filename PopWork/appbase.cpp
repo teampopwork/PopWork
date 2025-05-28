@@ -3523,7 +3523,7 @@ void AppBase::Init()
 	if (!ChangeDirHook(mChangeDirTo.c_str()))
 		chdir(mChangeDirTo.c_str());
 
-	gPakInterface->AddPakFile("main.pak");
+	gPakInterface->AddPakFile("main.gpak");
 
 	// Create a globally unique mutex
 	mMutex = new std::mutex();

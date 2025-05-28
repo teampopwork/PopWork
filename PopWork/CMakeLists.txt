@@ -115,6 +115,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Vorbis::vorbisfile
     Vorbis::vorbis
     CURL::libcurl
+    zlibstatic
+    misc
     ${BASS_PATH}
 )
 

@@ -19,3 +19,6 @@
 [submodule "external/curl"]
 	path = external/curl
 	url = https://github.com/teampopwork/curl.git
+[submodule "external/zlib"]
+	path = external/zlib
+	url = https://github.com/madler/zlib

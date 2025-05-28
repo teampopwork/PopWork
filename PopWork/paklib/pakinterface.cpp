@@ -1,10 +1,53 @@
 #include "pakinterface.hpp"
+#include "gpak.hpp"
 #include "common.hpp"
 #include <algorithm>
 #include <cstring>
 #include <cstdlib>
+#include <zlib.h>
+extern "C"
+{
+#include <aes.h>
+}
+
 
 using namespace std;
+
+
+std::vector<uint8_t> Decompress(const std::vector<uint8_t> &input, size_t originalSize)
+{
+	std::vector<uint8_t> output(originalSize);
+	uLongf destLen = originalSize;
+
+	int res = ::uncompress(output.data(), &destLen, input.data(), input.size());
+	if (res != Z_OK)
+		throw std::runtime_error("zlib decompression failed with code: " + std::to_string(res));
+
+	return output;
+}
+
+
+std::vector<uint8_t> AESDecrypt(const std::vector<uint8_t> &data, const std::string &password)
+{
+	AES_ctx ctx;
+	uint8_t key[32] = {};
+	std::memcpy(key, password.data(), std::min(password.size(), sizeof(key)));
+	AES_init_ctx(&ctx, key);
+
+	std::vector<uint8_t> decrypted = data;
+	for (size_t i = 0; i < decrypted.size(); i += 16)
+	{
+		AES_ECB_decrypt(&ctx, decrypted.data() + i);
+	}
+
+	if (!decrypted.empty())
+	{
+		uint8_t pad = decrypted.back();
+		if (pad <= 16)
+			decrypted.resize(decrypted.size() - pad);
+	}
+	return decrypted;
+}
 
 PakInterface *gPakInterface = new PakInterface();
 
@@ -63,20 +106,24 @@ bool PakInterface::AddPakFile(const string &fileName)
 	fread(collection.data(), 1, fileSize, fp);
 	fclose(fp);
 
-	// simple XOR decode with password
-	auto *bytes = reinterpret_cast<unsigned char *>(collection.data());
-	for (size_t i = 0; i < fileSize; ++i)
-		bytes[i] ^= static_cast<unsigned char>(mDecryptPassword[i % mDecryptPassword.size()]);
+	GPAKHeader *gpakHeader = reinterpret_cast<GPAKHeader *>(collection.data());
+	if (memcmp(gpakHeader->magic, "GPAK", 4) != 0 || gpakHeader->version != 1)
+    	return false;
 
-	// build one record covering full pak
-	PakRecord rec;
-	rec.mCollection = &collection;
-	rec.mFileName = fileName;
-	rec.mStartPos = 0;
-	rec.mSize = fileSize;
-	rec.mFileTime = filesystem::file_time_type::min();
-	mPakRecordMap[toupper(fileName)] = rec;
+	GPAKFileEntry *entriesPtr = reinterpret_cast<GPAKFileEntry *>(reinterpret_cast<uint8_t *>(collection.data()) + gpakHeader->fileTableOffset);
+	std::vector<GPAKFileEntry> entries(entriesPtr, entriesPtr + gpakHeader->fileCount);
 
+	for (const GPAKFileEntry& entry : entries)
+	{
+		std::string upperName = toupper(std::string(entry.path));
+		PakRecord& rec = mPakRecordMap[upperName];
+		rec.mCollection = &collection;
+		rec.mFileName = entry.path;
+		rec.mStartPos = entry.dataOffset;
+		rec.mCompressedSize = entry.compressedSize;
+		rec.mSize = entry.originalSize;
+		rec.mFileTime = filesystem::file_time_type::min(); // GPAK doesn't store this yet
+	}
 	return true;
 }
 
@@ -142,15 +189,7 @@ size_t PakInterface::FRead(void *buf, int size, int count, PFILE *pf)
 {
 	if (pf->mRecord)
 	{
-		auto &r = *pf->mRecord;
-		size_t toRead = min<size_t>(size * count, r.mSize - pf->mPos);
-		unsigned char *src = reinterpret_cast<unsigned char *>(r.mCollection->data()) + r.mStartPos + pf->mPos;
-		unsigned char *dst = reinterpret_cast<unsigned char *>(buf);
-		for (size_t i = 0; i < toRead; ++i)
-			dst[i] = src[i] ^ static_cast<unsigned char>(
-								  mDecryptPassword[(r.mStartPos + pf->mPos + i) % mDecryptPassword.size()]);
-		pf->mPos += toRead;
-		return toRead / size;
+		//TODO: ADD FREAD
 	}
 	return fread(buf, size, count, pf->mFP);
 }
