@@ -14,10 +14,10 @@ using namespace PopWork;
 //////////////////////////////////////////////////////////////////////////
 GameApp::GameApp()
 {
-	mProdName = "Hun-garr Needs Planets!";
-	mProductVersion = "1.0";
-	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap/PopWork/Hungarr";
+	mProdName = _S("Hun-garr Needs Planets!");
+	mProductVersion = _S("1.0");
+	mTitle = _S("PopWork: ") + mProdName + _S(" - ") + mProductVersion;
+	mRegKey = _S("PopCap/PopWork/Hungarr");
 
 	mWidth = 640;
 	mHeight = 480;

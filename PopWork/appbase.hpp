@@ -146,17 +146,17 @@ class AppBase : public ButtonListener, public DialogListener
 	ulong mRandSeed;
 
 	/// @brief defines the company name, also used in save files
-	std::string mCompanyName;
+	PopString mCompanyName;
 	/// @brief unused (probably)
-	std::string mFullCompanyName;
+	PopString mFullCompanyName;
 	/// @brief product (game) name
-	std::string mProdName;
+	PopString mProdName;
 	/// @brief the title for the window
 	PopString mTitle;
 	/// @brief TBA
-	std::string mRegKey;
+	PopString mRegKey;
 	/// @brief TBA
-	std::string mChangeDirTo;
+	PopString mChangeDirTo;
 
 	/// @brief TBA
 	int mRelaxUpdateBacklogCount; // app doesn't try to catch up for this many frames
@@ -249,9 +249,9 @@ class AppBase : public ButtonListener, public DialogListener
 	/// @brief TBA
 	bool mReadFromRegistry;
 	/// @brief TBA
-	std::string mRegisterLink;
+	PopString mRegisterLink;
 	/// @brief the game(product) version
-	std::string mProductVersion;
+	PopString mProductVersion;
 	/// @brief cursor images, max.: 13
 	Image *mCursorImages[NUM_CURSORS];
 	/// @brief titlebar icon, can use .rc for that if on windows
@@ -263,7 +263,7 @@ class AppBase : public ButtonListener, public DialogListener
 	/// @brief true if the app will shut down on URL open
 	bool mShutdownOnURLOpen;
 	/// @brief what url is the app opening
-	std::string mOpeningURL;
+	PopString mOpeningURL;
 	/// @brief the time when URL was opened
 	uint32_t mOpeningURLTime;
 	/// @brief TBA
@@ -634,15 +634,15 @@ class AppBase : public ButtonListener, public DialogListener
 
 	/// @brief if url open failed
 	/// @param theURL 
-	virtual void URLOpenFailed(const std::string &theURL);
+	virtual void URLOpenFailed(const PopString &theURL);
 	/// @brief if url open succeeded
 	/// @param theURL 
-	virtual void URLOpenSucceeded(const std::string &theURL);
+	virtual void URLOpenSucceeded(const PopString &theURL);
 	/// @brief opens a URL
 	/// @param theURL 
 	/// @param shutdownOnOpen 
 	/// @return true if success
-	virtual bool OpenURL(const std::string &theURL, bool shutdownOnOpen = false);
+	virtual bool OpenURL(const PopString &theURL, bool shutdownOnOpen = false);
 	/// @brief gets the current product version
 	/// @param thePath 
 	/// @return the product version
@@ -651,7 +651,7 @@ class AppBase : public ButtonListener, public DialogListener
 	/// @brief TBA
 	virtual void SEHOccured();
 	/// @brief TBA
-	virtual std::string GetGameSEHInfo();
+	virtual PopString GetGameSEHInfo();
 	/// @brief TBA
 	virtual void GetSEHWebParams(DefinesMap *theDefinesMap);
 	/// @brief shutdowns the app

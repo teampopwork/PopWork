@@ -21,10 +21,13 @@
     #define DEBUG_BREAK() ((void)0)
 #endif
 
-#define AL_CHECK_ERROR()                    \
-    do {                                    \
-        if (alGetError() != AL_NO_ERROR)    \
-            DEBUG_BREAK();                  \
+#define AL_CHECK_ERROR() \
+    do { \
+        ALenum err = alGetError(); \
+        if (err != AL_NO_ERROR) { \
+            SDL_Log("OpenAL error: %s at %s:%d\n", alGetString(err), __FILE__, __LINE__); \
+            DEBUG_BREAK(); \
+        } \
     } while (0)
 
 using namespace PopWork;

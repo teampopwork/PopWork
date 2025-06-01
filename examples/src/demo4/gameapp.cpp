@@ -23,18 +23,18 @@ using namespace PopWork;
 GameApp::GameApp()
 {
 	// mProdName is used for internal purposes to indicate the game that we're working on
-	mProdName = "Demo 4";
+	mProdName = _S("Demo 4");
 
 	// For internal uses, indicates the current product version
-	mProductVersion = "1.0";
+	mProductVersion = _S("1.0");
 
 	// This is the text that appears in the title bar of the application window
-	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mTitle = _S("PopWork: ") + mProdName + _S(" - ") + mProductVersion;
 
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
-	mRegKey = "PopCap/PopWork/Demo4";
+	mRegKey = _S("PopCap/PopWork/Demo4");
 
 	// Set the application width/height in terms of pixels here. Let's
 	// use a different resolution from Demo 1 just for fun.

@@ -11,10 +11,10 @@ using namespace PopWork;
 
 V12DemoApp::V12DemoApp()
 {
-	mProdName = "V12Demo";
-	mProductVersion = "1.0";
-	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
-	mRegKey = "PopCap/PopWork/V12Demo";
+	mProdName = _S("V12Demo");
+	mProductVersion = _S("1.0");
+	mTitle = _S("PopWork: ") + mProdName + _S(" - ") + mProductVersion;
+	mRegKey = _S("PopCap/PopWork/V12Demo");
 
 	mNoSoundNeeded = true;
 	mBoard = NULL;

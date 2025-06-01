@@ -94,7 +94,7 @@ AppBase::AppBase()
 	mFullScreenPageFlip = true; // should we page flip in fullscreen?
 	mTimeLoaded = SDL_GetTicks();
 	mSEHOccured = false;
-	mProdName = "Product";
+	mProdName = _S("Product");
 	mTitle = _S("PopWorkApp");
 	mShutdown = false;
 	mExitToTop = false;
@@ -298,7 +298,7 @@ AppBase::~AppBase()
 														  {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "No"}};
 
 					std::string aTitle = PopStringToStringFast(
-						StringToPopStringFast(mCompanyName) + _S(" ") +
+						mCompanyName + _S(" ") +
 						GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
 					std::string aMessage = PopStringToStringFast(
@@ -348,7 +348,7 @@ AppBase::~AppBase()
 							  _S("Would you like to keep Hardware Acceleration switched on?")));
 
 		std::string aTitle = PopStringToStringFast(
-			StringToPopStringFast(mCompanyName) + _S(" ") +
+			mCompanyName + _S(" ") +
 			GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
 
 		SDL_MessageBoxData messageBoxData = {
@@ -559,12 +559,12 @@ void AppBase::LostFocus()
 {
 }
 
-void AppBase::URLOpenFailed(const std::string &theURL)
+void AppBase::URLOpenFailed(const PopString &theURL)
 {
 	mIsOpeningURL = false;
 }
 
-void AppBase::URLOpenSucceeded(const std::string &theURL)
+void AppBase::URLOpenSucceeded(const PopString &theURL)
 {
 	mIsOpeningURL = false;
 
@@ -572,7 +572,7 @@ void AppBase::URLOpenSucceeded(const std::string &theURL)
 		Shutdown();
 }
 
-bool AppBase::OpenURL(const std::string &theURL, bool shutdownOnOpen)
+bool AppBase::OpenURL(const PopString &theURL, bool shutdownOnOpen)
 {
 	if ((!mIsOpeningURL) || (theURL != mOpeningURL))
 	{
@@ -581,7 +581,7 @@ bool AppBase::OpenURL(const std::string &theURL, bool shutdownOnOpen)
 		mOpeningURL = theURL;
 		mOpeningURLTime = SDL_GetTicks();
 
-		if (SDL_OpenURL(theURL.c_str()))
+		if (SDL_OpenURL(PopStringToStringFast(theURL).c_str()))
 		{
 			return true;
 		}
@@ -1004,7 +1004,8 @@ double AppBase::GetLoadingThreadProgress()
 bool AppBase::RegistryWrite(const std::string &theValueName, JSON_RTYPE theType, const uchar *theValue, ulong theLength)
 {
 	// H522
-	std::filesystem::path config = GetAppDataFolder() + mRegKey + "/registry.json"; // always registry.json
+	std::filesystem::path config =
+		GetAppDataFolder() + PopStringToString(mRegKey) + "/registry.json"; // always registry.json
 	std::filesystem::create_directories(config.parent_path());
 	//SDL_Log("%s", config.string().c_str());
 
@@ -1102,7 +1103,7 @@ bool AppBase::RegistryEraseKey(const PopString &_theKeyName)
 void AppBase::RegistryEraseValue(const PopString &_theValueName)
 {
 	// H522
-	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::filesystem::path configPath = GetAppDataFolder() + PopStringToString(mRegKey) + "/registry.json";
 	std::string keyName = PopStringToString(_theValueName);
 
 	if (!std::filesystem::exists(configPath))
@@ -1148,7 +1149,7 @@ bool AppBase::RegistryReadKey(const std::string &theValueName, JSON_RTYPE *theTy
 							  ulong theKey)
 {
 	// H522
-	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::filesystem::path configPath = GetAppDataFolder() + PopStringToString(mRegKey) + "/registry.json";
 	if (!std::filesystem::exists(configPath) || !theType || !theValue || !theLength)
 		return false;
 
@@ -1221,7 +1222,7 @@ bool AppBase::RegistryReadKey(const std::string &theValueName, JSON_RTYPE *theTy
 bool AppBase::RegistryReadString(const std::string &theKey, std::string *theString)
 {
 	// H522
-	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::filesystem::path configPath = GetAppDataFolder() + PopStringToString(mRegKey) + "/registry.json";
 	if (!std::filesystem::exists(configPath) || !theString)
 		return false;
 
@@ -1255,7 +1256,7 @@ bool AppBase::RegistryReadInteger(const std::string &theKey, int *theValue)
 	std::string s;
 
 	nlohmann::json j;
-	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::filesystem::path configPath = GetAppDataFolder() + PopStringToString(mRegKey) + "/registry.json";
 	std::ifstream inFile(configPath);
 	if (!inFile)
 		return false;
@@ -1283,7 +1284,7 @@ bool AppBase::RegistryReadBoolean(const std::string &theKey, bool *theValue)
 		return false;
 
 	nlohmann::json j;
-	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::filesystem::path configPath = GetAppDataFolder() + PopStringToString(mRegKey) + "/registry.json";
 	std::ifstream inFile(configPath);
 	if (!inFile)
 		return false;
@@ -1311,7 +1312,7 @@ bool AppBase::RegistryReadData(const std::string &theKey, uchar *theValue, ulong
 		return false;
 
 	nlohmann::json j;
-	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
+	std::filesystem::path configPath = GetAppDataFolder() + PopStringToString(mRegKey) + "/registry.json";
 	std::ifstream inFile(configPath);
 	if (!inFile)
 		return false;
@@ -1340,7 +1341,7 @@ bool AppBase::RegistryReadData(const std::string &theKey, uchar *theValue, ulong
 void AppBase::ReadFromRegistry()
 {
 	mReadFromRegistry = true;
-	mRegKey = PopStringToString(GetString("RegistryKey", StringToPopString(mRegKey)));
+	mRegKey = GetString("RegistryKey", mRegKey);
 
 	if (mRegKey.length() == 0)
 		return;
@@ -1441,7 +1442,7 @@ void AppBase::SEHOccured()
 	EnforceCursor();
 }
 
-std::string AppBase::GetGameSEHInfo()
+PopString AppBase::GetGameSEHInfo()
 {
 	int aSecLoaded = (SDL_GetTicks() - mTimeLoaded) / 1000;
 
@@ -1451,15 +1452,11 @@ std::string AppBase::GetGameSEHInfo()
 	char aThreadIdStr[16];
 	sprintf(aThreadIdStr, "%X", mPrimaryThreadId);
 
-	std::string anInfoString = "Product: " + mProdName + "\r\n" + "Version: " + mProductVersion + "\r\n";
+	PopString anInfoString = _S("Product: ") + mProdName + _S("\r\n") + _S("Version: ") + mProductVersion + _S("\r\n");
 
-	anInfoString += "Time Loaded: " + std::string(aTimeStr) +
-					"\r\n"
-					"Fullscreen: " +
-					(mIsWindowed ? std::string("No") : std::string("Yes")) +
-					"\r\n"
-					"Primary ThreadId: " +
-					aThreadIdStr + "\r\n";
+	anInfoString += _S("Time Loaded: ") + StringToPopString(std::string(aTimeStr)) + _S("\r\n") + _S("Fullscreen: ") +
+					(mIsWindowed ? _S("No") : _S("Yes")) + _S("\r\n") + _S("Primary ThreadId: ") +
+					StringToPopString(std::string(aThreadIdStr)) + _S("\r\n");
 
 	return anInfoString;
 }
@@ -3459,7 +3456,7 @@ void AppBase::HandleCmdLineParam(const std::string &theParamName, const std::str
 	}
 	else if (theParamName == "-changedir")
 	{
-		mChangeDirTo = theParamValue;
+		mChangeDirTo = StringToPopString(theParamValue);
 	}
 	else
 	{
@@ -3520,8 +3517,8 @@ void AppBase::Init()
 		mOnlyAllowOneCopyToRun = false;
 
 	// Change directory
-	if (!ChangeDirHook(mChangeDirTo.c_str()))
-		chdir(mChangeDirTo.c_str());
+	if (!ChangeDirHook(PopStringToString(mChangeDirTo).c_str()))
+		chdir(PopStringToString(mChangeDirTo).c_str());
 
 	gPakInterface->AddPakFile("main.pak");
 

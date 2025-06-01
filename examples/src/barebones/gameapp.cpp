@@ -7,13 +7,13 @@ using namespace PopWork;
 
 GameApp::GameApp()
 {
-	mProdName = "BareBones";
+	mProdName = _S("BareBones");
 
-	mProductVersion = "1.0";
+	mProductVersion = _S("1.0");
 
-	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mTitle = _S("PopWork: ") + mProdName + _S(" - ") + mProductVersion;
 
-	mRegKey = "PopCap\\PopWork\\BareBones";
+	mRegKey = _S("PopCap\\PopWork\\BareBones");
 
 	mWidth = 640;
 	mHeight = 480;
