@@ -158,7 +158,6 @@ class PakInterface : public PakInterfaceBase
   public:
 	PakCollectionList mPakCollectionList;
 	PakRecordMap mPakRecordMap;
-	std::string mDecryptPassword;
 	std::string mError;
 
 	PakInterface();

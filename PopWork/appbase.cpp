@@ -3092,6 +3092,12 @@ int AppBase::InitSDLInterface()
 		mSDLInterface->UpdateViewport();
 		mWidgetManager->Resize(mScreenBounds, mSDLInterface->mPresentationRect);
 		PostSDLInterfaceInitHook();
+
+		if (mIGUIManager)
+			delete mIGUIManager;
+		mIGUIManager = new ImGuiManager(mSDLInterface);
+		RegisterImGuiWindows();
+
 	}
 	return aResult;
 }
@@ -3574,11 +3580,6 @@ void AppBase::Init()
 	}
 
 	InitHook();
-
-	// TODO: check if this will crash
-	// edit: nope, it won't
-	mIGUIManager = new ImGuiManager(mSDLInterface);
-	RegisterImGuiWindows();
 
 	mInitialized = true;
 }

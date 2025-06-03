@@ -42,17 +42,17 @@ unsigned long *Image::GetBits()
 
 Image *GetImageSTB(const std::string &theFileName)
 {
-	FILE *fp;
+	PFILE *fp;
 
-	if ((fp = fopen(theFileName.c_str(), "rb")) == nullptr)
+	if ((fp = p_fopen(theFileName.c_str(), "rb")) == nullptr)
 		return nullptr;
 
-	fseek(fp, 0, SEEK_END);
-	size_t fileSize = ftell(fp);
-	fseek(fp, 0, SEEK_SET);
+	p_fseek(fp, 0, SEEK_END);
+	size_t fileSize = p_ftell(fp);
+	p_fseek(fp, 0, SEEK_SET);
 	std::vector<uint8_t> data(fileSize);
-	fread(data.data(), 1, fileSize, fp);
-	fclose(fp);
+	p_fread(data.data(), 1, fileSize, fp);
+	p_fclose(fp);
 
 	int width, height, num_channels;
 	unsigned char *stb_image = stbi_load_from_memory(data.data(), fileSize, &width, &height, &num_channels, NULL);

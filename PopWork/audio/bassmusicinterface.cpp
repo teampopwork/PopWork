@@ -52,7 +52,7 @@ BassMusicInfo::BassMusicInfo()
 	mVolumeCap = 1.0;
 	mStopOnFade = false;
 	mHMusic = NULL;
-	mHStream = NULL;
+	mStream = {NULL, NULL};
 }
 
 BassMusicInterface::BassMusicInterface()
@@ -80,33 +80,34 @@ bool BassMusicInterface::LoadMusic(int theSongId, const std::string &theFileName
 	if (aDotPos != std::string::npos)
 		anExt = StringToLower(theFileName.substr(aDotPos + 1));
 
+	PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
+	if (!aFP)
+		return false;
+
+	p_fseek(aFP, 0, SEEK_END);
+	int aSize = p_ftell(aFP);
+	p_fseek(aFP, 0, SEEK_SET);
+
+	uchar *aData = new uchar[aSize];
+	p_fread(aData, 1, aSize, aFP);
+	p_fclose(aFP);
+
 	if (anExt == "wav" || anExt == "ogg" || anExt == "mp3")
-		aStream = BASS_StreamCreateFile(FALSE, (void *)theFileName.c_str(), 0, 0, 0);
+		aStream = BASS_StreamCreateFile(TRUE, aData, 0, aSize, BASS_SAMPLE_LOOP);
 	else
 	{
-		PFILE *aFP = p_fopen(theFileName.c_str(), "rb");
-		if (!aFP)
-			return false;
-
-		p_fseek(aFP, 0, SEEK_END);
-		int aSize = p_ftell(aFP);
-		p_fseek(aFP, 0, SEEK_SET);
-
-		uchar *aData = new uchar[aSize];
-		p_fread(aData, 1, aSize, aFP);
-		p_fclose(aFP);
-
-		aHMusic = BASS_MusicLoad(FALSE, (void *)theFileName.c_str(), 0, 0, BASS_MUSIC_LOOP | BASS_MUSIC_RAMP, 0);
-
+		aHMusic = BASS_MusicLoad(TRUE, aData, 0, 0, BASS_MUSIC_LOOP | BASS_MUSIC_RAMP, 0);
 		delete[] aData;
 	}
 
-	if (!aHMusic && !aStream)
+	int anErrCode = BASS_ErrorGetCode();
+	if ((!aHMusic && !aStream )|| anErrCode != BASS_OK)
 		return false;
 
 	BassMusicInfo aMusicInfo;
 	aMusicInfo.mHMusic = aHMusic;
-	aMusicInfo.mHStream = aStream;
+	aMusicInfo.mStream.mHStream = aStream;
+	aMusicInfo.mStream.mStreamData = aData;
 	mMusicMap.insert(BassMusicMap::value_type(theSongId, aMusicInfo));
 
 	return true;
@@ -133,9 +134,9 @@ void BassMusicInterface::PlayMusic(int theSongId, int theOffset, bool noLoop)
 		else
 		{
 			BOOL flush = theOffset == -1 ? FALSE : TRUE;
-			BASS_StreamPlay(aMusicInfo->mHStream, flush, noLoop ? 0 : BASS_MUSIC_LOOP);
+			BASS_StreamPlay(aMusicInfo->mStream.mHStream, flush, noLoop ? 0 : BASS_MUSIC_LOOP);
 			if (theOffset > 0)
-				BASS_ChannelSetPosition(aMusicInfo->mHStream, theOffset, BASS_POS_BYTE);
+				BASS_ChannelSetPosition(aMusicInfo->mStream.mHStream, theOffset, BASS_POS_BYTE);
 		}
 	}
 }
@@ -171,8 +172,8 @@ void BassMusicInterface::UnloadMusic(int theSongId)
 	if (anItr != mMusicMap.end())
 	{
 		BassMusicInfo *aMusicInfo = &anItr->second;
-		if (aMusicInfo->mHStream)
-			BASS_StreamFree(aMusicInfo->mHStream);
+		if (aMusicInfo->mStream.mHStream)
+			BASS_StreamFree(aMusicInfo->mStream.mHStream);
 		else if (aMusicInfo->mHMusic)
 			BASS_MusicFree(aMusicInfo->mHMusic);
 
@@ -186,8 +187,11 @@ void BassMusicInterface::UnloadAllMusic()
 	for (BassMusicMap::iterator anItr = mMusicMap.begin(); anItr != mMusicMap.end(); ++anItr)
 	{
 		BassMusicInfo *aMusicInfo = &anItr->second;
-		if (aMusicInfo->mHStream)
-			BASS_StreamFree(aMusicInfo->mHStream);
+		if (aMusicInfo->mStream.mHStream)
+		{
+			BASS_StreamFree(aMusicInfo->mStream.mHStream);
+			delete[] aMusicInfo->mStream.mStreamData;
+		}
 		else if (aMusicInfo->mHMusic)
 			BASS_MusicFree(aMusicInfo->mHMusic);
 	}
@@ -261,9 +265,9 @@ void BassMusicInterface::FadeIn(int theSongId, int theOffset, double theSpeed, b
 		else
 		{
 			BOOL flush = theOffset == -1 ? FALSE : TRUE;
-			BASS_StreamPlay(aMusicInfo->mHStream, flush, noLoop ? 0 : BASS_MUSIC_LOOP);
+			BASS_StreamPlay(aMusicInfo->mStream.mHStream, flush, noLoop ? 0 : BASS_MUSIC_LOOP);
 			if (theOffset > 0)
-				BASS_ChannelSetPosition(aMusicInfo->mHStream, theOffset, BASS_POS_BYTE);
+				BASS_ChannelSetPosition(aMusicInfo->mStream.mHStream, theOffset, BASS_POS_BYTE);
 		}
 	}
 }

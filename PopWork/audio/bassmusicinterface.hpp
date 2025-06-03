@@ -12,6 +12,14 @@ namespace PopWork
 
 class AppBase;
 
+struct StreamData
+{
+	/// @brief data that is streamed to mHStream
+	uchar* mStreamData;
+	/// @brief stream object
+	HSTREAM mHStream;
+};
+
 /**
  * @brief bass music info
  *
@@ -23,7 +31,7 @@ class BassMusicInfo
 	/// @brief music object
 	HMUSIC mHMusic;
 	/// @brief stream object
-	HSTREAM mHStream;
+	StreamData mStream;
 	/// @brief current volume
 	double mVolume;
 	/// @brief TBA
@@ -43,7 +51,7 @@ class BassMusicInfo
 	/// @return mHMusic if no mHStream and vice verse
 	uint32_t GetHandle()
 	{
-		return mHMusic ? mHMusic : mHStream;
+		return mHMusic ? mHMusic : mStream.mHStream;
 	}
 };
 

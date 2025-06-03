@@ -83,6 +83,8 @@ static bool matchPattern(const string &pattern, const string &name)
 	return _stricmp(name.substr(name.size() - suffix.size()).c_str(), suffix.c_str()) == 0;
 }
 
+std::string gDecryptPassword = "PopCapPopWorkFramework";
+
 PakInterface::PakInterface()
 {
 	// nothing to initialize beyond base
@@ -189,7 +191,28 @@ size_t PakInterface::FRead(void *buf, int size, int count, PFILE *pf)
 {
 	if (pf->mRecord)
 	{
-		//TODO: ADD FREAD
+		//This is probably the worse code ever written.
+		//It's very slow.
+		//I wish i knew how to actually get it to decompress and decrypt in fopen or heck even in addpakfile.
+		//TODO: MOVE DECRPYTION AND DECOMPRESSION LOGIC TO FOPEN OR ADDPAKFILE
+        PakRecord* rec = pf->mRecord;
+		auto& collection = *rec->mCollection;
+		const uint8_t* compressedData = collection.data() + pf->mRecord->mStartPos;
+		std::vector<uint8_t> compressed(compressedData, compressedData + pf->mRecord->mCompressedSize);
+
+		if (!gDecryptPassword.empty())
+		{
+			compressed = AESDecrypt(compressed, gDecryptPassword);
+		}
+		std::vector<uint8_t> decompressed = Decompress(compressed, pf->mRecord->mSize);
+
+		int aSizeBytes = std::min(size*count, static_cast<int>(pf->mRecord->mSize - pf->mPos));
+
+		std::memcpy(buf, decompressed.data() + pf->mPos, aSizeBytes);
+
+		pf->mPos += aSizeBytes;
+
+		return aSizeBytes / size;
 	}
 	return fread(buf, size, count, pf->mFP);
 }
