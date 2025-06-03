@@ -115,17 +115,38 @@ bool PakInterface::AddPakFile(const string &fileName)
 	GPAKFileEntry *entriesPtr = reinterpret_cast<GPAKFileEntry *>(reinterpret_cast<uint8_t *>(collection.data()) + gpakHeader->fileTableOffset);
 	std::vector<GPAKFileEntry> entries(entriesPtr, entriesPtr + gpakHeader->fileCount);
 
+	// the decompressed buffer to fill up.
+	std::vector<uint8_t> finalBuffer;
+	finalBuffer.reserve(fileSize);
+
+	//Size of the header for recalculating the start pos
+	size_t headerSize = gpakHeader->fileTableOffset + gpakHeader->fileCount * sizeof(GPAKFileEntry);
+
+
 	for (const GPAKFileEntry& entry : entries)
 	{
 		std::string upperName = toupper(std::string(entry.path));
 		PakRecord& rec = mPakRecordMap[upperName];
 		rec.mCollection = &collection;
 		rec.mFileName = entry.path;
-		rec.mStartPos = entry.dataOffset;
-		rec.mCompressedSize = entry.compressedSize;
 		rec.mSize = entry.originalSize;
 		rec.mFileTime = filesystem::file_time_type::min(); // GPAK doesn't store this yet
+
+		//Decompress and Decrypt the GPAK data.
+		const uint8_t* compressedData = collection.data() + entry.dataOffset;
+		std::vector<uint8_t> compressed(compressedData, compressedData + entry.compressedSize);
+		if (!gDecryptPassword.empty())
+			compressed = AESDecrypt(compressed, gDecryptPassword);
+		std::vector<uint8_t> decompressed = Decompress(compressed, entry.originalSize);
+
+		rec.mStartPos = finalBuffer.size();
+
+		finalBuffer.insert(finalBuffer.end(), decompressed.begin(), decompressed.end());
 	}
+
+	//Move the readable data into the collection for fread to use
+	collection.vector() = std::move(finalBuffer);
+
 	return true;
 }
 
@@ -191,24 +212,11 @@ size_t PakInterface::FRead(void *buf, int size, int count, PFILE *pf)
 {
 	if (pf->mRecord)
 	{
-		//This is probably the worse code ever written.
-		//It's very slow.
-		//I wish i knew how to actually get it to decompress and decrypt in fopen or heck even in addpakfile.
-		//TODO: MOVE DECRPYTION AND DECOMPRESSION LOGIC TO FOPEN OR ADDPAKFILE
         PakRecord* rec = pf->mRecord;
-		auto& collection = *rec->mCollection;
-		const uint8_t* compressedData = collection.data() + pf->mRecord->mStartPos;
-		std::vector<uint8_t> compressed(compressedData, compressedData + pf->mRecord->mCompressedSize);
-
-		if (!gDecryptPassword.empty())
-		{
-			compressed = AESDecrypt(compressed, gDecryptPassword);
-		}
-		std::vector<uint8_t> decompressed = Decompress(compressed, pf->mRecord->mSize);
 
 		int aSizeBytes = std::min(size*count, static_cast<int>(pf->mRecord->mSize - pf->mPos));
 
-		std::memcpy(buf, decompressed.data() + pf->mPos, aSizeBytes);
+		std::memcpy(buf, rec->mCollection->data() + rec->mStartPos + pf->mPos, aSizeBytes);
 
 		pf->mPos += aSizeBytes;
 

@@ -96,7 +96,7 @@ bool BassMusicInterface::LoadMusic(int theSongId, const std::string &theFileName
 		aStream = BASS_StreamCreateFile(TRUE, aData, 0, aSize, BASS_SAMPLE_LOOP);
 	else
 	{
-		aHMusic = BASS_MusicLoad(TRUE, aData, 0, 0, BASS_MUSIC_LOOP | BASS_MUSIC_RAMP, 0);
+		aHMusic = BASS_MusicLoad(TRUE, aData, 0, aSize, BASS_MUSIC_LOOP | BASS_MUSIC_RAMP, 0);
 		delete[] aData;
 	}
 

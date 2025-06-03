@@ -23,7 +23,6 @@ class PakRecord
 	std::string mFileName;
 	FileTime mFileTime;
 	std::streamoff mStartPos;
-	uint32_t mCompressedSize;
 	std::size_t mSize;
 };
 
