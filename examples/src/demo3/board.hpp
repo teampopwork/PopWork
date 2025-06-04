@@ -31,15 +31,15 @@
 //////////////////////////////////////////////////////////////////////////
 
 // This file must be included so that we can derive our Board class from it
-#include "PopWork/widget/widget.hpp"
+#include "PopLib/widget/widget.hpp"
 
 // You'll learn about responding to button events in this demo.
 // Any class that wants to respond to them must derive from ButtonListener.
-#include "PopWork/widget/buttonlistener.hpp"
+#include "PopLib/widget/buttonlistener.hpp"
 
-// We place all our classes inside the "PopWork" namespace to avoid name collisions
+// We place all our classes inside the "PopLib" namespace to avoid name collisions
 // with other libraries that might be added.
-namespace PopWork
+namespace PopLib
 {
 
 // Forward declare the graphics class. You will see the graphics class used
@@ -260,6 +260,6 @@ class Board : public Widget, public ButtonListener
 	virtual void MouseUp(int x, int y, int theClickCount);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __BOARD_HPP__

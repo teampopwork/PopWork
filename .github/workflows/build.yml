@@ -99,7 +99,7 @@ jobs:
       - name: Upload dist directory
         uses: actions/upload-artifact@v4
         with:
-          name: PopWork-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}
+          name: PopLib-${{ needs.version.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}
           path: dist/
 
   release:

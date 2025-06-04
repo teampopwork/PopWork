@@ -4,11 +4,11 @@
 #pragma once
 #endif
 
-#include "PopWork/widget/widget.hpp"
-#include "PopWork/widget/buttonlistener.hpp"
-#include "PopWork/math/rect.hpp"
+#include "PopLib/widget/widget.hpp"
+#include "PopLib/widget/buttonlistener.hpp"
+#include "PopLib/math/rect.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class V12DemoApp;
@@ -85,6 +85,6 @@ class Board : public Widget, public ButtonListener
 	}
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif //__BOARD_HPP__

@@ -4,9 +4,9 @@
 #pragma once
 #endif
 
-#include "PopWork/appbase.hpp"
+#include "PopLib/appbase.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 class Board;
 
@@ -26,6 +26,6 @@ class GameApp : public AppBase
 	Board *mBoard;
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __GAMEAPP_H__

@@ -9,9 +9,9 @@
 #pragma once
 #endif
 
-#include "PopWork/common.hpp"
+#include "PopLib/common.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Graphics;
@@ -221,6 +221,6 @@ class GameOverEffect
 	void DoneViewingStats();
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __GAME_OVER_EFFECT_HPP__

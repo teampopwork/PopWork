@@ -1,14 +1,14 @@
 #include "res.hpp"
-#include "PopWork/resources/resourcemanager.hpp"
+#include "PopLib/resources/resourcemanager.hpp"
 #include <cstdint>
 
-using namespace PopWork;
+using namespace PopLib;
 
 #pragma warning(disable : 4311 4312)
 
 static bool gNeedRecalcVariableToIdMap = false;
 
-bool PopWork::ExtractResourcesByName(ResourceManager *theManager, const char *theName)
+bool PopLib::ExtractResourcesByName(ResourceManager *theManager, const char *theName)
 {
 	if (strcmp(theName, "Game") == 0)
 		return ExtractGameResources(theManager);
@@ -21,7 +21,7 @@ bool PopWork::ExtractResourcesByName(ResourceManager *theManager, const char *th
 	return false;
 }
 
-PopWork::ResourceId PopWork::GetIdByStringId(const char *theStringId)
+PopLib::ResourceId PopLib::GetIdByStringId(const char *theStringId)
 {
 	typedef std::map<std::string, int> MyMap;
 	static MyMap aMap;
@@ -39,23 +39,23 @@ PopWork::ResourceId PopWork::GetIdByStringId(const char *theStringId)
 }
 
 // Game Resources
-Image *PopWork::IMAGE_BG0;
-Image *PopWork::IMAGE_BG1;
-Image *PopWork::IMAGE_BG2;
-Image *PopWork::IMAGE_BUTTON_DOWN;
-Image *PopWork::IMAGE_BUTTON_NORMAL;
-Image *PopWork::IMAGE_BUTTON_OVER;
-Image *PopWork::IMAGE_CHECKBOX;
-Image *PopWork::IMAGE_DIALOG_BOX;
-Image *PopWork::IMAGE_DIALOG_BUTTON;
-Image *PopWork::IMAGE_ROBOTROBOT;
-Image *PopWork::IMAGE_SLIDER_THUMB;
-Image *PopWork::IMAGE_SLIDER_TRACK;
-Image *PopWork::IMAGE_TESTPIXEL;
-int PopWork::SOUND_MUTATOR;
-int PopWork::SOUND_TIMER;
+Image *PopLib::IMAGE_BG0;
+Image *PopLib::IMAGE_BG1;
+Image *PopLib::IMAGE_BG2;
+Image *PopLib::IMAGE_BUTTON_DOWN;
+Image *PopLib::IMAGE_BUTTON_NORMAL;
+Image *PopLib::IMAGE_BUTTON_OVER;
+Image *PopLib::IMAGE_CHECKBOX;
+Image *PopLib::IMAGE_DIALOG_BOX;
+Image *PopLib::IMAGE_DIALOG_BUTTON;
+Image *PopLib::IMAGE_ROBOTROBOT;
+Image *PopLib::IMAGE_SLIDER_THUMB;
+Image *PopLib::IMAGE_SLIDER_TRACK;
+Image *PopLib::IMAGE_TESTPIXEL;
+int PopLib::SOUND_MUTATOR;
+int PopLib::SOUND_TIMER;
 
-bool PopWork::ExtractGameResources(ResourceManager *theManager)
+bool PopLib::ExtractGameResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -86,36 +86,36 @@ bool PopWork::ExtractGameResources(ResourceManager *theManager)
 }
 
 // Hungarr Resources
-Image *PopWork::IMAGE_ATOMIC_EXPLOSION;
-Image *PopWork::IMAGE_BOMB_RADIAL_DEATH;
-Image *PopWork::IMAGE_HUNGARR_BEAM_DOWN;
-Image *PopWork::IMAGE_HUNGARR_BEAM_LEFT;
-Image *PopWork::IMAGE_HUNGARR_BEAM_RIGHT;
-Image *PopWork::IMAGE_HUNGARR_BEAM_UP;
-Image *PopWork::IMAGE_HUNGARR_HORIZ;
-Image *PopWork::IMAGE_HUNGARR_SMALL;
-Image *PopWork::IMAGE_HUNGARR_VERT;
-Image *PopWork::IMAGE_PARTICLE_LIGHTNING;
-Image *PopWork::IMAGE_PLANETS;
-Image *PopWork::IMAGE_SPARK;
-int PopWork::SOUND_BEAM_HIT;
-int PopWork::SOUND_BEAM_MOVING;
-int PopWork::SOUND_BUTTON;
-int PopWork::SOUND_EXPLOSION;
-int PopWork::SOUND_GAME_OVER_CLICK;
-int PopWork::SOUND_GAME_OVER_RESTART;
-int PopWork::SOUND_GAME_OVER_STATS;
-int PopWork::SOUND_GAME_OVER_TEXT;
-int PopWork::SOUND_LEVEL_UP1;
-int PopWork::SOUND_LEVEL_UP2;
-int PopWork::SOUND_LEVEL_UP3;
-int PopWork::SOUND_LEVEL_UP4;
-int PopWork::SOUND_MAGZAP;
-int PopWork::SOUND_PLANET;
-int PopWork::SOUND_PLANET_HIT;
-int PopWork::SOUND_REGION_FILLED;
+Image *PopLib::IMAGE_ATOMIC_EXPLOSION;
+Image *PopLib::IMAGE_BOMB_RADIAL_DEATH;
+Image *PopLib::IMAGE_HUNGARR_BEAM_DOWN;
+Image *PopLib::IMAGE_HUNGARR_BEAM_LEFT;
+Image *PopLib::IMAGE_HUNGARR_BEAM_RIGHT;
+Image *PopLib::IMAGE_HUNGARR_BEAM_UP;
+Image *PopLib::IMAGE_HUNGARR_HORIZ;
+Image *PopLib::IMAGE_HUNGARR_SMALL;
+Image *PopLib::IMAGE_HUNGARR_VERT;
+Image *PopLib::IMAGE_PARTICLE_LIGHTNING;
+Image *PopLib::IMAGE_PLANETS;
+Image *PopLib::IMAGE_SPARK;
+int PopLib::SOUND_BEAM_HIT;
+int PopLib::SOUND_BEAM_MOVING;
+int PopLib::SOUND_BUTTON;
+int PopLib::SOUND_EXPLOSION;
+int PopLib::SOUND_GAME_OVER_CLICK;
+int PopLib::SOUND_GAME_OVER_RESTART;
+int PopLib::SOUND_GAME_OVER_STATS;
+int PopLib::SOUND_GAME_OVER_TEXT;
+int PopLib::SOUND_LEVEL_UP1;
+int PopLib::SOUND_LEVEL_UP2;
+int PopLib::SOUND_LEVEL_UP3;
+int PopLib::SOUND_LEVEL_UP4;
+int PopLib::SOUND_MAGZAP;
+int PopLib::SOUND_PLANET;
+int PopLib::SOUND_PLANET_HIT;
+int PopLib::SOUND_REGION_FILLED;
 
-bool PopWork::ExtractHungarrResources(ResourceManager *theManager)
+bool PopLib::ExtractHungarrResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -159,15 +159,15 @@ bool PopWork::ExtractHungarrResources(ResourceManager *theManager)
 }
 
 // Init Resources
-Font *PopWork::FONT_DEFAULT;
-Font *PopWork::FONT_HUNGARR;
-Image *PopWork::IMAGE_CUSTOM_DRAGGING;
-Image *PopWork::IMAGE_CUSTOM_HAND;
-Image *PopWork::IMAGE_CUSTOM_POINTER;
-Image *PopWork::IMAGE_CUSTOM_TEXT;
-Image *PopWork::IMAGE_HUNGARR_LOGO;
+Font *PopLib::FONT_DEFAULT;
+Font *PopLib::FONT_HUNGARR;
+Image *PopLib::IMAGE_CUSTOM_DRAGGING;
+Image *PopLib::IMAGE_CUSTOM_HAND;
+Image *PopLib::IMAGE_CUSTOM_POINTER;
+Image *PopLib::IMAGE_CUSTOM_TEXT;
+Image *PopLib::IMAGE_HUNGARR_LOGO;
 
-bool PopWork::ExtractInitResources(ResourceManager *theManager)
+bool PopLib::ExtractInitResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -190,11 +190,11 @@ bool PopWork::ExtractInitResources(ResourceManager *theManager)
 }
 
 // TitleScreen Resources
-Image *PopWork::IMAGE_LOADER_BAR;
-Image *PopWork::IMAGE_LOADER_LOADINGTXT;
-int PopWork::SOUND_CONTINUE;
+Image *PopLib::IMAGE_LOADER_BAR;
+Image *PopLib::IMAGE_LOADER_LOADINGTXT;
+int PopLib::SOUND_CONTINUE;
 
-bool PopWork::ExtractTitleScreenResources(ResourceManager *theManager)
+bool PopLib::ExtractTitleScreenResources(ResourceManager *theManager)
 {
 	gNeedRecalcVariableToIdMap = true;
 
@@ -267,27 +267,27 @@ static void *gResources[] = {&FONT_DEFAULT,
 							 IMAGE_TESTPIXEL,
 							 NULL};
 
-Image *PopWork::LoadImageById(ResourceManager *theManager, int theId)
+Image *PopLib::LoadImageById(ResourceManager *theManager, int theId)
 {
 	return (*((Image **)gResources[theId]) = theManager->LoadImage(GetStringIdById(theId)));
 }
 
-Image *PopWork::GetImageById(int theId)
+Image *PopLib::GetImageById(int theId)
 {
 	return *(Image **)gResources[theId];
 }
 
-Font *PopWork::GetFontById(int theId)
+Font *PopLib::GetFontById(int theId)
 {
 	return *(Font **)gResources[theId];
 }
 
-int PopWork::GetSoundById(int theId)
+int PopLib::GetSoundById(int theId)
 {
 	return *(int *)gResources[theId];
 }
 
-static PopWork::ResourceId GetIdByVariable(const void *theVariable)
+static PopLib::ResourceId GetIdByVariable(const void *theVariable)
 {
 	typedef std::map<int, int> MyMap;
 	static MyMap aMap;
@@ -306,22 +306,22 @@ static PopWork::ResourceId GetIdByVariable(const void *theVariable)
 		return (ResourceId)anItr->second;
 }
 
-PopWork::ResourceId PopWork::GetIdByImage(Image *theImage)
+PopLib::ResourceId PopLib::GetIdByImage(Image *theImage)
 {
 	return GetIdByVariable(theImage);
 }
 
-PopWork::ResourceId PopWork::GetIdByFont(Font *theFont)
+PopLib::ResourceId PopLib::GetIdByFont(Font *theFont)
 {
 	return GetIdByVariable(theFont);
 }
 
-PopWork::ResourceId PopWork::GetIdBySound(int theSound)
+PopLib::ResourceId PopLib::GetIdBySound(int theSound)
 {
 	return GetIdByVariable((void *)theSound);
 }
 
-const char *PopWork::GetStringIdById(int theId)
+const char *PopLib::GetStringIdById(int theId)
 {
 	switch (theId)
 	{

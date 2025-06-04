@@ -31,11 +31,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 // This file must be included so that we can derive our Board class from it
-#include "PopWork/widget/widget.hpp"
+#include "PopLib/widget/widget.hpp"
 
-// We place all our classes inside the "PopWork" namespace to avoid name collisions
+// We place all our classes inside the "PopLib" namespace to avoid name collisions
 // with other libraries that might be added.
-namespace PopWork
+namespace PopLib
 {
 
 // Forward declare the graphics class. You will see the graphics class used
@@ -99,6 +99,6 @@ class Board : public Widget
 	virtual void Update();
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __BOARD_HPP__

@@ -7,16 +7,16 @@
 #include "gameovereffect.hpp"
 #include "optionsdialog.hpp"
 
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/color.hpp"
-#include "PopWork/math/rect.hpp"
-#include "PopWork/widget/buttonwidget.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/graphics/imagefont.hpp"
-#include "PopWork/audio/soundmanager.hpp"
-#include "PopWork/audio/soundinstance.hpp"
-#include "PopWork/misc/buffer.hpp"
-#include "PopWork/audio/musicinterface.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/color.hpp"
+#include "PopLib/math/rect.hpp"
+#include "PopLib/widget/buttonwidget.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/graphics/imagefont.hpp"
+#include "PopLib/audio/soundmanager.hpp"
+#include "PopLib/audio/soundinstance.hpp"
+#include "PopLib/misc/buffer.hpp"
+#include "PopLib/audio/musicinterface.hpp"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -26,7 +26,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-using namespace PopWork;
+using namespace PopLib;
 
 // How much faster the beam gets when you eat a planet
 const float BEAM_INC_SPEED = 0.05f;

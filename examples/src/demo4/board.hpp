@@ -30,18 +30,18 @@
 //	classes where and when to draw to.
 //////////////////////////////////////////////////////////////////////////
 
-#include "PopWork/widget/widget.hpp"
-#include "PopWork/widget/buttonlistener.hpp"
+#include "PopLib/widget/widget.hpp"
+#include "PopLib/widget/buttonlistener.hpp"
 
 // Because we're going to be learning about some new widgets, we
 // need to include some more listener classes so we can respond to each one.
-#include "PopWork/widget/editlistener.hpp"
-#include "PopWork/widget/checkboxlistener.hpp"
-#include "PopWork/widget/listlistener.hpp"
+#include "PopLib/widget/editlistener.hpp"
+#include "PopLib/widget/checkboxlistener.hpp"
+#include "PopLib/widget/listlistener.hpp"
 
-// We place all our classes inside the "PopWork" namespace to avoid name collisions
+// We place all our classes inside the "PopLib" namespace to avoid name collisions
 // with other libraries that might be added.
-namespace PopWork
+namespace PopLib
 {
 
 // Forward declare the graphics class. You will see the graphics class used
@@ -269,7 +269,7 @@ class Board : public Widget, public ButtonListener, public EditListener, public 
 	//	more processor time.
 	//	IMPORTANT: YOU MUST ALSO DELETE THE FOLLOWING REGISTRY KEY:
 	//	Whereever your registry settings are stored
-	//	(HKEY_LOCAL_MACHINE\SOFTWARE\PopWork\Demo4 for this case),
+	//	(HKEY_LOCAL_MACHINE\SOFTWARE\PopLib\Demo4 for this case),
 	//	you must delete the key "WaitForVSync". This is VERY important, and it
 	//	won't work otherwise.
 	//////////////////////////////////////////////////////////////////////////
@@ -323,6 +323,6 @@ class Board : public Widget, public ButtonListener, public EditListener, public 
 	virtual void RemovedFromManager(WidgetManager *theWidgetManager);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __BOARD_HPP__

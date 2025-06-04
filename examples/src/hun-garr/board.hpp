@@ -30,11 +30,11 @@
 //	classes where and when to draw to.
 //////////////////////////////////////////////////////////////////////////
 
-#include "PopWork/widget/widget.hpp"
-#include "PopWork/widget/buttonlistener.hpp"
-#include "PopWork/math/rect.hpp"
+#include "PopLib/widget/widget.hpp"
+#include "PopLib/widget/buttonlistener.hpp"
+#include "PopLib/math/rect.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Graphics;
@@ -753,6 +753,6 @@ class Board : public Widget, public ButtonListener
 	void OptionsDialogDone();
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __BOARD_HPP__

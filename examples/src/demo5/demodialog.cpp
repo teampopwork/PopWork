@@ -2,16 +2,16 @@
 #include "res.hpp"
 #include "gameapp.hpp"
 
-#include "PopWork/appbase.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/graphics/font.hpp"
-#include "PopWork/widget/dialogbutton.hpp"
-#include "PopWork/widget/checkbox.hpp"
+#include "PopLib/appbase.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/graphics/font.hpp"
+#include "PopLib/widget/dialogbutton.hpp"
+#include "PopLib/widget/checkbox.hpp"
 
 // We're going to use a slider widget to control sound/music volume
-#include "PopWork/widget/slider.hpp"
+#include "PopLib/widget/slider.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //	Let's do a little explanation of the parent Dialog class, shall we?
@@ -301,7 +301,7 @@ void DemoDialog::ButtonDepress(int theId)
 	if (theId == mRandomBtn->mId)
 	{
 		// Let's get a random integer. The Rand() function is declared
-		// in Common.h and returns a value from 0 to POPWORK_RAND_MAX (2,147,483,647)
+		// in Common.h and returns a value from 0 to POPLIB_RAND_MAX (2,147,483,647)
 		int r = Rand();
 
 		// Now let's change the text of the dialog box:

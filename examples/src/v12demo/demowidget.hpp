@@ -4,10 +4,10 @@
 #pragma once
 #endif
 
-#include "PopWork/widget/widget.hpp"
-#include "PopWork/widget/buttonlistener.hpp"
+#include "PopLib/widget/widget.hpp"
+#include "PopLib/widget/buttonlistener.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class ButtonWidget;
@@ -33,6 +33,6 @@ class DemoWidget : public Widget, public ButtonListener
 	void ButtonDepress(int id);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif //__DEMO_WIDGET_HPP__

@@ -19,14 +19,14 @@
 #pragma once
 #endif
 
-#include "PopWork/widget/dialog.hpp"
+#include "PopLib/widget/dialog.hpp"
 
 // This lets us receive slider events
-#include "PopWork/widget/sliderlistener.hpp"
+#include "PopLib/widget/sliderlistener.hpp"
 
-#include "PopWork/widget/checkboxlistener.hpp"
+#include "PopLib/widget/checkboxlistener.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Graphics;
@@ -200,6 +200,6 @@ class DemoDialog : public Dialog, public SliderListener, public CheckboxListener
 	void CheckboxChecked(int theId, bool checked);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif

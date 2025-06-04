@@ -1,18 +1,18 @@
 #include "xmldemoapp.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/resources/resourcemanager.hpp"
-#include "PopWork/readwrite/xmlparser.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/resources/resourcemanager.hpp"
+#include "PopLib/readwrite/xmlparser.hpp"
 #include "board.hpp"
 #include "res.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 XMLDemoApp::XMLDemoApp()
 {
 	mProdName = "XMLDemo";
 	mProductVersion = "1.0";
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
-	mRegKey = "PopCap\\PopWork\\XMLDemo";
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
+	mRegKey = "PopCap\\PopLib\\XMLDemo";
 
 	mBoard = NULL;
 	mParser = NULL;

@@ -1,5 +1,5 @@
 # Contributing
-Thanks for contributing to PopWork! We **always** welcome improvements, bug fixes, and new ideas.
+Thanks for contributing to PopLib! We **always** welcome improvements, bug fixes, and new ideas.
 
 ## How to contribute
 - Please open an issue to discuss major changes before starting work.

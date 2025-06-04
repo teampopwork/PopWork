@@ -1,5 +1,5 @@
 # PopWork
-[![Build Status](https://github.com/Electr0Gunner/PopWork/actions/workflows/build.yml/badge.svg)](https://github.com/Electr0Gunner/PopWork/actions/workflows/build.yml) ![Repo size](https://img.shields.io/github/repo-size/Electr0Gunner/PopWork) ![Last commit](https://img.shields.io/github/last-commit/Electr0Gunner/PopWork)
+[![Build Status](https://github.com/teampopwork/PopLib/actions/workflows/build.yml/badge.svg)](https://github.com/teampopwork/PopLib/actions/workflows/build.yml) ![Repo size](https://img.shields.io/github/repo-size/teampopwork/poplib) ![Last commit](https://img.shields.io/github/last-commit/teampopwork/poplib)
 
 > An updated version of PopCap's SexyAppFramework, which aims to add more features than usual.
 

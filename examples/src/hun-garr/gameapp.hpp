@@ -25,9 +25,9 @@
 //	either in this demo, or in previous ones if they've already been covered.
 //////////////////////////////////////////////////////////////////////////
 
-#include "PopWork/appbase.hpp"
+#include "PopLib/appbase.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Board;
@@ -165,6 +165,6 @@ class GameApp : public AppBase
 	virtual void PlaySample(int theSoundNum);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __GAMEAPP_HPP__

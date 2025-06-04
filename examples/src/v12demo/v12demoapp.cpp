@@ -1,20 +1,20 @@
 #include "v12demoapp.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/graphics/sdlimage.hpp"
-#include "PopWork/resources/resourcemanager.hpp"
-#include "PopWork/widget/dialog.hpp"
-#include "PopWork/graphics/SWTri/SWTri.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/graphics/sdlimage.hpp"
+#include "PopLib/resources/resourcemanager.hpp"
+#include "PopLib/widget/dialog.hpp"
+#include "PopLib/graphics/SWTri/SWTri.hpp"
 #include "board.hpp"
 #include "res.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 V12DemoApp::V12DemoApp()
 {
 	mProdName = "V12Demo";
 	mProductVersion = "1.0";
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
-	mRegKey = "PopCap/PopWork/V12Demo";
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
+	mRegKey = "PopCap/PopLib/V12Demo";
 
 	mNoSoundNeeded = true;
 	mBoard = NULL;

@@ -2,13 +2,13 @@
 #include "titlescreen.hpp"
 #include "board.hpp"
 #include "optionsdialog.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/resources/resourcemanager.hpp"
-#include "PopWork/audio/bassmusicinterface.hpp"
-#include "PopWork/widget/dialog.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/resources/resourcemanager.hpp"
+#include "PopLib/audio/bassmusicinterface.hpp"
+#include "PopLib/widget/dialog.hpp"
 #include "res.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -16,8 +16,8 @@ GameApp::GameApp()
 {
 	mProdName = "Hun-garr Needs Planets!";
 	mProductVersion = "1.0";
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
-	mRegKey = "PopCap/PopWork/Hungarr";
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
+	mRegKey = "PopCap/PopLib/Hungarr";
 
 	mWidth = 640;
 	mHeight = 480;

@@ -1,28 +1,28 @@
 #include "gameapp.hpp"
 #include "board.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
 
 // Why are we including ImageFont.h and not Font.h? Font.h is just a generic
 // base class. ImageFont creates fonts from an image that contains all the
 // text characters as well as a text file that indicates character widths
 // and kerning information, as well as some more advanced features not used
 // in this tutorial such as font layers, etc.
-#include "PopWork/graphics/imagefont.hpp"
+#include "PopLib/graphics/imagefont.hpp"
 
 // The Image.h file just declares basic functions. All images are either of
 // the SDLImage or MemoryImage type. For this demo, we will use SDLImage
 // types, as they are the type returned by the image loading code.
 // A SDLImage is actually derived from MemoryImage, so where an Image or
 // MemoryImage is required, a SDLImage will suffice as well.
-#include "PopWork/graphics/sdlimage.hpp"
+#include "PopLib/graphics/sdlimage.hpp"
 
 // This will let us load sounds
-#include "PopWork/audio/soundmanager.hpp"
+#include "PopLib/audio/soundmanager.hpp"
 
-// The PopWork resides in the "PopWork" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace PopWork" to avoid
-// having to prefix everything with PopWork::
-using namespace PopWork;
+// The PopLib resides in the "PopLib" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopLib" to avoid
+// having to prefix everything with PopLib::
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -35,12 +35,12 @@ GameApp::GameApp()
 	mProductVersion = "1.0";
 
 	// This is the text that appears in the title bar of the application window
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
 
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
-	mRegKey = "PopCap/PopWork/Demo2";
+	mRegKey = "PopCap/PopLib/Demo2";
 
 	// Set the application width/height in terms of pixels here. Let's
 	// use a different resolution from Demo 1 just for fun.

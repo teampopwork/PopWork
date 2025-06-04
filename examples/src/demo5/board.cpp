@@ -6,21 +6,21 @@
 #include "res.hpp"
 
 // You should remember these files from the previous demos
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/color.hpp"
-#include "PopWork/math/rect.hpp"
-#include "PopWork/widget/buttonwidget.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/graphics/imagefont.hpp"
-#include "PopWork/graphics/image.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/color.hpp"
+#include "PopLib/math/rect.hpp"
+#include "PopLib/widget/buttonwidget.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/graphics/imagefont.hpp"
+#include "PopLib/graphics/image.hpp"
 
 // Our example dialog box
 #include "demodialog.hpp"
 
-// And for our performance profiling example, we first have to define POPWORK_PERF_ENABLED
+// And for our performance profiling example, we first have to define PERF_ENABLED
 // before including PerfTimer.h:
-#define POPWORK_PERF_ENABLED
-#include "PopWork/debug/perftimer.hpp"
+#define PERF_ENABLED
+#include "PopLib/debug/perftimer.hpp"
 
 // Lastly, for our example of how to catch memory leaks, we first
 // enable leak detection with a #define in EACH of the files we want
@@ -29,13 +29,13 @@
 // OTHER FILE INCLUDES OR ELSE IT WILL CAUSE LINKER AND COMPILER ERRORS!
 // Memory leaks will automatically be dumped to "mem_leaks.txt" when
 // the app is closed.
-//#define POPWORK_MEMTRACE
-#include "PopWork/debug/memmgr.hpp"
+#define MEMTRACE
+#include "PopLib/debug/memmgr.hpp"
 
-// The PopWork resides in the "PopWork" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace PopWork" to avoid
-// having to prefix everything with PopWork::
-using namespace PopWork;
+// The PopLib resides in the "PopLib" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopLib" to avoid
+// having to prefix everything with PopLib::
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -101,16 +101,16 @@ void Board::Update()
 	// statement below, passing in a string indicating WHAT you're
 	// profiling. The string can be anything. Enabled debug keys by
 	// pressing CTRL-ALT-D and then press F2 to enabled/disable profiling.
-	POPWORK_PERF_BEGIN("Start_Of_Update");
+	PERF_BEGIN("Start_Of_Update");
 
 	Widget::Update();
 
 	MarkDirty();
 
 	// And you mark the end of a profiling section with
-	// POPWORK_PER_END, passing in the same string you passed to
-	// POPWORK_PERF_BEGIN.
-	POPWORK_PERF_END("Start_Of_Update");
+	// PERF_END, passing in the same string you passed to
+	// PERF_BEGIN.
+	PERF_END("Start_Of_Update");
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ void Board::Draw(Graphics *g)
 	// statement below, passing in a string indicating WHAT you're
 	// profiling. The string can be anything. Enabled debug keys by
 	// pressing CTRL-ALT-D and then press F2 to enabled/disable profiling.
-	POPWORK_PERF_BEGIN("Start_Of_Draw");
+	PERF_BEGIN("Start_Of_Draw");
 
 	// Clear the screen to black
 	g->SetColor(Color(0, 0, 0));
@@ -223,9 +223,9 @@ void Board::Draw(Graphics *g)
 	}
 
 	// And you mark the end of a profiling section with
-	// POPWORK_PER_END, passing in the same string you passed to
-	// POPWORK_PERF_BEGIN.
-	POPWORK_PERF_END("Start_Of_Draw");
+	// PERF_END, passing in the same string you passed to
+	// PERF_BEGIN.
+	PERF_END("Start_Of_Draw");
 }
 
 //////////////////////////////////////////////////////////////////////////

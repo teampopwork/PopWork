@@ -4,10 +4,10 @@
 #pragma once
 #endif
 
-#include "PopWork/widget/widget.hpp"
-#include "PopWork/widget/buttonlistener.hpp"
+#include "PopLib/widget/widget.hpp"
+#include "PopLib/widget/buttonlistener.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class GameApp;
@@ -116,6 +116,6 @@ class TitleScreen : public Widget, public ButtonListener
 	void LoadingComplete();
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif //__TITLE_SCREEN_HPP__

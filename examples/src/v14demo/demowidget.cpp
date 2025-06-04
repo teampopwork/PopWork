@@ -1,10 +1,10 @@
 #include "demowidget.hpp"
 #include "res.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/widget/buttonwidget.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/widget/buttonwidget.hpp"
 #include "v14demoapp.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

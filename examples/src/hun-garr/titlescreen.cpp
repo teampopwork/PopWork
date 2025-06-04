@@ -2,14 +2,14 @@
 #include "gameapp.hpp"
 #include "res.hpp"
 
-#include "PopWork/graphics/font.hpp"
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/image.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/math/rect.hpp"
-#include "PopWork/widget/hyperlinkwidget.hpp"
+#include "PopLib/graphics/font.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/image.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/math/rect.hpp"
+#include "PopLib/widget/hyperlinkwidget.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

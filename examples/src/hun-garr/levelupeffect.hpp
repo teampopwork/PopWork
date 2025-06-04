@@ -11,10 +11,10 @@
 #pragma once
 #endif
 
-#include "PopWork/common.hpp"
-#include "PopWork/math/rect.hpp"
+#include "PopLib/common.hpp"
+#include "PopLib/math/rect.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Graphics;
@@ -205,6 +205,6 @@ class LevelupEffect
 	}
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif //__LEVELUP_EFFECT_HPP__

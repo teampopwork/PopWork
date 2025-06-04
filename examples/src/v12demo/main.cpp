@@ -56,7 +56,7 @@
 #endif
 #endif
 
-using namespace PopWork;
+using namespace PopLib;
 
 int main(int argc, char *argv[])
 {

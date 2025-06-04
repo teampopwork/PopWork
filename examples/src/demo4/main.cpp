@@ -24,10 +24,10 @@
 #endif
 #endif
 
-// The PopWork resides in the "PopWork" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace PopWork" to avoid
-// having to prefix everything with PopWork::
-using namespace PopWork;
+// The PopLib resides in the "PopLib" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopLib" to avoid
+// having to prefix everything with PopLib::
+using namespace PopLib;
 
 int main(int argc, char *argv[])
 {

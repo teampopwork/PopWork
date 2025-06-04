@@ -4,9 +4,9 @@
 #pragma once
 #endif
 
-#include "PopWork/widget/widget.hpp"
+#include "PopLib/widget/widget.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class XMLDemoApp;
@@ -25,6 +25,6 @@ class Board : public Widget
 	void Draw(Graphics *g);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif //__BOARD_HPP__

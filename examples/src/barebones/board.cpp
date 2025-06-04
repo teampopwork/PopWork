@@ -1,10 +1,10 @@
 #include "board.hpp"
 
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/color.hpp"
-#include "PopWork/math/point.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/color.hpp"
+#include "PopLib/math/point.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 Board::Board(GameApp *theApp)
 {

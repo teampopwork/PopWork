@@ -6,33 +6,33 @@
 #include "res.hpp"
 
 // You should remember these files from the previous demos
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/color.hpp"
-#include "PopWork/math/rect.hpp"
-#include "PopWork/widget/buttonwidget.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/graphics/imagefont.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/color.hpp"
+#include "PopLib/math/rect.hpp"
+#include "PopLib/widget/buttonwidget.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/graphics/imagefont.hpp"
 
 // The following are needed for some new widgets we're going to learn about:
-#include "PopWork/widget/editwidget.hpp"
-#include "PopWork/widget/checkbox.hpp"
-#include "PopWork/widget/listwidget.hpp"
-#include "PopWork/widget/scrollbarwidget.hpp"
-#include "PopWork/widget/scrolllistener.hpp"
+#include "PopLib/widget/editwidget.hpp"
+#include "PopLib/widget/checkbox.hpp"
+#include "PopLib/widget/listwidget.hpp"
+#include "PopLib/widget/scrollbarwidget.hpp"
+#include "PopLib/widget/scrolllistener.hpp"
 
 // As part of our pitch shifted sound example, we'll need to
 // access the sound manager in our GameApp class as well as
 // individual sound instances:
-#include "PopWork/audio/soundmanager.hpp"
-#include "PopWork/audio/soundinstance.hpp"
+#include "PopLib/audio/soundmanager.hpp"
+#include "PopLib/audio/soundinstance.hpp"
 
 // Used for file I/O:
-#include "PopWork/misc/buffer.hpp"
+#include "PopLib/misc/buffer.hpp"
 
-// The PopWork resides in the "PopWork" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace PopWork" to avoid
-// having to prefix everything with PopWork::
-using namespace PopWork;
+// The PopLib resides in the "PopLib" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopLib" to avoid
+// having to prefix everything with PopLib::
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

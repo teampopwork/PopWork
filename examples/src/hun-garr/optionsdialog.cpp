@@ -2,14 +2,14 @@
 #include "res.hpp"
 #include "board.hpp"
 
-#include "PopWork/appbase.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/graphics/font.hpp"
-#include "PopWork/widget/dialogbutton.hpp"
-#include "PopWork/widget/checkbox.hpp"
-#include "PopWork/widget/slider.hpp"
+#include "PopLib/appbase.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/graphics/font.hpp"
+#include "PopLib/widget/dialogbutton.hpp"
+#include "PopLib/widget/checkbox.hpp"
+#include "PopLib/widget/slider.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 OptionsDialog::OptionsDialog(Board *b)
 	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, OptionsDialog::DIALOG_ID, true, "OPTIONS", "", "CLOSE",

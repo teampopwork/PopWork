@@ -4,9 +4,9 @@
 #pragma once
 #endif
 
-#include "PopWork/appbase.hpp"
+#include "PopLib/appbase.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Board;
@@ -76,5 +76,5 @@ class V12DemoApp : public AppBase
 	virtual void DialogButtonDepress(int dialog_id, int button_id);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 #endif //__V12DEMOAPP_HPP__

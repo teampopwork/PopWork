@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(PopWork LANGUAGES C CXX ASM VERSION 1.4.0)
+project(PopLib LANGUAGES C CXX ASM VERSION 1.4.0)
 
 set(BUILD_SHARED_LIBS OFF)
 set(SDL_SHARED ON)
@@ -69,7 +69,7 @@ set(CURL_USE_OPENSSL OFF CACHE BOOL "" FORCE)
 set(CURL_USE_MBEDTLS OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/curl EXCLUDE_FROM_ALL)
 
-add_subdirectory(PopWork)
+add_subdirectory(PopLib)
 
 if(BUILD_EXAMPLES)
 	add_subdirectory(examples)
@@ -77,7 +77,7 @@ endif()
 
 # djugjsfgufdgujdfgiujgdijfgifjdgidfjgifdgjfdgufdguifdg electr0gunner told me to add this
 if(BUILD_EXAMPLES OR BUILD_TOOLS)
-    set(demo_deps PopWork)
+    set(demo_deps PopLib)
 
     if(BUILD_EXAMPLES)
         list(APPEND demo_deps

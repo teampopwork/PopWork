@@ -1,23 +1,23 @@
 #include "v14demoapp.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/graphics/sdlimage.hpp"
-#include "PopWork/graphics/sdlinterface.hpp"
-#include "PopWork/imagelib/imagelib.hpp"
-#include "PopWork/resources/resourcemanager.hpp"
-#include "PopWork/widget/dialog.hpp"
-#include "PopWork/graphics/SWTri/SWTri.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/graphics/sdlimage.hpp"
+#include "PopLib/graphics/sdlinterface.hpp"
+#include "PopLib/imagelib/imagelib.hpp"
+#include "PopLib/resources/resourcemanager.hpp"
+#include "PopLib/widget/dialog.hpp"
+#include "PopLib/graphics/SWTri/SWTri.hpp"
 #include "board.hpp"
 #include "res.hpp"
-#include "PopWork/misc/httptransfer.hpp"
+#include "PopLib/misc/httptransfer.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 V14DemoApp::V14DemoApp()
 {
 	mProdName = "V14Demo";
 	mProductVersion = "1.0";
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
-	mRegKey = "PopCap/PopWork/V14Demo";
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
+	mRegKey = "PopCap/PopLib/V14Demo";
 
 	//mNoSoundNeeded = true;
 	mBoard = NULL;
@@ -97,7 +97,7 @@ void V14DemoApp::InitHook()
 	mWidgetManager->AddWidget(mBoard);
 	mWidgetManager->SetFocus(mBoard);
 
-	PopWork::HTTPTransfer transfer;
+	PopLib::HTTPTransfer transfer;
 
 #ifdef _DEBUG
 	// simple GET test,

@@ -4,7 +4,7 @@
 #pragma once
 #endif
 
-namespace PopWork
+namespace PopLib
 {
 class ResourceManager;
 class Image;
@@ -146,6 +146,6 @@ ResourceId GetIdBySound(int theSound);
 const char *GetStringIdById(int theId);
 ResourceId GetIdByStringId(const char *theStringId);
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif

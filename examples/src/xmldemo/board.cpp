@@ -1,9 +1,9 @@
 #include "board.hpp"
 #include "xmldemoapp.hpp"
-#include "PopWork/graphics/graphics.hpp"
+#include "PopLib/graphics/graphics.hpp"
 #include "res.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 Board::Board(XMLDemoApp *theApp)
 {

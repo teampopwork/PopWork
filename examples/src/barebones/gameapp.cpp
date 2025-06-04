@@ -1,9 +1,9 @@
 #include "gameapp.hpp"
 #include "board.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/common.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/common.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 GameApp::GameApp()
 {
@@ -11,9 +11,9 @@ GameApp::GameApp()
 
 	mProductVersion = "1.0";
 
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
 
-	mRegKey = "PopCap\\PopWork\\BareBones";
+	mRegKey = "PopCap\\PopLib\\BareBones";
 
 	mWidth = 640;
 	mHeight = 480;

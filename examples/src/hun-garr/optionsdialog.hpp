@@ -12,11 +12,11 @@
 #pragma once
 #endif
 
-#include "PopWork/widget/dialog.hpp"
-#include "PopWork/widget/sliderlistener.hpp"
-#include "PopWork/widget/checkboxlistener.hpp"
+#include "PopLib/widget/dialog.hpp"
+#include "PopLib/widget/sliderlistener.hpp"
+#include "PopLib/widget/checkboxlistener.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Graphics;
@@ -98,6 +98,6 @@ class OptionsDialog : public Dialog, public SliderListener, public CheckboxListe
 	void CheckboxChecked(int theId, bool checked);
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif

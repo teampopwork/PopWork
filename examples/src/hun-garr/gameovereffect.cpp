@@ -5,12 +5,12 @@
 #include "res.hpp"
 #include "board.hpp"
 
-#include "PopWork/appbase.hpp"
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/font.hpp"
-#include "PopWork/graphics/image.hpp"
+#include "PopLib/appbase.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/font.hpp"
+#include "PopLib/graphics/image.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

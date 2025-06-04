@@ -4,9 +4,9 @@
 #pragma once
 #endif
 
-#include "PopWork/widget/widget.hpp"
+#include "PopLib/widget/widget.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 class Graphics;
 
@@ -27,6 +27,6 @@ class Board : public Widget
 	GameApp *mApp;
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __BOARD_H__

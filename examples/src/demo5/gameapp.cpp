@@ -2,26 +2,26 @@
 #include "titlescreen.hpp"
 #include "board.hpp"
 #include "demodialog.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
 
-#include "PopWork/widget/checkbox.hpp"
+#include "PopLib/widget/checkbox.hpp"
 
 // We will be accessing the resource manager in this demo, so include it's header
-#include "PopWork/resources/resourcemanager.hpp"
+#include "PopLib/resources/resourcemanager.hpp"
 
 // Required for playing music
-#include "PopWork/audio/bassmusicinterface.hpp"
+#include "PopLib/audio/bassmusicinterface.hpp"
 
 // Contains all the resources from the resources.xml file in our
 // properties directory. See that file for more information.
 #include "res.hpp"
 
-#include "PopWork/widget/dialog.hpp"
+#include "PopLib/widget/dialog.hpp"
 
-// The PopWork resides in the "PopWork" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace PopWork" to avoid
-// having to prefix everything with PopWork::
-using namespace PopWork;
+// The PopLib resides in the "PopLib" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopLib" to avoid
+// having to prefix everything with PopLib::
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -34,12 +34,12 @@ GameApp::GameApp()
 	mProductVersion = "1.0";
 
 	// This is the text that appears in the title bar of the application window
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
 
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
-	mRegKey = "PopCap/PopWork/Demo5";
+	mRegKey = "PopCap/PopLib/Demo5";
 
 	// Set the application width/height in terms of pixels here.
 	mWidth = 640;

@@ -1,12 +1,12 @@
 #include "gameapp.hpp"
 #include "board.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/common.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/common.hpp"
 
-// The PopWork resides in the "PopWork" namespace. As a convenience,
-// you'll see in all the .cpp files "using namespace PopWork" to avoid
-// having to prefix everything with PopWork::
-using namespace PopWork;
+// The PopLib resides in the "PopLib" namespace. As a convenience,
+// you'll see in all the .cpp files "using namespace PopLib" to avoid
+// having to prefix everything with PopLib::
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -19,12 +19,12 @@ GameApp::GameApp()
 	mProductVersion = "1.0";
 
 	// This is the text that appears in the title bar of the application window
-	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
+	mTitle = "PopLib: " + mProdName + " - " + mProductVersion;
 
 	// Indicates the registry location where all registry keys will be read from
 	// and written to. This is stored under the HKEY_CURRENT_USER tree on
 	// Windows systems.
-	mRegKey = "PopCap/PopWork/Demo1";
+	mRegKey = "PopCap/PopLib/Demo1";
 
 	// Set the application width/height in terms of pixels here.
 	mWidth = 640;

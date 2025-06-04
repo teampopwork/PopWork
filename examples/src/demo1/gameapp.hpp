@@ -19,11 +19,11 @@
 //	interaction takes place), etc.
 //////////////////////////////////////////////////////////////////////////
 
-#include "PopWork/appbase.hpp"
+#include "PopLib/appbase.hpp"
 
-// We place all our classes inside the "PopWork" namespace to avoid name collisions
+// We place all our classes inside the "PopLib" namespace to avoid name collisions
 // with other libraries that might be added.
-namespace PopWork
+namespace PopLib
 {
 
 // The GameApp class will be responsible for creating a class by the name
@@ -81,6 +81,6 @@ class GameApp : public AppBase
 	virtual void LoadingThreadCompleted();
 };
 
-} // namespace PopWork
+} // namespace PopLib
 
 #endif // __GAMEAPP_HPP__

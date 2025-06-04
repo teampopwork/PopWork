@@ -5,11 +5,11 @@
 #include "board.hpp"
 #include "res.hpp"
 
-#include "PopWork/appbase.hpp"
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/font.hpp"
+#include "PopLib/appbase.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/font.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 const int STRIP_WIDTH = 20;
 

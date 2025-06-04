@@ -5,4 +5,4 @@ Unacceptable behavior includes harassment, hate speech, and personal attacks.
 
 If you experience or witness violations, please contact [electr0gunner] on Discord.
 
-Let’s keep PopWork welcoming for everyone!
+Let’s keep PopLib welcoming for everyone!

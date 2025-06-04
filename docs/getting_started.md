@@ -1,9 +1,9 @@
 # Getting Started
-Hey, YourLocalMoon speaking. Welcome to **PopWork**, a community version of *PopCap*'s SexyAppFramework!
+Hey, YourLocalMoon speaking. Welcome to **PopLib**, a community version of *PopCap*'s SexyAppFramework!
 
-## Building PopWork
+## Building PopLib
 ### Preparing
-Building **PopWork** is actually very simple. It's like any *CMake* project! Just make sure you got these installed:
+Building **PopLib** is actually very simple. It's like any *CMake* project! Just make sure you got these installed:
 - Git
 - CMake (latest)
 - Visual Studio 2022 (required for building!)
@@ -12,7 +12,7 @@ Building **PopWork** is actually very simple. It's like any *CMake* project! Jus
 Okay, first of all, clone the repository. I'll just assume you installed *Git*, so just enter these commands in your command prompt or whatever you have:
 
 ```
-git clone https://github.com/PvZDecompAssociation/PopWork.git --recursive
+git clone https://github.com/teampopwork/PopLib.git --recursive
 ```
 
 > The --recursive flag is crucial, it ensures all the libraries are also cloned.
@@ -29,7 +29,7 @@ To use CMake to build, just type this command in your command prompt:
 cmake --build build --config Release
 ```
 
-You can keep `Release`, OR you can replace it with `Debug` for debugging purposes. And voilà, you've built **PopWork**!
+You can keep `Release`, OR you can replace it with `Debug` for debugging purposes. And voilà, you've built **PopLib**!
 
 ## Font Building
 

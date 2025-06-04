@@ -3,22 +3,22 @@
 #include "res.hpp"
 #include "v14demoapp.hpp"
 
-#include "PopWork/graphics/sysfont.hpp"
-#include "PopWork/graphics/font.hpp"
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/widget/buttonwidget.hpp"
-#include "PopWork/graphics/HeaderFont/LiberationSansRegular.h"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/widget/dialog.hpp"
-#include "PopWork/misc/flags.hpp"
-#include "PopWork/imagelib/imagelib.hpp"
-#include "PopWork/graphics/memoryimage.hpp"
-#include "PopWork/math/matrix.hpp"
-#include "PopWork/math/trivertex.hpp"
-#include "PopWork/audio/soundmanager.hpp"
-#include "PopWork/audio/soundinstance.hpp"
+#include "PopLib/graphics/sysfont.hpp"
+#include "PopLib/graphics/font.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/widget/buttonwidget.hpp"
+#include "PopLib/graphics/HeaderFont/LiberationSansRegular.h"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/widget/dialog.hpp"
+#include "PopLib/misc/flags.hpp"
+#include "PopLib/imagelib/imagelib.hpp"
+#include "PopLib/graphics/memoryimage.hpp"
+#include "PopLib/math/matrix.hpp"
+#include "PopLib/math/trivertex.hpp"
+#include "PopLib/audio/soundmanager.hpp"
+#include "PopLib/audio/soundinstance.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 Board::Board(V14DemoApp* theApp)
 {

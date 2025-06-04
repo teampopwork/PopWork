@@ -8,17 +8,17 @@
 
 // Now that we're on our 4th demo, the reason for including the headers
 // below should be apparent. If you forgot, review demos 1-3.
-#include "PopWork/graphics/font.hpp"
-#include "PopWork/graphics/graphics.hpp"
-#include "PopWork/graphics/image.hpp"
-#include "PopWork/widget/widgetmanager.hpp"
-#include "PopWork/math/rect.hpp"
+#include "PopLib/graphics/font.hpp"
+#include "PopLib/graphics/graphics.hpp"
+#include "PopLib/graphics/image.hpp"
+#include "PopLib/widget/widgetmanager.hpp"
+#include "PopLib/math/rect.hpp"
 
 // A new class: the HyperlinkWidget. It acts and resembles a standard
 // WWW hyperlink.
-#include "PopWork/widget/hyperlinkwidget.hpp"
+#include "PopLib/widget/hyperlinkwidget.hpp"
 
-using namespace PopWork;
+using namespace PopLib;
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

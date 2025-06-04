@@ -4,9 +4,9 @@
 #pragma once
 #endif
 
-#include "PopWork/appbase.hpp"
+#include "PopLib/appbase.hpp"
 
-namespace PopWork
+namespace PopLib
 {
 
 class Board;
@@ -75,5 +75,5 @@ class XMLDemoApp : public AppBase
 	virtual void InitHook();
 };
 
-} // namespace PopWork
+} // namespace PopLib
 #endif //__XMLDEMOAPP_HPP__
