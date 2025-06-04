@@ -57,9 +57,9 @@ class Profile
 	virtual void ResetProfile();
 
 	// A new Feature!  Allows for Multiple State Types!  Story mode, Casual Mode, Mini Game Mode
-	virtual std::string GetStateFileName(PopString theStateName, PopString theUserName = _S(""));
-	virtual void EraseStateSaves(PopString theUserName = _S(""));
-	virtual std::string GetUserFileName(PopString theUserName = _S(""));
+	virtual std::string GetStateFileName(PopString theStateName, PopString theUserName = "");
+	virtual void EraseStateSaves(PopString theUserName = "");
+	virtual std::string GetUserFileName(PopString theUserName = "");
 
 	// Another Cool Feature!  Read and Write integers with String Values!
 	virtual void SetIntegerValue(PopString theValueName, int theValue);

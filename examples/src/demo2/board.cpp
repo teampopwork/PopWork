@@ -156,7 +156,7 @@ void Board::Draw(Graphics *g)
 	// set the color before or after you set the font, fyi.
 	g->SetColor(Color(255, 0, 0));
 	g->SetFont(mApp->mTextFont);
-	g->DrawString(_S("Woo! Text! Ya!"), 10, 10);
+	g->DrawString("Woo! Text! Ya!", 10, 10);
 
 	// Wait a minute, didn't we say to draw at a Y value of 10? Then why does it
 	// appear to be drawing at about 0? That's because the text is offset
@@ -168,7 +168,7 @@ void Board::Draw(Graphics *g)
 	// Y value of 10 just to show you the slight difference using GetAscent makes.
 	g->SetColor(Color(55, 90, 255));
 	// We already set the font, no need to set it again unless we want a new one
-	g->DrawString(_S("I like Techno and Drum n' Bass"), 170, 10 + mApp->mTextFont->GetAscent());
+	g->DrawString("I like Techno and Drum n' Bass", 170, 10 + mApp->mTextFont->GetAscent());
 
 	// And to help you out visually, let's draw a line at Y coordinate 10:
 	g->SetColor(Color(255, 255, 255));
@@ -180,18 +180,18 @@ void Board::Draw(Graphics *g)
 	// the font can't represent to show you what would happen.
 	g->SetFont(mApp->mNumberFont);
 	g->SetColor(Color(255, 255, 0));
-	g->DrawString(_S("+200"), 10, 40);
-	g->DrawString(_S("+200 pts"), 10, 60);
+	g->DrawString("+200", 10, 40);
+	g->DrawString("+200 pts", 10, 60);
 
 	// You can also get the width of a string in pixels for any given font. In addition, you
 	// can use a printf style function, StrFormat, which is defined in Common.h, to
 	// format strings. You might want to look at Common.h for some...common...and handy functions.
 	g->SetColor(Color(0, 255, 255));
-	PopString myString = StrFormat(_S("You got %d points!"), 147);
+	PopString myString = StrFormat("You got %d points!", 147);
 	g->SetFont(mApp->mTextFont);
 	g->DrawString(myString, 10, 80);
 	g->SetColor(Color(0, 255, 0));
-	g->DrawString(_S(" I am to the right of that previous string."), 10 + mApp->mTextFont->StringWidth(myString), 80);
+	g->DrawString(" I am to the right of that previous string.", 10 + mApp->mTextFont->StringWidth(myString), 80);
 
 	// What about some other common text functions, like justifying and word wrapping?
 	// Not a problem. The Widget class contains some useful features.
@@ -204,9 +204,9 @@ void Board::Draw(Graphics *g)
 	//	For centered/right justified, you can also specify a width indicating the size of the region you
 	//	are printing in. The sole purpose of that is to control the centering/right aligning.
 	g->SetColor(Color(255, 255, 255));
-	WriteString(g, _S("Left justified at X of 200"), 200, 95, -1, -1);
-	WriteString(g, _S("Centered using app width"), 0, 110, mWidth, 0);
-	WriteString(g, _S("Centered using width of 200, X of 200"), 200, 125, 200, 0);
+	WriteString(g, "Left justified at X of 200", 200, 95, -1, -1);
+	WriteString(g, "Centered using app width", 0, 110, mWidth, 0);
+	WriteString(g, "Centered using width of 200, X of 200", 200, 125, 200, 0);
 
 	// And now for a word wrapping example. With this function, you specify a rectangular region
 	// that represents the "box" in which you want the text to be displayed. You can also
@@ -218,10 +218,10 @@ void Board::Draw(Graphics *g)
 	g->SetColor(Color(255, 255, 255));
 	g->DrawRect(30, 140, 200, 400);
 	g->SetColor(Color(0, 255, 0));
-	WriteWordWrapped(g, Rect(30, 140, 200, 400), _S("This is some text that is wrapped inside of the rectangle \
+	WriteWordWrapped(g, Rect(30, 140, 200, 400), "This is some text that is wrapped inside of the rectangle \
 												at X of 30, Y of 140, width of 200, height of 400. It has \
 												been wrapped using the default left justification and the \
-												default line spacing."),
+												default line spacing.",
 					 -1, -1);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////

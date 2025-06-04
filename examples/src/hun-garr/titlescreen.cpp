@@ -32,7 +32,7 @@ void TitleScreen::Init(void)
 {
 	mContinueLink = new HyperlinkWidget(1, this);
 	mContinueLink->SetFont(FONT_DEFAULT);
-	mContinueLink->mLabel = _S("CLICK TO CONTINUE");
+	mContinueLink->mLabel = "CLICK TO CONTINUE";
 	mContinueLink->mColor = Color(255, 255, 255);
 	mContinueLink->mOverColor = Color(0, 255, 0);
 	mContinueLink->mUnderlineSize = 1;
@@ -99,7 +99,7 @@ void TitleScreen::Draw(Graphics *g)
 	g->DrawImage(IMAGE_HUNGARR_LOGO, mWidth / 2 - IMAGE_HUNGARR_LOGO->mWidth / 2, 100);
 	g->SetColor(Color::White);
 	g->SetFont(FONT_HUNGARR);
-	PopString s = _S("HUN-GARR NEEDS PLANETS!");
+	PopString s = "HUN-GARR NEEDS PLANETS!";
 	g->DrawString(s, mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, 200);
 }
 

@@ -107,7 +107,7 @@ void Board::Draw(Graphics *g)
 	// Let's also print some text too.
 	g->SetFont(FONT_DEFAULT);
 	g->SetColor(Color(255, 255, 255));
-	g->DrawString(_S("Non smooth motion is jerky"), 10, 100);
+	g->DrawString("Non smooth motion is jerky", 10, 100);
 
 	// What's this? A new DrawImage function? Yes. Believe it. It is true.
 	// DrawImageF is just like it's best friend, DrawImage except that
@@ -120,7 +120,7 @@ void Board::Draw(Graphics *g)
 	g->DrawImageF(IMAGE_ROBOTROBOT, mMotionX, 120.0f);
 
 	// Now let's draw the image but using the smooth motion amounts:
-	g->DrawString(_S("Smooth motion is silky smoothness"), 10, 200);
+	g->DrawString("Smooth motion is silky smoothness", 10, 200);
 	g->DrawImageF(IMAGE_ROBOTROBOT, mUpdateFMotionX, 220.0f);
 
 	// Let's draw the currently selected list item:
@@ -142,13 +142,13 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 	mButton1 = new ButtonWidget(1, this);
 	mButton1->Resize(5, 5, 100, 50);
 	mButton1->SetFont(FONT_DEFAULT);
-	mButton1->mLabel = _S("Sound Left");
+	mButton1->mLabel = "Sound Left";
 	theWidgetManager->AddWidget(mButton1);
 
 	mButton2 = new ButtonWidget(2, this);
 	mButton2->Resize(106, 5, 100, 50);
 	mButton2->SetFont(FONT_DEFAULT);
-	mButton2->mLabel = _S("Sound Right");
+	mButton2->mLabel = "Sound Right";
 	theWidgetManager->AddWidget(mButton2);
 
 	// Let's set up our edit widget, shall we? The constructor is
@@ -290,7 +290,7 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 		// file format.
 
 		while (!buffer.AtEnd())
-			mListWidget->AddLine(StringToPopStringFast(buffer.ReadString()), true);
+			mListWidget->AddLine(buffer.ReadString(), true);
 	}
 
 	// If you read Board::ListClicked, you'll see that we
@@ -302,7 +302,7 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 	// set by setting the mRegKey variable in GameApp's constructor.
 	// The functions return false if there was an error reading the
 	// key or the key doesn't exist:
-	std::string temp = PopStringToStringFast(mText);
+	std::string temp = mText;
 	mApp->RegistryReadString("ListItem", &temp);
 }
 
@@ -396,10 +396,10 @@ void Board::EditWidgetText(int theId, const std::string &theString)
 		if (StringToUpper(theString) == "CLEAR")
 			mListWidget->RemoveAll();
 		else
-			mListWidget->AddLine(StringToPopStringFast(theString), true);
+			mListWidget->AddLine(theString, true);
 
 		// Now clear the edit box
-		mEditWidget->SetText(_S(""));
+		mEditWidget->SetText("");
 
 		// As an example of saving data to files, let's write out the contents
 		// of the list box. Instead of using the C or C++ way of
@@ -412,7 +412,7 @@ void Board::EditWidgetText(int theId, const std::string &theString)
 		// And now all we do is say WriteString. There are other methods
 		// for writing other data types too:
 		for (unsigned int i = 0; i < mListWidget->mLines.size(); i++)
-			buffer.WriteString(PopStringToStringFast(mListWidget->mLines.at(i)));
+			buffer.WriteString(mListWidget->mLines.at(i));
 
 		// Now we need to write the buffer to disk. GameApp can help us out with
 		// that. This data is saved in a special binary format that allows
@@ -475,7 +475,7 @@ void Board::ListClicked(int theId, int theIdx, int theClickCount)
 		// location that you set in GameApp's constructor when you
 		// set the mRegKey variable. The function returns false
 		// if there was an error, such as a lack of permission:
-		if (!mApp->RegistryWriteString("ListItem", PopStringToStringFast(mText)))
+		if (!mApp->RegistryWriteString("ListItem", mText))
 			mApp->Popup("Couldn't save \"ListItem\" to registry");
 	}
 }

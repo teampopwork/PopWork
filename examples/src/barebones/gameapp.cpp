@@ -11,7 +11,7 @@ GameApp::GameApp()
 
 	mProductVersion = "1.0";
 
-	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
 
 	mRegKey = "PopCap\\PopWork\\BareBones";
 

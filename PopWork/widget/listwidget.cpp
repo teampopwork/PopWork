@@ -54,7 +54,7 @@ PopString ListWidget::GetSortKey(int theIdx)
 	PopString aString = mLines[theIdx];
 
 	while (aString.length() < (ulong)mMaxNumericPlaces)
-		aString = _S("0") + aString;
+		aString = "0" + aString;
 
 	if (mSortFromChild)
 		return mChild->GetSortKey(theIdx) + aString;
@@ -66,7 +66,7 @@ PopString ListWidget::GetSortKey(int theIdx)
 			return aString + mChild->GetSortKey(theIdx);
 	}
 
-	return _S("");
+	return "";
 }
 
 void ListWidget::Sort(bool ascending)
@@ -168,7 +168,7 @@ int ListWidget::AddLine(const PopString &theLine, bool alphabetical)
 					if (aListWidget == this)
 						aListWidget->mLines.insert(aListWidget->mLines.begin() + i, theLine);
 					else
-						aListWidget->mLines.insert(aListWidget->mLines.begin() + i, _S("-"));
+						aListWidget->mLines.insert(aListWidget->mLines.begin() + i, "-");
 
 					aListWidget->mLineColors.insert(aListWidget->mLineColors.begin() + i, mColors[COLOR_TEXT]);
 					aListWidget->MarkDirty();
@@ -195,7 +195,7 @@ int ListWidget::AddLine(const PopString &theLine, bool alphabetical)
 			if (aListWidget == this)
 				aListWidget->mLines.push_back(theLine);
 			else
-				aListWidget->mLines.push_back(_S("-"));
+				aListWidget->mLines.push_back("-");
 
 			aListWidget->mLineColors.push_back(mColors[COLOR_TEXT]);
 			aListWidget->MarkDirty();

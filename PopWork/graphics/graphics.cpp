@@ -1127,7 +1127,7 @@ int Graphics::WriteString(const PopString &theString, int theX, int theY, int th
 		{
 			if (i + 1 < theLength && theString[i + 1] == '^') // literal '^'
 			{
-				aString += _S('^');
+				aString += '^';
 				i++;
 			}
 			else if (i > theLength - 8) // badly formatted color specification
@@ -1135,9 +1135,9 @@ int Graphics::WriteString(const PopString &theString, int theX, int theY, int th
 			else // change color instruction
 			{
 				uint32_t aColor = 0;
-				if (theString[i + 1] == _S('o'))
+				if (theString[i + 1] == 'o')
 				{
-					if (popstrncmp(theString.c_str() + i + 1, _S("oldclr"), 6) == 0)
+					if (popstrncmp(theString.c_str() + i + 1, "oldclr", 6) == 0)
 						aColor = theOldColor;
 				}
 				else
@@ -1147,12 +1147,12 @@ int Graphics::WriteString(const PopString &theString, int theX, int theY, int th
 						PopChar aChar = theString[i + aDigitNum + 1];
 						int aVal = 0;
 
-						if ((aChar >= _S('0')) && (aChar <= _S('9')))
-							aVal = aChar - _S('0');
-						else if ((aChar >= _S('A')) && (aChar <= _S('F')))
-							aVal = (aChar - _S('A')) + 10;
-						else if ((aChar >= _S('a')) && (aChar <= _S('f')))
-							aVal = (aChar - _S('a')) + 10;
+						if ((aChar >= '0') && (aChar <= '9'))
+							aVal = aChar - '0';
+						else if ((aChar >= 'A') && (aChar <= 'F'))
+							aVal = (aChar - 'A') + 10;
+						else if ((aChar >= 'a') && (aChar <= 'f'))
+							aVal = (aChar - 'a') + 10;
 
 						aColor += (aVal << ((5 - aDigitNum) * 4));
 					}
@@ -1168,7 +1168,7 @@ int Graphics::WriteString(const PopString &theString, int theX, int theY, int th
 
 				aXOffset += GetFont()->StringWidth(aString);
 
-				aString = _S("");
+				aString = "";
 			}
 		}
 		else
@@ -1237,11 +1237,11 @@ int Graphics::WriteWordWrapped(const Rect &theRect, const PopString &theLine, in
 	while (aCurPos < theLine.length())
 	{
 		aCurChar = theLine[aCurPos];
-		if (aCurChar == _S('^') && mWriteColoredString) // Handle special color modifier
+		if (aCurChar == '^' && mWriteColoredString) // Handle special color modifier
 		{
 			if (aCurPos + 1 < theLine.length())
 			{
-				if (theLine[aCurPos + 1] == _S('^'))
+				if (theLine[aCurPos + 1] == '^')
 					aCurPos++; // literal '^' -> just skip the extra '^'
 				else
 				{
@@ -1250,9 +1250,9 @@ int Graphics::WriteWordWrapped(const Rect &theRect, const PopString &theLine, in
 				}
 			}
 		}
-		else if (aCurChar == _S(' '))
+		else if (aCurChar == ' ')
 			aSpacePos = aCurPos;
-		else if (aCurChar == _S('\n'))
+		else if (aCurChar == '\n')
 		{
 			aCurWidth = theRect.mWidth + 1; // force word wrap
 			aSpacePos = aCurPos;
@@ -1288,9 +1288,9 @@ int Graphics::WriteWordWrapped(const Rect &theRect, const PopString &theLine, in
 					break;
 
 				aCurPos = aSpacePos + 1;
-				if (aCurChar != _S('\n'))
+				if (aCurChar != '\n')
 				{
-					while (aCurPos < theLine.length() && theLine[aCurPos] == _S(' '))
+					while (aCurPos < theLine.length() && theLine[aCurPos] == ' ')
 						aCurPos++;
 				}
 				aLineStartPos = aCurPos;

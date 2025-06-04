@@ -241,7 +241,7 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 	// go back and review.
 	mButton = new ButtonWidget(Board::OPTIONS_BUTTON_ID, this);
 	mButton->SetFont(FONT_DEFAULT);
-	mButton->mLabel = _S("Click Me!");
+	mButton->mLabel = "Click Me!";
 
 	// This time, let's use some images for our button.
 	// mOverImage is the image to use when the mouse cursor is over the button.

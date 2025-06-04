@@ -9,10 +9,10 @@
 
 using namespace PopWork;
 
-PopString PopWork::DIALOG_YES_STRING = _S("YES");
-PopString PopWork::DIALOG_NO_STRING = _S("NO");
-PopString PopWork::DIALOG_OK_STRING = _S("OK");
-PopString PopWork::DIALOG_CANCEL_STRING = _S("CANCEL");
+PopString PopWork::DIALOG_YES_STRING = "YES";
+PopString PopWork::DIALOG_NO_STRING = "NO";
+PopString PopWork::DIALOG_OK_STRING = "OK";
+PopString PopWork::DIALOG_CANCEL_STRING = "CANCEL";
 
 static int gDialogColors[][3] = {{255, 255, 255}, {255, 255, 0},  {255, 255, 255}, {255, 255, 255}, {255, 255, 255},
 

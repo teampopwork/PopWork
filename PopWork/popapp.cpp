@@ -47,12 +47,12 @@ void PopApp::InitPropertiesHook()
 		mBuildUnlocked = true;
 	}
 
-	mProdName = PopStringToStringFast(GetString("ProdName", StringToPopStringFast(mProdName)));
+	mProdName = GetString("ProdName", mProdName);
 	mIsWindowed = GetBoolean("DefaultWindowed", mIsWindowed);	
 
-	PopString aNewTitle = GetString("Title", _S(""));
+	PopString aNewTitle = GetString("Title", "");
 	if (aNewTitle.length() > 0)
-		mTitle = aNewTitle + _S(" ") + StringToPopStringFast(mProductVersion);	
+		mTitle = aNewTitle + " " + mProductVersion;	
 		
 }
 

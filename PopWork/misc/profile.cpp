@@ -64,9 +64,9 @@ Profile *PopWork::Profile::GetProfile()
 //************************************
 std::string PopWork::Profile::GetStateFileName(PopString theStateName, PopString theUserName /*= ""*/)
 {
-	std::string aStateName = PopStringToStringFast(theStateName);
+	std::string aStateName = theStateName;
 	std::string aUserName =
-		(theUserName == _S("")) ? PopStringToStringFast(mUserName) : PopStringToStringFast(theUserName);
+		(theUserName == "") ? mUserName : theUserName;
 
 	return StrFormat("%susers/%s/%s.sav", GetAppDataFolder().c_str(), aUserName.c_str(), aStateName.c_str());
 }
@@ -86,7 +86,7 @@ std::string PopWork::Profile::GetStateFileName(PopString theStateName, PopString
 std::string PopWork::Profile::GetUserFileName(PopString theUserName /*= ""*/)
 {
 	std::string aUserName =
-		(theUserName == _S("")) ? PopStringToStringFast(mUserName) : PopStringToStringFast(theUserName);
+		(theUserName == "") ? mUserName : theUserName;
 
 	return StrFormat("%susers/%s.xml", GetAppDataFolder().c_str(), aUserName.c_str());
 }
@@ -151,45 +151,45 @@ bool Profile::Save(PopString theFileName)
 
 		// Notice the Symmetry of Start/Stop Calls
 
-		aWriter.StartElement(_S("Profile"));
+		aWriter.StartElement("Profile");
 
 		std::map<PopString, int>::iterator map_itr = mIntegerMap.begin();
 		for (; map_itr != mIntegerMap.end(); ++map_itr)
 		{
-			aWriter.StartElement(_S("Integer"));
-			aWriter.WriteAttribute(_S("id"), map_itr->first);
-			aWriter.WriteAttribute(_S("value"), map_itr->second);
-			aWriter.StopElement(/*_S("Integer")*/);
+			aWriter.StartElement("Integer");
+			aWriter.WriteAttribute("id", map_itr->first);
+			aWriter.WriteAttribute("value", map_itr->second);
+			aWriter.StopElement();
 		}
 
 		std::map<PopString, double>::iterator float_itr = mFloatMap.begin();
 		for (; float_itr != mFloatMap.end(); ++float_itr)
 		{
-			aWriter.StartElement(_S("Float"));
-			aWriter.WriteAttribute(_S("id"), float_itr->first);
-			aWriter.WriteAttribute(_S("value"), (float)float_itr->second);
-			aWriter.StopElement(/*_S("Float")*/);
+			aWriter.StartElement("Float");
+			aWriter.WriteAttribute("id", float_itr->first);
+			aWriter.WriteAttribute("value", (float)float_itr->second);
+			aWriter.StopElement();
 		}
 
 		std::map<PopString, PopString>::iterator str_itr = mStringMap.begin();
 		for (; str_itr != mStringMap.end(); ++str_itr)
 		{
-			aWriter.StartElement(_S("String"));
-			aWriter.WriteAttribute(_S("id"), str_itr->first);
-			aWriter.WriteAttribute(_S("value"), str_itr->second);
-			aWriter.StopElement(/*_S("Sting")*/);
+			aWriter.StartElement("String");
+			aWriter.WriteAttribute("id", str_itr->first);
+			aWriter.WriteAttribute("value", str_itr->second);
+			aWriter.StopElement();
 		}
 
 		std::map<PopString, bool>::iterator bool_itr = mBoolMap.begin();
 		for (; bool_itr != mBoolMap.end(); ++bool_itr)
 		{
-			aWriter.StartElement(_S("Bool"));
-			aWriter.WriteAttribute(_S("id"), bool_itr->first);
-			aWriter.WriteAttribute(_S("value"), bool_itr->second);
-			aWriter.StopElement(/*_S("Bool")*/);
+			aWriter.StartElement("Bool");
+			aWriter.WriteAttribute("id", bool_itr->first);
+			aWriter.WriteAttribute("value", bool_itr->second);
+			aWriter.StopElement();
 		}
 
-		aWriter.StopElement(/*Profile*/);
+		aWriter.StopElement();
 
 		aWriter.CloseFile();
 
@@ -216,7 +216,7 @@ bool Profile::Load(PopString theFileName)
 
 	XMLParser aParser;
 
-	if (aParser.OpenFile(PopStringToStringFast(theFileName)) && !aParser.HasFailed())
+	if (aParser.OpenFile(theFileName) && !aParser.HasFailed())
 	{
 		XMLElement aNode;
 
@@ -249,47 +249,47 @@ void Profile::ParseXML(PopWork::XMLParser *theParser)
 		{
 		case XMLElement::TYPE_START: // the open tag.  eg: <Profile>
 		{
-			if (aNode.mValue == _S("Profile")) // Corresponds with the SAVE()
+			if (aNode.mValue == "Profile") // Corresponds with the SAVE()
 			{
 			}
-			else if (aNode.mValue == _S("Bool")) // Corresponds with the SAVE()
+			else if (aNode.mValue == "Bool") // Corresponds with the SAVE()
 			{
-				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				if (HasAttribute(&aNode, "id") && HasAttribute(&aNode, "value"))
 				{
-					PopString anId = aNode.mAttributes[_S("id")];
-					PopString aValue = aNode.mAttributes[_S("value")];
-					bool aBoolean = (aValue == _S("true") || aValue == _S("TRUE") || aValue == _S("1") ||
-									 aValue == _S("yes") || aValue == _S("YES"));
+					PopString anId = aNode.mAttributes["id"];
+					PopString aValue = aNode.mAttributes["value"];
+					bool aBoolean = (aValue == "true" || aValue == "TRUE" || aValue == "1" ||
+									 aValue == "yes" || aValue == "YES");
 
 					mBoolMap.insert(std::pair<PopString, bool>(anId, aBoolean));
 				}
 			}
-			else if (aNode.mValue == _S("String")) // Corresponds with the SAVE()
+			else if (aNode.mValue == "String") // Corresponds with the SAVE()
 			{
-				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				if (HasAttribute(&aNode, "id") && HasAttribute(&aNode, "value"))
 				{
-					PopString anId = aNode.mAttributes[_S("id")];
-					PopString aValue = aNode.mAttributes[_S("value")];
+					PopString anId = aNode.mAttributes["id"];
+					PopString aValue = aNode.mAttributes["value"];
 
 					mStringMap.insert(std::pair<PopString, PopString>(anId, aValue));
 				}
 			}
-			else if (aNode.mValue == _S("Float")) // Corresponds with the SAVE()
+			else if (aNode.mValue == "Float") // Corresponds with the SAVE()
 			{
-				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				if (HasAttribute(&aNode, "id") && HasAttribute(&aNode, "value"))
 				{
-					PopString anId = aNode.mAttributes[_S("id")];
-					double aValue = atof(PopStringToStringFast(aNode.mAttributes[_S("value")]).c_str());
+					PopString anId = aNode.mAttributes["id"];
+					double aValue = atof(aNode.mAttributes["value"].c_str());
 
 					mFloatMap.insert(std::pair<PopString, double>(anId, aValue));
 				}
 			}
-			else if (aNode.mValue == _S("Integer"))
+			else if (aNode.mValue == "Integer")
 			{
-				if (HasAttribute(&aNode, _S("id")) && HasAttribute(&aNode, _S("value")))
+				if (HasAttribute(&aNode, "id") && HasAttribute(&aNode, "value"))
 				{
-					PopString anId = aNode.mAttributes[_S("id")];
-					int aValue = popatoi(aNode.mAttributes[_S("value")].c_str());
+					PopString anId = aNode.mAttributes["id"];
+					int aValue = popatoi(aNode.mAttributes["value"].c_str());
 
 					mIntegerMap.insert(std::pair<PopString, int>(anId, aValue));
 				}
@@ -316,17 +316,17 @@ void Profile::ParseXML(PopWork::XMLParser *theParser)
 bool Profile::LoadUser(PopString theUserName)
 {
 	SetUserName(theUserName);
-	if (mUserName != _S(""))
+	if (mUserName != "")
 	{
 		std::string aFileName = GetUserFileName(mUserName);
 
 		if (PopWork::FileExists(aFileName))
 		{
-			return Load(StringToPopStringFast(aFileName));
+			return Load(aFileName);
 		}
 	}
 
-	SetUserName(_S(""));
+	SetUserName("");
 	return false;
 }
 
@@ -340,12 +340,12 @@ bool Profile::LoadUser(PopString theUserName)
 //************************************
 bool Profile::SaveUser()
 {
-	if (mUserName != _S(""))
+	if (mUserName != "")
 	{
 		std::string aFileName = GetUserFileName(mUserName);
 		MkDir(GetFileDir(aFileName));
 
-		return Save(StringToPopStringFast(aFileName));
+		return Save(aFileName);
 	}
 	return false;
 }
@@ -362,7 +362,7 @@ bool Profile::SaveUser()
 bool Profile::NewUser(PopString theUserName)
 {
 	SetUserName(theUserName);
-	gAppBase->RegistryWriteString("LastProfileName", PopStringToStringFast(mUserName));
+	gAppBase->RegistryWriteString("LastProfileName", mUserName);
 	ResetProfile();
 	return SaveUser();
 }
@@ -379,7 +379,7 @@ bool Profile::NewUser(PopString theUserName)
 //************************************
 bool Profile::RenameUser(PopString theNewUserName)
 {
-	if (theNewUserName != _S(""))
+	if (theNewUserName != "")
 	{
 		PopString OldUserName = mUserName; // remember old username
 
@@ -412,7 +412,7 @@ bool Profile::RenameUser(PopString theNewUserName)
 //************************************
 bool Profile::DeleteUser(PopString theUserName)
 {
-	if (theUserName != _S(""))
+	if (theUserName != "")
 	{
 		std::string aFileName = GetUserFileName(theUserName);
 
@@ -448,7 +448,7 @@ bool Profile::SetUserName(PopString theUserName)
 
 	mUserName = theUserName;
 	// write registry key if the username was entered in a dialog
-	gAppBase->RegistryWriteString("LastProfileName", PopStringToStringFast(mUserName));
+	gAppBase->RegistryWriteString("LastProfileName", mUserName);
 	return true;
 }
 
@@ -586,16 +586,16 @@ PopString PopWork::Profile::GetStringValue(PopString theValueName, PopString the
 //************************************
 void PopWork::Profile::EraseStateSaves(PopString theUserName)
 {
-	if (theUserName == _S(""))
+	if (theUserName == "")
 	{
-		std::string aUserName = PopStringToStringFast(mUserName);
+		std::string aUserName = mUserName;
 		std::string aStatePath = StrFormat("%susers/%s/", GetAppDataFolder().c_str(), aUserName.c_str());
 
 		Deltree(aStatePath);
 	}
 	else
 	{
-		std::string aUserName = PopStringToStringFast(theUserName);
+		std::string aUserName = theUserName;
 		std::string aStatePath = StrFormat("%susers/%s/", GetAppDataFolder().c_str(), aUserName.c_str());
 
 		Deltree(aStatePath);

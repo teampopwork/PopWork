@@ -54,7 +54,7 @@ void TitleScreen::Init(void)
 	mContinueLink->SetFont(FONT_DEFAULT);
 
 	// Like the button widget, we can set the text to display:
-	mContinueLink->mLabel = _S("CLICK TO CONTINUE");
+	mContinueLink->mLabel = "CLICK TO CONTINUE";
 
 	// And like the button widget, we can set the default and over colors.
 	// We don't use the SetColor method though, we just directly

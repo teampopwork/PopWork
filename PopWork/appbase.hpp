@@ -72,7 +72,6 @@ typedef std::vector<std::string> StringVector;
 
 typedef std::map<std::string, PopString> StringPopStringMap;
 typedef std::map<std::string, std::string> StringStringMap;
-typedef std::map<std::string, std::wstring> StringWStringMap;
 typedef std::map<std::string, bool> StringBoolMap;
 typedef std::map<std::string, int> StringIntMap;
 typedef std::map<std::string, double> StringDoubleMap;
@@ -454,7 +453,7 @@ class AppBase : public ButtonListener, public DialogListener
 	Ratio mWindowAspect;
 
 	/// @brief TBA
-	StringWStringMap mStringProperties;
+	StringStringMap mStringProperties;
 	/// @brief TBA
 	StringBoolMap mBoolProperties;
 	/// @brief TBA
@@ -620,15 +619,9 @@ class AppBase : public ButtonListener, public DialogListener
 	/// @param theTitle
 	/// @param theFlags
 	/// @return button id??
-	virtual int MsgBox(const std::wstring &theText, const std::wstring &theTitle = L"Message", int theFlags = 0);
-	/// @brief popup
-	/// @param theString 
 	virtual void Popup(const std::string &theString);
 	/// @brief popup (wide string)
 	/// @param theString 
-	virtual void Popup(const std::wstring &theString);
-	/// @brief logs a screensaver error
-	/// @param theError 
 	virtual void LogScreenSaverError(const std::string &theError);
 	/// @brief safely deletes a widget
 	/// @param theWidget 
@@ -1048,7 +1041,7 @@ class AppBase : public ButtonListener, public DialogListener
 	/// @brief sets a string by id (string, widestring)
 	/// @param theId 
 	/// @param theValue
-	void SetString(const std::string &theId, const std::wstring &theValue);
+	void SetString(const std::string &theId, const std::string &theValue);
 
 	// Registry access methods
 

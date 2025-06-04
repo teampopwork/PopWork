@@ -184,7 +184,7 @@ ImageFont *SysFont::CreateImageFont()
 int SysFont::StringWidth(const PopString &theString)
 {
 	int w = 0;
-	TTF_GetStringSize(mTTFFont, PopStringToStringFast(theString).c_str(), 0, &w, nullptr);
+	TTF_GetStringSize(mTTFFont, theString.c_str(), 0, &w, nullptr);
 
 	return w;
 }
@@ -195,7 +195,7 @@ void SysFont::DrawString(Graphics *g, int theX, int theY, const PopString &theSt
 	SDL_Renderer *renderer = mApp->mSDLInterface->mRenderer;
 	SDL_Color aColor = {(Uint8)theColor.mRed, (Uint8)theColor.mGreen, (Uint8)theColor.mBlue, (Uint8)theColor.mAlpha};
 	SDL_Surface *textSurface =
-		TTF_RenderText_Blended(mTTFFont, PopStringToStringFast(theString).c_str(), 0, aColor);
+		TTF_RenderText_Blended(mTTFFont, theString.c_str(), 0, aColor);
 	if (!textSurface)
 	{
 		mApp->mSDLInterface->MakeSimpleMessageBox("Failed to render text: ", SDL_GetError(), SDL_MESSAGEBOX_ERROR);

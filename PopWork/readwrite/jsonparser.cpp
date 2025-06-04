@@ -24,7 +24,7 @@ bool JsonParser::OpenFile(const std::string &theFilename)
 	PFILE *pf = p_fopen(theFilename.c_str(), "rb");
 	if (!pf)
 	{
-		Fail(_S("Failed to open file: ") + StringToPopStringFast(theFilename));
+		Fail("Failed to open file: " + theFilename);
 		return false;
 	}
 
@@ -36,7 +36,7 @@ bool JsonParser::OpenFile(const std::string &theFilename)
 	if (size <= 0)
 	{
 		p_fclose(pf);
-		Fail(_S("Empty or unreadable file: ") + StringToPopStringFast(theFilename));
+		Fail("Empty or unreadable file: " + theFilename);
 		return false;
 	}
 
@@ -46,7 +46,7 @@ bool JsonParser::OpenFile(const std::string &theFilename)
 
 	if (readCount != static_cast<std::size_t>(size))
 	{
-		Fail(_S("Failed to read complete file: ") + StringToPopStringFast(theFilename));
+		Fail("Failed to read complete file: " + theFilename);
 		return false;
 	}
 
@@ -56,7 +56,7 @@ bool JsonParser::OpenFile(const std::string &theFilename)
 	}
 	catch (const nlohmann::json::parse_error &e)
 	{
-		Fail(_S("JSON parse error: ") + StringToPopStringFast(e.what()));
+		Fail(std::string("JSON parse error: ") + e.what());
 		return false;
 	}
 
@@ -67,7 +67,7 @@ int JsonParser::GetValueInt(const std::string &theName)
 {
 	if (mHasFailed || !mJson.contains(theName) || !mJson[theName].is_number_integer())
 	{
-		Fail(_S("Missing or invalid integer value for key: ") + StringToPopStringFast(theName));
+		Fail("Missing or invalid integer value for key: " + theName);
 		return 0;
 	}
 
@@ -78,9 +78,9 @@ PopString JsonParser::GetValueStr(const std::string &theName)
 {
 	if (mHasFailed || !mJson.contains(theName) || !mJson[theName].is_string())
 	{
-		Fail(_S("Missing or invalid string value for key: ") + StringToPopStringFast(theName));
-		return _S("");
+		Fail("Missing or invalid string value for key: " + theName);
+		return "";
 	}
 
-	return StringToPopStringFast(mJson[theName].get<std::string>());
+	return mJson[theName].get<std::string>();
 }

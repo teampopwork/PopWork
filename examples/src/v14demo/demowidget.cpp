@@ -29,11 +29,11 @@ DemoWidget::DemoWidget()
 	// have to remove your child widgets before deleting them: this is handled automatically
 	// for you.
 	mMoveButton = new ButtonWidget(0, this);
-	mMoveButton->mLabel = _S("MOVE");
+	mMoveButton->mLabel = "MOVE";
 	mMoveButton->SetFont(FONT_DEFAULT);
 	
 	mCloseButton = new ButtonWidget(1, this);
-	mCloseButton->mLabel = _S("CLOSE");
+	mCloseButton->mLabel = "CLOSE";
 	mCloseButton->SetFont(FONT_DEFAULT);	
 
 	// VERY IMPORTANT: Notice that we're calling THIS CLASS' (or really, it's parent, WidgetContainer's)

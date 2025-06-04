@@ -58,8 +58,8 @@ using namespace PopWork;
 //	The NO/CANCEL buttons have a value of 3000 + the dialog's ID.
 //////////////////////////////////////////////////////////////////////////
 DemoDialog::DemoDialog(std::string theHeader, std::string theBody)
-	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, StringToPopStringFast(theHeader),
-			 StringToPopStringFast(theBody), _S("CLOSE"), Dialog::BUTTONS_FOOTER)
+	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, DemoDialog::DIALOG_ID, true, theHeader,
+			theBody, "CLOSE", Dialog::BUTTONS_FOOTER)
 {
 	// We can set the rectangular region in which all text/buttons are to go
 	// by changing the mContentInsets variable. The first parameter
@@ -105,12 +105,12 @@ DemoDialog::DemoDialog(std::string theHeader, std::string theBody)
 
 	// Let's make a button to show off how to use random numbers
 	mRandomBtn = new DialogButton(IMAGE_DIALOG_BUTTON, DemoDialog::RANDOM_BTN_ID, this);
-	mRandomBtn->mLabel = _S("Random #");
+	mRandomBtn->mLabel = "Random #";
 	mRandomBtn->SetFont(FONT_DEFAULT);
 
 	// To illustrate the mClip example, we'll use a button to toggle it.
 	mClipBtn = new DialogButton(IMAGE_DIALOG_BUTTON, DemoDialog::CLIP_BTN_ID, this);
-	mClipBtn->mLabel = _S("Clipping");
+	mClipBtn->mLabel = "Clipping";
 	mClipBtn->SetFont(FONT_DEFAULT);
 
 	m3DCheckbox = new Checkbox(IMAGE_CHECKBOX, IMAGE_CHECKBOX, DemoDialog::HARDWARE_CHECKBOX_ID, this);
@@ -148,15 +148,15 @@ void DemoDialog::Draw(Graphics *g)
 	// at the top left corner of the widget (our dialog box). So we
 	// just take the difference between the widget locations to produce the
 	// actual location we want to drawour text at:
-	g->DrawString(_S("Music volume:"), mMusicVolumeSlider->mX - mX,
+	g->DrawString("Music volume:", mMusicVolumeSlider->mX - mX,
 				  mMusicVolumeSlider->mY - mY - mMusicVolumeSlider->mHeight);
 
-	g->DrawString(_S("Sound volume:"), mSfxVolumeSlider->mX - mX,
+	g->DrawString("Sound volume:", mSfxVolumeSlider->mX - mX,
 				  mSfxVolumeSlider->mY - mY - mSfxVolumeSlider->mHeight);
 
 	// Do the same for the checkboxes:
-	g->DrawString(_S("3D Mode:"), m3DCheckbox->mX - mX, m3DCheckbox->mY - mY - m3DCheckbox->mHeight + 20);
-	g->DrawString(_S("Full Screen:"), mFSCheckbox->mX - mX, mFSCheckbox->mY - mY - mFSCheckbox->mHeight + 20);
+	g->DrawString("3D Mode:", m3DCheckbox->mX - mX, m3DCheckbox->mY - mY - m3DCheckbox->mHeight + 20);
+	g->DrawString("Full Screen:", mFSCheckbox->mX - mX, mFSCheckbox->mY - mY - mFSCheckbox->mHeight + 20);
 
 	// As an example of clipping and how to disable it, let's draw
 	// a box and some text outside of the X/Y/Width/Height of this
@@ -171,8 +171,8 @@ void DemoDialog::Draw(Graphics *g)
 	// Draw one in the top left
 	g->FillRect(-100, -100, 100, 100);
 	g->SetColor(Color::Black);
-	g->DrawString(_S("Top left"), -90, -20);
-	g->DrawString(_S("Bottom right"), mWidth + 10, mHeight + 20);
+	g->DrawString("Top left", -90, -20);
+	g->DrawString("Bottom right", mWidth + 10, mHeight + 20);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -305,7 +305,7 @@ void DemoDialog::ButtonDepress(int theId)
 		int r = Rand();
 
 		// Now let's change the text of the dialog box:
-		mDialogLines = StrFormat(_S("Random number: %d"), r);
+		mDialogLines = StrFormat("Random number: %d", r);
 	}
 	else if (theId == mClipBtn->mId)
 	{
@@ -313,9 +313,9 @@ void DemoDialog::ButtonDepress(int theId)
 		// our dialog box.
 		mClip = !mClip;
 		if (mClip)
-			mClipBtn->mLabel = _S("Clipping");
+			mClipBtn->mLabel = "Clipping";
 		else
-			mClipBtn->mLabel = _S("No clipping");
+			mClipBtn->mLabel = "No clipping";
 	}
 	// Previously, before framework 1.2, the line below looked like:
 	// else if (theId == 2000 + mId)
@@ -366,10 +366,10 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 				// if the user was in full screen mode, they might not see the error message. Using
 				// a game dialog box is the safest way to warn them.
 				m3DCheckbox->SetChecked(false);
-				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Not Supported"),
-								   _S("Hardware acceleration can not be enabled on this computer. \nYour\
-							video card does not meet the minimum requirements for this game."),
-								   _S("OK"), Dialog::BUTTONS_FOOTER);
+				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, "Not Supported",
+								   "Hardware acceleration can not be enabled on this computer. \nYour\
+							video card does not meet the minimum requirements for this game.",
+								   "OK", Dialog::BUTTONS_FOOTER);
 			}
 			else if (!gAppBase->Is3DAccelerationRecommended())
 			{
@@ -377,10 +377,10 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 				// with a call to Is3DAccelerationRecommended. This allows the user to override
 				// the default setting, but with a warning that it might not work or might cause
 				// problems. Some cards fail the detection process but wind up being OK to use.
-				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("Warning"),
-								   _S("Your video card may not fully support this feature.\n\
-					If you experience slower performance, please disable Hardware Acceleration."),
-								   _S("OK"), Dialog::BUTTONS_FOOTER);
+				gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, "Warning",
+								   "Your video card may not fully support this feature.\n\
+					If you experience slower performance, please disable Hardware Acceleration.",
+								   "OK", Dialog::BUTTONS_FOOTER);
 			}
 		}
 	}
@@ -395,10 +395,10 @@ void DemoDialog::CheckboxChecked(int theId, bool checked)
 		// checking the value of AppBase's mForceFullScreen variable.
 		if (gAppBase->mForceFullscreen && !checked)
 		{
-			gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, _S("No Windowed Mode"),
-							   _S("Windowed mode is only available if your desktop is running in\n\
-			either 16 bit or 32 bit color mode, which it is not."),
-							   _S("OK"), Dialog::BUTTONS_FOOTER);
+			gAppBase->DoDialog(DemoDialog::MESSAGE_BOX_ID, true, "No Windowed Mode",
+							   "Windowed mode is only available if your desktop is running in\n\
+			either 16 bit or 32 bit color mode, which it is not.",
+							   "OK", Dialog::BUTTONS_FOOTER);
 
 			// re-check the box to indicate that fullscreen is still the selected mode:
 			mFSCheckbox->SetChecked(true);

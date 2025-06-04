@@ -14,7 +14,6 @@ set(_Python3_EXECUTABLE_DEBUG "" CACHE FILEPATH "Python debug executable")
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-option(USE_WIDESTRING "Wide Strings" ON)
 option(FEATURE_DISCORD_RPC "Discord RPC" OFF)
 option(BUILD_EXAMPLES "Build Examples" ON)
 option(CONSOLE "Show the console on Windows" ON)
@@ -26,10 +25,6 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 else ()
     message (STATUS "Using x86")
 	set(IS_64BIT false)
-endif()
-
-if(USE_WIDESTRING)
-	add_compile_definitions(_USE_WIDE_STRING)
 endif()
 
 if(FEATURE_DISCORD_RPC)

@@ -36,14 +36,14 @@ void GameOverEffect::Init()
 	mExplosion.clear();
 
 	mText.clear();
-	mText.push_back(Letter(_S("G")));
-	mText.push_back(Letter(_S("A")));
-	mText.push_back(Letter(_S("M")));
-	mText.push_back(Letter(_S("E")));
-	mText.push_back(Letter(_S(" O")));
-	mText.push_back(Letter(_S("V")));
-	mText.push_back(Letter(_S("E")));
-	mText.push_back(Letter(_S("R")));
+	mText.push_back(Letter("G"));
+	mText.push_back(Letter("A"));
+	mText.push_back(Letter("M"));
+	mText.push_back(Letter("E"));
+	mText.push_back(Letter(" O"));
+	mText.push_back(Letter("V"));
+	mText.push_back(Letter("E"));
+	mText.push_back(Letter("R"));
 
 	mLines.clear();
 
@@ -287,7 +287,7 @@ void GameOverEffect::Draw(Graphics *g)
 	else if ((mState == GameOverEffect::SHOWING_LETTERS) || (mState == GameOverEffect::FADING_LETTERS))
 	{
 		g->SetFont(FONT_HUNGARR);
-		int x = gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(_S("GAME OVER")) / 2;
+		int x = gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth("GAME OVER") / 2;
 		int y = gAppBase->mHeight / 2;
 
 		for (int i = 0; i < mText.size(); i++)
@@ -318,7 +318,7 @@ void GameOverEffect::Draw(Graphics *g)
 		PopString s;
 		int strWidth;
 
-		s = _S("FINAL SCORE: ");
+		s = "FINAL SCORE: ";
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(255, 0, 0));
@@ -326,23 +326,23 @@ void GameOverEffect::Draw(Graphics *g)
 
 		g->SetColor(Color::White);
 		y += FONT_HUNGARR->GetHeight();
-		s = _S("LEVEL REACHED: ");
+		s = "LEVEL REACHED: ";
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(255, 0, 0));
-		g->DrawString(StrFormat(_S("%d"), mStats.mLevel), rightX, y);
+		g->DrawString(StrFormat("%d", mStats.mLevel), rightX, y);
 
 		g->SetColor(Color::White);
 		y += FONT_HUNGARR->GetHeight();
-		s = _S("TOTAL PLANETS EATEN: ");
+		s = "TOTAL PLANETS EATEN: ";
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(255, 255, 0));
-		g->DrawString(StrFormat(_S("%d"), mStats.mNumPlanetsEaten), rightX, y);
+		g->DrawString(StrFormat("%d", mStats.mNumPlanetsEaten), rightX, y);
 
 		g->SetColor(Color::White);
 		y += FONT_HUNGARR->GetHeight();
-		s = _S("TOTAL PEOPLE EATEN: ");
+		s = "TOTAL PEOPLE EATEN: ";
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(255, 255, 0));
@@ -350,7 +350,7 @@ void GameOverEffect::Draw(Graphics *g)
 
 		g->SetColor(Color::White);
 		y += FONT_HUNGARR->GetHeight();
-		s = _S("TASTIEST PLANET: ");
+		s = "TASTIEST PLANET: ";
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(0, 255, 0));
@@ -358,7 +358,7 @@ void GameOverEffect::Draw(Graphics *g)
 
 		g->SetColor(Color::White);
 		y += FONT_HUNGARR->GetHeight();
-		s = _S("EXPORT EATEN MOST: ");
+		s = "EXPORT EATEN MOST: ";
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(0, 255, 0));

@@ -246,10 +246,10 @@ void EditWidget::EnforceMaxPixels()
 
 bool EditWidget::IsPartOfWord(PopChar theChar)
 {
-	return (((theChar >= _S('A')) && (theChar <= _S('Z'))) || ((theChar >= _S('a')) && (theChar <= _S('z'))) ||
-			((theChar >= _S('0')) && (theChar <= _S('9'))) ||
-			(((unsigned int)theChar >= (unsigned int)(L'�')) && ((unsigned int)theChar <= (unsigned int)(L'�'))) ||
-			(theChar == _S('_')));
+	return (((theChar >= 'A') && (theChar <= 'Z')) || ((theChar >= 'a') && (theChar <= 'z')) ||
+			((theChar >= '0') && (theChar <= '9')) ||
+			(((unsigned int)theChar >= (unsigned int)('�')) && ((unsigned int)theChar <= (unsigned int)('�'))) ||
+			(theChar == '_'));
 }
 
 void EditWidget::ProcessKey(KeyCode theKey, PopChar theChar)
@@ -277,10 +277,10 @@ void EditWidget::ProcessKey(KeyCode theKey, PopChar theChar)
 		{
 			if (mCursorPos < mHilitePos)
 				mWidgetManager->mApp->CopyToClipboard(
-					PopStringToString(GetDisplayString().substr(mCursorPos, mHilitePos)));
+					GetDisplayString().substr(mCursorPos, mHilitePos));
 			else
 				mWidgetManager->mApp->CopyToClipboard(
-					PopStringToString(GetDisplayString().substr(mHilitePos, mCursorPos)));
+					GetDisplayString().substr(mHilitePos, mCursorPos));
 
 			if (theChar == 3)
 			{
@@ -299,7 +299,7 @@ void EditWidget::ProcessKey(KeyCode theKey, PopChar theChar)
 	{
 		// Paste selection
 
-		PopString aBaseString = StringToPopString(mWidgetManager->mApp->GetClipboard());
+		PopString aBaseString = mWidgetManager->mApp->GetClipboard();
 
 		if (aBaseString.length() > 0)
 		{

@@ -169,27 +169,27 @@ bool ResourceManager::ParseCommonResource(XMLElement &theElement, BaseRes *theRe
 {
 	mHadAlreadyDefinedError = false;
 
-	const PopString &aPath = theElement.mAttributes[_S("path")];
+	const PopString &aPath = theElement.mAttributes["path"];
 	if (aPath.empty())
 		return Fail("No path specified.");
 
 	theRes->mXMLAttributes = theElement.mAttributes;
 	theRes->mFromProgram = false;
-	if (aPath[0] == _S('!'))
+	if (aPath[0] == '!')
 	{
-		theRes->mPath = PopStringToStringFast(aPath);
-		if (aPath == _S("!program"))
+		theRes->mPath = aPath;
+		if (aPath == "!program")
 			theRes->mFromProgram = true;
 	}
 	else
-		theRes->mPath = mDefaultPath + PopStringToStringFast(aPath);
+		theRes->mPath = mDefaultPath + aPath;
 
 	std::string anId;
-	XMLParamMap::iterator anItr = theElement.mAttributes.find(_S("id"));
+	XMLParamMap::iterator anItr = theElement.mAttributes.find("id");
 	if (anItr == theElement.mAttributes.end())
 		anId = mDefaultIdPrefix + GetFileName(theRes->mPath, true);
 	else
-		anId = mDefaultIdPrefix + PopStringToStringFast(anItr->second);
+		anId = mDefaultIdPrefix + anItr->second;
 
 	theRes->mResGroup = mCurResGroup;
 	theRes->mId = anId;
@@ -235,13 +235,13 @@ bool ResourceManager::ParseSoundResource(XMLElement &theElement)
 
 	XMLParamMap::iterator anItr;
 
-	anItr = theElement.mAttributes.find(_S("volume"));
+	anItr = theElement.mAttributes.find("volume");
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(), _S("%lf"), &aRes->mVolume);
+		popsscanf(anItr->second.c_str(), "%lf", &aRes->mVolume);
 
-	anItr = theElement.mAttributes.find(_S("pan"));
+	anItr = theElement.mAttributes.find("pan");
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(), _S("%d"), &aRes->mPanning);
+		popsscanf(anItr->second.c_str(), "%d", &aRes->mPanning);
 
 	return true;
 }
@@ -256,7 +256,7 @@ static void ReadIntVector(const PopString &theVal, std::vector<int> &theVector)
 	while (true)
 	{
 		theVector.push_back(popatoi(theVal.c_str() + aPos));
-		aPos = theVal.find_first_of(_S(','), aPos);
+		aPos = theVal.find_first_of(',', aPos);
 		if (aPos == std::string::npos)
 			break;
 
@@ -288,60 +288,60 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 		}
 	}
 
-	aRes->mPalletize = theElement.mAttributes.find(_S("nopal")) == theElement.mAttributes.end();
-	aRes->mA4R4G4B4 = theElement.mAttributes.find(_S("a4r4g4b4")) != theElement.mAttributes.end();
-	aRes->mDDSurface = theElement.mAttributes.find(_S("ddsurface")) != theElement.mAttributes.end();
+	aRes->mPalletize = theElement.mAttributes.find("nopal") == theElement.mAttributes.end();
+	aRes->mA4R4G4B4 = theElement.mAttributes.find("a4r4g4b4") != theElement.mAttributes.end();
+	aRes->mDDSurface = theElement.mAttributes.find("ddsurface") != theElement.mAttributes.end();
 	aRes->mPurgeBits =
-		(theElement.mAttributes.find(_S("nobits")) != theElement.mAttributes.end()) ||
-		((mApp->Is3DAccelerated()) && (theElement.mAttributes.find(_S("nobits3d")) != theElement.mAttributes.end())) ||
-		((!mApp->Is3DAccelerated()) && (theElement.mAttributes.find(_S("nobits2d")) != theElement.mAttributes.end()));
-	aRes->mA8R8G8B8 = theElement.mAttributes.find(_S("a8r8g8b8")) != theElement.mAttributes.end();
-	aRes->mNearestFilter = theElement.mAttributes.find(_S("nearestfilter")) != theElement.mAttributes.end();
-	aRes->mAutoFindAlpha = theElement.mAttributes.find(_S("noalpha")) == theElement.mAttributes.end();
+		(theElement.mAttributes.find("nobits") != theElement.mAttributes.end()) ||
+		((mApp->Is3DAccelerated()) && (theElement.mAttributes.find("nobits3d") != theElement.mAttributes.end())) ||
+		((!mApp->Is3DAccelerated()) && (theElement.mAttributes.find("nobits2d") != theElement.mAttributes.end()));
+	aRes->mA8R8G8B8 = theElement.mAttributes.find("a8r8g8b8") != theElement.mAttributes.end();
+	aRes->mNearestFilter = theElement.mAttributes.find("nearestfilter") != theElement.mAttributes.end();
+	aRes->mAutoFindAlpha = theElement.mAttributes.find("noalpha") == theElement.mAttributes.end();
 
 	XMLParamMap::iterator anItr;
-	anItr = theElement.mAttributes.find(_S("alphaimage"));
+	anItr = theElement.mAttributes.find("alphaimage");
 	if (anItr != theElement.mAttributes.end())
-		aRes->mAlphaImage = mDefaultPath + PopStringToStringFast(anItr->second);
+		aRes->mAlphaImage = mDefaultPath + anItr->second;
 
 	aRes->mAlphaColor = 0xFFFFFF;
-	anItr = theElement.mAttributes.find(_S("alphacolor"));
+	anItr = theElement.mAttributes.find("alphacolor");
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(), _S("%x"), &aRes->mAlphaColor);
+		popsscanf(anItr->second.c_str(), "%x", &aRes->mAlphaColor);
 
-	anItr = theElement.mAttributes.find(_S("variant"));
+	anItr = theElement.mAttributes.find("variant");
 	if (anItr != theElement.mAttributes.end())
-		aRes->mVariant = PopStringToStringFast(anItr->second);
+		aRes->mVariant = anItr->second;
 
-	anItr = theElement.mAttributes.find(_S("alphagrid"));
+	anItr = theElement.mAttributes.find("alphagrid");
 	if (anItr != theElement.mAttributes.end())
-		aRes->mAlphaGridImage = mDefaultPath + PopStringToStringFast(anItr->second);
+		aRes->mAlphaGridImage = mDefaultPath + anItr->second;
 
-	anItr = theElement.mAttributes.find(_S("rows"));
+	anItr = theElement.mAttributes.find("rows");
 	if (anItr != theElement.mAttributes.end())
 		aRes->mRows = popatoi(anItr->second.c_str());
 	else
 		aRes->mRows = 1;
 
-	anItr = theElement.mAttributes.find(_S("cols"));
+	anItr = theElement.mAttributes.find("cols");
 	if (anItr != theElement.mAttributes.end())
 		aRes->mCols = popatoi(anItr->second.c_str());
 	else
 		aRes->mCols = 1;
 
-	anItr = theElement.mAttributes.find(_S("anim"));
+	anItr = theElement.mAttributes.find("anim");
 	AnimType anAnimType = AnimType_None;
 	if (anItr != theElement.mAttributes.end())
 	{
 		const PopChar *aType = anItr->second.c_str();
 
-		if (popstricmp(aType, _S("none")) == 0)
+		if (popstricmp(aType, "none") == 0)
 			anAnimType = AnimType_None;
-		else if (popstricmp(aType, _S("once")) == 0)
+		else if (popstricmp(aType, "once") == 0)
 			anAnimType = AnimType_Once;
-		else if (popstricmp(aType, _S("loop")) == 0)
+		else if (popstricmp(aType, "loop") == 0)
 			anAnimType = AnimType_Loop;
-		else if (popstricmp(aType, _S("pingpong")) == 0)
+		else if (popstricmp(aType, "pingpong") == 0)
 			anAnimType = AnimType_PingPong;
 		else
 		{
@@ -355,23 +355,23 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 		int aNumCels = std::max(aRes->mRows, aRes->mCols);
 		int aBeginDelay = 0, anEndDelay = 0;
 
-		anItr = theElement.mAttributes.find(_S("framedelay"));
+		anItr = theElement.mAttributes.find("framedelay");
 		if (anItr != theElement.mAttributes.end())
 			aRes->mAnimInfo.mFrameDelay = popatoi(anItr->second.c_str());
 
-		anItr = theElement.mAttributes.find(_S("begindelay"));
+		anItr = theElement.mAttributes.find("begindelay");
 		if (anItr != theElement.mAttributes.end())
 			aBeginDelay = popatoi(anItr->second.c_str());
 
-		anItr = theElement.mAttributes.find(_S("enddelay"));
+		anItr = theElement.mAttributes.find("enddelay");
 		if (anItr != theElement.mAttributes.end())
 			anEndDelay = popatoi(anItr->second.c_str());
 
-		anItr = theElement.mAttributes.find(_S("perframedelay"));
+		anItr = theElement.mAttributes.find("perframedelay");
 		if (anItr != theElement.mAttributes.end())
 			ReadIntVector(anItr->second, aRes->mAnimInfo.mPerFrameDelay);
 
-		anItr = theElement.mAttributes.find(_S("framemap"));
+		anItr = theElement.mAttributes.find("framemap");
 		if (anItr != theElement.mAttributes.end())
 			ReadIntVector(anItr->second, aRes->mAnimInfo.mFrameMap);
 
@@ -409,20 +409,20 @@ bool ResourceManager::ParseFontResource(XMLElement &theElement)
 	}
 
 	XMLParamMap::iterator anItr;
-	anItr = theElement.mAttributes.find(_S("image"));
+	anItr = theElement.mAttributes.find("image");
 	if (anItr != theElement.mAttributes.end())
-		aRes->mImagePath = PopStringToStringFast(anItr->second);
+		aRes->mImagePath = anItr->second;
 
-	anItr = theElement.mAttributes.find(_S("tags"));
+	anItr = theElement.mAttributes.find("tags");
 	if (anItr != theElement.mAttributes.end())
-		aRes->mTags = PopStringToStringFast(anItr->second);
+		aRes->mTags = anItr->second;
 
 	if (strncmp(aRes->mPath.c_str(), "!sys:", 5) == 0)
 	{
 		aRes->mSysFont = true;
 		aRes->mPath = aRes->mPath.substr(5);
 
-		anItr = theElement.mAttributes.find(_S("size"));
+		anItr = theElement.mAttributes.find("size");
 		if (anItr == theElement.mAttributes.end())
 			return Fail("SysFont needs point size");
 
@@ -430,10 +430,10 @@ bool ResourceManager::ParseFontResource(XMLElement &theElement)
 		if (aRes->mSize <= 0)
 			return Fail("SysFont needs point size");
 
-		aRes->mBold = theElement.mAttributes.find(_S("bold")) != theElement.mAttributes.end();
-		aRes->mItalic = theElement.mAttributes.find(_S("italic")) != theElement.mAttributes.end();
-		aRes->mShadow = theElement.mAttributes.find(_S("shadow")) != theElement.mAttributes.end();
-		aRes->mUnderline = theElement.mAttributes.find(_S("underline")) != theElement.mAttributes.end();
+		aRes->mBold = theElement.mAttributes.find("bold") != theElement.mAttributes.end();
+		aRes->mItalic = theElement.mAttributes.find("italic") != theElement.mAttributes.end();
+		aRes->mShadow = theElement.mAttributes.find("shadow") != theElement.mAttributes.end();
+		aRes->mUnderline = theElement.mAttributes.find("underline") != theElement.mAttributes.end();
 	}
 	else
 		aRes->mSysFont = false;
@@ -464,13 +464,13 @@ bool ResourceManager::ParsePIEffectResource(XMLElement &theElement)
 bool ResourceManager::ParseSetDefaults(XMLElement &theElement)
 {
 	XMLParamMap::iterator anItr;
-	anItr = theElement.mAttributes.find(_S("path"));
+	anItr = theElement.mAttributes.find("path");
 	if (anItr != theElement.mAttributes.end())
-		mDefaultPath = RemoveTrailingSlash(PopStringToStringFast(anItr->second)) + '/';
+		mDefaultPath = RemoveTrailingSlash(anItr->second) + '/';
 
-	anItr = theElement.mAttributes.find(_S("idprefix"));
+	anItr = theElement.mAttributes.find("idprefix");
 	if (anItr != theElement.mAttributes.end())
-		mDefaultIdPrefix = RemoveTrailingSlash(PopStringToStringFast(anItr->second));
+		mDefaultIdPrefix = RemoveTrailingSlash(anItr->second);
 
 	return true;
 }
@@ -487,7 +487,7 @@ bool ResourceManager::ParseResources()
 
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
-			if (aXMLElement.mValue == _S("Image"))
+			if (aXMLElement.mValue == "Image")
 			{
 				if (!ParseImageResource(aXMLElement))
 					return false;
@@ -498,7 +498,7 @@ bool ResourceManager::ParseResources()
 				if (aXMLElement.mType != XMLElement::TYPE_END)
 					return Fail("Unexpected element found.");
 			}
-			else if (aXMLElement.mValue == _S("Sound"))
+			else if (aXMLElement.mValue == "Sound")
 			{
 				if (!ParseSoundResource(aXMLElement))
 					return false;
@@ -509,7 +509,7 @@ bool ResourceManager::ParseResources()
 				if (aXMLElement.mType != XMLElement::TYPE_END)
 					return Fail("Unexpected element found.");
 			}
-			else if (aXMLElement.mValue == _S("Font"))
+			else if (aXMLElement.mValue == "Font")
 			{
 				if (!ParseFontResource(aXMLElement))
 					return false;
@@ -520,7 +520,7 @@ bool ResourceManager::ParseResources()
 				if (aXMLElement.mType != XMLElement::TYPE_END)
 					return Fail("Unexpected element found.");
 			}
-			else if (aXMLElement.mValue == _S("PopAnim"))
+			else if (aXMLElement.mValue == "PopAnim")
 			{
 				if (!ParsePopAnimResource(aXMLElement))
 					return false;
@@ -531,7 +531,7 @@ bool ResourceManager::ParseResources()
 				if (aXMLElement.mType != XMLElement::TYPE_END)
 					return Fail("Unexpected element found.");
 			}
-			else if (aXMLElement.mValue == _S("PIEffect"))
+			else if (aXMLElement.mValue == "PIEffect")
 			{
 				if (!ParsePIEffectResource(aXMLElement))
 					return false;
@@ -542,7 +542,7 @@ bool ResourceManager::ParseResources()
 				if (aXMLElement.mType != XMLElement::TYPE_END)
 					return Fail("Unexpected element found.");
 			}
-			else if (aXMLElement.mValue == _S("SetDefaults"))
+			else if (aXMLElement.mValue == "SetDefaults")
 			{
 				if (!ParseSetDefaults(aXMLElement))
 					return false;
@@ -555,13 +555,13 @@ bool ResourceManager::ParseResources()
 			}
 			else
 			{
-				Fail("Invalid Section '" + PopStringToStringFast(aXMLElement.mValue) + "'");
+				Fail("Invalid Section '" + aXMLElement.mValue + "'");
 				return false;
 			}
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 		{
-			Fail("Element Not Expected '" + PopStringToStringFast(aXMLElement.mValue) + "'");
+			Fail("Element Not Expected '" + aXMLElement.mValue + "'");
 			return false;
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
@@ -585,9 +585,9 @@ bool ResourceManager::DoParseResources()
 
 			if (aXMLElement.mType == XMLElement::TYPE_START)
 			{
-				if (aXMLElement.mValue == _S("Resources"))
+				if (aXMLElement.mValue == "Resources")
 				{
-					mCurResGroup = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+					mCurResGroup = aXMLElement.mAttributes["id"];
 					mCurResGroupList = &mResGroupMap[mCurResGroup];
 
 					if (mCurResGroup.empty())
@@ -601,20 +601,20 @@ bool ResourceManager::DoParseResources()
 				}
 				else
 				{
-					Fail("Invalid Section '" + PopStringToStringFast(aXMLElement.mValue) + "'");
+					Fail("Invalid Section '" + aXMLElement.mValue + "'");
 					break;
 				}
 			}
 			else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 			{
-				Fail("Element Not Expected '" + PopStringToStringFast(aXMLElement.mValue) + "'");
+				Fail("Element Not Expected '" + aXMLElement.mValue + "'");
 				break;
 			}
 		}
 	}
 
 	if (mXMLParser->HasFailed())
-		Fail(PopStringToStringFast(mXMLParser->GetErrorText()));
+		Fail(mXMLParser->GetErrorText());
 
 	delete mXMLParser;
 	mXMLParser = NULL;
@@ -634,11 +634,11 @@ bool ResourceManager::ParseResourcesFile(const std::string &theFilename)
 	while (!mXMLParser->HasFailed())
 	{
 		if (!mXMLParser->NextElement(&aXMLElement))
-			Fail(PopStringToStringFast(mXMLParser->GetErrorText()));
+			Fail(mXMLParser->GetErrorText());
 
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
-			if (aXMLElement.mValue != _S("ResourceManifest"))
+			if (aXMLElement.mValue != "ResourceManifest")
 				break;
 			else
 				return DoParseResources();

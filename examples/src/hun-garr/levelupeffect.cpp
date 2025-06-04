@@ -42,41 +42,41 @@ void LevelupEffect::Init()
 	//	reversed until it drops below the threshhold speed of 0.1 pixels per update.
 	//////////////////////////////////////////////////////////////////////////
 
-	float x = (GRID_END_X - GRID_START_X) / 2 - FONT_HUNGARR->StringWidth(_S("LEVEL UP!")) / 2;
+	float x = (GRID_END_X - GRID_START_X) / 2 - FONT_HUNGARR->StringWidth("LEVEL UP!") / 2;
 	float y = FONT_HUNGARR->GetHeight();
 	float startingY = y;
 	float ydec = y;
 	float speed = 5.0f;
 
-	mText.push_back(BouncyChar(_S("L"), x, y, speed));
+	mText.push_back(BouncyChar("L", x, y, speed));
 
-	x += FONT_HUNGARR->StringWidth(_S("L"));
+	x += FONT_HUNGARR->StringWidth("L");
 	y -= ydec;
-	mText.push_back(BouncyChar(_S("E"), x, y, speed));
+	mText.push_back(BouncyChar("E", x, y, speed));
 
-	x += FONT_HUNGARR->StringWidth(_S("E"));
+	x += FONT_HUNGARR->StringWidth("E");
 	y -= ydec;
-	mText.push_back(BouncyChar(_S("V"), x, y, speed));
+	mText.push_back(BouncyChar("V", x, y, speed));
 
-	x += FONT_HUNGARR->StringWidth(_S("V"));
+	x += FONT_HUNGARR->StringWidth("V");
 	y -= ydec;
-	mText.push_back(BouncyChar(_S("E"), x, y, speed));
+	mText.push_back(BouncyChar("E", x, y, speed));
 
-	x += FONT_HUNGARR->StringWidth(_S("E"));
+	x += FONT_HUNGARR->StringWidth("E");
 	y -= ydec;
-	mText.push_back(BouncyChar(_S("L"), x, y, speed));
+	mText.push_back(BouncyChar("L", x, y, speed));
 
-	x += FONT_HUNGARR->StringWidth(_S("L "));
+	x += FONT_HUNGARR->StringWidth("L ");
 	y -= ydec;
-	mText.push_back(BouncyChar(_S("U"), x, y, speed));
+	mText.push_back(BouncyChar("U", x, y, speed));
 
-	x += FONT_HUNGARR->StringWidth(_S("U"));
+	x += FONT_HUNGARR->StringWidth("U");
 	y -= ydec;
-	mText.push_back(BouncyChar(_S("P"), x, y, speed));
+	mText.push_back(BouncyChar("P", x, y, speed));
 
-	x += FONT_HUNGARR->StringWidth(_S("P"));
+	x += FONT_HUNGARR->StringWidth("P");
 	y -= ydec;
-	mText.push_back(BouncyChar(_S("!"), x, y, speed));
+	mText.push_back(BouncyChar("!", x, y, speed));
 
 	mDone = false;
 	mHue = 0;
@@ -268,11 +268,11 @@ void LevelupEffect::Draw(Graphics *g)
 		// to begin the next level, we display info on the user's performance from the last level.
 		int y = 50;
 		g->SetColor(gAppBase->HSLToRGB(mHue, 255, 128) & 0xFFFFFFFF);
-		PopString s = StrFormat(_S("LEVEL %d COMPLETE!"), mStats.mLevelCompleted);
+		PopString s = StrFormat("LEVEL %d COMPLETE!", mStats.mLevelCompleted);
 		g->DrawString(s, gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, y);
 
 		g->SetColor(Color::White);
-		s = _S("POPULATION CONSUMED:");
+		s ="POPULATION CONSUMED:";
 		int strWidth = FONT_HUNGARR->StringWidth(s);
 
 		int rightX = strWidth + 100;
@@ -283,21 +283,21 @@ void LevelupEffect::Draw(Graphics *g)
 
 		y += FONT_HUNGARR->GetHeight();
 		g->SetColor(Color::White);
-		s = _S("SYSTEMS SUBJUGATED:");
+		s = "SYSTEMS SUBJUGATED:";
 		strWidth = FONT_HUNGARR->StringWidth(s);
 		g->DrawString(s, rightX - strWidth, y);
 		g->SetColor(Color(255, 0, 0));
-		g->DrawString(StrFormat(_S("%d%%"), mStats.mPercentComplete), rightX + 5, y);
+		g->DrawString(StrFormat("%d%%", mStats.mPercentComplete), rightX + 5, y);
 
 		y += FONT_HUNGARR->GetHeight();
 		if (mStats.mPercentComplete >= COMPLETION_BONUS_PCT)
 		{
-			s = StrFormat(_S("%d%%+ BONUS:"), COMPLETION_BONUS_PCT);
+			s = StrFormat("%d%%+ BONUS:", COMPLETION_BONUS_PCT);
 			g->SetColor(Color::White);
 			strWidth = FONT_HUNGARR->StringWidth(s);
 			g->DrawString(s, rightX - strWidth, y);
 			g->SetColor(Color(255, 0, 0));
-			g->DrawString(StrFormat(_S("%d"), COMPLETION_BONUS * mStats.mLevelCompleted), rightX + 5, y);
+			g->DrawString(StrFormat("%d", COMPLETION_BONUS * mStats.mLevelCompleted), rightX + 5, y);
 		}
 
 		if (mStats.mPlanetsEaten.size() > 0)
@@ -306,11 +306,11 @@ void LevelupEffect::Draw(Graphics *g)
 			int third = gAppBase->mWidth / 3;
 			g->SetColor(Color(255, 255, 0));
 
-			s = _S("PLANET EATEN:");
+			s = "PLANET EATEN:";
 			g->DrawString(s, third / 2 - FONT_HUNGARR->StringWidth(s) / 2, y);
-			s = _S("EXPORTS:");
+			s = "EXPORTS:";
 			g->DrawString(s, third + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
-			s = _S("POPULATION:");
+			s = "POPULATION:";
 			g->DrawString(s, third * 2 + (third / 2 - FONT_HUNGARR->StringWidth(s) / 2), y);
 
 			y += FONT_HUNGARR->GetHeight();
@@ -347,12 +347,12 @@ void LevelupEffect::Draw(Graphics *g)
 			if (drawDotDotDot)
 			{
 				g->SetColor(Color::White);
-				g->DrawString(_S("..."), 5, y);
+				g->DrawString("...", 5, y);
 			}
 		}
 
 		g->SetColor(Color::White);
-		s = _S("CLICK TO CONTINUE");
+		s = "CLICK TO CONTINUE";
 		g->DrawString(s, gAppBase->mWidth / 2 - FONT_HUNGARR->StringWidth(s) / 2, gAppBase->mHeight - 20);
 	}
 

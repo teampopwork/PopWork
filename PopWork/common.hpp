@@ -53,42 +53,11 @@ typedef uint32_t UINT;
 typedef int64_t __int64;
 
 typedef std::map<std::string, std::string> DefinesMap;
-typedef std::map<std::wstring, std::wstring> WStringWStringMap;
 #endif
 
 #include "readwrite/modval.hpp"
 
-#ifdef _USE_WIDE_STRING
-typedef std::wstring PopString;
-#define _S(x) L##x
-
-#ifndef _WIN32
-inline int _wtoi(const wchar_t *str)
-{
-  return (int)wcstol(str, 0, 10);
-}
-#endif
-
-#define popstrncmp wcsncmp
-#define popstrcmp wcscmp
-#ifdef _WIN32
-#define popstricmp wcsicmp
-#else
-#define popstricmp wcscasecmp
-#endif
-#define popsscanf swscanf
-#define popatoi _wtoi
-#define popstrcpy wcscpy
-
-#define PopStringToStringFast(x) WStringToString(x)
-#define PopStringToWStringFast(x) (x)
-#define StringToPopStringFast(x) StringToWString(x)
-#define WStringToPopStringFast(x) (x)
-
-#else
-
 typedef std::string PopString;
-#define _S(x) x
 
 #define popstrncmp strncmp
 #define popstrcmp strcmp
@@ -96,13 +65,6 @@ typedef std::string PopString;
 #define popsscanf sscanf
 #define popatoi atoi
 #define popstrcpy strcpy
-
-#define PopStringToStringFast(x) (x)
-#define PopStringToWStringFast(x) StringToWString(x)
-#define StringToPopStringFast(x) (x)
-#define WStringToPopStringFast(x) WStringToString(x)
-
-#endif
 
 #define LONG_BIGE_TO_NATIVE(l)                                                                                         \
 	(((l >> 24) & 0xFF) | ((l >> 8) & 0xFF00) | ((l << 8) & 0xFF0000) | ((l << 24) & 0xFF000000))
@@ -207,22 +169,6 @@ std::wstring StringToWString(const std::string &theString);
 /// @param theString 
 /// @return string
 std::string WStringToString(const std::wstring &theString);
-/// @brief converts a string to PopString
-/// @param theString 
-/// @return PopString
-PopString StringToPopString(const std::string &theString);
-/// @brief converts a wide string to PopString
-/// @param theString 
-/// @return PopString
-PopString WStringToPopString(const std::wstring &theString);
-/// @brief converts a PopString to string
-/// @param theString 
-/// @return string
-std::string PopStringToString(const PopString &theString);
-/// @brief converts a PopString to wide string
-/// @param theString 
-/// @return wide string
-std::wstring PopStringToWString(const PopString &theString);
 /// @brief TBA
 /// @param theData 
 /// @return string

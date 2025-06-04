@@ -174,42 +174,6 @@ std::string PopWork::WStringToString(const std::wstring &theString)
 	}
 }
 
-PopString PopWork::StringToPopString(const std::string &theString)
-{
-#ifdef _USE_WIDE_STRING
-	return StringToWString(theString);
-#else
-	return PopString(theString);
-#endif
-}
-
-PopString PopWork::WStringToPopString(const std::wstring &theString)
-{
-#ifdef _USE_WIDE_STRING
-	return PopString(theString);
-#else
-	return WStringToString(theString);
-#endif
-}
-
-std::string PopWork::PopStringToString(const PopString &theString)
-{
-#ifdef _USE_WIDE_STRING
-	return WStringToString(theString);
-#else
-	return std::string(theString);
-#endif
-}
-
-std::wstring PopWork::PopStringToWString(const PopString &theString)
-{
-#ifdef _USE_WIDE_STRING
-	return std::wstring(theString);
-#else
-	return StringToWString(theString);
-#endif
-}
-
 std::string PopWork::Trim(const std::string &theString)
 {
 	int aStartPos = 0;
@@ -454,7 +418,7 @@ bool PopWork::StringToDouble(const std::wstring theString, double *theDoubleVal)
 PopString PopWork::CommaSeperate(int theValue)
 {
 	if (theValue == 0)
-		return _S("0");
+		return "0";
 
 	PopString aCurString;
 
@@ -464,8 +428,8 @@ PopString PopWork::CommaSeperate(int theValue)
 	while (aCurValue > 0)
 	{
 		if ((aPlace != 0) && (aPlace % 3 == 0))
-			aCurString = _S(',') + aCurString;
-		aCurString = (PopChar)(_S('0') + (aCurValue % 10)) + aCurString;
+			aCurString = ',' + aCurString;
+		aCurString = (PopChar)('0' + (aCurValue % 10)) + aCurString;
 		aCurValue /= 10;
 		aPlace++;
 	}

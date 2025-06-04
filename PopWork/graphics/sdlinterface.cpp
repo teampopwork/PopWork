@@ -141,7 +141,7 @@ bool SDLInterface::InitSDLWindow(bool IsWindowed)
 {
 	int aWindowFlags = IsWindowed ? 0 : SDL_WINDOW_FULLSCREEN;
 
-	mWindow = SDL_CreateWindow(PopStringToStringFast(mApp->mTitle).c_str(), mWidth, mHeight, aWindowFlags);
+	mWindow = SDL_CreateWindow(mApp->mTitle.c_str(), mWidth, mHeight, aWindowFlags);
 	if (mWindow == nullptr)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Window Creation Failed", SDL_GetError(), nullptr);

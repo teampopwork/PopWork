@@ -212,15 +212,15 @@ void Board::Draw(Graphics *g)
 	// for the MouseMove/MouseDrag/MouseDown/MouseUp methods.
 	g->SetFont(mApp->mFont);
 	g->SetColor(Color(255, 255, 255));
-	g->DrawString(StrFormat(_S("X, Y is %d, %d"), mMouseX, mMouseY), 630, 20);
+	g->DrawString(StrFormat("X, Y is %d, %d", mMouseX, mMouseY), 630, 20);
 
 	PopString buttonStr;
 	if (mLeftDown)
-		buttonStr += _S("Left button is down. ");
+		buttonStr += "Left button is down. ";
 	if (mRightDown)
-		buttonStr += _S("Right button is down. ");
+		buttonStr += "Right button is down. ";
 	if (mMiddleDown)
-		buttonStr += _S("Middle button is down. ");
+		buttonStr += "Middle button is down. ";
 
 	WriteWordWrapped(g, Rect(630, 40, mWidth - 630, 300), buttonStr, -1, -1);
 }
@@ -255,7 +255,7 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 	// And just what should that label be? How about the word "Off".
 	// We'll make it so that when it's clicked, it changes to "On" and
 	// back to "Off" again.
-	mButton->mLabel = _S("Off");
+	mButton->mLabel = "Off";
 
 	// We can also change some colors, like the label color and the color
 	// the label gets when moused over using the constants below:
@@ -311,10 +311,10 @@ void Board::ButtonDepress(int theId)
 		// we're going to just use a literal instead. When a button
 		// causes an action, it calls the appropriate listener function and
 		// let's the listener know who it is via the ID parameter.
-		if (mButton->mLabel == _S("Off"))
-			mButton->mLabel = _S("On");
+		if (mButton->mLabel == "Off")
+			mButton->mLabel = "On";
 		else
-			mButton->mLabel = _S("Off");
+			mButton->mLabel = "Off";
 	}
 }
 

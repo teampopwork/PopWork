@@ -11,7 +11,7 @@ XMLDemoApp::XMLDemoApp()
 {
 	mProdName = "XMLDemo";
 	mProductVersion = "1.0";
-	mTitle = StringToPopStringFast("PopWork: " + mProdName + " - " + mProductVersion);
+	mTitle = "PopWork: " + mProdName + " - " + mProductVersion;
 	mRegKey = "PopCap\\PopWork\\XMLDemo";
 
 	mBoard = NULL;
@@ -119,22 +119,22 @@ bool XMLDemoApp::ExtractXMLData()
 			// a comment is found, etc.
 			// In the meantime, the mSection field contains the full name of the current
 			// section.
-			if (e.mSection == _S("Section1"))
+			if (e.mSection == "Section1")
 			{
 				// Once inside a section, each item is read in. When an item is read in,
 				// it's tag is placed in the mValue field, and all attributes will be stored
 				// in a map (mAttributes) keyed by the attribute's string name, with a result of
 				// type std::string.
-				if (e.mValue == _S("Item1"))
+				if (e.mValue == "Item1")
 				{
 					// At this point, we've read the line from our demo.xml file:
 					// <Item1 text="Some text for Section1/Item1"/>
 					// that is, assuming you didn't change the contents of that file.
 					// As you can see, "Item1" is in the mValue field, and "text" is
 					// the key in our mAttributes map, with "Some text for Section1/Item1" as its value.
-					mSection1.mItem1Text = e.mAttributes[_S("text")];
+					mSection1.mItem1Text = e.mAttributes["text"];
 				}
-				else if (e.mValue == _S("BoolParam"))
+				else if (e.mValue == "BoolParam")
 				{
 					// You'll notice that in demo.xml the line containing this part of the XML code reads:
 					// 	<BoolParam text="Some text for Section1/BoolParam">true</BoolParam>
@@ -145,14 +145,14 @@ bool XMLDemoApp::ExtractXMLData()
 					// The "true" part will be covered a few paragraphs below where we check for TYPE_ELEMENT.
 					// For now though, we can read in all parameters (in this case, just "text") stored
 					// as part of this item.
-					mSection1.mBoolParamText = e.mAttributes[_S("text")];
+					mSection1.mBoolParamText = e.mAttributes["text"];
 				}
 			}
-			else if (e.mSection == _S("Section2"))
+			else if (e.mSection == "Section2")
 			{
-				if (e.mValue == _S("IntParam"))
-					mSection2.mIntParamText = e.mAttributes[_S("text")];
-				else if (e.mValue == _S("MultiAttrib"))
+				if (e.mValue == "IntParam")
+					mSection2.mIntParamText = e.mAttributes["text"];
+				else if (e.mValue == "MultiAttrib")
 				{
 					// If you check out the demo.xml file, you'll see an entry declared like this:
 					//
@@ -165,12 +165,12 @@ bool XMLDemoApp::ExtractXMLData()
 					//	Again, the tag is in mValue, and all attributes are stored as key/value pairs
 					// in the mAttributes map. Note that the whitespace doesn't matter: you could
 					// have declared the above line on just a single line if you wanted to.
-					mSection2.mMultiAttrib1 = e.mAttributes[_S("attrib1")];
-					mSection2.mMultiAttrib2 = e.mAttributes[_S("attrib2")];
-					mSection2.mMultiAttrib3 = e.mAttributes[_S("attrib3")];
+					mSection2.mMultiAttrib1 = e.mAttributes["attrib1"];
+					mSection2.mMultiAttrib2 = e.mAttributes["attrib2"];
+					mSection2.mMultiAttrib3 = e.mAttributes["attrib3"];
 				}
 			}
-			else if (e.mValue == _S("Section2"))
+			else if (e.mValue == "Section2")
 			{
 				// Confused about this part? Don't be: When the very first line of a section
 				// is read in (in this case, it is: <Section2 s2attrib="Section2 attrib text">),
@@ -182,7 +182,7 @@ bool XMLDemoApp::ExtractXMLData()
 				// Since when a line is read in, if it contains any attributes they too are read in,
 				// this is a good time to extract out the "s2attrib" attribute and record it in our mSection2
 				// structure.
-				mSection2.mSectionAttribText = e.mAttributes[_S("s2attrib")];
+				mSection2.mSectionAttribText = e.mAttributes["s2attrib"];
 			}
 		}
 		else if (e.mType == XMLElement::TYPE_ELEMENT)
@@ -196,16 +196,16 @@ bool XMLDemoApp::ExtractXMLData()
 			// above example, the section name is "Section1/BoolParam" since the previous (parent) section is
 			// "Section1" and the tag is "BoolParam". The data is contained in the mValue field.
 
-			if (e.mSection == _S("Section1/BoolParam"))
-				mSection1.mBoolParamElement = StringToLower(e.mValue) == _S("false") ? false : true;
-			else if (e.mSection == _S("Section2/IntParam"))
+			if (e.mSection == "Section1/BoolParam")
+				mSection1.mBoolParamElement = StringToLower(e.mValue) == "false" ? false : true;
+			else if (e.mSection == "Section2/IntParam")
 			{
 				// This is just a handy std::string to integer function, that will return a boolean
 				// indicating success or failure. I'm ignoring the return type though in this
 				// particular case as I don't care for this particular example.
 				(void)StringToInt(e.mValue, &mSection2.mIntParamElement);
 			}
-			else if (e.mSection == _S("Section2/Subsection/Item2"))
+			else if (e.mSection == "Section2/Subsection/Item2")
 				mSection2.mSubsectionItem2 = e.mValue;
 		}
 	}

@@ -36,44 +36,47 @@ const float MAX_BEAM_SPEED = 2.5f;
 
 // Table of random planet names
 const int NUM_PLANET_NAMES = 28;
-const PopString PLANET_NAME[] = {_S("Deev-z"),
-									 _S("SEN-Hen"),
-									 _S("Wallach IX"),
-									 _S("Salusa Secundus"),
-									 _S("Ridiculous Prime"),
-									 _S("Architekt V"),
-									 _S("Robot Republica"),
-									 _S("Ix"),
-									 _S("XOLDOG4000"),
-									 _S("Kliprok"),
-									 _S("TR-909"),
-									 _S("TR-808"),
-									 _S("TB-303"),
-									 _S("DTR011"),
-									 _S("dTech"),
-									 _S("Rotwang"),
-									 _S("Sukhtek"),
-									 _S("Romulox"),
-									 _S("Dob Reevz"),
-									 _S("Skull XII"),
-									 _S("Beefy Prime"),
-									 _S("Haas"),
-									 _S("Reifenrath"),
-									 _S("Gehner Subulon"),
-									 _S("ACE-DOGG"),
-									 _S("Charolastra"),
-									 _S("Nixd"),
-									 _S("BASS")};
+const PopString PLANET_NAME[] = {
+	"Deev-z",
+	"SEN-Hen",
+	"Wallach IX",
+	"Salusa Secundus",
+	"Ridiculous Prime",
+	"Architekt V",
+	"Robot Republica",
+	"Ix",
+	"XOLDOG4000",
+	"Kliprok",
+	"TR-909",
+	"TR-808",
+	"TB-303",
+	"DTR011",
+	"dTech",
+	"Rotwang",
+	"Sukhtek",
+	"Romulox",
+	"Dob Reevz",
+	"Skull XII",
+	"Beefy Prime",
+	"Haas",
+	"Reifenrath",
+	"Gehner Subulon",
+	"ACE-DOGG",
+	"Charolastra",
+	"Nixd",
+	"BASS"
+};
 
 // Table of random planet exports:
 const int NUM_PLANET_EXPORTS = 23;
 const PopString PLANET_EXPORTS[] = {
-	_S("Happiness"),	  _S("Donkeys"),		_S("Rabies"),	   _S("AstroPop"),
-	_S("Idiocy"),		  _S("Minimal Techno"), _S("Citizens"),	   _S("Pain-relieving Pants"),
-	_S("The Quad-Laser"), _S("Septic Systems"), _S("Video Games"), _S("Robots"),
-	_S("Plaid"),		  _S("Octagons"),		_S("Gingivitis"),  _S("Recognizers"),
-	_S("Electro"),		  _S("Sauce"),			_S("Kindness"),	   _S("Bison"),
-	_S("Saline"),		  _S("Cholera"),		_S("TyperShark")};
+	"Happiness",       "Donkeys",        "Rabies",          "AstroPop",
+	"Idiocy",          "Minimal Techno", "Citizens",        "Pain-relieving Pants",
+	"The Quad-Laser",  "Septic Systems", "Video Games",     "Robots",
+	"Plaid",           "Octagons",       "Gingivitis",      "Recognizers",
+	"Electro",         "Sauce",          "Kindness",        "Bison",
+	"Saline",          "Cholera",        "TyperShark"
+};
 
 //////////////////////////////////////////////////////////////////////////
 //	Inline functions
@@ -768,7 +771,7 @@ void Board::Draw(Graphics *g)
 		g->FillRect(0, 0, mWidth, mHeight);
 		g->SetColor(Color::White);
 		g->SetFont(FONT_HUNGARR);
-		g->DrawString(_S("PAUSED"), mWidth / 2 - FONT_HUNGARR->StringWidth(_S("PAUSED")) / 2, mHeight / 2);
+		g->DrawString("PAUSED", mWidth / 2 - FONT_HUNGARR->StringWidth("PAUSED") / 2, mHeight / 2);
 	}
 }
 
@@ -858,49 +861,49 @@ void Board::DrawUI(Graphics *g)
 
 	g->SetFont(FONT_HUNGARR);
 	PopString s;
-	int rightX = FONT_HUNGARR->StringWidth(_S("POPULATION CONSUMED: ")) + 5;
+	int rightX = FONT_HUNGARR->StringWidth("POPULATION CONSUMED: ") + 5;
 
 	int strWidth;
-	s = _S("WORLDS DEVOURED: ");
+	s = "WORLDS DEVOURED: ";
 	strWidth = FONT_HUNGARR->StringWidth(s);
 	g->SetColor(Color(255, 255, 255, 128));
 	g->DrawString(s, rightX - strWidth, ascent);
 	g->SetColor(Color(255, 0, 0, 200));
-	g->DrawString(StrFormat(_S("%d"), mNumPlanetsEaten), rightX - 5, ascent);
+	g->DrawString(StrFormat("%d", mNumPlanetsEaten), rightX - 5, ascent);
 
-	s = _S("POPULATION CONSUMED: ");
+	s = "POPULATION CONSUMED: ";
 	g->SetColor(Color(255, 255, 255, 128));
 	g->DrawString(s, 5, height * 2);
 	g->SetColor(Color(255, 0, 0, 200));
 	g->DrawString(CommaSeperate(mPopulationEaten), rightX - 5, height * 2);
 
-	s = _S("SCORE: ");
+	s = "SCORE: ";
 	strWidth = FONT_HUNGARR->StringWidth(s);
 	g->SetColor(Color(255, 255, 255, 128));
 	g->DrawString(s, rightX - strWidth, height * 3);
 	g->SetColor(Color(255, 255, 0, 200));
-	g->DrawString(StrFormat(_S("%s"), CommaSeperate(mScore).c_str()), rightX - 5, height * 3);
+	g->DrawString(StrFormat("%s", CommaSeperate(mScore).c_str()), rightX - 5, height * 3);
 
 	int x = 380;
-	s = _S("SYSTEMS SUBJUGATED: ");
+	s = "SYSTEMS SUBJUGATED: ";
 	g->SetColor(Color(255, 255, 255, 128));
 	g->DrawString(s, x, ascent);
 	g->SetColor(Color(255, 0, 0, 200));
-	g->DrawString(StrFormat(_S("%d%%"), mPercentComplete), x + FONT_HUNGARR->StringWidth(s), ascent);
+	g->DrawString(StrFormat("%d%%", mPercentComplete), x + FONT_HUNGARR->StringWidth(s), ascent);
 
-	s = _S("LIVES: ");
+	s = "LIVES: ";
 	g->SetColor(Color(255, 255, 255, 128));
 	g->DrawString(s, x, height * 2);
 	strWidth = FONT_HUNGARR->StringWidth(s);
 	g->DrawImage(IMAGE_HUNGARR_SMALL, strWidth + x, ascent);
 	g->SetColor(Color(255, 0, 0, 200));
-	g->DrawString(StrFormat(_S("x%d"), mLives), x + 10 + strWidth + IMAGE_HUNGARR_SMALL->GetWidth(), height * 2);
+	g->DrawString(StrFormat("x%d", mLives), x + 10 + strWidth + IMAGE_HUNGARR_SMALL->GetWidth(), height * 2);
 
-	s = _S("LEVEL: ");
+	s = "LEVEL: ";
 	g->SetColor(Color(255, 255, 255, 128));
 	g->DrawString(s, x, height * 3);
 	g->SetColor(Color(255, 255, 0, 200));
-	g->DrawString(StrFormat(_S("%d"), mLevel), x + FONT_HUNGARR->StringWidth(s), height * 3);
+	g->DrawString(StrFormat("%d", mLevel), x + FONT_HUNGARR->StringWidth(s), height * 3);
 
 	for (int i = 0; i < mBonusText.size(); i++)
 	{
@@ -1208,7 +1211,7 @@ void Board::AddedToManager(WidgetManager *theWidgetManager)
 
 	mOptionsBtn = new ButtonWidget(1, this);
 	mOptionsBtn->SetFont(FONT_DEFAULT);
-	mOptionsBtn->mLabel = _S("Options");
+	mOptionsBtn->mLabel = "Options";
 	mOptionsBtn->SetColor(ButtonWidget::COLOR_LABEL, Color::White);
 	mOptionsBtn->SetColor(ButtonWidget::COLOR_LABEL_HILITE, Color::White);
 
@@ -1957,7 +1960,7 @@ void Board::GivePlanetBonus(Planet *p)
 	PopString pName = PLANET_NAME[p->mNameIdx];
 	PopString pExport = PLANET_EXPORTS[p->mExportIdx];
 	int points = mLevel * 1000;
-	AddBonusText(StrFormat(_S("%s: +%d"), pName.c_str(), points), p->mX, p->mY);
+	AddBonusText(StrFormat("%s: +%d", pName.c_str(), points), p->mX, p->mY);
 	mScore += points;
 
 	mPlanetsEaten.push_back(pName);
@@ -2008,7 +2011,7 @@ void Board::UpdatePercentComplete(void)
 	if (points > 0)
 	{
 		mApp->PlaySample(SOUND_REGION_FILLED);
-		AddBonusText(StrFormat(_S("+%d"), points));
+		AddBonusText(StrFormat("+%d", points));
 	}
 
 	mPercentComplete = newAmount;
@@ -2088,7 +2091,7 @@ void Board::LostLife(void)
 		if (idx != -1)
 			es.mFavoritePlanet = PLANET_NAME[idx];
 		else
-			es.mFavoritePlanet = _S("N/A");
+			es.mFavoritePlanet = "N/A";
 
 		idx = -1;
 		count = 0;
@@ -2108,7 +2111,7 @@ void Board::LostLife(void)
 		if (idx != -1)
 			es.mFavoriteExport = PLANET_EXPORTS[idx];
 		else
-			es.mFavoriteExport = _S("N/A");
+			es.mFavoriteExport = "N/A";
 
 		// Fade out the music
 		mApp->mMusicInterface->FadeOut(0, true);

@@ -54,10 +54,10 @@ void XMLParser::Fail(const PopString &theErrorText)
 
 void XMLParser::Init()
 {
-	mSection = _S("");
+	mSection = "";
 	mLineNum = 1;
 	mHasFailed = false;
-	mErrorText = _S("");
+	mErrorText = "";
 	mFirstChar = true;
 	mByteSwap = false;
 }
@@ -71,15 +71,15 @@ bool XMLParser::AddAttribute(XMLElement *theElement, const PopString &theAttribu
 	if (!aRet.second)
 		aRet.first->second = theAttributeValue;
 
-	if (theAttributeKey != _S("/"))
+	if (theAttributeKey != "/")
 		theElement->mAttributeIteratorList.push_back(aRet.first);
 
 	return aRet.second;
 }
 
-bool XMLParser::GetAsciiChar(wchar_t *theChar, bool *error)
+bool XMLParser::GetAsciiChar(char *theChar, bool *error)
 {
-	wchar_t aChar = 0;
+	char aChar = 0;
 	if (p_fread(&aChar, 1, 1, mFile) != 1)
 		return false;
 
@@ -87,7 +87,7 @@ bool XMLParser::GetAsciiChar(wchar_t *theChar, bool *error)
 	return true;
 }
 
-bool XMLParser::GetUTF8Char(wchar_t *theChar, bool *error)
+bool XMLParser::GetUTF8Char(char *theChar, bool *error)
 {
 	static const unsigned short aMaskData[] = {
 		0xC0, // 1 extra byte
@@ -171,7 +171,7 @@ bool XMLParser::GetUTF8Char(wchar_t *theChar, bool *error)
 			return GetUTF8Char(theChar, error);
 		}
 
-		*theChar = (wchar_t)aTempChar;
+		*theChar = (char)aTempChar;
 		*error = false;
 		return true;
 	}
@@ -180,9 +180,9 @@ bool XMLParser::GetUTF8Char(wchar_t *theChar, bool *error)
 	return false;
 }
 
-bool XMLParser::GetUTF16Char(wchar_t *theChar, bool *error)
+bool XMLParser::GetUTF16Char(char *theChar, bool *error)
 {
-	wchar_t aTempChar = 0;
+	char aTempChar = 0;
 	if (p_fread(&aTempChar, 2, 1, mFile) != 1)
 		return false;
 
@@ -201,19 +201,19 @@ bool XMLParser::GetUTF16Char(wchar_t *theChar, bool *error)
 		}
 	}
 	if (mByteSwap)
-		aTempChar = (wchar_t)((aTempChar << 8) | (aTempChar >> 8));
+		aTempChar = (char)((aTempChar << 8) | (aTempChar >> 8));
 
 	if ((aTempChar & 0xD800) == 0xD800)
 	{
-		wchar_t aNextChar = 0;
+		char aNextChar = 0;
 		if (p_fread(&aNextChar, 2, 1, mFile) != 1)
 			return false;
 
 		if (mByteSwap)
-			aNextChar = (wchar_t)((aNextChar << 8) | (aNextChar >> 8));
+			aNextChar = (char)((aNextChar << 8) | (aNextChar >> 8));
 		if ((aNextChar & 0xDC00) == 0xDC00)
 		{
-			*theChar = (wchar_t)((((aTempChar & ~0xD800) << 10) | (aNextChar & ~0xDC00)) + 0x10000);
+			*theChar = (char)((((aTempChar & ~0xD800) << 10) | (aNextChar & ~0xDC00)) + 0x10000);
 		}
 		else
 			return false;
@@ -224,9 +224,9 @@ bool XMLParser::GetUTF16Char(wchar_t *theChar, bool *error)
 	return true;
 }
 
-bool XMLParser::GetUTF16LEChar(wchar_t *theChar, bool *error)
+bool XMLParser::GetUTF16LEChar(char *theChar, bool *error)
 {
-	wchar_t aTempChar = 0;
+	char aTempChar = 0;
 	if (p_fread(&aTempChar, 2, 1, mFile) != 1)
 		return false;
 
@@ -234,14 +234,14 @@ bool XMLParser::GetUTF16LEChar(wchar_t *theChar, bool *error)
 
 	if ((aTempChar & 0xD800) == 0xD800)
 	{
-		wchar_t aNextChar = 0;
+		char aNextChar = 0;
 		if (p_fread(&aNextChar, 2, 1, mFile) != 1)
 			return false;
 
 		aNextChar = WORD_LITTLEE_TO_NATIVE(aTempChar);
 		if ((aNextChar & 0xDC00) == 0xDC00)
 		{
-			*theChar = (wchar_t)((((aTempChar & ~0xD800) << 10) | (aNextChar & ~0xDC00)) + 0x10000);
+			*theChar = (char)((((aTempChar & ~0xD800) << 10) | (aNextChar & ~0xDC00)) + 0x10000);
 		}
 		else
 			return false;
@@ -250,9 +250,9 @@ bool XMLParser::GetUTF16LEChar(wchar_t *theChar, bool *error)
 	return true;
 }
 
-bool XMLParser::GetUTF16BEChar(wchar_t *theChar, bool *error)
+bool XMLParser::GetUTF16BEChar(char *theChar, bool *error)
 {
-	wchar_t aTempChar = 0;
+	char aTempChar = 0;
 	if (p_fread(&aTempChar, 2, 1, mFile) != 1)
 		return false;
 
@@ -260,14 +260,14 @@ bool XMLParser::GetUTF16BEChar(wchar_t *theChar, bool *error)
 
 	if ((aTempChar & 0xD800) == 0xD800)
 	{
-		wchar_t aNextChar = 0;
+		char aNextChar = 0;
 		if (p_fread(&aNextChar, 2, 1, mFile) != 1)
 			return false;
 
 		aNextChar = WORD_BIGE_TO_NATIVE(aTempChar);
 		if ((aNextChar & 0xDC00) == 0xDC00)
 		{
-			*theChar = (wchar_t)((((aTempChar & ~0xD800) << 10) | (aNextChar & ~0xDC00)) + 0x10000);
+			*theChar = (char)((((aTempChar & ~0xD800) << 10) | (aNextChar & ~0xDC00)) + 0x10000);
 		}
 		else
 			return false;
@@ -283,7 +283,7 @@ bool XMLParser::OpenFile(const std::string &theFileName)
 	if (mFile == NULL)
 	{
 		mLineNum = 0;
-		Fail(StringToPopString("Unable to open file " + theFileName));
+		Fail("Unable to open file " + theFileName);
 		return false;
 	}
 	else if (!mForcedEncodingType)
@@ -349,7 +349,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 	{
 		theElement->mType = XMLElement::TYPE_NONE;
 		theElement->mSection = mSection;
-		theElement->mValue = _S("");
+		theElement->mValue = "";
 		theElement->mAttributes.clear();
 		theElement->mInstruction.erase();
 
@@ -359,16 +359,16 @@ bool XMLParser::NextElement(XMLElement *theElement)
 
 		bool doingAttribute = false;
 		bool AttributeVal = false;
-		std::wstring aAttributeKey;
-		std::wstring aAttributeValue;
+		std::string aAttributeKey;
+		std::string aAttributeValue;
 
-		std::wstring aLastAttributeKey;
+		std::string aLastAttributeKey;
 
 		for (;;)
 		{
 			// Process character by character
 
-			wchar_t c;
+			char c;
 			int aVal;
 
 			if (mBufferedText.size() > 0)
@@ -390,7 +390,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 					else
 					{
 						if (error)
-							Fail(_S("Illegal Character"));
+							Fail("Illegal Character");
 						aVal = 0;
 					}
 				}
@@ -475,7 +475,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 							}
 							else
 							{
-								Fail(_S("Unexpected '<'"));
+								Fail("Unexpected '<'");
 								return false;
 							}
 						}
@@ -485,7 +485,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 							{
 								bool insertEnd = false;
 
-								if (aAttributeKey == L"/")
+								if (aAttributeKey == "/")
 								{
 									// We will get this if we have a space before the />, so we can ignore it
 									//  and go about our business now
@@ -503,17 +503,17 @@ bool XMLParser::NextElement(XMLElement *theElement)
 										aAttributeValue = XMLDecodeString(aAttributeValue);
 
 										aLastAttributeKey = aAttributeKey;
-										AddAttribute(theElement, WStringToPopString(aLastAttributeKey),
-													 WStringToPopString(aAttributeValue));
+										AddAttribute(theElement, aLastAttributeKey,
+													aAttributeValue);
 
-										aAttributeKey = L"";
-										aAttributeValue = L"";
+										aAttributeKey = "";
+										aAttributeValue = "";
 									}
 
 									if (aLastAttributeKey.length() > 0)
 									{
 										PopString aVal =
-											theElement->mAttributes[WStringToPopString(aLastAttributeKey)];
+											theElement->mAttributes[aLastAttributeKey];
 
 										int aLen = aVal.length();
 
@@ -523,7 +523,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 											//											theElement->mAttributes[aLastAttributeKey]
 											//= aVal.substr(0, aLen - 1);
 
-											AddAttribute(theElement, WStringToPopString(aLastAttributeKey),
+											AddAttribute(theElement, aLastAttributeKey,
 														 XMLDecodeString(aVal.substr(0, aLen - 1)));
 
 											insertEnd = true;
@@ -545,7 +545,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 								// Do we want to fake an ending section?
 								if (insertEnd)
 								{
-									PopString anAddString = _S("</") + theElement->mValue + _S(">");
+									PopString anAddString = "</" + theElement->mValue + ">";
 
 									int anOldSize = mBufferedText.size();
 									int anAddLength = anAddString.length();
@@ -557,13 +557,13 @@ bool XMLParser::NextElement(XMLElement *theElement)
 
 									// clear out aAttributeKey, since it contains "/" as its value and will insert
 									// it into the element's attribute map.
-									aAttributeKey = L"";
+									aAttributeKey = "";
 
 									// OLD: mBufferedText = "</" + theElement->mValue + ">" + mBufferedText;
 								}
 
 								if (mSection.length() != 0)
-									mSection += _S("/");
+									mSection += "/";
 
 								mSection += theElement->mValue;
 
@@ -571,10 +571,10 @@ bool XMLParser::NextElement(XMLElement *theElement)
 							}
 							else if (theElement->mType == XMLElement::TYPE_END)
 							{
-								int aLastSlash = mSection.rfind(_S('/'));
+								int aLastSlash = mSection.rfind('/');
 								if ((aLastSlash == -1) && (mSection.length() == 0))
 								{
-									Fail(_S("Unexpected End"));
+									Fail("Unexpected End");
 									return false;
 								}
 
@@ -582,8 +582,8 @@ bool XMLParser::NextElement(XMLElement *theElement)
 
 								if (aLastSectionName != theElement->mValue)
 								{
-									Fail(_S("End '") + theElement->mValue + _S("' Doesn't Match Start '") +
-										 aLastSectionName + _S("'"));
+									Fail("End '" + theElement->mValue + "' Doesn't Match Start '" +
+										 aLastSectionName + "'");
 									return false;
 								}
 
@@ -596,27 +596,27 @@ bool XMLParser::NextElement(XMLElement *theElement)
 							}
 							else
 							{
-								Fail(_S("Unexpected '>'"));
+								Fail("Unexpected '>'");
 								return false;
 							}
 						}
 						else if ((c == L'/') && (theElement->mType == XMLElement::TYPE_START) &&
-								 (theElement->mValue == _S("")))
+								 (theElement->mValue == ""))
 						{
 							theElement->mType = XMLElement::TYPE_END;
 						}
 						else if ((c == L'?') && (theElement->mType == XMLElement::TYPE_START) &&
-								 (theElement->mValue == _S("")))
+								 (theElement->mValue == ""))
 						{
 							theElement->mType = XMLElement::TYPE_INSTRUCTION;
 						}
-						else if (::isspace((uchar)c))
+						else if (::isspace(c))
 						{
-							if (theElement->mValue != _S(""))
+							if (theElement->mValue != "")
 								hasSpace = true;
 
 							// It's a comment!
-							if ((theElement->mType == XMLElement::TYPE_START) && (theElement->mValue == _S("!--")))
+							if ((theElement->mType == XMLElement::TYPE_START) && (theElement->mValue == "!--"))
 								theElement->mType = XMLElement::TYPE_COMMENT;
 						}
 						else if (c > 32)
@@ -625,7 +625,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 						}
 						else
 						{
-							Fail(_S("Illegal Character"));
+							Fail("Illegal Character");
 							return false;
 						}
 					}
@@ -643,7 +643,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 						{
 							if (hasSpace)
 							{
-								if ((!doingAttribute) || ((!AttributeVal) && (c != _S('='))) ||
+								if ((!doingAttribute) || ((!AttributeVal) && (c != '=')) ||
 									((AttributeVal) && ((aAttributeValue.length() > 0) || gotEndQuote)))
 								{
 									if (doingAttribute)
@@ -654,11 +654,11 @@ bool XMLParser::NextElement(XMLElement *theElement)
 										//										theElement->mAttributes[aAttributeKey] =
 										// aAttributeValue;
 
-										AddAttribute(theElement, WStringToPopString(aAttributeKey),
-													 WStringToPopString(aAttributeValue));
+										AddAttribute(theElement, aAttributeKey,
+													 aAttributeValue);
 
-										aAttributeKey = L"";
-										aAttributeValue = L"";
+										aAttributeKey = "";
+										aAttributeValue = "";
 
 										aLastAttributeKey = aAttributeKey;
 									}
@@ -673,7 +673,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 								hasSpace = false;
 							}
 
-							std::wstring *aStrPtr = NULL;
+							std::string *aStrPtr = NULL;
 
 							if (!doingAttribute)
 							{
@@ -704,7 +704,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 						{
 							if (hasSpace)
 							{
-								theElement->mValue += _S(" ");
+								theElement->mValue += " ";
 								hasSpace = false;
 							}
 
@@ -716,7 +716,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 			else
 			{
 				if (theElement->mType != XMLElement::TYPE_NONE)
-					Fail(_S("Unexpected End of File"));
+					Fail("Unexpected End of File");
 
 				return false;
 			}
@@ -728,7 +728,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 			aAttributeValue = XMLDecodeString(aAttributeValue);
 			//			theElement->mAttributes[aAttributeKey] = aAttributeValue;
 
-			AddAttribute(theElement, WStringToPopString(aAttributeKey), WStringToPopString(aAttributeValue));
+			AddAttribute(theElement, aAttributeKey, aAttributeValue);
 		}
 
 		theElement->mValue = XMLDecodeString(theElement->mValue);

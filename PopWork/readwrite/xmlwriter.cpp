@@ -36,7 +36,7 @@ void XMLWriter::Fail(const PopString &theErrorText)
 
 void XMLWriter::Warn(const PopString &theWarning)
 {
-	mWarningStack.push(_S("WARNING: ") + theWarning);
+	mWarningStack.push("WARNING: " + theWarning);
 }
 
 void XMLWriter::Comment(const PopString &theComment)
@@ -52,12 +52,12 @@ void XMLWriter::Init()
 
 bool XMLWriter::OpenFile(const PopString &theFileName)
 {
-	mFile = fopen(PopStringToStringFast(theFileName).c_str(), "w+t");
+	mFile = fopen(theFileName.c_str(), "w+t");
 
 	if (mFile == NULL)
 	{
 		mLineNum = 0;
-		Fail(_S("Unable to open file ") + theFileName);
+		Fail("Unable to open file " + theFileName);
 		return false;
 	}
 
@@ -98,7 +98,7 @@ bool XMLWriter::AddAttribute(XMLElement *theElement, const PopString &theAttribu
 	if (!aRet.second)
 		aRet.first->second = theAttributeValue;
 
-	if (theAttributeKey != _S("/"))
+	if (theAttributeKey != "/")
 		theElement->mAttributeIteratorList.push_back(aRet.first);
 
 	return aRet.second;
@@ -123,7 +123,7 @@ bool XMLWriter::StartElement(const PopString &theElementName)
 
 	if (!ValidateElementNodeName(theElementName))
 	{
-		Warn(theElementName + _S(" is an Invalid Node Name."));
+		Warn(theElementName + " is an Invalid Node Name.");
 	}
 
 	while (!mWarningStack.empty())
@@ -211,7 +211,7 @@ bool XMLWriter::StopElement()
 
 	if (mSectionStack.empty())
 	{
-		Fail(_S("Stop Element Calls do not match StartElement Calls."));
+		Fail("Stop Element Calls do not match StartElement Calls.");
 		return false;
 	}
 
@@ -260,7 +260,7 @@ bool XMLWriter::WriteAttribute(const PopString &aAttributeKey, const PopString &
 	{
 		if (!ValidateElementNodeName(aAttributeKey))
 		{
-			Warn(aAttributeKey + _S(" is an invalid Attribute Name."));
+			Warn(aAttributeKey + " is an invalid Attribute Name.");
 		}
 
 		fprintf(mFile, " %s=\"%s\"", aAttributeKey.c_str(), XMLEncodeString(aAttributeValue).c_str());
@@ -268,21 +268,21 @@ bool XMLWriter::WriteAttribute(const PopString &aAttributeKey, const PopString &
 	}
 
 	if (mSectionStack.size())
-		Fail(_S("Attributes Section already closed for ") + mSectionStack.top());
+		Fail("Attributes Section already closed for " + mSectionStack.top());
 	else
-		Fail(_S("No Element Nodes Open for Writing Attributes."));
+		Fail("No Element Nodes Open for Writing Attributes.");
 
 	return false;
 }
 
 bool XMLWriter::WriteAttribute(const PopString &aAttributeKey, const int &aAttributeValue)
 {
-	return WriteAttribute(aAttributeKey, StrFormat(_S("%d"), aAttributeValue));
+	return WriteAttribute(aAttributeKey, StrFormat("%d", aAttributeValue));
 }
 
 bool XMLWriter::WriteAttribute(const PopString &aAttributeKey, const float &aAttributeValue)
 {
-	return WriteAttribute(aAttributeKey, StrFormat(_S("%f"), aAttributeValue));
+	return WriteAttribute(aAttributeKey, StrFormat("%f", aAttributeValue));
 }
 
 bool XMLWriter::CloseFile()
@@ -298,7 +298,7 @@ bool XMLWriter::CloseFile()
 		return true;
 	}
 
-	Fail(_S("File not Open"));
+	Fail("File not Open");
 	return false;
 }
 
@@ -325,7 +325,7 @@ bool XMLWriter::CheckFileOpen()
 		return true;
 	}
 
-	Fail(_S("No File Opened for writing"));
+	Fail("No File Opened for writing");
 	return false;
 }
 
@@ -339,7 +339,7 @@ bool PopWork::XMLWriter::WriteAttribute(const PopString &aAttributeKey)
 	{
 		if (!ValidateElementNodeName(aAttributeKey))
 		{
-			Warn(aAttributeKey + _S(" is an invalid Attribute Name."));
+			Warn(aAttributeKey + " is an invalid Attribute Name.");
 		}
 
 		fprintf(mFile, " %s", aAttributeKey.c_str());
@@ -347,9 +347,9 @@ bool PopWork::XMLWriter::WriteAttribute(const PopString &aAttributeKey)
 	}
 
 	if (mSectionStack.size())
-		Fail(_S("Attributes Section already closed for ") + mSectionStack.top());
+		Fail("Attributes Section already closed for " + mSectionStack.top());
 	else
-		Fail(_S("No Element Nodes Open for Writing Attributes."));
+		Fail("No Element Nodes Open for Writing Attributes.");
 
 	return false;
 }

@@ -29,20 +29,20 @@ Board::Board(V14DemoApp* theApp)
 	SysFont* aFont = new SysFont(mApp, LiberationSans_Regular, LiberationSans_Regular_Size, 12, 0, false, false, false);
 
 	mDemoButton = new ButtonWidget(0, this);
-	mDemoButton->mLabel = _S("Demo Widget");
+	mDemoButton->mLabel = "Demo Widget";
 	mDemoButton->SetFont(aFont);
 	mDemoButton->Resize(10, 10, 10 + aFont->StringWidth(mDemoButton->mLabel), 50);
 	AddWidget(mDemoButton);
 
 	mDialogButton = new ButtonWidget(1, this);
-	mDialogButton->mLabel = _S("Do Dialog");
+	mDialogButton->mLabel = "Do Dialog";
 	mDialogButton->SetFont(FONT_DEFAULT);
 	int w = FONT_DEFAULT->StringWidth(mDialogButton->mLabel);
 	mDialogButton->Resize(mApp->mWidth - 20 - w, 10, w + 10, 50);
 	AddWidget(mDialogButton);
 
 	mMsgButton = new ButtonWidget(2, this);
-	mMsgButton->mLabel = _S("Create Message Box");
+	mMsgButton->mLabel = "Create Message Box";
 	mMsgButton->SetFont(FONT_DEFAULT);
 	w = FONT_DEFAULT->StringWidth(mMsgButton->mLabel);
 	mMsgButton->Resize(mDemoButton->mX + 20 + mDemoButton->mWidth, 10, w + 10, 50);
@@ -182,7 +182,7 @@ void Board::DrawOverlay(Graphics* g)
 
 	g->SetFont(FONT_DEFAULT);
 	g->SetColor(Color::White);
-	g->DrawString(_S("LOST FOCUS"), mMsgX, mMsgY);	
+	g->DrawString("LOST FOCUS", mMsgX, mMsgY);	
 
 	g->PushState();
 
@@ -216,7 +216,7 @@ void Board::ButtonDepress(int id)
 	else if (id == mDialogButton->mId)
 	{
 
-		Dialog* d = mApp->DoDialog(100, true, _S("Fun Dialog"), _S("Line 1\nLine 2\nLine 3"), _S("Close!"), Dialog::BUTTONS_FOOTER);
+		Dialog* d = mApp->DoDialog(100, true, "Fun Dialog", "Line 1\nLine 2\nLine 3", "Close!", Dialog::BUTTONS_FOOTER);
 		d->SetButtonFont(FONT_DEFAULT);
 
 	}

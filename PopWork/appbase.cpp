@@ -95,7 +95,7 @@ AppBase::AppBase()
 	mTimeLoaded = SDL_GetTicks();
 	mSEHOccured = false;
 	mProdName = "Product";
-	mTitle = _S("PopWorkApp");
+	mTitle = "PopWorkApp";
 	mShutdown = false;
 	mExitToTop = false;
 	mWidth = 640;
@@ -221,17 +221,17 @@ AppBase::AppBase()
 		mAdd8BitMaxTable[i] = 255;
 
 	// Set default strings.  Init could read in overrides from partner.xml
-	SetString("DIALOG_BUTTON_OK", L"OK");
-	SetString("DIALOG_BUTTON_CANCEL", L"CANCEL");
+	SetString("DIALOG_BUTTON_OK", "OK");
+	SetString("DIALOG_BUTTON_CANCEL", "CANCEL");
 
-	SetString("UPDATE_CHECK_TITLE", L"Update Check");
-	SetString("UPDATE_CHECK_BODY", L"Checking if there are any updates available for this product ...");
+	SetString("UPDATE_CHECK_TITLE", "Update Check");
+	SetString("UPDATE_CHECK_BODY", "Checking if there are any updates available for this product ...");
 
-	SetString("UP_TO_DATE_TITLE", L"Up to Date");
-	SetString("UP_TO_DATE_BODY", L"There are no updates available for this product at this time.");
-	SetString("NEW_VERSION_TITLE", L"New Version");
+	SetString("UP_TO_DATE_TITLE", "Up to Date");
+	SetString("UP_TO_DATE_BODY", "There are no updates available for this product at this time.");
+	SetString("NEW_VERSION_TITLE", "New Version");
 	SetString("NEW_VERSION_BODY",
-			  L"There is an update available for this product.  Would you like to visit the web site to download it?");
+			  "There is an update available for this product.  Would you like to visit the web site to download it?");
 
 	mWidgetManager = new WidgetManager(this);
 	mResourceManager = new ResourceManager(this);
@@ -297,15 +297,12 @@ AppBase::~AppBase()
 					SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
 														  {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "No"}};
 
-					std::string aTitle = PopStringToStringFast(
-						StringToPopStringFast(mCompanyName) + _S(" ") +
-						GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
+					std::string aTitle = mCompanyName + " " + GetString("HARDWARE_ACCEL_CONFIRMATION", "Hardware Acceleration Confirmation");
 
-					std::string aMessage = PopStringToStringFast(
-						GetString("HARDWARE_ACCEL_SWITCHED_ON",
-								  _S("Hardware Acceleration was switched on during this session.\n")
-									  _S("If this resulted in slower performance, it should be switched off.\n")
-										  _S("Would you like to keep Hardware Acceleration switched on?")));
+					std::string aMessage = GetString("HARDWARE_ACCEL_SWITCHED_ON",
+								  "Hardware Acceleration was switched on during this session.\n"
+									  "If this resulted in slower performance, it should be switched off.\n"
+										  "Would you like to keep Hardware Acceleration switched on?");
 
 					SDL_MessageBoxData aMessageboxData = {};
 					aMessageboxData.flags = SDL_MESSAGEBOX_INFORMATION;
@@ -341,15 +338,13 @@ AppBase::~AppBase()
 			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
 		};
 
-		std::string aMessage = PopStringToStringFast(
-			GetString("HARDWARE_ACCEL_NOT_WORKING",
-					  _S("Hardware Acceleration may not have been working correctly during this session.\r\n")
-						  _S("If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n")
-							  _S("Would you like to keep Hardware Acceleration switched on?")));
+		std::string aMessage = GetString("HARDWARE_ACCEL_NOT_WORKING",
+					  "Hardware Acceleration may not have been working correctly during this session.\r\n"
+						  "If you noticed graphics problems, you may want to turn off Hardware Acceleration.\r\n"
+							  "Would you like to keep Hardware Acceleration switched on?");
 
-		std::string aTitle = PopStringToStringFast(
-			StringToPopStringFast(mCompanyName) + _S(" ") +
-			GetString("HARDWARE_ACCEL_CONFIRMATION", _S("Hardware Acceleration Confirmation")));
+		std::string aTitle = mCompanyName + " " +
+			GetString("HARDWARE_ACCEL_CONFIRMATION", "Hardware Acceleration Confirmation");
 
 		SDL_MessageBoxData messageBoxData = {
 			SDL_MESSAGEBOX_INFORMATION, nullptr, aTitle.c_str(), aMessage.c_str(), SDL_arraysize(buttons), buttons, nullptr};
@@ -807,7 +802,7 @@ void AppBase::DumpProgramInfo()
 		++anItr;
 	}
 
-	aDumpStream << "Total Image Allocation: " << PopStringToStringFast(CommaSeperate(aTotalMemory)).c_str()
+	aDumpStream << "Total Image Allocation: " << CommaSeperate(aTotalMemory).c_str()
 				<< " bytes<BR>";
 	aDumpStream << "<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=4>";
 
@@ -890,46 +885,50 @@ void AppBase::DumpProgramInfo()
 		aDumpStream << "<TD ALIGN=RIGHT>" << aStr << "</TD>" << std::endl;
 
 		aDumpStream << "<TD>"
-					<< PopStringToString(
-						   ((aBitsMemory != 0) ? _S("mBits<BR>") + CommaSeperate(aBitsMemory) : _S("&nbsp;")))
+					<< ((aBitsMemory != 0) ? "mBits<BR>" + CommaSeperate(aBitsMemory) : "&nbsp;")
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopStringToString(((aPalletizedMemory != 0)
-											  ? _S("Palletized<BR>") + CommaSeperate(aPalletizedMemory)
-											  : _S("&nbsp;")))
+					<< ((aPalletizedMemory != 0)
+							? "Palletized<BR>" + CommaSeperate(aPalletizedMemory)
+							: "&nbsp;")
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopStringToString(
-						   ((aSurfaceMemory != 0) ? _S("DDSurface<BR>") + CommaSeperate(aSurfaceMemory) : _S("&nbsp;")))
-					<< "</TD>" << std::endl;
-		aDumpStream << "<TD>"
-					<< PopStringToString(((aMemoryImage->mD3DData != nullptr)
-											  ? _S("Texture<BR>") + StringToPopString(aTextureFormatName) + _S("<BR>") +
-													CommaSeperate(aTextureMemory)
-											  : _S("&nbsp;")))
+					<< ((aSurfaceMemory != 0)
+							? "DDSurface<BR>" + CommaSeperate(aSurfaceMemory)
+							: "&nbsp;")
 					<< "</TD>" << std::endl;
 
-		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mIsVolatile) ? _S("Volatile") : _S("&nbsp;")))
+		aDumpStream << "<TD>"
+					<< ((aMemoryImage->mD3DData != nullptr)
+							? "Texture<BR>" + aTextureFormatName + "<BR>" + CommaSeperate(aTextureMemory)
+							: "&nbsp;")
 					<< "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mForcedMode) ? _S("Forced") : _S("&nbsp;")))
+
+		aDumpStream << "<TD>"
+					<< (aMemoryImage->mIsVolatile ? "Volatile" : "&nbsp;")
 					<< "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mHasAlpha) ? _S("HasAlpha") : _S("&nbsp;")))
+
+		aDumpStream << "<TD>"
+					<< (aMemoryImage->mForcedMode ? "Forced" : "&nbsp;")
 					<< "</TD>" << std::endl;
-		aDumpStream << "<TD>" << PopStringToString(((aMemoryImage->mHasTrans) ? _S("HasTrans") : _S("&nbsp;")))
+
+		aDumpStream << "<TD>"
+					<< (aMemoryImage->mHasAlpha ? "HasAlpha" : "&nbsp;")
+					<< "</TD>" << std::endl;
+
+		aDumpStream << "<TD>"
+					<< (aMemoryImage->mHasTrans ? "HasTrans" : "&nbsp;")
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopStringToString(((aNativeAlphaMemory != 0)
-											  ? _S("NativeAlpha<BR>") + CommaSeperate(aNativeAlphaMemory)
-											  : _S("&nbsp;")))
+					<< ((aNativeAlphaMemory != 0) ? "NativeAlpha<BR>" + CommaSeperate(aNativeAlphaMemory) :"&nbsp;")
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopStringToString(
-						   ((aRLAlphaMemory != 0) ? _S("RLAlpha<BR>") + CommaSeperate(aRLAlphaMemory) : _S("&nbsp;")))
+					<<((aRLAlphaMemory != 0) ? "RLAlpha<BR>" + CommaSeperate(aRLAlphaMemory) : "&nbsp;")
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>"
-					<< PopStringToString(((aRLAdditiveMemory != 0)
-											  ? _S("RLAdditive<BR>") + CommaSeperate(aRLAdditiveMemory)
-											  : _S("&nbsp;")))
+					<< ((aRLAdditiveMemory != 0)
+											  ? "RLAdditive<BR>" + CommaSeperate(aRLAdditiveMemory)
+											  : "&nbsp;")
 					<< "</TD>" << std::endl;
 		aDumpStream << "<TD>" << (aMemoryImage->mFilePath.empty() ? "&nbsp;" : aMemoryImage->mFilePath) << "</TD>"
 					<< std::endl;
@@ -973,18 +972,18 @@ void AppBase::DumpProgramInfo()
 	}
 
 	aDumpStream << "<TD>Totals</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalMemorySize)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalBitsMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalPalletizedMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalSurfaceMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalTextureMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalMemorySize) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalBitsMemory) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalPalletizedMemory) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalSurfaceMemory) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalTextureMemory) << "</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalNativeAlphaMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalRLAlphaMemory)) << "</TD>" << std::endl;
-	aDumpStream << "<TD>" << PopStringToString(CommaSeperate(aTotalRLAdditiveMemory)) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalNativeAlphaMemory) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalRLAlphaMemory) << "</TD>" << std::endl;
+	aDumpStream << "<TD>" << CommaSeperate(aTotalRLAdditiveMemory) << "</TD>" << std::endl;
 	aDumpStream << "<TD>&nbsp;</TD>" << std::endl;
 
 	aDumpStream << "</TABLE></CENTER></BODY></HTML>" << std::endl;
@@ -1087,7 +1086,7 @@ void AppBase::WriteToRegistry()
 bool AppBase::RegistryEraseKey(const PopString &_theKeyName)
 {
 	std::filesystem::path basePath = GetAppDataFolder();
-	std::filesystem::path keyPath = basePath / PopStringToString(_theKeyName) / "registry.json";
+	std::filesystem::path keyPath = basePath / _theKeyName / "registry.json";
 
 	if (std::filesystem::exists(keyPath))
 	{
@@ -1103,7 +1102,7 @@ void AppBase::RegistryEraseValue(const PopString &_theValueName)
 {
 	// H522
 	std::filesystem::path configPath = GetAppDataFolder() + mRegKey + "/registry.json";
-	std::string keyName = PopStringToString(_theValueName);
+	std::string keyName = _theValueName;
 
 	if (!std::filesystem::exists(configPath))
 		return;
@@ -1340,7 +1339,7 @@ bool AppBase::RegistryReadData(const std::string &theKey, uchar *theValue, ulong
 void AppBase::ReadFromRegistry()
 {
 	mReadFromRegistry = true;
-	mRegKey = PopStringToString(GetString("RegistryKey", StringToPopString(mRegKey)));
+	mRegKey = GetString("RegistryKey", mRegKey);
 
 	if (mRegKey.length() == 0)
 		return;
@@ -1619,7 +1618,7 @@ static void CalculateFPS()
 
 		Graphics aDrawG(gFPSImage);
 		aDrawG.SetFont(&aFont);
-		PopString aFPS = StrFormat(_S("FPS: %d"), gFPSDisplay);
+		PopString aFPS = StrFormat("FPS: %d", gFPSDisplay);
 		aDrawG.SetColor(Color(0, 0, 0));
 		aDrawG.FillRect(0, 0, gFPSImage->GetWidth(), gFPSImage->GetHeight());
 		aDrawG.SetColor(Color(255, 255, 255));
@@ -1647,7 +1646,7 @@ static void FPSDrawCoords(int theX, int theY)
 
 	Graphics aDrawG(gFPSImage);
 	aDrawG.SetFont(&aFont);
-	PopString aFPS = StrFormat(_S("%d,%d"), theX, theY);
+	PopString aFPS = StrFormat("%d,%d", theX, theY);
 	aDrawG.SetColor(0x000000);
 	aDrawG.FillRect(0, 0, gFPSImage->GetWidth(), gFPSImage->GetHeight());
 	aDrawG.SetColor(0xFFFFFF);
@@ -1921,86 +1920,6 @@ int AppBase::MsgBox(const std::string &theText, const std::string &theTitle, int
 	return aResult;
 }
 
-int AppBase::MsgBox(const std::wstring &theText, const std::wstring &theTitle, int theFlags)
-{
-	if (IsScreenSaver())
-	{
-		LogScreenSaverError(WStringToString(theText));
-		return 0;
-	}
-
-	SDL_MessageBoxData messageBoxData = {SDL_MESSAGEBOX_INFORMATION,
-										 NULL,
-										 WStringToString(theTitle).c_str(),
-										 WStringToString(theText).c_str(),
-										 NULL,
-										 NULL,
-										 NULL};
-
-	if (theFlags & MsgBoxFlags::MsgBox_OK)
-	{
-		SDL_MessageBoxButtonData buttons[] = {
-			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK"},
-		};
-
-		messageBoxData.numbuttons = SDL_arraysize(buttons);
-		messageBoxData.buttons = buttons;
-	}
-	else if (theFlags & MsgBoxFlags::MsgBox_OKCANCEL)
-	{
-		SDL_MessageBoxButtonData buttons[] = {
-			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK"},
-			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel"},
-		};
-		messageBoxData.numbuttons = SDL_arraysize(buttons);
-		messageBoxData.buttons = buttons;
-	}
-	else if (theFlags & MsgBoxFlags::MsgBox_ABORTRETRYIGNORE)
-	{
-		SDL_MessageBoxButtonData buttons[] = {
-			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Abort"},
-			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Retry"},
-			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 2, "Ignore"},
-		};
-		messageBoxData.numbuttons = SDL_arraysize(buttons);
-		messageBoxData.buttons = buttons;
-	}
-	else if (theFlags & MsgBoxFlags::MsgBox_YESNOCANCEL)
-	{
-		SDL_MessageBoxButtonData buttons[] = {
-			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes"},
-			{0, 1, "No"},
-			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Cancel"},
-		};
-		messageBoxData.numbuttons = SDL_arraysize(buttons);
-		messageBoxData.buttons = buttons;
-	}
-	else if (theFlags & MsgBoxFlags::MsgBox_YESNO)
-	{
-		SDL_MessageBoxButtonData buttons[] = {
-			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Yes"},
-			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "No"},
-		};
-		messageBoxData.numbuttons = SDL_arraysize(buttons);
-		messageBoxData.buttons = buttons;
-	}
-	else if (theFlags & MsgBoxFlags::MsgBox_RETRYCANCEL)
-	{
-		SDL_MessageBoxButtonData buttons[] = {
-			{SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Retry"},
-			{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Cancel"},
-		};
-		messageBoxData.numbuttons = SDL_arraysize(buttons);
-		messageBoxData.buttons = buttons;
-	}
-
-	BeginPopup();
-	int aResult = mSDLInterface->MakeResultMessageBox(messageBoxData);
-	EndPopup();
-
-	return aResult;
-}
-
 void AppBase::Popup(const std::string &theString)
 {
 	if (IsScreenSaver())
@@ -2011,26 +1930,9 @@ void AppBase::Popup(const std::string &theString)
 
 	BeginPopup();
 	if (!mShutdown)
-		mSDLInterface->MakeSimpleMessageBox(PopStringToString(GetString("FATAL_ERROR", _S("FATAL ERROR"))).c_str(),
+		mSDLInterface->MakeSimpleMessageBox(GetString("FATAL_ERROR", "FATAL ERROR").c_str(),
 											theString.c_str(), SDL_MESSAGEBOX_ERROR);
 	EndPopup();
-}
-
-void AppBase::Popup(const std::wstring &theString)
-{
-	if (IsScreenSaver())
-	{
-		LogScreenSaverError(WStringToString(theString));
-		return;
-	}
-
-	BeginPopup();
-	if (!mShutdown)
-		//::MessageBoxW(mHWnd, theString.c_str(), PopStringToWString(GetString("FATAL_ERROR", _S("FATAL
-		//:ERROR"))).c_str(), MB_APPLMODAL | MB_ICONSTOP);
-		// mSDLInterface->MakeSimpleMessageBox(PopStringToString(GetString("FATAL_ERROR", _S("FATAL
-		// ERROR"))).c_str(), theString.c_str(), SDL_MESSAGEBOX_ERROR); readding after wstring is working properly
-		EndPopup();
 }
 
 void AppBase::SafeDeleteWidget(Widget *theWidget)
@@ -3181,8 +3083,7 @@ bool AppBase::LoadProperties(const std::string &theFileName, bool required, bool
 			return true;
 		else
 		{
-			Popup(GetString("UNABLE_OPEN_PROPERTIES", _S("Unable to open properties file ")) +
-				  StringToPopString(theFileName));
+			Popup(GetString("UNABLE_OPEN_PROPERTIES", "Unable to open properties file ") + theFileName);
 			return false;
 		}
 	}
@@ -3190,8 +3091,7 @@ bool AppBase::LoadProperties(const std::string &theFileName, bool required, bool
 	{
 		if (!CheckSignature(aBuffer, theFileName))
 		{
-			Popup(GetString("PROPERTIES_SIG_FAILED", _S("Signature check failed on ")) +
-				  StringToPopString(theFileName + "'"));
+			Popup(GetString("PROPERTIES_SIG_FAILED", "Signature check failed on ") + theFileName + "'");
 			return false;
 		}
 	}
@@ -3292,21 +3192,21 @@ double AppBase::GetDouble(const std::string &theId, double theDefault)
 
 PopString AppBase::GetString(const std::string &theId)
 {
-	StringWStringMap::iterator anItr = mStringProperties.find(theId);
+	StringStringMap::iterator anItr = mStringProperties.find(theId);
 	DBG_ASSERTE(anItr != mStringProperties.end());
 
 	if (anItr != mStringProperties.end())
-		return WStringToPopString(anItr->second);
+		return anItr->second;
 	else
-		return _S("");
+		return "";
 }
 
 PopString AppBase::GetString(const std::string &theId, const PopString &theDefault)
 {
-	StringWStringMap::iterator anItr = mStringProperties.find(theId);
+	StringStringMap::iterator anItr = mStringProperties.find(theId);
 
 	if (anItr != mStringProperties.end())
-		return WStringToPopString(anItr->second);
+		return anItr->second;
 	else
 		return theDefault;
 }
@@ -3322,10 +3222,10 @@ StringVector AppBase::GetStringVector(const std::string &theId)
 		return StringVector();
 }
 
-void AppBase::SetString(const std::string &theId, const std::wstring &theValue)
+void AppBase::SetString(const std::string &theId, const std::string &theValue)
 {
-	std::pair<StringWStringMap::iterator, bool> aPair =
-		mStringProperties.insert(StringWStringMap::value_type(theId, theValue));
+	std::pair<StringStringMap::iterator, bool> aPair =
+		mStringProperties.insert(StringStringMap::value_type(theId, theValue));
 	if (!aPair.second) // Found it, change value
 		aPair.first->second = theValue;
 }
@@ -3474,8 +3374,7 @@ void AppBase::HandleCmdLineParam(const std::string &theParamName, const std::str
 	}
 	else
 	{
-		Popup(GetString("INVALID_COMMANDLINE_PARAM", _S("Invalid command line parameter: ")) +
-			  StringToPopString(theParamName));
+		Popup(GetString("INVALID_COMMANDLINE_PARAM", "Invalid command line parameter: ") + theParamName);
 		DoExit(0);
 	}
 }
@@ -4306,8 +4205,7 @@ void AppBase::Set3DAcclerated(bool is3D, bool reinit)
 
 		if (aResult != SDLInterface::RESULT_OK)
 		{
-			//	Popup(GetString("FAILED_INIT_DIRECTDRAW", _S("Failed to initialize DirectDraw: ")) +
-			//StringToPopString(DDInterface::ResultToString(aResult) + " " + mDDInterface->mErrorString));
+			Popup(GetString("FAILED_INIT_DIRECTDRAW", "Failed to initialize DirectDraw: ") + SDL_GetError());
 			DoExit(1);
 		}
 

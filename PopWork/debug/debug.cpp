@@ -82,7 +82,7 @@ void PopWorkTraceFmt(const PopChar *fmt, ...)
 
 	va_list argList;
 	va_start(argList, fmt);
-	std::string result = PopStringToStringFast(vformat(fmt, argList));
+	std::string result = vformat(fmt, argList);
 	va_end(argList);
 
 	if (gTraceFile == nullptr)
@@ -239,7 +239,7 @@ void OutputDebug(const PopChar *fmt, ...)
 {
 	va_list argList;
 	va_start(argList, fmt);
-	std::string result = PopStringToStringFast(vformat(fmt, argList));
+	std::string result = vformat(fmt, argList);
 	va_end(argList);
 
 	SDL_Log("%s", result.c_str());

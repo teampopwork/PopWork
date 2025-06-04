@@ -55,7 +55,7 @@ Board::Board(V12DemoApp *theApp)
 	// have to remove your child widgets before deleting them: this is handled automatically
 	// for you.
 	mDemoButton = new ButtonWidget(0, this);
-	mDemoButton->mLabel = _S("Demo Widget");
+	mDemoButton->mLabel = "Demo Widget";
 	mDemoButton->SetFont(FONT_DEFAULT);
 	mDemoButton->Resize(10, 10, 10 + FONT_DEFAULT->StringWidth(mDemoButton->mLabel), 50);
 
@@ -65,14 +65,14 @@ Board::Board(V12DemoApp *theApp)
 	AddWidget(mDemoButton);
 
 	mDialogButton = new ButtonWidget(1, this);
-	mDialogButton->mLabel = _S("Do Dialog");
+	mDialogButton->mLabel = "Do Dialog";
 	mDialogButton->SetFont(FONT_DEFAULT);
 	int w = FONT_DEFAULT->StringWidth(mDialogButton->mLabel);
 	mDialogButton->Resize(mApp->mWidth - 20 - w, 10, w + 10, 50);
 	AddWidget(mDialogButton);
 
 	mCurtainButton = new ButtonWidget(2, this);
-	mCurtainButton->mLabel = _S("Do Transition");
+	mCurtainButton->mLabel = "Do Transition";
 	mCurtainButton->SetFont(FONT_DEFAULT);
 	w = FONT_DEFAULT->StringWidth(mCurtainButton->mLabel);
 	mCurtainButton->Resize(mDemoButton->mX + 20 + mDemoButton->mWidth, 10, w + 10, 50);
@@ -233,7 +233,7 @@ void Board::DrawOverlay(Graphics *g)
 
 	g->SetFont(FONT_DEFAULT);
 	g->SetColor(Color::White);
-	g->DrawString(_S("LOST FOCUS"), mMsgX, mMsgY);
+	g->DrawString("LOST FOCUS", mMsgX, mMsgY);
 
 	// PushState is a new addition. Previously, any time you changed the
 	// graphic's state, you had to undo it, otherwise it affected anything
@@ -368,7 +368,7 @@ void Board::ButtonDepress(int id)
 		// the single line of code below. No messy functions to write, no images to create, that's a hassel
 		// when you're starting a new app and don't care about the initial appearance of your UI elements and
 		// just want to start testing gameplay immediately.
-		Dialog *d = mApp->DoDialog(100, true, _S("Fun Dialog"), _S("Line 1\nLine 2\nLine 3"), _S("Close!"),
+		Dialog *d = mApp->DoDialog(100, true, "Fun Dialog", "Line 1\nLine 2\nLine 3", "Close!",
 								   Dialog::BUTTONS_FOOTER);
 
 		// Using the default font, which is a system font, can sometimes cause problems on older OS's, like

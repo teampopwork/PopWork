@@ -12,7 +12,7 @@
 using namespace PopWork;
 
 OptionsDialog::OptionsDialog(Board *b)
-	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, OptionsDialog::DIALOG_ID, true, _S("OPTIONS"), _S(""), _S("CLOSE"),
+	: Dialog(IMAGE_DIALOG_BOX, IMAGE_DIALOG_BUTTON, OptionsDialog::DIALOG_ID, true, "OPTIONS", "", "CLOSE",
 			 Dialog::BUTTONS_FOOTER)
 {
 	mContentInsets = Insets(23, 20, 23, 20);
@@ -34,7 +34,7 @@ OptionsDialog::OptionsDialog(Board *b)
 	mSfxVolumeSlider->SetValue(gAppBase->GetSfxVolume());
 
 	mQuitBtn = new DialogButton(IMAGE_DIALOG_BUTTON, OptionsDialog::QUIT_BTN_ID, this);
-	mQuitBtn->mLabel = _S("QUIT GAME");
+	mQuitBtn->mLabel = "QUIT GAME";
 	mQuitBtn->SetFont(FONT_DEFAULT);
 
 	m3DCheckbox = new Checkbox(IMAGE_CHECKBOX, IMAGE_CHECKBOX, OptionsDialog::HARDWARE_CHECKBOX_ID, this);
@@ -73,16 +73,16 @@ void OptionsDialog::Draw(Graphics *g)
 	// at the top left corner of the widget (our dialog box). So we
 	// just take the difference between the widget locations to produce the
 	// actual location we want to drawour text at:
-	g->DrawString(_S("Music volume:"), mMusicVolumeSlider->mX - mX,
+	g->DrawString("Music volume:", mMusicVolumeSlider->mX - mX,
 				  mMusicVolumeSlider->mY - mY - mMusicVolumeSlider->mHeight);
 
-	g->DrawString(_S("Sound volume:"), mSfxVolumeSlider->mX - mX,
+	g->DrawString("Sound volume:", mSfxVolumeSlider->mX - mX,
 				  mSfxVolumeSlider->mY - mY - mSfxVolumeSlider->mHeight);
 
 	// Do the same for the checkboxes:
-	g->DrawString(_S("3D Mode:"), m3DCheckbox->mX - mX - 25, m3DCheckbox->mY - mY - m3DCheckbox->mHeight + 20);
-	g->DrawString(_S("Full Screen:"), mFSCheckbox->mX - mX - 25, mFSCheckbox->mY - mY - mFSCheckbox->mHeight + 20);
-	g->DrawString(_S("Custom Cursors:"), mCustomCursorsCheckbox->mX - mX - 25,
+	g->DrawString("3D Mode:", m3DCheckbox->mX - mX - 25, m3DCheckbox->mY - mY - m3DCheckbox->mHeight + 20);
+	g->DrawString("Full Screen:", mFSCheckbox->mX - mX - 25, mFSCheckbox->mY - mY - mFSCheckbox->mHeight + 20);
+	g->DrawString("Custom Cursors:", mCustomCursorsCheckbox->mX - mX - 25,
 				  mCustomCursorsCheckbox->mY - mY - mCustomCursorsCheckbox->mHeight + 20);
 }
 
@@ -228,10 +228,10 @@ void OptionsDialog::CheckboxChecked(int theId, bool checked)
 				// if the user was in full screen mode, they might not see the error message. Using
 				// a game dialog box is the safest way to warn them.
 				m3DCheckbox->SetChecked(false);
-				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("Not Supported"),
-								   _S("Hardware acceleration can not be enabled on this computer. \nYour \
-					video card does not meet the minimum requirements for this game."),
-								   _S("OK"), Dialog::BUTTONS_FOOTER);
+				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, "Not Supported",
+								   "Hardware acceleration can not be enabled on this computer. \nYour \
+					video card does not meet the minimum requirements for this game.",
+								   "OK", Dialog::BUTTONS_FOOTER);
 			}
 			else if (!gAppBase->Is3DAccelerationRecommended())
 			{
@@ -239,10 +239,10 @@ void OptionsDialog::CheckboxChecked(int theId, bool checked)
 				// with a call to Is3DAccelerationRecommended. This allows the user to override
 				// the default setting, but with a warning that it might not work or might cause
 				// problems. Some cards fail the detection process but wind up being OK to use.
-				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("Warning"),
-								   _S("Your video card may not fully support this feature.\n\
-					If you experience slower performance, please disable Hardware Acceleration."),
-								   _S("OK"), Dialog::BUTTONS_FOOTER);
+				gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true,"Warning",
+								   "Your video card may not fully support this feature.\n\
+					If you experience slower performance, please disable Hardware Acceleration.",
+								   "OK", Dialog::BUTTONS_FOOTER);
 			}
 		}
 	}
@@ -257,10 +257,10 @@ void OptionsDialog::CheckboxChecked(int theId, bool checked)
 		// checking the value of AppBase's mForceFullScreen variable.
 		if (gAppBase->mForceFullscreen && !checked)
 		{
-			gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true, _S("No Windowed Mode"),
-							   _S("Windowed mode is only available if your desktop is running in\n\
-				either 16 bit or 32 bit color mode, which it is not."),
-							   _S("OK"), Dialog::BUTTONS_FOOTER);
+			gAppBase->DoDialog(OptionsDialog::MESSAGE_BOX_ID, true,  "No Windowed Mode",
+							   "Windowed mode is only available if your desktop is running in\n\
+				either 16 bit or 32 bit color mode, which it is not.",
+							   "OK", Dialog::BUTTONS_FOOTER);
 
 			// re-check the box to indicate that fullscreen is still the selected mode:
 			mFSCheckbox->SetChecked(true);

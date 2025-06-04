@@ -20,9 +20,9 @@ void PropertiesParser::Fail(const PopString &theErrorText)
 
 		mError = theErrorText;
 		if (aLineNum > 0)
-			mError += StrFormat(_S(" on Line %d"), aLineNum);
+			mError += StrFormat(" on Line %d", aLineNum);
 		if (!mXMLParser->GetFileName().empty())
-			mError += StrFormat(_S(" in File '%s'"), mXMLParser->GetFileName().c_str());
+			mError += StrFormat(" in File '%s'", mXMLParser->GetFileName().c_str());
 	}
 }
 
@@ -32,7 +32,7 @@ PropertiesParser::~PropertiesParser()
 
 bool PropertiesParser::ParseSingleElement(PopString *aString)
 {
-	*aString = _S("");
+	*aString = "";
 
 	for (;;)
 	{
@@ -42,7 +42,7 @@ bool PropertiesParser::ParseSingleElement(PopString *aString)
 
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
-			Fail(_S("Unexpected Section: '") + aXMLElement.mValue + _S("'"));
+			Fail("Unexpected Section: '" + aXMLElement.mValue + "'");
 			return false;
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
@@ -68,24 +68,24 @@ bool PropertiesParser::ParseStringArray(StringVector *theStringVector)
 
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
-			if (aXMLElement.mValue == _S("String"))
+			if (aXMLElement.mValue == "String")
 			{
 				PopString aString;
 
 				if (!ParseSingleElement(&aString))
 					return false;
 
-				theStringVector->push_back(PopStringToStringFast(aString));
+				theStringVector->push_back(aString);
 			}
 			else
 			{
-				Fail(_S("Invalid Section '") + aXMLElement.mValue + _S("'"));
+				Fail("Invalid Section '" + aXMLElement.mValue + "'");
 				return false;
 			}
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 		{
-			Fail(_S("Element Not Expected '") + aXMLElement.mValue + _S("'"));
+			Fail("Element Not Expected '" + aXMLElement.mValue + "'");
 			return false;
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
@@ -105,27 +105,27 @@ bool PropertiesParser::ParseProperties()
 
 		if (aXMLElement.mType == XMLElement::TYPE_START)
 		{
-			if (aXMLElement.mValue == _S("String"))
+			if (aXMLElement.mValue == "String")
 			{
 				PopString aDef;
 				if (!ParseSingleElement(&aDef))
 					return false;
 
-				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
-				mApp->SetString(anId, PopStringToWStringFast(aDef));
+				std::string anId = aXMLElement.mAttributes["id"];
+				mApp->SetString(anId, aDef);
 			}
-			else if (aXMLElement.mValue == _S("StringArray"))
+			else if (aXMLElement.mValue == "StringArray")
 			{
 				StringVector aDef;
 
 				if (!ParseStringArray(&aDef))
 					return false;
 
-				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = aXMLElement.mAttributes["id"];
 
 				mApp->mStringVectorProperties.insert(StringStringVectorMap::value_type(anId, aDef));
 			}
-			else if (aXMLElement.mValue == _S("Boolean"))
+			else if (aXMLElement.mValue == "Boolean")
 			{
 				PopString aVal;
 
@@ -135,21 +135,21 @@ bool PropertiesParser::ParseProperties()
 				aVal = Upper(aVal);
 
 				bool boolVal;
-				if ((aVal == _S("1")) || (aVal == _S("YES")) || (aVal == _S("ON")) || (aVal == _S("TRUE")))
+				if ((aVal == "1") || (aVal == "YES") || (aVal == "ON") || (aVal == "TRUE"))
 					boolVal = true;
-				else if ((aVal == _S("0")) || (aVal == _S("NO")) || (aVal == _S("OFF")) || (aVal == _S("FALSE")))
+				else if ((aVal == "0") || (aVal == "NO") || (aVal == "OFF") || (aVal == "FALSE"))
 					boolVal = false;
 				else
 				{
-					Fail(_S("Invalid Boolean Value: '") + aVal + _S("'"));
+					Fail("Invalid Boolean Value: '" + aVal + "'");
 					return false;
 				}
 
-				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = aXMLElement.mAttributes["id"];
 
 				mApp->SetBoolean(anId, boolVal);
 			}
-			else if (aXMLElement.mValue == _S("Integer"))
+			else if (aXMLElement.mValue == "Integer")
 			{
 				PopString aVal;
 
@@ -159,15 +159,15 @@ bool PropertiesParser::ParseProperties()
 				int anInt;
 				if (!StringToInt(aVal, &anInt))
 				{
-					Fail(_S("Invalid Integer Value: '") + aVal + _S("'"));
+					Fail("Invalid Integer Value: '" + aVal + "'");
 					return false;
 				}
 
-				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = aXMLElement.mAttributes["id"];
 
 				mApp->SetInteger(anId, anInt);
 			}
-			else if (aXMLElement.mValue == _S("Double"))
+			else if (aXMLElement.mValue == "Double")
 			{
 				PopString aVal;
 
@@ -177,23 +177,23 @@ bool PropertiesParser::ParseProperties()
 				double aDouble;
 				if (!StringToDouble(aVal, &aDouble))
 				{
-					Fail(_S("Invalid Double Value: '") + aVal + _S("'"));
+					Fail("Invalid Double Value: '" + aVal + "'");
 					return false;
 				}
 
-				std::string anId = PopStringToStringFast(aXMLElement.mAttributes[_S("id")]);
+				std::string anId = aXMLElement.mAttributes["id"];
 
 				mApp->SetDouble(anId, aDouble);
 			}
 			else
 			{
-				Fail(_S("Invalid Section '") + aXMLElement.mValue + _S("'"));
+				Fail("Invalid Section '" + aXMLElement.mValue + "'");
 				return false;
 			}
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 		{
-			Fail(_S("Element Not Expected '") + aXMLElement.mValue + _S("'"));
+			Fail("Element Not Expected '" + aXMLElement.mValue + "'");
 			return false;
 		}
 		else if (aXMLElement.mType == XMLElement::TYPE_END)
@@ -215,20 +215,20 @@ bool PropertiesParser::DoParseProperties()
 
 			if (aXMLElement.mType == XMLElement::TYPE_START)
 			{
-				if (aXMLElement.mValue == _S("Properties"))
+				if (aXMLElement.mValue == "Properties")
 				{
 					if (!ParseProperties())
 						break;
 				}
 				else
 				{
-					Fail(_S("Invalid Section '") + aXMLElement.mValue + _S("'"));
+					Fail("Invalid Section '" + aXMLElement.mValue + "'");
 					break;
 				}
 			}
 			else if (aXMLElement.mType == XMLElement::TYPE_ELEMENT)
 			{
-				Fail(_S("Element Not Expected '") + aXMLElement.mValue + _S("'"));
+				Fail("Element Not Expected '" + aXMLElement.mValue + "'");
 				break;
 			}
 		}
