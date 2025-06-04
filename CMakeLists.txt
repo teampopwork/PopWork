@@ -76,10 +76,10 @@ if(BUILD_EXAMPLES)
 endif()
 
 # djugjsfgufdgujdfgiujgdijfgifjdgidfjgifdgjfdgufdguifdg electr0gunner told me to add this
-if(BUILD_DEMOS OR BUILD_TOOLS)
+if(BUILD_EXAMPLES OR BUILD_TOOLS)
     set(demo_deps PopWork)
 
-    if(BUILD_DEMOS)
+    if(BUILD_EXAMPLES)
         list(APPEND demo_deps
             Demo1 Demo2 Demo3 Demo4 Demo5
             Hun-garr V12Demo V14Demo XMLDemo
