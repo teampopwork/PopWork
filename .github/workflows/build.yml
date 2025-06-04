@@ -63,7 +63,7 @@ jobs:
           sudo apt-get install -y \
             build-essential libx11-dev libxcursor-dev libxi-dev \
             libxrandr-dev libxext-dev libdrm-dev libgbm-dev \
-            libwayland-dev libegl1-mesa-dev libfreetype6-dev libharfbuzz-dev
+            libwayland-dev libegl1-mesa-dev libfreetype6-dev libharfbuzz-dev zlib1g-dev
 
       - name: Configure
         run: |
