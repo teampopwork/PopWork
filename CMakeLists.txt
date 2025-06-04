@@ -62,6 +62,8 @@ add_subdirectory(external/discordrpc EXCLUDE_FROM_ALL)
 
 # what the hell am i doing with my life
 set(BUILD_CURL_EXE OFF CACHE BOOL "Build curl executable" FORCE)
+# i am asking the same thing buddy.
+set(CURL_ZLIB OFF CACHE BOOL "Disable curl's use of system zlib" FORCE)
 set(HTTP_ONLY ON CACHE BOOL "" FORCE)
 set(CURL_USE_LIBPSL OFF CACHE BOOL "Use libpsl" FORCE)
 set(CURL_USE_OPENSSL OFF CACHE BOOL "" FORCE)
