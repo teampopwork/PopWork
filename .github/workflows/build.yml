@@ -7,11 +7,13 @@ on:
       - '**/*.cpp'
       - '**/*.hpp'
       - '**/*.h'
+      - '.github/workflows/build.yml'
   pull_request:
     paths:
       - '**/*.cpp'
       - '**/*.hpp'
       - '**/*.h'
+      - '.github/workflows/build.yml'
   release:
     types: [created]
 
