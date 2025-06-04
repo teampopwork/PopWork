@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(PopLib LANGUAGES C CXX ASM VERSION 1.4.0)
 
 set(BUILD_SHARED_LIBS OFF)
-set(SDL_SHARED ON)
 
 # temp workaround for me
 set(_Python3_EXECUTABLE_DEBUG "" CACHE FILEPATH "Python debug executable")
