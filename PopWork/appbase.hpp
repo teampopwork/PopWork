@@ -581,6 +581,8 @@ class AppBase : public ButtonListener, public DialogListener
 	virtual void ShutdownHook();
 	/// @brief pre ~task~ terminate
 	virtual void PreTerminate();
+	/// @brief update hook
+	virtual void UpdateHook();
 	/// @brief loading thread process
 	virtual void LoadingThreadProc();
 	/// @brief writes saved settings to json

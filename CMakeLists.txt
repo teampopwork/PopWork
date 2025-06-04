@@ -15,6 +15,7 @@ set(_Python3_EXECUTABLE_DEBUG "" CACHE FILEPATH "Python debug executable")
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 option(USE_WIDESTRING "Wide Strings" ON)
+option(FEATURE_DISCORD_RPC "Discord RPC" OFF)
 option(BUILD_EXAMPLES "Build Examples" ON)
 option(CONSOLE "Show the console on Windows" ON)
 option(BUILD_TOOLS "Build Tools" ON)
@@ -29,6 +30,10 @@ endif()
 
 if(USE_WIDESTRING)
 	add_compile_definitions(_USE_WIDE_STRING)
+endif()
+
+if(FEATURE_DISCORD_RPC)
+	add_compile_definitions(_FEATURE_DISCORD_RPC)
 endif()
 
 if(CONSOLE AND WIN32)
@@ -58,6 +63,7 @@ add_subdirectory(external/openal EXCLUDE_FROM_ALL)
 add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
 add_subdirectory(external/zlib EXCLUDE_FROM_ALL)
 add_subdirectory(external/misc EXCLUDE_FROM_ALL)
+add_subdirectory(external/discordrpc EXCLUDE_FROM_ALL)
 
 
 # what the hell am i doing with my life

@@ -49,6 +49,8 @@ void V14DemoApp::ShutdownHook()
 
 void V14DemoApp::InitHook()
 {
+	// We call the PopApp Init hook so we can propely set up systems like DiscordRPC.
+	PopApp::InitHook();
 	// Like the ShutdownHook idea, we no longer need to call the parent class' Init method.
 	// This function only gets called once, and after the parent has finished its Init code.
 	// It just saves us a few lines of extra checking, and saves some headaches that can

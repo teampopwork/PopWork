@@ -1472,6 +1472,10 @@ void AppBase::ShutdownHook()
 {
 }
 
+void AppBase::UpdateHook()
+{
+}
+
 void AppBase::Shutdown()
 {
 	if ((mPrimaryThreadId != 0) && (SDL_GetCurrentThreadID() != mPrimaryThreadId))
@@ -3059,6 +3063,7 @@ bool AppBase::UpdateAppStep(bool *updated)
 			if (updated != nullptr)
 				*updated = mUpdateCount != anOldUpdateCnt;
 		}
+		UpdateHook();
 	}
 
 	mUpdateAppDepth--;

@@ -22,3 +22,6 @@
 [submodule "external/zlib"]
 	path = external/zlib
 	url = https://github.com/madler/zlib
+[submodule "external/discordrpc"]
+	path = external/discordrpc
+	url = https://github.com/EclipseMenu/discord-presence

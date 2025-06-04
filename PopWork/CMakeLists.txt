@@ -91,8 +91,15 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/external/ogg/include
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/external/misc
+    ${CMAKE_SOURCE_DIR}/external/discordrpc
     ${CMAKE_SOURCE_DIR}/external/stb_image
 )
+
+if (FEATURE_DISCORD_RPC)
+    include_directories(
+        ${CMAKE_SOURCE_DIR}/external/discordrpc
+    )
+endif()
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
 	STB_IMAGE_IMPLEMENTATION
@@ -119,6 +126,13 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     misc
     ${BASS_PATH}
 )
+
+if (FEATURE_DISCORD_RPC)
+    target_link_libraries(${PROJECT_NAME} PUBLIC
+        discord-rpc
+    )
+endif()
+
 
 # Doxygen
 find_package(Doxygen)
