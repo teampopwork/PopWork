@@ -85,19 +85,19 @@ add_library(${PROJECT_NAME} STATIC ${ALL_GROUPED_FILES})
 
 # hacks!!
 include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/external/vorbis/include
-    ${CMAKE_SOURCE_DIR}/external/openal
-    ${CMAKE_SOURCE_DIR}/external/ogg/include
+    ${POPLIB_ROOT_DIR}
+    ${POPLIB_ROOT_DIR}/external/vorbis/include
+    ${POPLIB_ROOT_DIR}/external/openal
+    ${POPLIB_ROOT_DIR}/external/ogg/include
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/external/misc
-    ${CMAKE_SOURCE_DIR}/external/discordrpc
-    ${CMAKE_SOURCE_DIR}/external/stb_image
+    ${POPLIB_ROOT_DIR}/external/misc
+    ${POPLIB_ROOT_DIR}/external/discordrpc
+    ${POPLIB_ROOT_DIR}/external/stb_image
 )
 
 if (FEATURE_DISCORD_RPC)
     include_directories(
-        ${CMAKE_SOURCE_DIR}/external/discordrpc
+        ${POPLIB_ROOT_DIR}/external/discordrpc
     )
 endif()
 
