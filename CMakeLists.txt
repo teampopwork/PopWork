@@ -38,11 +38,11 @@ endif()
 
 if (IS_64BIT)
     message (STATUS "Getting the x64 BASS path")
-	set(BASS_LIB_PATH ${CMAKE_SOURCE_DIR}/external/bass/x64)
+	set(BASS_LIB_PATH ${POPLIB_ROOT_DIR}/external/bass/x64)
 	message (${BASS_LIB_PATH})
 else ()
     message (STATUS "Getting the x86 BASS path")
-	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/external/bass/x86)
+	set(BASS_LIB_PATH  ${POPLIB_ROOT_DIR}/external/bass/x86)
 	message (${BASS_LIB_PATH})
 endif()
 
