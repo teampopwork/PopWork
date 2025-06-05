@@ -13,7 +13,11 @@ extern "C"
 
 using namespace std;
 
+PakInterface *gPakInterface = new PakInterface();
 
+std::string gDecryptPassword = "PopCapPopLibFramework";
+
+//////////////////
 std::vector<uint8_t> Decompress(const std::vector<uint8_t> &input, size_t originalSize)
 {
 	std::vector<uint8_t> output(originalSize);
@@ -26,7 +30,7 @@ std::vector<uint8_t> Decompress(const std::vector<uint8_t> &input, size_t origin
 	return output;
 }
 
-
+//////////////////
 std::vector<uint8_t> AESDecrypt(const std::vector<uint8_t> &data, const std::string &password)
 {
 	AES_ctx ctx;
@@ -48,8 +52,6 @@ std::vector<uint8_t> AESDecrypt(const std::vector<uint8_t> &data, const std::str
 	}
 	return decrypted;
 }
-
-PakInterface *gPakInterface = new PakInterface();
 
 //////////////////
 static bool starts_with(const std::string &str, const std::string &prefix)
@@ -83,8 +85,6 @@ static bool matchPattern(const string &pattern, const string &name)
 	return _stricmp(name.substr(name.size() - suffix.size()).c_str(), suffix.c_str()) == 0;
 }
 
-std::string gDecryptPassword = "PopCapPopLibFramework";
-
 PakInterface::PakInterface()
 {
 	// nothing to initialize beyond base
@@ -108,6 +108,7 @@ bool PakInterface::AddPakFile(const string &fileName)
 	fread(collection.data(), 1, fileSize, fp);
 	fclose(fp);
 
+	//Check for the GPAK in the file header. If it's not there, it's not a valid GPAK file
 	GPAKHeader *gpakHeader = reinterpret_cast<GPAKHeader *>(collection.data());
 	if (memcmp(gpakHeader->magic, "GPAK", 4) != 0 || gpakHeader->version != 1)
     	return false;
@@ -121,7 +122,6 @@ bool PakInterface::AddPakFile(const string &fileName)
 
 	//Size of the header for recalculating the start pos
 	size_t headerSize = gpakHeader->fileTableOffset + gpakHeader->fileCount * sizeof(GPAKFileEntry);
-
 
 	for (const GPAKFileEntry& entry : entries)
 	{

@@ -4,7 +4,7 @@
 #pragma once
 #endif
 
-#include <math.h>
+#include "math.hpp"
 
 namespace PopLib
 {
@@ -80,7 +80,7 @@ class Vector2
 
 	float Magnitude() const
 	{
-		return sqrtf(x * x + y * y);
+		return std::sqrt(x * x + y * y);
 	}
 	float MagnitudeSquared() const
 	{
@@ -97,6 +97,18 @@ class Vector2
 	{
 		return Vector2(-y, x);
 	}
+
+	float Distance(const Vector2& a, const Vector2& b)
+	{
+		return std::sqrt(DistanceSquared(a,b));
+	}
+	float DistanceSquared(const Vector2& a, const Vector2& b)
+	{
+		float dx = a.x - b.x;
+		float dy = a.y - b.y;
+		return dx * dx + dy * dy;
+	}
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,13 +152,25 @@ class Vector3
 	}
 	float Magnitude() const
 	{
-		return sqrtf(x * x + y * y + z * z);
+		return std::sqrt(x * x + y * y + z * z);
 	}
 
 	Vector3 Normalize() const
 	{
 		float aMag = Magnitude();
 		return aMag != 0 ? (*this) / aMag : *this;
+	}
+
+	float Distance(const Vector3& a, const Vector3& b)
+	{
+		return std::sqrt(DistanceSquared(a,b));
+	}
+	float DistanceSquared(const Vector3& a, const Vector3& b)
+	{
+		float dx = a.x - b.x;
+		float dy = a.y - b.y;
+		float dz = a.z - b.z;
+		return dx * dx + dy * dy + dz * dz;
 	}
 };
 

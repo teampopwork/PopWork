@@ -15,7 +15,7 @@
 namespace PopLib
 {
 
-class /*Pop*/Math
+class Math
 {
   public:
 	inline static double Fabs(double x)
@@ -42,6 +42,39 @@ class /*Pop*/Math
 	{
 		return x != 0 && (x & (x - 1)) == 0;
 	}
+
+	inline static float Clamp(float value, float min, float max)
+	{
+		return std::fmax(min, std::fmin(max, value));
+	}
+
+	inline static float Lerp(float a, float b, float t)
+	{
+		return a + t * (b - a);
+	}
+
+	inline static float SmoothStep(float edge0, float edge1, float x)
+	{
+		x = Clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+		return x * x * (3 - 2 * x);
+	}
+
+	inline static bool NearlyEqual(float a, float b, float epsilon = 1e-5f)
+	{
+		return std::fabs(a - b) <= epsilon;
+	}
+
+	inline static float Sin(float angleRadians) { return std::sinf(angleRadians); }
+	inline static float Cos(float angleRadians) { return std::cosf(angleRadians); }
+	inline static float Tan(float angleRadians) { return std::tanf(angleRadians); }
+	inline static float Asin(float x) { return std::asinf(x); }
+	inline static float Acos(float x) { return std::acosf(x); }
+	inline static float Atan2(float y, float x) { return std::atan2f(y, x); }
+
+	template <typename T> int Sign(T val) {
+    return (T(0) < val) - (val < T(0));
+	}
+
 };
 
 };
