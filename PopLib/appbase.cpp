@@ -3042,25 +3042,16 @@ void AppBase::Start()
 
 	WaitForLoadingThread();
 
-	char aString[256];
-	sprintf(aString, "Seconds       = %g\r\n", (SDL_GetTicks() - aStartTime) / 1000.0);
-	SDL_Log(aString);
+	SDL_Log("Seconds       = %g\r\n", (SDL_GetTicks() - aStartTime) / 1000.0);
 	// sprintf(aString, "Count         = %d\r\n", aCount);
 	// OutputDebugString(aString);
-	sprintf(aString, "Sleep Count   = %d\r\n", mSleepCount);
-	SDL_Log(aString);
-	sprintf(aString, "Update Count  = %d\r\n", mUpdateCount);
-	SDL_Log(aString);
-	sprintf(aString, "Draw Count    = %d\r\n", mDrawCount);
-	SDL_Log(aString);
-	sprintf(aString, "Draw Time     = %d\r\n", mDrawTime);
-	SDL_Log(aString);
-	sprintf(aString, "Screen Blt    = %d\r\n", mScreenBltTime);
-	SDL_Log(aString);
+	SDL_Log("Sleep Count   = %d\r\n", mSleepCount);
+	SDL_Log("Update Count  = %d\r\n", mUpdateCount);
+	SDL_Log("Draw Count    = %d\r\n", mDrawCount);
+	SDL_Log("Screen Blt    = %d\r\n", mScreenBltTime);
 	if (mDrawTime + mScreenBltTime > 0)
 	{
-		sprintf(aString, "Avg FPS       = %d\r\n", (mDrawCount * 1000) / (mDrawTime + mScreenBltTime));
-		SDL_Log(aString);
+		SDL_Log("Avg FPS       = %d\r\n", (mDrawCount * 1000) / (mDrawTime + mScreenBltTime));
 	}
 
 	PreTerminate();
