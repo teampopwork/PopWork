@@ -84,19 +84,20 @@ set(ALL_GROUPED_FILES ${SOURCE_FILES} ${HEADER_FILES})
 add_library(${PROJECT_NAME} STATIC ${ALL_GROUPED_FILES})
 
 # hacks!!
-include_directories(
-    ${POPLIB_ROOT_DIR}
-    ${POPLIB_ROOT_DIR}/external/vorbis/include
-    ${POPLIB_ROOT_DIR}/external/openal
-    ${POPLIB_ROOT_DIR}/external/ogg/include
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${POPLIB_ROOT_DIR}/external/misc
-    ${POPLIB_ROOT_DIR}/external/discordrpc
-    ${POPLIB_ROOT_DIR}/external/stb_image
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        ${POPLIB_ROOT_DIR}
+        ${POPLIB_ROOT_DIR}/external/vorbis/include
+        ${POPLIB_ROOT_DIR}/external/openal
+        ${POPLIB_ROOT_DIR}/external/ogg/include
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${POPLIB_ROOT_DIR}/external/misc
+        ${POPLIB_ROOT_DIR}/external/discordrpc
+        ${POPLIB_ROOT_DIR}/external/stb_image
 )
 
 if (FEATURE_DISCORD_RPC)
-    include_directories(
+    target_include_directories(${PROJECT_NAME} PUBLIC
         ${POPLIB_ROOT_DIR}/external/discordrpc
     )
 endif()
