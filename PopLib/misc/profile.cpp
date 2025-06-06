@@ -289,7 +289,7 @@ void Profile::ParseXML(PopLib::XMLParser *theParser)
 				if (HasAttribute(&aNode, "id") && HasAttribute(&aNode, "value"))
 				{
 					PopString anId = aNode.mAttributes["id"];
-					int aValue = popatoi(aNode.mAttributes["value"].c_str());
+					int aValue = atoi(aNode.mAttributes["value"].c_str());
 
 					mIntegerMap.insert(std::pair<PopString, int>(anId, aValue));
 				}

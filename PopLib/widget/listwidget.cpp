@@ -154,7 +154,7 @@ int ListWidget::AddLine(const PopString &theLine, bool alphabetical)
 	if (alphabetical)
 	{
 		for (int i = 0; i < (int)mLines.size(); i++)
-			if (popstrcmp(theLine.c_str(), mLines[i].c_str()) < 0)
+			if (strcmp(theLine.c_str(), mLines[i].c_str()) < 0)
 			{
 				anIdx = i;
 
@@ -224,7 +224,7 @@ int ListWidget::GetLineCount()
 int ListWidget::GetLineIdx(const PopString &theLine)
 {
 	for (ulong i = 0; i < mLines.size(); i++)
-		if (popstrcmp(mLines[i].c_str(), theLine.c_str()) == 0)
+		if (strcmp(mLines[i].c_str(), theLine.c_str()) == 0)
 			return i;
 
 	return -1;

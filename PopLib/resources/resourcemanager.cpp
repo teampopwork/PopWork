@@ -237,11 +237,11 @@ bool ResourceManager::ParseSoundResource(XMLElement &theElement)
 
 	anItr = theElement.mAttributes.find("volume");
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(), "%lf", &aRes->mVolume);
+		sscanf(anItr->second.c_str(), "%lf", &aRes->mVolume);
 
 	anItr = theElement.mAttributes.find("pan");
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(), "%d", &aRes->mPanning);
+		sscanf(anItr->second.c_str(), "%d", &aRes->mPanning);
 
 	return true;
 }
@@ -255,7 +255,7 @@ static void ReadIntVector(const PopString &theVal, std::vector<int> &theVector)
 	std::string::size_type aPos = 0;
 	while (true)
 	{
-		theVector.push_back(popatoi(theVal.c_str() + aPos));
+		theVector.push_back(atoi(theVal.c_str() + aPos));
 		aPos = theVal.find_first_of(',', aPos);
 		if (aPos == std::string::npos)
 			break;
@@ -307,7 +307,7 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	aRes->mAlphaColor = 0xFFFFFF;
 	anItr = theElement.mAttributes.find("alphacolor");
 	if (anItr != theElement.mAttributes.end())
-		popsscanf(anItr->second.c_str(), "%x", &aRes->mAlphaColor);
+		sscanf(anItr->second.c_str(), "%x", &aRes->mAlphaColor);
 
 	anItr = theElement.mAttributes.find("variant");
 	if (anItr != theElement.mAttributes.end())
@@ -319,13 +319,13 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 
 	anItr = theElement.mAttributes.find("rows");
 	if (anItr != theElement.mAttributes.end())
-		aRes->mRows = popatoi(anItr->second.c_str());
+		aRes->mRows = atoi(anItr->second.c_str());
 	else
 		aRes->mRows = 1;
 
 	anItr = theElement.mAttributes.find("cols");
 	if (anItr != theElement.mAttributes.end())
-		aRes->mCols = popatoi(anItr->second.c_str());
+		aRes->mCols = atoi(anItr->second.c_str());
 	else
 		aRes->mCols = 1;
 
@@ -335,13 +335,13 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 	{
 		const PopChar *aType = anItr->second.c_str();
 
-		if (popstricmp(aType, "none") == 0)
+		if (stricmp(aType, "none") == 0)
 			anAnimType = AnimType_None;
-		else if (popstricmp(aType, "once") == 0)
+		else if (stricmp(aType, "once") == 0)
 			anAnimType = AnimType_Once;
-		else if (popstricmp(aType, "loop") == 0)
+		else if (stricmp(aType, "loop") == 0)
 			anAnimType = AnimType_Loop;
-		else if (popstricmp(aType, "pingpong") == 0)
+		else if (stricmp(aType, "pingpong") == 0)
 			anAnimType = AnimType_PingPong;
 		else
 		{
@@ -357,15 +357,15 @@ bool ResourceManager::ParseImageResource(XMLElement &theElement)
 
 		anItr = theElement.mAttributes.find("framedelay");
 		if (anItr != theElement.mAttributes.end())
-			aRes->mAnimInfo.mFrameDelay = popatoi(anItr->second.c_str());
+			aRes->mAnimInfo.mFrameDelay = atoi(anItr->second.c_str());
 
 		anItr = theElement.mAttributes.find("begindelay");
 		if (anItr != theElement.mAttributes.end())
-			aBeginDelay = popatoi(anItr->second.c_str());
+			aBeginDelay = atoi(anItr->second.c_str());
 
 		anItr = theElement.mAttributes.find("enddelay");
 		if (anItr != theElement.mAttributes.end())
-			anEndDelay = popatoi(anItr->second.c_str());
+			anEndDelay = atoi(anItr->second.c_str());
 
 		anItr = theElement.mAttributes.find("perframedelay");
 		if (anItr != theElement.mAttributes.end())
@@ -426,7 +426,7 @@ bool ResourceManager::ParseFontResource(XMLElement &theElement)
 		if (anItr == theElement.mAttributes.end())
 			return Fail("SysFont needs point size");
 
-		aRes->mSize = popatoi(anItr->second.c_str());
+		aRes->mSize = atoi(anItr->second.c_str());
 		if (aRes->mSize <= 0)
 			return Fail("SysFont needs point size");
 

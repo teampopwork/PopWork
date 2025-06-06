@@ -1137,7 +1137,7 @@ int Graphics::WriteString(const PopString &theString, int theX, int theY, int th
 				uint32_t aColor = 0;
 				if (theString[i + 1] == 'o')
 				{
-					if (popstrncmp(theString.c_str() + i + 1, "oldclr", 6) == 0)
+					if (strncmp(theString.c_str() + i + 1, "oldclr", 6) == 0)
 						aColor = theOldColor;
 				}
 				else
