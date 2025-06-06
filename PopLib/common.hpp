@@ -59,13 +59,6 @@ typedef std::map<std::string, std::string> DefinesMap;
 
 typedef std::string PopString;
 
-#define popstrncmp strncmp
-#define popstrcmp strcmp
-#define popstricmp stricmp
-#define popsscanf sscanf
-#define popatoi atoi
-#define popstrcpy strcpy
-
 #define LONG_BIGE_TO_NATIVE(l)                                                                                         \
 	(((l >> 24) & 0xFF) | ((l >> 8) & 0xFF00) | ((l << 8) & 0xFF0000) | ((l << 24) & 0xFF000000))
 #define WORD_BIGE_TO_NATIVE(w) (((w >> 8) & 0xFF) | ((w << 8) & 0xFF00))
