@@ -43,11 +43,6 @@ class Math
 		return x != 0 && (x & (x - 1)) == 0;
 	}
 
-	template<typename T>
-	inline static T Clamp(T value, T minVal, T maxVal) {
-		return std::max(minVal, std::min(value, maxVal));
-	}
-
 	inline static float Lerp(float a, float b, float t)
 	{
 		return a + t * (b - a);
@@ -55,7 +50,7 @@ class Math
 
 	inline static float SmoothStep(float edge0, float edge1, float x)
 	{
-		x = Clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
 		return x * x * (3 - 2 * x);
 	}
 
