@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(PopLib LANGUAGES C CXX ASM VERSION 1.4.0)
 
-set(POPLIB_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(POPLIB_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE PATH "Path to engine")
+
+set(BASS_PATH "" CACHE PATH "Path to BASS")
 
 set(BUILD_SHARED_LIBS OFF)
 
@@ -45,6 +47,14 @@ else ()
 	set(BASS_LIB_PATH  ${POPLIB_ROOT_DIR}/external/bass/x86)
 	message (${BASS_LIB_PATH})
 endif()
+
+# Get the bass path
+if (WIN32)
+    set(BASS_PATH "${BASS_LIB_PATH}/bass.dll")
+elseif (UNIX)
+    set(BASS_PATH "${BASS_LIB_PATH}/libbass.so")
+endif()
+
 
 # external libraries
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build as DLL" FORCE)
