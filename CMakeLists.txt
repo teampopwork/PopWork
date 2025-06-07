@@ -64,6 +64,7 @@ add_subdirectory(external/miniaudio EXCLUDE_FROM_ALL)
 add_subdirectory(external/zlib EXCLUDE_FROM_ALL)
 add_subdirectory(external/misc EXCLUDE_FROM_ALL)
 add_subdirectory(external/discordrpc EXCLUDE_FROM_ALL)
+add_subdirectory(external/tinyxml2 EXCLUDE_FROM_ALL)
 
 
 # what the hell am i doing with my life

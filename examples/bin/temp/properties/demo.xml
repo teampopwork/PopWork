@@ -1,6 +1,6 @@
-<!-- below is an example of an instruction. The XMLParser class can handle instruction syntax,
-	 but you'll notice that in the XMLDemo we don't actually use the value, we just ignore it. -->
 <?xml version="1.0"?>
+<!-- above is an example of an instruction. The XMLParser class can handle instruction syntax,
+	 but you'll notice that in the XMLDemo we don't actually use the value, we just ignore it. -->
 
 <!-- Sections contain nested items -->
 <Section1>

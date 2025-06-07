@@ -18,7 +18,6 @@ XMLWriter::XMLWriter()
 {
 	mFile = NULL;
 	mLineNum = 0;
-	mAllowComments = false;
 	mOpenAttributes = false;
 }
 

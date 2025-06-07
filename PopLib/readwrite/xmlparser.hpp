@@ -6,7 +6,9 @@
 
 #include "common.hpp"
 #include "debug/perftimer.hpp"
+#include <tinyxml2.h>
 
+using namespace tinyxml2;
 struct PFILE;
 
 namespace PopLib
@@ -54,13 +56,19 @@ class XMLParser
 	int mLineNum;
 	PFILE *mFile;
 	bool mHasFailed;
-	bool mAllowComments;
-	XMLParserBuffer mBufferedText;
-	PopString mSection;
-	bool (XMLParser::*mGetCharFunc)(char *theChar, bool *error);
-	bool mForcedEncodingType;
 	bool mFirstChar;
 	bool mByteSwap;
+    XMLDocument mDocument;
+    XMLNode* mCurrentNode;
+	/// @brief current elements
+	std::vector<PopString> mSectionStack;
+	/// @brief names of elements that await TYPE_END
+	std::vector<PopString> mEndPending;
+	
+	/// @brief the processed children
+	std::vector<PopString> mProcessedChildren;
+	/// @brief stack of parent elements
+	std::vector<XMLNode*> mNodeStack;
 
   protected:
 	void Fail(const PopString &theErrorText);
@@ -68,42 +76,18 @@ class XMLParser
 
 	bool AddAttribute(XMLElement *theElement, const PopString &aAttributeKey, const PopString &aAttributeValue);
 
-	bool GetAsciiChar(char *theChar, bool *error);
-	bool GetUTF8Char(char *theChar, bool *error);
-	bool GetUTF16Char(char *theChar, bool *error);
-	bool GetUTF16LEChar(char *theChar, bool *error);
-	bool GetUTF16BEChar(char *theChar, bool *error);
-
-  public:
-	enum XMLEncodingType
-	{
-		ASCII,
-		UTF_8,
-		UTF_16,
-		UTF_16_LE,
-		UTF_16_BE
-	};
-
   public:
 	XMLParser();
 	virtual ~XMLParser();
 
-	void SetEncodingType(XMLEncodingType theEncoding);
 	bool OpenFile(const std::string &theFilename);
-	void SetStringSource(const std::wstring &theString);
-	void SetStringSource(const std::string &theString);
+	bool OpenBuffer(const std::string &theBuffer);
 	bool NextElement(XMLElement *theElement);
 	PopString GetErrorText();
 	int GetCurrentLineNum();
 	std::string GetFileName();
 
-	inline void AllowComments(bool doAllow)
-	{
-		mAllowComments = doAllow;
-	}
-
 	bool HasFailed();
-	bool EndOfFile();
 };
 
 }; // namespace PopLib

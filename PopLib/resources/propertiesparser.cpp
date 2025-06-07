@@ -254,7 +254,7 @@ bool PropertiesParser::ParsePropertiesBuffer(const Buffer &theBuffer)
 	std::string aString;
 	aString.insert(aString.begin(), (char *)theBuffer.GetDataPtr(),
 				   (char *)theBuffer.GetDataPtr() + theBuffer.GetDataLen());
-	mXMLParser->SetStringSource(aString);
+	mXMLParser->OpenBuffer(aString);
 
 	return DoParseProperties();
 }

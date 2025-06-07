@@ -61,12 +61,6 @@ void XMLDemoApp::InitHook()
 	// Create our XML Parser object
 	mParser = new XMLParser();
 
-	// By default, comments are ignored and you won't see them at all once the file is read in.
-	// If you would like to not strip out the comments, you can call the AllowComments method
-	// of the XMLParser class and pass in true. Uncomment the line below to let XML comments
-	// be retained when loading the demo.xml file:
-	// mParser->AllowComments(true);
-
 	// Load in our demo XML file. If an error occurs, it'll return false.
 	if (!mParser->OpenFile("properties/demo.xml"))
 	{

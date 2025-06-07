@@ -28,7 +28,6 @@ class XMLWriter
 	int mLineNum;
 	FILE *mFile;
 	bool mHasFailed;
-	bool mAllowComments;
 	bool mOpenAttributes;
 
 	std::stack<PopString> mSectionStack;
@@ -61,11 +60,6 @@ class XMLWriter
 	PopString GetErrorText();
 	int GetCurrentLineNum();
 	PopString GetFileName();
-
-	inline void AllowComments(bool doAllow)
-	{
-		mAllowComments = doAllow;
-	}
 
 	bool HasFailed();
 };

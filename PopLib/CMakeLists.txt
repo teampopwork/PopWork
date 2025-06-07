@@ -124,6 +124,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Vorbis::vorbis
     CURL::libcurl
     zlibstatic
+    tinyxml2
     misc
     ${BASS_LIB_PATH}
 )
