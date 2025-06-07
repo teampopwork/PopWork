@@ -69,6 +69,7 @@ class XMLParser
 	std::vector<PopString> mProcessedChildren;
 	/// @brief stack of parent elements
 	std::vector<XMLNode*> mNodeStack;
+	bool mFirstStart;
 
   protected:
 	void Fail(const PopString &theErrorText);

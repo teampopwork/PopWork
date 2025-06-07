@@ -9,6 +9,7 @@ XMLParser::XMLParser()
 	mFile = NULL;
 	mLineNum = 0;
 	mCurrentNode = nullptr;
+	mFirstStart = true;
 }
 
 XMLParser::~XMLParser()
@@ -107,7 +108,6 @@ bool XMLParser::OpenFile(const std::string &theFileName)
 
 bool XMLParser::NextElement(XMLElement *theElement)
 {
-	static bool firstCall = true;
 
     if (!mEndPending.empty())
     {
@@ -135,12 +135,12 @@ bool XMLParser::NextElement(XMLElement *theElement)
         return true;
     }
 
-	if (!mCurrentNode && firstCall)
+	if (!mCurrentNode && mFirstStart)
     {
         mCurrentNode = mDocument.FirstChild();
-        firstCall = false;
+        mFirstStart = false;
     }
-    else if (!mCurrentNode && !firstCall)
+    else if (!mCurrentNode && !mFirstStart)
     {
         // No more nodes to process, end of document reached
         return false;
@@ -153,11 +153,6 @@ bool XMLParser::NextElement(XMLElement *theElement)
     {
         mCurrentNode = mCurrentNode->NextSibling();
     }
-
-    theElement->mAttributes.clear();
-    theElement->mInstruction.clear();
-    theElement->mValue.clear();
-    theElement->mSection.clear();
 
   	if (!mCurrentNode)
         return false;
