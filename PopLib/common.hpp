@@ -19,6 +19,16 @@
 #define NOMINMAX
 #endif
 
+
+//vorbis workaounds since for some fucking reason, vorbis force defines min and max.
+#ifdef max
+#undef max
+#endif
+
+#ifdef min
+#undef min
+#endif
+
 #include <string>
 #include <vector>
 #include <set>
