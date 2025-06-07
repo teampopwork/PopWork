@@ -15,6 +15,10 @@
 #undef _UNICODE
 #undef UNICODE
 
+#ifdef _WIN32
+#define NOMINMAX
+#endif
+
 #include <string>
 #include <vector>
 #include <set>
@@ -25,10 +29,6 @@
 #include <cmath>
 #include <cstdint>
 #include <ctime>
-
-#ifdef _WIN32
-#define NOMINMAX
-#endif
 
 #ifdef _WIN32
 #include <windows.h>
