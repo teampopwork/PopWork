@@ -109,9 +109,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 if (WIN32)
-    set(BASS_PATH "${BASS_LIB_PATH}/bass.lib")
+    set(BASS_LIB_PATH "${BASS_LIB_PATH}/bass.lib")
 elseif (UNIX)
-    set(BASS_PATH "${BASS_LIB_PATH}/libbass.so")
+    set(BASS_LIB_PATH "${BASS_LIB_PATH}/libbass.so")
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
@@ -125,7 +125,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     CURL::libcurl
     zlibstatic
     misc
-    ${BASS_PATH}
+    ${BASS_LIB_PATH}
 )
 
 if (FEATURE_DISCORD_RPC)
