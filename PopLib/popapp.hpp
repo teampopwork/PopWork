@@ -42,23 +42,33 @@ namespace PopLib
         int mTimesExecuted;
         bool mTimedOut;
     public:
+        virtual void UpdateFrames();
+
+        virtual void WriteToRegistry();
+        virtual void ReadFromRegistry();	
+
+        virtual bool CheckSignature(const Buffer& theBuffer, const std::string& theFileName);
+        
+        virtual bool ShouldCheckForUpdate();
+        virtual void UpdateCheckQueried();
+
+        virtual void URLOpenSucceeded(const std::string& theURL);
+    public:
         PopApp();
         virtual ~PopApp();
 
     	virtual void Init();
 	    virtual void InitHook();
 	    virtual void InitPropertiesHook();
-        virtual bool CheckSignature(const Buffer& theBuffer, const std::string& theFileName);
-	    virtual void UpdateHook();
     	virtual void OpenUpdateURL();
-	    virtual void PreDisplayHook();
-    	virtual void PreTerminate();
-        virtual void ReadFromRegistry();
 
         bool Validate(const std::string& theUserName, const std::string& theRegCode);
 
         virtual bool OpenRegisterPage(DefinesMap theDefinesMap);
         virtual bool OpenRegisterPage();
+
+        virtual void HandleCmdLineParam(const std::string& theParamName, const std::string& theParamValue);
+        virtual bool OpenHTMLTemplate(const std::string& theTemplateFile, const DefinesMap& theDefinesMap);
         #if _FEATURE_DISCORD_RPC
         virtual void InitDiscordRPC();
         #endif
