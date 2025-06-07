@@ -19,10 +19,20 @@ namespace PopLib
         std::string mRPCAppID;
         #endif
 
-        int mBuildNum;
-	    std::string mBuildDate;
+        std::string mBetaSupportSiteOverride;
+        std::string mBetaSupportProdNameOverride;
+        std::string mReferId;
+        std::string mVariation;
+        ulong mDownloadId;
+        std::string mRegSource;
+        ulong mLastVerCheckQueryTime;
+        bool mSkipAd;
+        bool mDontUpdate;	
 
-        std::string mUserName;	
+        int mBuildNum;
+        std::string mBuildDate;
+
+        std::string mUserName;
         std::string mRegUserName;
         std::string mRegCode;
         bool mIsRegistered;	
@@ -35,9 +45,20 @@ namespace PopLib
         PopApp();
         virtual ~PopApp();
 
+    	virtual void Init();
 	    virtual void InitHook();
 	    virtual void InitPropertiesHook();
+        virtual bool CheckSignature(const Buffer& theBuffer, const std::string& theFileName);
 	    virtual void UpdateHook();
+    	virtual void OpenUpdateURL();
+	    virtual void PreDisplayHook();
+    	virtual void PreTerminate();
+        virtual void ReadFromRegistry();
+
+        bool Validate(const std::string& theUserName, const std::string& theRegCode);
+
+        virtual bool OpenRegisterPage(DefinesMap theDefinesMap);
+        virtual bool OpenRegisterPage();
         #if _FEATURE_DISCORD_RPC
         virtual void InitDiscordRPC();
         #endif
