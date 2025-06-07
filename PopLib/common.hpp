@@ -15,7 +15,7 @@
 #undef _UNICODE
 #undef UNICODE
 
-#ifdef _WIN32
+#ifndef NOMINMAX
 #define NOMINMAX
 #endif
 
