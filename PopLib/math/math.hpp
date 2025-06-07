@@ -18,16 +18,6 @@ namespace PopLib
 class Math
 {
   public:
-	template<typename T>
-	inline static T min(T a, T b) {
-		return (a < b) ? a : b;
-	}
-
-	template<typename T>
-	inline static T max(T a, T b) {
-		return (a > b) ? a : b;
-	}
-
 	inline static double Fabs(double x)
 	{
 		return std::fabs(x);
@@ -55,7 +45,7 @@ class Math
 
 	template<typename T>
 	inline static T Clamp(T value, T minVal, T maxVal) {
-		return max(minVal, min(value, maxVal));
+		return std::max(minVal, std::min(value, maxVal));
 	}
 
 	inline static float Lerp(float a, float b, float t)
