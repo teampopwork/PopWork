@@ -49,19 +49,50 @@ bool XMLParser::AddAttribute(XMLElement *theElement, const PopString &theAttribu
 	return aRet.second;
 }
 
-bool XMLParser::OpenBuffer(const std::string &theBuffer)
+bool XMLParser::OpenBuffer(const std::string &theBuffer, const std::string &custom_root)
 {
 	mCurrentNode = nullptr;
 	mSectionStack.clear();
 	mEndPending.clear();
 	mHasFailed = false;
 
-	const char* data = theBuffer.c_str();
-	size_t size   = theBuffer.size();
-	if (size >= 3 && (unsigned char)data[0]==0xEF && (unsigned char)data[1]==0xBB && (unsigned char)data[2]==0xBF)
-	{
-		data += 3; size -= 3;
-	}
+
+    // UTF-8 stuff
+    std::string input = theBuffer;
+    if (input.size() >= 3 &&
+        (unsigned char)input[0] == 0xEF &&
+        (unsigned char)input[1] == 0xBB &&
+        (unsigned char)input[2] == 0xBF)
+    {
+        input = input.substr(3);
+    }
+
+    std::string aNewWrappedBuffer;
+
+    if (custom_root != "")
+    {
+        // get the declaration so we dont add the custom root before it
+        std::string xmlDecl;
+        if (input.find("<?xml") == 0)
+        {
+            size_t declEnd = input.find("?>");
+            if (declEnd != std::string::npos)
+            {
+                declEnd += 2;
+                xmlDecl = input.substr(0, declEnd);
+                input = input.substr(declEnd);  // remove declaration from the main content
+            }
+        }
+
+        // Wrap with custom root
+        aNewWrappedBuffer = xmlDecl + "<" + custom_root + ">" + input + "</" + custom_root + ">";
+    }
+    else
+        aNewWrappedBuffer = input;
+
+    const char* data = aNewWrappedBuffer.c_str();
+    size_t size = aNewWrappedBuffer.size();
+
     mDocument = new XMLDocument();
 	XMLError err = mDocument->Parse(data, size);
 	if (err != XML_SUCCESS) { 
@@ -72,7 +103,7 @@ bool XMLParser::OpenBuffer(const std::string &theBuffer)
 	return true;
 }
 
-bool XMLParser::OpenFile(const std::string &theFileName)
+bool XMLParser::OpenFile(const std::string &theFileName, const std::string &custom_root)
 {
 	mFile = p_fopen(theFileName.c_str(), "r");
 
@@ -97,16 +128,7 @@ bool XMLParser::OpenFile(const std::string &theFileName)
 	std::string content(size, '\0');
 	p_fread(content.data(), size, 1, mFile);
 
-    mDocument = new XMLDocument();
-	XMLError result = mDocument->Parse(content.c_str(), content.size());
-    if (result != tinyxml2::XML_SUCCESS)
-    {
-        Fail("Failed to parse XML file " + theFileName + ": " + mDocument->ErrorStr());
-        return false;
-    }
-
-	mFileName = theFileName;
-	Init();
+    OpenBuffer(content, custom_root);
 	return true;
 }
 

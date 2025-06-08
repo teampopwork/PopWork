@@ -81,8 +81,8 @@ class XMLParser
 	XMLParser();
 	virtual ~XMLParser();
 
-	bool OpenFile(const std::string &theFilename);
-	bool OpenBuffer(const std::string &theBuffer);
+	bool OpenFile(const std::string &theFilename, const std::string &custom_root = "");
+	bool OpenBuffer(const std::string &theBuffer, const std::string &custom_root = "");
 	bool NextElement(XMLElement *theElement);
 	PopString GetErrorText();
 	int GetCurrentLineNum();
