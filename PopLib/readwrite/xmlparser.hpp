@@ -58,7 +58,7 @@ class XMLParser
 	bool mHasFailed;
 	bool mFirstChar;
 	bool mByteSwap;
-    XMLDocument mDocument;
+    XMLDocument* mDocument;
     XMLNode* mCurrentNode;
 	/// @brief current elements
 	std::vector<PopString> mSectionStack;

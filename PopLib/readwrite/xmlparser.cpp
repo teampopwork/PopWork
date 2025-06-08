@@ -34,6 +34,9 @@ void XMLParser::Init()
 
 bool XMLParser::AddAttribute(XMLElement *theElement, const PopString &theAttributeKey, const PopString &theAttributeValue)
 {
+    if (theAttributeValue == "SUNFLOWER_HEAD_SING1")
+        int asd = 2;
+
 	std::pair<XMLParamMap::iterator, bool> aRet;
 
 	aRet = theElement->mAttributes.insert(XMLParamMap::value_type(theAttributeKey, theAttributeValue));
@@ -59,10 +62,10 @@ bool XMLParser::OpenBuffer(const std::string &theBuffer)
 	{
 		data += 3; size -= 3;
 	}
-
-	XMLError err = mDocument.Parse(data, size);
+    mDocument = new XMLDocument();
+	XMLError err = mDocument->Parse(data, size);
 	if (err != XML_SUCCESS) { 
-		std::string anError = mDocument.ErrorStr();
+		std::string anError = mDocument->ErrorStr();
 		Fail("Parse error: " + anError); 
 		return false;
 	}
@@ -94,10 +97,11 @@ bool XMLParser::OpenFile(const std::string &theFileName)
 	std::string content(size, '\0');
 	p_fread(content.data(), size, 1, mFile);
 
-	XMLError result = mDocument.Parse(content.c_str(), content.size());
+    mDocument = new XMLDocument();
+	XMLError result = mDocument->Parse(content.c_str(), content.size());
     if (result != tinyxml2::XML_SUCCESS)
     {
-        Fail("Failed to parse XML file " + theFileName + ": " + mDocument.ErrorStr());
+        Fail("Failed to parse XML file " + theFileName + ": " + mDocument->ErrorStr());
         return false;
     }
 
@@ -108,6 +112,12 @@ bool XMLParser::OpenFile(const std::string &theFileName)
 
 bool XMLParser::NextElement(XMLElement *theElement)
 {
+
+    theElement->mAttributes.clear();
+    theElement->mInstruction.clear();
+    theElement->mValue.clear();
+    theElement->mSection.clear();
+
 
     if (!mEndPending.empty())
     {
@@ -129,7 +139,17 @@ bool XMLParser::NextElement(XMLElement *theElement)
         theElement->mSection = mSectionStack.back();
         mSectionStack.pop_back();
 
+        if (mSectionStack.empty())
+            return false; //We left the root?
+
         mCurrentNode = parent->NextSibling();
+        while (mCurrentNode &&
+            !mCurrentNode->ToElement() &&
+            !mCurrentNode->ToComment() &&
+            !mCurrentNode->ToDeclaration())
+        {
+            mCurrentNode = mCurrentNode->NextSibling();
+        }
 		if (mCurrentNode)
 			mLineNum = mCurrentNode->GetLineNum();
         return true;
@@ -137,7 +157,7 @@ bool XMLParser::NextElement(XMLElement *theElement)
 
 	if (!mCurrentNode && mFirstStart)
     {
-        mCurrentNode = mDocument.FirstChild();
+        mCurrentNode = mDocument->FirstChild();
         mFirstStart = false;
     }
     else if (!mCurrentNode && !mFirstStart)
@@ -157,14 +177,8 @@ bool XMLParser::NextElement(XMLElement *theElement)
   	if (!mCurrentNode)
         return false;
 
-    theElement->mAttributes.clear();
-    theElement->mInstruction.clear();
-    theElement->mValue.clear();
-    theElement->mSection.clear();
-
     if (auto com = mCurrentNode->ToComment()) // Comments
     {
-		mLineNum = mCurrentNode->GetLineNum();
         theElement->mType = XMLElement::TYPE_COMMENT;
         theElement->mInstruction = com->Value();
         mCurrentNode = mCurrentNode->NextSibling();
@@ -172,7 +186,6 @@ bool XMLParser::NextElement(XMLElement *theElement)
     }
     else if (auto decl = mCurrentNode->ToDeclaration()) // XML declaration / PI
     {
-		mLineNum = mCurrentNode->GetLineNum();
         theElement->mType        = XMLElement::TYPE_INSTRUCTION;
         theElement->mInstruction = decl->Value();
 		mCurrentNode = mCurrentNode->NextSibling();
@@ -180,31 +193,68 @@ bool XMLParser::NextElement(XMLElement *theElement)
     }
     else if (auto elem = mCurrentNode->ToElement()) // Element start
     {
-		mLineNum = mCurrentNode->GetLineNum();
-        theElement->mType   = XMLElement::TYPE_START;
-        theElement->mValue  = elem->Name();
+        auto closeType = elem->ClosingType();
 
-        if (mSectionStack.empty())
-            mSectionStack.push_back(elem->Name());
-        else
-            mSectionStack.push_back(mSectionStack.back() + "/" + elem->Name());
-        theElement->mSection = mSectionStack.back();
-
-        for (auto attr = elem->FirstAttribute(); attr; attr = attr->Next())
-            AddAttribute(theElement, attr->Name(), attr->Value());
-
-		if (elem->FirstChild())
+        if (closeType == tinyxml2::XMLElement::OPEN)
         {
-            mCurrentNode = elem->FirstChild();
-			mNodeStack.push_back(elem);
-        }
-		else
-		{
-			mEndPending.push_back(elem->Name());
-            mCurrentNode = elem->NextSibling();
-		}
+            // Start tag <tag>
+            theElement->mType = XMLElement::TYPE_START;
+            theElement->mValue = elem->Name();
 
-        return true;
+            if (mSectionStack.empty())
+                mSectionStack.push_back(elem->Name());
+            else
+                mSectionStack.push_back(mSectionStack.back() + "/" + elem->Name());
+            theElement->mSection = mSectionStack.back();
+
+            for (auto attr = elem->FirstAttribute(); attr; attr = attr->Next())
+                AddAttribute(theElement, attr->Name(), attr->Value());
+
+            mCurrentNode = elem->FirstChild();
+            mNodeStack.push_back(elem);
+
+            return true;
+        }
+        else if (closeType == tinyxml2::XMLElement::CLOSED)
+        {
+            // Self-closing tag <tag />
+            // Emit START event now
+            theElement->mType = XMLElement::TYPE_START;
+            theElement->mValue = elem->Name();
+
+            if (mSectionStack.empty())
+                mSectionStack.push_back(elem->Name());
+            else
+                mSectionStack.push_back(mSectionStack.back() + "/" + elem->Name());
+            theElement->mSection = mSectionStack.back();
+
+            for (auto attr = elem->FirstAttribute(); attr; attr = attr->Next())
+                AddAttribute(theElement, attr->Name(), attr->Value());
+
+            // Immediately emit the END event for the same element on next call
+            mEndPending.push_back(elem->Name());
+
+            mCurrentNode = mCurrentNode->NextSibling();
+
+            return true;
+        }
+        else if (closeType == tinyxml2::XMLElement::CLOSING)
+        {
+            // This means an end tag node (</tag>) - normally tinyxml2 skips these as separate nodes,
+            // but if you get here, emit END event.
+
+            theElement->mType = XMLElement::TYPE_END;
+            theElement->mValue = elem->Name();
+
+            if (!mSectionStack.empty())
+                mSectionStack.pop_back();
+
+            theElement->mSection = mSectionStack.empty() ? "" : mSectionStack.back();
+
+            mCurrentNode = mCurrentNode->NextSibling();
+
+            return true;
+        }
     }
 
 	return false;
