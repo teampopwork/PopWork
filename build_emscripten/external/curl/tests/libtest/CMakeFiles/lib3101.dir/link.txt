@@ -1,0 +1,1 @@
+/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/lib3101.dir/link.d CMakeFiles/lib3101.dir/lib3101.c.o CMakeFiles/lib3101.dir/first.c.o CMakeFiles/lib3101.dir/testutil.c.o -o lib3101  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

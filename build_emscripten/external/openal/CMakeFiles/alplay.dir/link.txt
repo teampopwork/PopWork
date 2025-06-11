@@ -1,0 +1,1 @@
+/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/alplay.dir/link.d CMakeFiles/alplay.dir/examples/alplay.c.o -o alplay  -pthread /usr/lib/libsndfile.so libalsoft.excommon.a libopenal.a -pthread -ldl -latomic -lm -lrt

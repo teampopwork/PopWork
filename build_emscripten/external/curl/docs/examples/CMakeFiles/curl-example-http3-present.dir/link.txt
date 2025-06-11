@@ -1,0 +1,1 @@
+/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/curl-example-http3-present.dir/link.d "CMakeFiles/curl-example-http3-present.dir/http3-present.c.o" -o http3-present  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

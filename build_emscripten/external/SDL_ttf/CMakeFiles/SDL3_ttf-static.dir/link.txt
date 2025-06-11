@@ -1,0 +1,2 @@
+/usr/bin/ar qc libSDL3_ttf.a "CMakeFiles/SDL3_ttf-static.dir/src/SDL_hashtable.c.o" "CMakeFiles/SDL3_ttf-static.dir/src/SDL_hashtable_ttf.c.o" "CMakeFiles/SDL3_ttf-static.dir/src/SDL_gpu_textengine.c.o" "CMakeFiles/SDL3_ttf-static.dir/src/SDL_renderer_textengine.c.o" "CMakeFiles/SDL3_ttf-static.dir/src/SDL_surface_textengine.c.o" "CMakeFiles/SDL3_ttf-static.dir/src/SDL_ttf.c.o"
+/usr/bin/ranlib libSDL3_ttf.a

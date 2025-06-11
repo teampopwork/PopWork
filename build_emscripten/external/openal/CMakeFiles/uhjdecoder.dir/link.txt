@@ -1,0 +1,1 @@
+/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/uhjdecoder.dir/link.d CMakeFiles/uhjdecoder.dir/utils/uhjdecoder.cpp.o "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/format.cc.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/os.cc.o" -o uhjdecoder  libalsoft.common.a -pthread /usr/lib/libsndfile.so

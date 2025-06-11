@@ -1,0 +1,1 @@
+/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/lib586.dir/link.d CMakeFiles/lib586.dir/lib586.c.o CMakeFiles/lib586.dir/first.c.o -o lib586  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

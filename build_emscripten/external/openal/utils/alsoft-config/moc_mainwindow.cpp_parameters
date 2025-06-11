@@ -1,0 +1,4 @@
+-D_USE_WIDE_STRING
+-o
+/home/guest/Downloads/PopLib/build/external/openal/utils/alsoft-config/moc_mainwindow.cpp
+/home/guest/Downloads/PopLib/external/openal/utils/alsoft-config/mainwindow.h

@@ -1,0 +1,1 @@
+/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/unit1305.dir/link.d CMakeFiles/unit1305.dir/unit1305.c.o CMakeFiles/unit1305.dir/__/libtest/first.c.o -o unit1305  -lcurltool ../../lib/libcurlu.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

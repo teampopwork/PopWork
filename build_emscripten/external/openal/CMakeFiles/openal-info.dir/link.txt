@@ -1,0 +1,1 @@
+/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/openal-info.dir/link.d "CMakeFiles/openal-info.dir/utils/openal-info.c.o" -o openal-info  -pthread libopenal.a -pthread -ldl -latomic -lm

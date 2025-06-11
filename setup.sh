@@ -1,3 +1,4 @@
+# So configure it first with cmake and then use emmake
 mkdir build
 cd build
-emcmake cmake ../
+CC=gcc CXX=g++ cmake ../

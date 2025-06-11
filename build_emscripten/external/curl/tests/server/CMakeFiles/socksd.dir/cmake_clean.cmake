@@ -1,0 +1,38 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/socksd.dir/link.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/base64.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/base64.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/inet_pton.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/inet_pton.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/multibyte.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/multibyte.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/nonblock.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/nonblock.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/strparse.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/strparse.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/timediff.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/timediff.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/timeval.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/timeval.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/version_win32.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/version_win32.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/warnless.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/warnless.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/winapi.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/curlx/winapi.c.o.d"
+  "CMakeFiles/socksd.dir/__/__/lib/memdebug.c.o"
+  "CMakeFiles/socksd.dir/__/__/lib/memdebug.c.o.d"
+  "CMakeFiles/socksd.dir/getpart.c.o"
+  "CMakeFiles/socksd.dir/getpart.c.o.d"
+  "CMakeFiles/socksd.dir/socksd.c.o"
+  "CMakeFiles/socksd.dir/socksd.c.o.d"
+  "CMakeFiles/socksd.dir/util.c.o"
+  "CMakeFiles/socksd.dir/util.c.o.d"
+  "socksd"
+  "socksd.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C)
+  include(CMakeFiles/socksd.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libalsoft.sofa-support.a "CMakeFiles/alsoft.sofa-support.dir/utils/sofa-support.cpp.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/format.cc.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/os.cc.o"
+/usr/bin/ranlib libalsoft.sofa-support.a

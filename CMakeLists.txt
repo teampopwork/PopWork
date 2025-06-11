@@ -31,6 +31,31 @@ if(USE_WIDESTRING)
 	add_compile_definitions(_USE_WIDE_STRING)
 endif()
 
+# Emscripten additions
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+    
+    # todo: add to compile options
+    add_link_options(
+        "-sWASM=0"
+        "-sALLOW_MEMORY_GROWTH=1"
+        "-sUSE_WEBGL2=1"
+        "-sFULL_ES3=1"
+        "-sUSE_FREETYPE=1"
+        "-sUSE_HARFBUZZ=1"
+    )
+
+    set(SDLTTF_FREETYPE_VENDORED ON CACHE BOOL "" FORCE)
+    
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        SUFFIX ".a"
+    )
+    
+    if(BUILD_EXAMPLES)
+      # im too lazy for this
+    endif()
+endif()
+
 if(CONSOLE AND WIN32)
 	add_compile_definitions(_CONSOLE_ON)
 endif()

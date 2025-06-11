@@ -1,0 +1,1 @@
+/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/lib1591.dir/link.d CMakeFiles/lib1591.dir/lib1591.c.o CMakeFiles/lib1591.dir/first.c.o CMakeFiles/lib1591.dir/testutil.c.o -o lib1591  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

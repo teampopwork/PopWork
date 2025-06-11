@@ -1,0 +1,1 @@
+/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/allafplay.dir/link.d CMakeFiles/allafplay.dir/examples/allafplay.cpp.o "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/format.cc.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/os.cc.o" -o allafplay  -pthread libalsoft.common.a libalsoft.excommon.a libopenal.a -pthread -ldl -latomic -lm -lrt
