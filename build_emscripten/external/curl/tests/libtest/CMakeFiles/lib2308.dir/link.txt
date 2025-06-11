@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/lib2308.dir/link.d CMakeFiles/lib2308.dir/lib2308.c.o CMakeFiles/lib2308.dir/first.c.o -o lib2308  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

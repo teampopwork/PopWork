@@ -1,2 +1,0 @@
-/usr/bin/ar qc libminiaudio_channel_separator_node.a CMakeFiles/miniaudio_channel_separator_node.dir/extras/nodes/ma_channel_separator_node/ma_channel_separator_node.c.o
-/usr/bin/ranlib libminiaudio_channel_separator_node.a

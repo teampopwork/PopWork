@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/curl-example-10-at-a-time.dir/link.d "CMakeFiles/curl-example-10-at-a-time.dir/10-at-a-time.c.o" -o 10-at-a-time  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

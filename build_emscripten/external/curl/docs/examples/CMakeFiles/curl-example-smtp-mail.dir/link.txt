@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/curl-example-smtp-mail.dir/link.d "CMakeFiles/curl-example-smtp-mail.dir/smtp-mail.c.o" -o smtp-mail  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/lib2405.dir/link.d CMakeFiles/lib2405.dir/lib2405.c.o CMakeFiles/lib2405.dir/first.c.o CMakeFiles/lib2405.dir/testutil.c.o -o lib2405  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

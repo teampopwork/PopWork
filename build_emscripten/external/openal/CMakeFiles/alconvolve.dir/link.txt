@@ -1,1 +1,0 @@
-/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/alconvolve.dir/link.d CMakeFiles/alconvolve.dir/examples/alconvolve.c.o -o alconvolve  -pthread libalsoft.common.a /usr/lib/libsndfile.so libalsoft.excommon.a libopenal.a -pthread -ldl -latomic -lm -lrt

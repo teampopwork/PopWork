@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/lib671.dir/link.d CMakeFiles/lib671.dir/lib670.c.o CMakeFiles/lib671.dir/first.c.o CMakeFiles/lib671.dir/testutil.c.o -o lib671  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

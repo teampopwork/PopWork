@@ -1,1 +1,0 @@
-/usr/bin/gcc -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/vorbis_test.dir/link.d CMakeFiles/vorbis_test.dir/util.c.o CMakeFiles/vorbis_test.dir/write_read.c.o CMakeFiles/vorbis_test.dir/test.c.o -o vorbis_test  ../lib/libvorbisenc.a -lm ../lib/libvorbis.a -lm ../../ogg/libogg.a

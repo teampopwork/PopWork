@@ -1,2 +1,0 @@
-# Empty dependencies file for curl-example-websocket-cb.
-# This may be replaced when dependencies are built.

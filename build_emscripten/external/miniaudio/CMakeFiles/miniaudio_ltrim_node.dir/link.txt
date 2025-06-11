@@ -1,2 +1,0 @@
-/usr/bin/ar qc libminiaudio_ltrim_node.a CMakeFiles/miniaudio_ltrim_node.dir/extras/nodes/ma_ltrim_node/ma_ltrim_node.c.o
-/usr/bin/ranlib libminiaudio_ltrim_node.a

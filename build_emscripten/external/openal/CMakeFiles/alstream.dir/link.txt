@@ -1,1 +1,0 @@
-/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/alstream.dir/link.d CMakeFiles/alstream.dir/examples/alstream.c.o -o alstream  -pthread /usr/lib/libsndfile.so libalsoft.excommon.a libopenal.a -pthread -ldl -latomic -lm -lrt

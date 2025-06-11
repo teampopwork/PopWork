@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/libprereq.dir/link.d CMakeFiles/libprereq.dir/libprereq.c.o CMakeFiles/libprereq.dir/first.c.o CMakeFiles/libprereq.dir/testutil.c.o -o libprereq  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

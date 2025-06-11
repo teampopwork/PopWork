@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/curlt-client-h2-upgrade-extreme.dir/link.d "CMakeFiles/curlt-client-h2-upgrade-extreme.dir/h2-upgrade-extreme.c.o" -o h2-upgrade-extreme  ../../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

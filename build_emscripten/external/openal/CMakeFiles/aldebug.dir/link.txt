@@ -1,1 +1,0 @@
-/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/aldebug.dir/link.d CMakeFiles/aldebug.dir/examples/aldebug.cpp.o "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/format.cc.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/os.cc.o" -o aldebug  -pthread libalsoft.excommon.a libopenal.a -pthread -ldl -latomic -lm -lrt

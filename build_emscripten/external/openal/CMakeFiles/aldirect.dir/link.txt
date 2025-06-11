@@ -1,1 +1,0 @@
-/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/aldirect.dir/link.d CMakeFiles/aldirect.dir/examples/aldirect.cpp.o "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/format.cc.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/os.cc.o" -o aldirect  -pthread /usr/lib/libsndfile.so libalsoft.excommon.a libopenal.a -pthread -ldl -latomic -lm -lrt

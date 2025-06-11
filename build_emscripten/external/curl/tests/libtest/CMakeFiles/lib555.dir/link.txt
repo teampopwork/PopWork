@@ -1,1 +1,0 @@
-/usr/bin/gcc  -I/usr/include -I/usr/include -I/usr/include -I/usr/include -I/usr/include -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/lib555.dir/link.d CMakeFiles/lib555.dir/lib555.c.o CMakeFiles/lib555.dir/first.c.o CMakeFiles/lib555.dir/testutil.c.o -o lib555  ../../lib/libcurl.a -lssh2 -lidn2 /usr/lib/libz.so -lbrotlidec -lbrotlicommon -lzstd -lnghttp2

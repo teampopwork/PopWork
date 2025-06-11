@@ -1,1 +1,0 @@
-/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/sofa-info.dir/link.d "CMakeFiles/sofa-info.dir/utils/sofa-info.cpp.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/format.cc.o" "fmt-11.1.4/CMakeFiles/alsoft.fmt.dir/src/os.cc.o" -o sofa-info  -pthread libalsoft.sofa-support.a -pthread libalsoft.common.a /usr/lib/libmysofa.so /usr/lib/libz.so -lm

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libminiaudio_reverb_node.a CMakeFiles/miniaudio_reverb_node.dir/extras/nodes/ma_reverb_node/ma_reverb_node.c.o
-/usr/bin/ranlib libminiaudio_reverb_node.a

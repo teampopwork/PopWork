@@ -1,1 +1,0 @@
-/usr/bin/g++ -O2 -g -DNDEBUG -Wl,--dependency-file=CMakeFiles/alreverb.dir/link.d CMakeFiles/alreverb.dir/examples/alreverb.c.o -o alreverb  -pthread /usr/lib/libsndfile.so libalsoft.excommon.a libopenal.a -pthread -ldl -latomic -lm -lrt

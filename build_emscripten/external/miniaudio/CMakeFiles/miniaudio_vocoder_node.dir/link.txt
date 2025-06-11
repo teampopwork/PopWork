@@ -1,2 +1,0 @@
-/usr/bin/ar qc libminiaudio_vocoder_node.a CMakeFiles/miniaudio_vocoder_node.dir/extras/nodes/ma_vocoder_node/ma_vocoder_node.c.o
-/usr/bin/ranlib libminiaudio_vocoder_node.a
