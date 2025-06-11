@@ -22,13 +22,40 @@ option(BUILD_TOOLS "Build Tools" ON)
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
     message(STATUS "Using x64")
 	set(IS_64BIT true)
-else ()
-    message (STATUS "Using x86")
-	set(IS_64BIT false)
+	# Holy shit moon, don't use else for any other arch
+	# TODO: Fix this shitty code
+#else if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+	#message (STATUS "Using x86")
+    #	set(IS_64BIT false)
 endif()
 
 if(USE_WIDESTRING)
 	add_compile_definitions(_USE_WIDE_STRING)
+endif()
+
+# Emscripten additions
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+    
+    # todo: add to compile options
+    add_link_options(
+        "-sWASM=0"
+        "-sALLOW_MEMORY_GROWTH=1"
+        "-sUSE_WEBGL2=1"
+        "-sFULL_ES3=1"
+        "-sUSE_FREETYPE=1"
+        "-sUSE_HARFBUZZ=1"
+    )
+
+    set(SDLTTF_FREETYPE_VENDORED ON CACHE BOOL "" FORCE)
+    
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        SUFFIX ".a"
+    )
+    
+    if(BUILD_EXAMPLES)
+      # im too lazy for this
+    endif()
 endif()
 
 if(CONSOLE AND WIN32)
@@ -39,10 +66,14 @@ if (IS_64BIT)
     message (STATUS "Getting the x64 BASS path")
 	set(BASS_LIB_PATH ${CMAKE_SOURCE_DIR}/external/bass/x64)
 	message (${BASS_LIB_PATH})
-else ()
-    message (STATUS "Getting the x86 BASS path")
-	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/external/bass/x86)
-	message (${BASS_LIB_PATH})
+#else ()
+# TODO: Fix this code
+#else if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+#	message (STATUS "Getting the x86 BASS path")
+#	set(BASS_LIB_PATH  ${CMAKE_SOURCE_DIR}/external/bass/x86)
+#	message (${BASS_LIB_PATH})
+else ( )
+	message (STATUS "Not using BASS (Asuming Emscripten")
 endif()
 
 # external libraries
